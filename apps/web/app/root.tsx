@@ -6,6 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
   useRouteError,
+  useLocation,
 } from "@remix-run/react";
 import { Suspense } from "react";
 
@@ -19,6 +20,8 @@ import CustomErrorBoundary from "./modules/common/ErrorBoundary/ErrorBoundary";
 import Loader from "./modules/common/Loader/Loader";
 import { Providers } from "./modules/Global/Providers";
 import { ThemeWrapper } from "./modules/Global/ThemeWrapper";
+import { OfflineProviders } from "./modules/Offline/OfflineProviders";
+import { useOfflineSessionObserver } from "./modules/Offline/useOfflineSessionObserver";
 
 import type { LinksFunction } from "@remix-run/node";
 
@@ -54,6 +57,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function Root() {
   useNavigationTracker();
+  useOfflineSessionObserver();
+  const { pathname } = useLocation();
+  if (pathname === "/offline-learning") {
+    return (
+      <OfflineProviders>
+        <Suspense fallback={<Loader />}>
+          <Outlet />
+        </Suspense>
+      </OfflineProviders>
+    );
+  }
 
   return (
     <Providers>

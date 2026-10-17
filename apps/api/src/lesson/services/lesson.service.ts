@@ -774,6 +774,7 @@ export class LessonService {
     return {
       ...lesson,
       description: updatedDescription ?? lesson.description,
+      lessonResources: mappedResources,
       hasOnlyVideo: hasVideo,
       hasVideo: contentCount.video > 0,
       hasTrackedVideo: videoResourceEntityIds.length > 0,

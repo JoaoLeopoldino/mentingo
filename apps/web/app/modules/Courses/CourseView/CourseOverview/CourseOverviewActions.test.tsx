@@ -62,7 +62,7 @@ const renderActions = ({
   onEnrollmentCompleted?: () => void;
   onToggleLearningMode?: () => void;
 } = {}) =>
-  renderWith().render(
+  renderWith({ withQuery: true }).render(
     <MemoryRouter initialEntries={["/course/course-1"]}>
       <Routes>
         <Route

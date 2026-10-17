@@ -13,6 +13,9 @@ import {
 import * as Sentry from "@sentry/react";
 import { StrictMode, useEffect } from "react";
 import { hydrateRoot } from "react-dom/client";
+// Virtual module supplied by the existing Vite PWA plugin.
+// eslint-disable-next-line import/no-unresolved
+import { registerSW } from "virtual:pwa-register";
 
 import { version } from "../version.json";
 
@@ -45,6 +48,9 @@ Sentry.init({
 Sentry.setTags({
   version,
 });
+
+// Remix SPA HTML is emitted after Vite HTML transforms.
+registerSW({ immediate: true });
 
 hydrateRoot(
   document,

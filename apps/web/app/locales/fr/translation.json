@@ -7564,5 +7564,31 @@
       "automation_archive": "L’envoi a été arrêté car l’automatisation a changé.",
       "automation_deleted": "L’envoi a été arrêté car l’automatisation a changé."
     }
+  },
+  "offline": {
+    "title": "Offline downloads",
+    "download": "Download text and PDFs",
+    "downloading": "Downloading…",
+    "ready": "Available offline",
+    "failed": "Download interrupted. Remove it and download again online.",
+    "incomplete": "Incomplete download",
+    "remove": "Remove download",
+    "online": "Connected",
+    "disconnected": "No Internet connection",
+    "scope": "Read-only text and PDF downloads expire after 7 days. Quizzes, SCORM, videos and completion are not available offline. Use a private device. Downloads are removed when you sign out.",
+    "back": "Back to courses",
+    "loading": "Loading downloads…",
+    "empty": "No downloaded courses on this device.",
+    "unsupported": "Contents or formatting not preserved in this download",
+    "error": {
+      "session": "Sign in online before using your private downloads. Support mode is not supported.",
+      "language": "This course is not available in the selected language.",
+      "cancelled": "Download cancelled because the session or saved download changed.",
+      "quota": "Not enough storage, or the download exceeds the 32 MB limit.",
+      "pdf": "The resource is not a valid PDF.",
+      "empty": "This course has no available text or PDFs to download.",
+      "download": "Download failed. Check your connection and try again online.",
+      "storage": "Could not access device storage. Check permissions and available space."
+    }
   }
 }

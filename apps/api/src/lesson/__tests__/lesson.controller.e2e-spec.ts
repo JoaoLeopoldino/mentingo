@@ -204,6 +204,41 @@ describe("LessonController (e2e) - quiz feedback redaction", () => {
   };
 
   describe("public lesson access", () => {
+    it("includes attachment metadata in content lesson responses", async () => {
+      await setPublicCourseAccess(true);
+      const lesson = await createLessonForPublicAccess({
+        isFreemium: true,
+        lessonType: LESSON_TYPES.CONTENT,
+      });
+      const [resource] = await db
+        .insert(resources)
+        .values({
+          reference: "synthetic.pdf",
+          contentType: "application/pdf",
+          title: { en: "Safety manual" },
+          description: { en: "Synthetic PDF metadata" },
+        })
+        .returning();
+      jest.spyOn(app.get(FileService), "getResourcesForEntity").mockResolvedValueOnce([
+        {
+          ...resource,
+          title: { en: "Safety manual" },
+          description: { en: "Synthetic PDF metadata" },
+          resourceEntityId: randomUUID() as UUIDType,
+          fileUrl: "http://example.com/synthetic.pdf",
+        },
+      ]);
+      const response = await request(app.getHttpServer())
+        .get(`/api/lesson/${lesson.id}`)
+        .query({ language: SUPPORTED_LANGUAGES.EN })
+        .expect(200);
+      expect(response.body.data.lessonResources).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id: resource.id, contentType: "application/pdf" }),
+        ]),
+      );
+    });
+
     it("allows guests to view a content lesson in a public chapter", async () => {
       await setPublicCourseAccess(true);
       const lesson = await createLessonForPublicAccess({

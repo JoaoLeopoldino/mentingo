@@ -2476,7 +2476,14 @@
     },
     "pdfPreview": {
       "previous": "Anterior",
-      "next": "Seguinte"
+      "next": "Seguinte",
+      "ariaLabel": {
+        "drag": "Mover pré-visualização do PDF",
+        "remove": "Remover pré-visualização do PDF"
+      },
+      "loading": "A carregar pré-visualização…",
+      "openFile": "Abrir ficheiro",
+      "showingPage": "Página {{page}} de {{total}}"
     },
     "assetLibrary": {
       "delete": "Eliminar",
@@ -3173,6 +3180,32 @@
     "detail": {
       "status": "Estado",
       "language": "Idioma"
+    }
+  },
+  "offline": {
+    "title": "Descargas offline",
+    "download": "Descarregar texto e PDFs",
+    "downloading": "A descarregar…",
+    "ready": "Disponível offline",
+    "failed": "Descarga interrompida. Remova-a e volte a descarregar com Internet.",
+    "incomplete": "Descarga incompleta",
+    "remove": "Remover descarga",
+    "online": "Com ligação à Internet",
+    "disconnected": "Sem ligação à Internet",
+    "scope": "A leitura de texto e PDF é válida durante 7 dias. Avaliações, SCORM, vídeos e conclusão não estão disponíveis offline. Utilize um dispositivo privado. As descargas são removidas ao terminar sessão.",
+    "back": "Voltar às formações",
+    "loading": "A carregar descargas…",
+    "empty": "Não existem formações descarregadas neste dispositivo.",
+    "unsupported": "Conteúdos ou formatação não preservados nesta descarga",
+    "error": {
+      "session": "Inicie sessão com Internet antes de aceder às suas descargas privadas. O modo de suporte não é permitido.",
+      "language": "Esta formação não está disponível no idioma seleccionado.",
+      "cancelled": "Descarga cancelada devido a uma alteração da sessão ou da descarga guardada.",
+      "quota": "Espaço insuficiente ou descarga superior ao limite de 32 MB.",
+      "pdf": "O recurso não é um PDF válido.",
+      "empty": "Esta formação não tem texto ou PDFs disponíveis para descarga.",
+      "download": "A descarga falhou. Verifique a ligação e tente novamente com Internet.",
+      "storage": "Não foi possível aceder ao armazenamento do dispositivo. Verifique as permissões e o espaço disponível."
     }
   }
 }

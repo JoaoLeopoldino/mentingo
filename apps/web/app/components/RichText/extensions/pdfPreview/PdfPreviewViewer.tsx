@@ -40,7 +40,7 @@ export const PdfPreviewViewer = ({ src }: PdfPreviewViewerProps) => {
       .then((module) => {
         if (!isMounted) return;
 
-        module.pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${module.pdfjs.version}/build/pdf.worker.min.mjs`;
+        module.pdfjs.GlobalWorkerOptions.workerSrc = `${import.meta.env.BASE_URL}assets/pdf.worker.min.mjs`;
 
         setReactPdf(module);
       })

@@ -17,6 +17,7 @@ import { hasPermission } from "~/common/permissions/permission.utils";
 import { Button } from "~/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
 import { useLanguageStore } from "~/modules/Dashboard/Settings/Language/LanguageStore";
+import { OfflineDownloadButton } from "~/modules/Offline/OfflineDownloadButton";
 
 import { COURSE_OVERVIEW_HANDLES } from "../../../../../e2e/data/courses/handles";
 import { useCourseAccessProvider } from "../../context/CourseAccessProvider";
@@ -163,6 +164,9 @@ export default function CourseOverviewActions({
       className="flex flex-wrap items-center gap-2 sm:gap-3"
     >
       {renderPrimaryAction()}
+      {currentUser && !currentUser.isSupportMode && course.enrolled && (
+        <OfflineDownloadButton courseId={course.id} language={language} />
+      )}
 
       <Button
         data-testid={COURSE_OVERVIEW_HANDLES.DETAILS_BUTTON}

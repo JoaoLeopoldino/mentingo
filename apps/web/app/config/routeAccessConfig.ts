@@ -96,6 +96,9 @@ export const routeAccessConfig = createRouteConfig({
   "auth/password-recovery": PUBLIC,
   "oauth/connect": PUBLIC,
 
+  // The reader also requires the locally persisted authenticated owner.
+  "offline-learning": { allOf: [PERMISSIONS.USER_READ_SELF] },
+
   // Client part
   "": PUBLIC,
   notifications: {

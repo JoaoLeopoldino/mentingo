@@ -1,17 +1,23 @@
+import { createRequire } from "node:module";
 import path from "path";
 
 import { vitePlugin as remix } from "@remix-run/dev";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { defineConfig, loadEnv } from "vite";
 import { cjsInterop } from "vite-plugin-cjs-interop";
-import { VitePWA } from "vite-plugin-pwa";
+import { VitePWA, type VitePluginPWAAPI } from "vite-plugin-pwa";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import svgr from "vite-plugin-svgr";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 import { routes } from "./routes";
 
-export default defineConfig(({ mode }) => {
+const require = createRequire(import.meta.url);
+const pdfWorkerPath = require.resolve("pdfjs-dist/build/pdf.worker.min.mjs", {
+  paths: [require.resolve("react-pdf")],
+});
+
+export default defineConfig(({ mode, isSsrBuild }) => {
   const env = loadEnv(mode, process.cwd(), "");
 
   return {
@@ -29,33 +35,42 @@ export default defineConfig(({ mode }) => {
         },
         ssr: false, // SPA MODE - Might migrate to React Router 7
         routes,
+        buildEnd: async ({ viteConfig }) => {
+          // Remix emits its route manifest and SPA document after the client bundle.
+          const pwa = viteConfig.plugins.find((plugin) => plugin.name === "vite-plugin-pwa");
+          const api = pwa?.api as VitePluginPWAAPI | undefined;
+          if (!api) throw new Error("PWA integration is missing");
+          await api.generateSW();
+        },
       }),
-      viteStaticCopy({
-        targets: [
-          {
-            src: "app/assets/svgs/app-signet.svg",
-            dest: "",
-          },
-          {
-            src: "app/locales/en/translation.json",
-            dest: "locales/en",
-          },
-          {
-            src: "app/locales/pl/translation.json",
-            dest: "locales/pl",
-          },
-          ...(process.env.NODE_ENV === "production"
-            ? [
-                { src: "app/assets/svgs/app-logo.svg", dest: "app/assets/svgs" },
-                { src: "app/assets/svgs/app-email-logo.svg", dest: "app/assets/svgs" },
-                {
-                  src: "app/assets/svgs/app-email-border-circle.svg",
-                  dest: "app/assets/svgs",
-                },
-              ]
-            : []),
-        ],
-      }),
+      !isSsrBuild &&
+        viteStaticCopy({
+          targets: [
+            { src: pdfWorkerPath, dest: "assets" },
+            {
+              src: "app/assets/svgs/app-signet.svg",
+              dest: "",
+            },
+            {
+              src: "app/locales/en/translation.json",
+              dest: "locales/en",
+            },
+            {
+              src: "app/locales/pl/translation.json",
+              dest: "locales/pl",
+            },
+            ...(process.env.NODE_ENV === "production"
+              ? [
+                  { src: "app/assets/svgs/app-logo.svg", dest: "app/assets/svgs" },
+                  { src: "app/assets/svgs/app-email-logo.svg", dest: "app/assets/svgs" },
+                  {
+                    src: "app/assets/svgs/app-email-border-circle.svg",
+                    dest: "app/assets/svgs",
+                  },
+                ]
+              : []),
+          ],
+        }),
       tsconfigPaths(),
       sentryVitePlugin({
         org: env.SENTRY_ORG,
@@ -80,20 +95,11 @@ export default defineConfig(({ mode }) => {
           cleanupOutdatedCaches: true,
           clientsClaim: true,
           skipWaiting: true,
-          navigateFallback: null,
-          runtimeCaching: [
-            {
-              urlPattern: /^https:\/\/.*\.(?:png|jpg|jpeg|svg|webp|woff2?)$/,
-              handler: "CacheFirst",
-              options: {
-                cacheName: "assets-cache",
-                expiration: {
-                  maxEntries: 100,
-                  maxAgeSeconds: 60 * 60 * 24 * 30,
-                },
-              },
-            },
-          ],
+          // Only compiled static files are cached; private API responses stay out.
+          navigateFallback: "/index.html",
+          navigateFallbackAllowlist: [/^\/offline-learning\/?(?:\?.*)?$/],
+          globPatterns: ["**/*.{js,css,html,svg,woff,woff2,mjs}"],
+          runtimeCaching: [],
         },
       }),
     ],

@@ -13,3 +13,9 @@ Antes do reinício, a implementação offline tinha passado 26 testes web, 10 te
 O código offline será reconstruído a partir do trabalho registado na sessão, incluindo Dexie, propriedade por conta/origem, descarga atómica de texto/PDF, limpeza de sessão, worker PDF local e integração Workbox no fim do build Remix. A etapa de avaliações offline ainda não estava implementada.
 
 Não incluir o intervalo entre reinício e retoma como esforço de engenharia. A retoma foi confirmada às 22:20 UTC. Não houve push ou deployment.
+
+## Checkpoint de execução — 22:34 UTC
+
+Node 22.15.0 oficial recuperado e SHA-256 verificada. pnpm 10.22.0; instalação congelada concluída em 6m36s, com scripts de instalação desactivados e hardlinks num store persistente. Dependências offline repostas nas versões já ensaiadas. Os cinco pacotes partilhados compilaram.
+
+Na nova cópia: **26 testes web passaram em 3,06s**, além dos **10 testes Node em 270,949ms**. Lint dos ficheiros web/API alterados passou; build API passou. Contagens da base sintética: oito utilizadores, 222 migrações e coluna learning_cycle presente. Testes de integração, typecheck web, build web e Chrome ainda em execução/por repetir. Permanecem cerca de 765 MB livres: não houve eliminação de caches ou dados anteriores.
