@@ -6,6 +6,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import {
+  withEnglishLanguageFallback,
   CERTIFICATE_KIND,
   SUPPORTED_LANGUAGES,
   buildCertificateHtmlDocument as buildSharedCertificateHtmlDocument,
@@ -396,7 +397,7 @@ export class LearningPathCertificateService {
 
   private getSharePageContent(context: any, embeddedImageSrc: string) {
     const title = context.certificate.pathTitle ?? "";
-    const translations = {
+    const translations = withEnglishLanguageFallback({
       pl: {
         pageTitle: `Certyfikat ukończenia ścieżki rozwoju "${title}"`,
         pageDescription: `${context.certificate.fullName} ukończył/a ścieżkę rozwoju "${title}" i otrzymał/a certyfikat.`,
@@ -425,7 +426,7 @@ export class LearningPathCertificateService {
         pageTitle: `Certificat de réussite du parcours de développement « ${title} »`,
         pageDescription: `${context.certificate.fullName} a terminé le parcours de développement « ${title} » et obtenu un certificat.`,
       },
-    } as const satisfies Record<SupportedLanguages, { pageTitle: string; pageDescription: string }>;
+    }) satisfies Record<SupportedLanguages, { pageTitle: string; pageDescription: string }>;
 
     const localizedContent = translations[context.language as SupportedLanguages];
 

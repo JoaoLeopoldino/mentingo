@@ -1,3 +1,4 @@
+import { withEnglishLanguageFallback } from "@repo/shared";
 import { SupportedLanguages } from "@repo/shared";
 import { EmailContent } from "types";
 
@@ -6,7 +7,7 @@ export const getUserFinishedChapterEmailTranslations = (
   chapterName: string,
   courseName: string,
 ) => {
-  const emailContent: Record<SupportedLanguages, EmailContent> = {
+  const emailContent: Record<SupportedLanguages, EmailContent> = withEnglishLanguageFallback({
     en: {
       heading: "Chapter completed",
       paragraphs: [
@@ -63,7 +64,7 @@ export const getUserFinishedChapterEmailTranslations = (
       ],
       buttonText: "CHAPITRE SUIVANT",
     },
-  };
+  });
 
   return emailContent[language];
 };

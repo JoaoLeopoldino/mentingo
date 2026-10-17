@@ -682,7 +682,8 @@
       "lt": "Litewski",
       "cs": "Czeski",
       "es": "Hiszpański",
-      "fr": "Francuski"
+      "fr": "Francuski",
+      "pt-AO": "Portugalski (Angola)"
     },
     "lessonTypes": {
       "content": "Treść",
@@ -1799,7 +1800,8 @@
       "czech": "Czeski",
       "lithuanian": "Litewski",
       "spanish": "Hiszpański",
-      "french": "Francuski"
+      "french": "Francuski",
+      "angolanPortuguese": "Portugalski (Angola)"
     }
   },
   "resetOnboarding": {
@@ -6840,6 +6842,7 @@
       "section": "{{kind}} {{number}}"
     },
     "errors": {
+      "unsupportedLanguage": "Tworzenie z AI nie obsługuje jeszcze tego języka kursu. Użyj edytora natywnego.",
       "applicationFailed": "Nie udało się zastosować wybranych zmian. Sprawdź aktualny stan kursu i spróbuj ponownie.",
       "applicationNotFound": "Wynik zastosowania zmian nie jest już dostępny.",
       "assessmentAttemptsAcknowledgementRequired": "Wybrany quiz ma już podejścia uczestników. Przed zastosowaniem zmian sprawdź i potwierdź ich wpływ na uczestników.",

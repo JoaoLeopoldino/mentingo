@@ -1,4 +1,5 @@
 import {
+  withEnglishLanguageFallback,
   AUTOMATION_EVENT_KINDS,
   AUTOMATION_MAPPING_TYPES,
   BUILT_IN_EMAIL_TEMPLATE_KEYS,
@@ -9,7 +10,7 @@ import type { BuiltInAutomationDefinition } from "../automation-execution.types"
 
 export const adminOverdueCoursesAutomation: BuiltInAutomationDefinition = {
   eventKind: AUTOMATION_EVENT_KINDS.ADMIN_OVERDUE_COURSES,
-  name: {
+  name: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Overdue courses notification",
     [SUPPORTED_LANGUAGES.PL]: "Powiadomienie o zaległych kursach",
     [SUPPORTED_LANGUAGES.DE]: "Benachrichtigung über überfällige Kurse",
@@ -17,8 +18,8 @@ export const adminOverdueCoursesAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Notificación de cursos atrasados",
     [SUPPORTED_LANGUAGES.CS]: "Oznámení o kurzech po termínu",
     [SUPPORTED_LANGUAGES.LT]: "Pranešimas apie kursus, kurių terminas praleistas",
-  },
-  description: {
+  }),
+  description: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Sent to administrators about learners with overdue courses.",
     [SUPPORTED_LANGUAGES.PL]:
       "Wysyłane do administratorów w sprawie uczestników z kursami po terminie.",
@@ -30,7 +31,7 @@ export const adminOverdueCoursesAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.CS]: "Odesílá se správcům ohledně účastníků s kurzy po termínu.",
     [SUPPORTED_LANGUAGES.LT]:
       "Siunčiama administratoriams apie besimokančiuosius, praleidusius kursų užbaigimo terminus.",
-  },
+  }),
   templateKey: BUILT_IN_EMAIL_TEMPLATE_KEYS.ADMIN_OVERDUE_COURSES,
   mappings: {
     overdue_courses_summary: {

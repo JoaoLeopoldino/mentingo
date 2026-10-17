@@ -1,4 +1,5 @@
 import {
+  withEnglishLanguageFallback,
   AUTOMATION_EVENT_KINDS,
   AUTOMATION_MAPPING_TYPES,
   BUILT_IN_EMAIL_TEMPLATE_KEYS,
@@ -9,7 +10,7 @@ import type { BuiltInAutomationDefinition } from "../automation-execution.types"
 
 export const liveTrainingEndedAutomation: BuiltInAutomationDefinition = {
   eventKind: AUTOMATION_EVENT_KINDS.LIVE_TRAINING_ENDED,
-  name: {
+  name: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Live training ended",
     [SUPPORTED_LANGUAGES.PL]: "Szkolenie na żywo zakończone",
     [SUPPORTED_LANGUAGES.DE]: "Live-Schulung beendet",
@@ -17,8 +18,8 @@ export const liveTrainingEndedAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Formación en directo finalizada",
     [SUPPORTED_LANGUAGES.CS]: "Živé školení skončilo",
     [SUPPORTED_LANGUAGES.LT]: "Tiesioginiai mokymai baigti",
-  },
-  description: {
+  }),
+  description: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Sent when a live training is ended.",
     [SUPPORTED_LANGUAGES.PL]: "Wysyłane, gdy szkolenie na żywo zostanie zakończone.",
     [SUPPORTED_LANGUAGES.DE]: "Wird gesendet, wenn eine Live-Schulung beendet wird.",
@@ -26,7 +27,7 @@ export const liveTrainingEndedAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Se envía cuando finaliza una formación en directo.",
     [SUPPORTED_LANGUAGES.CS]: "Odesílá se při ukončení živého školení.",
     [SUPPORTED_LANGUAGES.LT]: "Siunčiama, kai tiesioginiai mokymai baigiami.",
-  },
+  }),
   templateKey: BUILT_IN_EMAIL_TEMPLATE_KEYS.LIVE_TRAINING_ENDED,
   mappings: {
     title: { type: AUTOMATION_MAPPING_TYPES.EVENT_FIELD, field: "title" },

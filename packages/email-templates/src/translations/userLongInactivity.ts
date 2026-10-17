@@ -1,3 +1,4 @@
+import { withEnglishLanguageFallback } from "@repo/shared";
 import { SupportedLanguages } from "@repo/shared";
 import { EmailContent } from "types";
 
@@ -5,7 +6,7 @@ export const getUserLongInactivityEmailTranslations = (
   language: SupportedLanguages,
   courseName?: string,
 ) => {
-  const activityContext: Record<SupportedLanguages, string> = {
+  const activityContext: Record<SupportedLanguages, string> = withEnglishLanguageFallback({
     en: courseName ? `in ${courseName}` : "on platform",
     pl: courseName ? `w kursie ${courseName}` : "na platformie",
     de: courseName ? `in ${courseName}` : "auf der Plattform",
@@ -13,9 +14,9 @@ export const getUserLongInactivityEmailTranslations = (
     cs: courseName ? `v kurzu ${courseName}` : "na platformě",
     es: courseName ? `en ${courseName}` : "en la plataforma",
     fr: courseName ? `dans le cours ${courseName}` : "sur la plateforme",
-  };
+  });
 
-  const emailContent: Record<SupportedLanguages, EmailContent> = {
+  const emailContent: Record<SupportedLanguages, EmailContent> = withEnglishLanguageFallback({
     en: {
       heading: "Time to resume your course",
       paragraphs: [
@@ -72,7 +73,7 @@ export const getUserLongInactivityEmailTranslations = (
       ],
       buttonText: "REPRENDRE LE COURS",
     },
-  };
+  });
 
   return emailContent[language];
 };

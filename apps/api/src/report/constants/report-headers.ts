@@ -1,3 +1,5 @@
+import { withEnglishLanguageFallback } from "@repo/shared";
+
 import type { SupportedLanguages } from "@repo/shared";
 
 export interface ReportHeaders {
@@ -10,68 +12,69 @@ export interface ReportHeaders {
   quizResults: string;
 }
 
-export const REPORT_HEADERS: Record<SupportedLanguages, ReportHeaders> = {
-  en: {
-    studentName: "Name",
-    groupName: "Groups",
-    courseName: "Course Name",
-    lessonCount: "Lesson Count",
-    completedLessons: "Completed Lessons",
-    progressPercentage: "Progress (%)",
-    quizResults: "Latest Quiz Attempt Results (%)",
-  },
-  pl: {
-    studentName: "Imię i nazwisko",
-    groupName: "Grupy",
-    courseName: "Nazwa kursu",
-    lessonCount: "Liczba lekcji",
-    completedLessons: "Ukończone lekcje",
-    progressPercentage: "Progres (%)",
-    quizResults: "Wyniki z ostatnich podejść do quizów (%)",
-  },
-  de: {
-    studentName: "Name",
-    groupName: "Gruppen",
-    courseName: "Kursname",
-    lessonCount: "Anzahl der Lektionen",
-    completedLessons: "Abgeschlossene Lektionen",
-    progressPercentage: "Fortschritt (%)",
-    quizResults: "Ergebnisse der letzten Quizversuche (%)",
-  },
-  lt: {
-    studentName: "Vardas",
-    groupName: "Grupės",
-    courseName: "Kursas",
-    lessonCount: "Lekcijų skaičius",
-    completedLessons: "Užbaigtos lekcijos",
-    progressPercentage: "Progresas (%)",
-    quizResults: "Rezultatai iš paskutinių bandymų (%)",
-  },
-  cs: {
-    studentName: "Jméno",
-    groupName: "Skupiny",
-    courseName: "Název kurzu",
-    lessonCount: "Počet lekcí",
-    completedLessons: "Dokončené lekce",
-    progressPercentage: "Progres (%)",
-    quizResults: "Výsledky z posledních pokusů (%)",
-  },
-  es: {
-    studentName: "Nombre",
-    groupName: "Grupos",
-    courseName: "Nombre del curso",
-    lessonCount: "Número de lecciones",
-    completedLessons: "Lecciones completadas",
-    progressPercentage: "Progreso (%)",
-    quizResults: "Resultados del último intento de cuestionario (%)",
-  },
-  fr: {
-    studentName: "Nom",
-    groupName: "Groupes",
-    courseName: "Nom du cours",
-    lessonCount: "Nombre de leçons",
-    completedLessons: "Leçons terminées",
-    progressPercentage: "Progression (%)",
-    quizResults: "Résultats de la dernière tentative au quiz (%)",
-  },
-};
+export const REPORT_HEADERS: Record<SupportedLanguages, ReportHeaders> =
+  withEnglishLanguageFallback({
+    en: {
+      studentName: "Name",
+      groupName: "Groups",
+      courseName: "Course Name",
+      lessonCount: "Lesson Count",
+      completedLessons: "Completed Lessons",
+      progressPercentage: "Progress (%)",
+      quizResults: "Latest Quiz Attempt Results (%)",
+    },
+    pl: {
+      studentName: "Imię i nazwisko",
+      groupName: "Grupy",
+      courseName: "Nazwa kursu",
+      lessonCount: "Liczba lekcji",
+      completedLessons: "Ukończone lekcje",
+      progressPercentage: "Progres (%)",
+      quizResults: "Wyniki z ostatnich podejść do quizów (%)",
+    },
+    de: {
+      studentName: "Name",
+      groupName: "Gruppen",
+      courseName: "Kursname",
+      lessonCount: "Anzahl der Lektionen",
+      completedLessons: "Abgeschlossene Lektionen",
+      progressPercentage: "Fortschritt (%)",
+      quizResults: "Ergebnisse der letzten Quizversuche (%)",
+    },
+    lt: {
+      studentName: "Vardas",
+      groupName: "Grupės",
+      courseName: "Kursas",
+      lessonCount: "Lekcijų skaičius",
+      completedLessons: "Užbaigtos lekcijos",
+      progressPercentage: "Progresas (%)",
+      quizResults: "Rezultatai iš paskutinių bandymų (%)",
+    },
+    cs: {
+      studentName: "Jméno",
+      groupName: "Skupiny",
+      courseName: "Název kurzu",
+      lessonCount: "Počet lekcí",
+      completedLessons: "Dokončené lekce",
+      progressPercentage: "Progres (%)",
+      quizResults: "Výsledky z posledních pokusů (%)",
+    },
+    es: {
+      studentName: "Nombre",
+      groupName: "Grupos",
+      courseName: "Nombre del curso",
+      lessonCount: "Número de lecciones",
+      completedLessons: "Lecciones completadas",
+      progressPercentage: "Progreso (%)",
+      quizResults: "Resultados del último intento de cuestionario (%)",
+    },
+    fr: {
+      studentName: "Nom",
+      groupName: "Groupes",
+      courseName: "Nom du cours",
+      lessonCount: "Nombre de leçons",
+      completedLessons: "Leçons terminées",
+      progressPercentage: "Progression (%)",
+      quizResults: "Résultats de la dernière tentative au quiz (%)",
+    },
+  });

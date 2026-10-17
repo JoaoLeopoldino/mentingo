@@ -1,8 +1,10 @@
+import { withEnglishLanguageFallback } from "@repo/shared";
+
 import type { SupportedLanguages } from "@repo/shared";
 
 export const getCourseChatMentionEmailHeading = (language: SupportedLanguages) =>
   (
-    ({
+    withEnglishLanguageFallback({
       en: "You were mentioned in course chat",
       pl: "Oznaczono Cię na czacie kursu",
       de: "Du wurdest im Kurschat erwähnt",
@@ -15,7 +17,7 @@ export const getCourseChatMentionEmailHeading = (language: SupportedLanguages) =
 
 export const getCourseChatMentionEmailButtonText = (language: SupportedLanguages) =>
   (
-    ({
+    withEnglishLanguageFallback({
       en: "Open course discussion",
       pl: "Otwórz dyskusję kursu",
       de: "Kursdiskussion öffnen",
@@ -35,7 +37,7 @@ export const getCourseChatMentionEmailParagraphs = (
     messageContent: string;
   },
 ) => {
-  const translations = {
+  const translations = withEnglishLanguageFallback({
     en: [
       `Hi ${params.recipientName}, ${params.authorName} mentioned you in ${params.courseName}.`,
       `"${params.messageContent}"`,
@@ -64,7 +66,7 @@ export const getCourseChatMentionEmailParagraphs = (
       `Bonjour ${params.recipientName}, ${params.authorName} vous a mentionné(e) dans ${params.courseName}.`,
       `"${params.messageContent}"`,
     ],
-  } satisfies Record<SupportedLanguages, string[]>;
+  }) satisfies Record<SupportedLanguages, string[]>;
 
   return translations[language];
 };

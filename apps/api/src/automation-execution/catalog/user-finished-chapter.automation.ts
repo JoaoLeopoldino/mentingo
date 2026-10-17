@@ -1,4 +1,5 @@
 import {
+  withEnglishLanguageFallback,
   AUTOMATION_EVENT_KINDS,
   AUTOMATION_MAPPING_TYPES,
   BUILT_IN_EMAIL_TEMPLATE_KEYS,
@@ -9,7 +10,7 @@ import type { BuiltInAutomationDefinition } from "../automation-execution.types"
 
 export const userFinishedChapterAutomation: BuiltInAutomationDefinition = {
   eventKind: AUTOMATION_EVENT_KINDS.USER_FINISHED_CHAPTER,
-  name: {
+  name: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Chapter completion",
     [SUPPORTED_LANGUAGES.PL]: "Ukończenie rozdziału",
     [SUPPORTED_LANGUAGES.DE]: "Kapitelabschluss",
@@ -17,8 +18,8 @@ export const userFinishedChapterAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Finalización de capítulo",
     [SUPPORTED_LANGUAGES.CS]: "Dokončení kapitoly",
     [SUPPORTED_LANGUAGES.LT]: "Skyriaus užbaigimas",
-  },
-  description: {
+  }),
+  description: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Sent when a learner completes a chapter.",
     [SUPPORTED_LANGUAGES.PL]: "Wysyłane, gdy uczestnik ukończy rozdział.",
     [SUPPORTED_LANGUAGES.DE]: "Wird gesendet, wenn ein Lernender ein Kapitel abschließt.",
@@ -26,7 +27,7 @@ export const userFinishedChapterAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Se envía cuando un participante completa un capítulo.",
     [SUPPORTED_LANGUAGES.CS]: "Odesílá se, když účastník dokončí kapitolu.",
     [SUPPORTED_LANGUAGES.LT]: "Siunčiama, kai besimokantysis užbaigia skyrių.",
-  },
+  }),
   templateKey: BUILT_IN_EMAIL_TEMPLATE_KEYS.USER_FINISHED_CHAPTER,
   legacySettingKey: "userChapterFinished",
   mappings: {

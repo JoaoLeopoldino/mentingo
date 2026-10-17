@@ -1,10 +1,11 @@
+import { withEnglishLanguageFallback } from "@repo/shared";
 import { EMAIL_TEMPLATE_EVENTS, type LocalizedEmailValue } from "./template-registry.types";
 
 export const EMAIL_TEMPLATE_NAMES: Record<
   keyof typeof EMAIL_TEMPLATE_EVENTS,
   LocalizedEmailValue<string>
 > = {
-  WELCOME: {
+  WELCOME: withEnglishLanguageFallback({
     en: "Welcome",
     pl: "Powitanie",
     de: "Willkommen",
@@ -12,8 +13,8 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "Uvítání",
     es: "Bienvenida",
     fr: "Bienvenue",
-  },
-  PASSWORD_RECOVERY: {
+  }),
+  PASSWORD_RECOVERY: withEnglishLanguageFallback({
     en: "Password recovery",
     pl: "Odzyskiwanie hasła",
     de: "Passwortwiederherstellung",
@@ -21,8 +22,8 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "Obnovení hesla",
     es: "Recuperación de contraseña",
     fr: "Récupération du mot de passe",
-  },
-  PASSWORD_REMINDER: {
+  }),
+  PASSWORD_REMINDER: withEnglishLanguageFallback({
     en: "Password creation reminder",
     pl: "Przypomnienie o utworzeniu hasła",
     de: "Erinnerung zur Passworterstellung",
@@ -30,8 +31,8 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "Připomenutí vytvoření hesla",
     es: "Recordatorio para crear la contraseña",
     fr: "Rappel de création du mot de passe",
-  },
-  USER_INVITE: {
+  }),
+  USER_INVITE: withEnglishLanguageFallback({
     en: "User invitation",
     pl: "Zaproszenie użytkownika",
     de: "Benutzereinladung",
@@ -39,8 +40,8 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "Pozvánka uživatele",
     es: "Invitación de usuario",
     fr: "Invitation d’un utilisateur",
-  },
-  USER_FIRST_LOGIN: {
+  }),
+  USER_FIRST_LOGIN: withEnglishLanguageFallback({
     en: "First login",
     pl: "Pierwsze logowanie",
     de: "Erste Anmeldung",
@@ -48,8 +49,8 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "První přihlášení",
     es: "Primer inicio de sesión",
     fr: "Première connexion",
-  },
-  USER_ASSIGNED_TO_COURSE: {
+  }),
+  USER_ASSIGNED_TO_COURSE: withEnglishLanguageFallback({
     en: "Course assignment",
     pl: "Przypisanie do kursu",
     de: "Kurszuweisung",
@@ -57,8 +58,8 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "Přiřazení ke kurzu",
     es: "Asignación a un curso",
     fr: "Affectation à un cours",
-  },
-  USER_SHORT_INACTIVITY: {
+  }),
+  USER_SHORT_INACTIVITY: withEnglishLanguageFallback({
     en: "Short inactivity reminder",
     pl: "Przypomnienie o krótkiej nieaktywności",
     de: "Erinnerung bei kurzer Inaktivität",
@@ -66,8 +67,8 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "Připomenutí krátké neaktivity",
     es: "Recordatorio de inactividad breve",
     fr: "Rappel d’inactivité courte",
-  },
-  USER_LONG_INACTIVITY: {
+  }),
+  USER_LONG_INACTIVITY: withEnglishLanguageFallback({
     en: "Long inactivity reminder",
     pl: "Przypomnienie o długiej nieaktywności",
     de: "Erinnerung bei längerer Inaktivität",
@@ -75,8 +76,8 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "Připomenutí dlouhé neaktivity",
     es: "Recordatorio de inactividad prolongada",
     fr: "Rappel d’inactivité prolongée",
-  },
-  USER_FINISHED_CHAPTER: {
+  }),
+  USER_FINISHED_CHAPTER: withEnglishLanguageFallback({
     en: "Chapter completion",
     pl: "Ukończenie rozdziału",
     de: "Kapitelabschluss",
@@ -84,8 +85,8 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "Dokončení kapitoly",
     es: "Finalización del capítulo",
     fr: "Achèvement du chapitre",
-  },
-  USER_FINISHED_COURSE: {
+  }),
+  USER_FINISHED_COURSE: withEnglishLanguageFallback({
     en: "Course completion",
     pl: "Ukończenie kursu",
     de: "Kursabschluss",
@@ -93,8 +94,8 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "Dokončení kurzu",
     es: "Finalización del curso",
     fr: "Achèvement du cours",
-  },
-  CERTIFICATE_EXPIRATION_WARNING: {
+  }),
+  CERTIFICATE_EXPIRATION_WARNING: withEnglishLanguageFallback({
     en: "Certificate expiration warning",
     pl: "Ostrzeżenie o wygaśnięciu certyfikatu",
     de: "Warnung vor Zertifikatsablauf",
@@ -102,8 +103,8 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "Upozornění na vypršení certifikátu",
     es: "Aviso de caducidad del certificado",
     fr: "Avertissement d’expiration du certificat",
-  },
-  CERTIFICATE_EXPIRED: {
+  }),
+  CERTIFICATE_EXPIRED: withEnglishLanguageFallback({
     en: "Certificate expired",
     pl: "Certyfikat wygasł",
     de: "Zertifikat abgelaufen",
@@ -111,8 +112,8 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "Platnost certifikátu vypršela",
     es: "Certificado caducado",
     fr: "Certificat expiré",
-  },
-  ADMIN_NEW_USER: {
+  }),
+  ADMIN_NEW_USER: withEnglishLanguageFallback({
     en: "New user notification",
     pl: "Powiadomienie o nowym użytkowniku",
     de: "Benachrichtigung über neuen Benutzer",
@@ -120,8 +121,8 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "Oznámení o novém uživateli",
     es: "Notificación de nuevo usuario",
     fr: "Notification de nouvel utilisateur",
-  },
-  ADMIN_FINISHED_COURSE: {
+  }),
+  ADMIN_FINISHED_COURSE: withEnglishLanguageFallback({
     en: "Admin course completion notification",
     pl: "Powiadomienie administratora o ukończeniu kursu",
     de: "Administratorbenachrichtigung zum Kursabschluss",
@@ -129,8 +130,8 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "Oznámení správci o dokončení kurzu",
     es: "Notificación al administrador sobre la finalización del curso",
     fr: "Notification à l’administrateur de l’achèvement du cours",
-  },
-  ADMIN_OVERDUE_COURSES: {
+  }),
+  ADMIN_OVERDUE_COURSES: withEnglishLanguageFallback({
     en: "Overdue courses notification",
     pl: "Powiadomienie o zaległych kursach",
     de: "Benachrichtigung über überfällige Kurse",
@@ -138,8 +139,8 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "Oznámení o kurzech po termínu",
     es: "Notificación de cursos vencidos",
     fr: "Notification de cours en retard",
-  },
-  COURSE_DUE_DATE_REMINDER: {
+  }),
+  COURSE_DUE_DATE_REMINDER: withEnglishLanguageFallback({
     en: "Course due-date reminder",
     pl: "Przypomnienie o terminie kursu",
     de: "Erinnerung an den Kurstermin",
@@ -147,8 +148,8 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "Připomenutí termínu kurzu",
     es: "Recordatorio de fecha límite del curso",
     fr: "Rappel de l’échéance du cours",
-  },
-  MAGIC_LINK: {
+  }),
+  MAGIC_LINK: withEnglishLanguageFallback({
     en: "Magic link",
     pl: "Link do logowania",
     de: "Anmeldelink",
@@ -156,8 +157,8 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "Přihlašovací odkaz",
     es: "Enlace de acceso",
     fr: "Lien de connexion",
-  },
-  COURSE_CHAT_MENTION: {
+  }),
+  COURSE_CHAT_MENTION: withEnglishLanguageFallback({
     en: "Course chat mention",
     pl: "Wzmianka na czacie kursu",
     de: "Erwähnung im Kurschat",
@@ -165,8 +166,8 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "Zmínka v chatu kurzu",
     es: "Mención en el chat del curso",
     fr: "Mention dans le chat du cours",
-  },
-  ANNOUNCEMENT: {
+  }),
+  ANNOUNCEMENT: withEnglishLanguageFallback({
     en: "Announcement",
     pl: "Ogłoszenie",
     de: "Ankündigung",
@@ -174,8 +175,8 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "Oznámení",
     es: "Anuncio",
     fr: "Annonce",
-  },
-  LIVE_TRAINING_STARTED: {
+  }),
+  LIVE_TRAINING_STARTED: withEnglishLanguageFallback({
     en: "Live training started",
     pl: "Szkolenie na żywo rozpoczęte",
     de: "Live-Schulung gestartet",
@@ -183,8 +184,8 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "Živé školení začalo",
     es: "Formación en directo iniciada",
     fr: "Formation en direct commencée",
-  },
-  LIVE_TRAINING_REMINDER: {
+  }),
+  LIVE_TRAINING_REMINDER: withEnglishLanguageFallback({
     en: "Live training reminder",
     pl: "Przypomnienie o szkoleniu na żywo",
     de: "Erinnerung an die Live-Schulung",
@@ -192,8 +193,8 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "Připomenutí živého školení",
     es: "Recordatorio de formación en directo",
     fr: "Rappel de formation en direct",
-  },
-  LIVE_TRAINING_ENDED: {
+  }),
+  LIVE_TRAINING_ENDED: withEnglishLanguageFallback({
     en: "Live training ended",
     pl: "Szkolenie na żywo zakończone",
     de: "Live-Schulung beendet",
@@ -201,5 +202,5 @@ export const EMAIL_TEMPLATE_NAMES: Record<
     cs: "Živé školení skončilo",
     es: "Formación en directo finalizada",
     fr: "Formation en direct terminée",
-  },
+  }),
 };

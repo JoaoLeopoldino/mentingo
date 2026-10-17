@@ -1,8 +1,9 @@
+import { withEnglishLanguageFallback } from "@repo/shared";
 import { SupportedLanguages } from "@repo/shared";
 import { EmailContent } from "types";
 
 export const getNewUserEmailTranslations = (language: SupportedLanguages, userName: string) => {
-  const emailContent: Record<SupportedLanguages, EmailContent> = {
+  const emailContent: Record<SupportedLanguages, EmailContent> = withEnglishLanguageFallback({
     en: {
       heading: "New user profile",
       paragraphs: ["Hello! 🧑‍💻", `${userName} has joined. Review the profile and assign courses.`],
@@ -44,7 +45,7 @@ export const getNewUserEmailTranslations = (language: SupportedLanguages, userNa
       ],
       buttonText: "OUVRIR LE PROFIL",
     },
-  };
+  });
 
   return emailContent[language];
 };

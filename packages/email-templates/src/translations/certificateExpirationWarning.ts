@@ -1,3 +1,4 @@
+import { withEnglishLanguageFallback } from "@repo/shared";
 import { SupportedLanguages } from "@repo/shared";
 import { EmailContent } from "types";
 
@@ -6,7 +7,7 @@ export const getCertificateExpirationWarningEmailTranslations = (
   courseName: string,
   expiresAt: string,
 ) => {
-  const emailContent: Record<SupportedLanguages, EmailContent> = {
+  const emailContent: Record<SupportedLanguages, EmailContent> = withEnglishLanguageFallback({
     en: {
       heading: "Certificate expires soon",
       paragraphs: [
@@ -63,7 +64,7 @@ export const getCertificateExpirationWarningEmailTranslations = (
       ],
       buttonText: "OUVRIR LE COURS",
     },
-  };
+  });
 
   return emailContent[language];
 };

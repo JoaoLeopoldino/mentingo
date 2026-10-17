@@ -1,3 +1,4 @@
+import { withEnglishLanguageFallback } from "@repo/shared";
 import { SupportedLanguages } from "@repo/shared";
 import { EmailContent } from "types";
 
@@ -28,7 +29,7 @@ export const getUserAssignedToCourseEmailTranslations = (
     ? `Ce cours est obligatoire et doit être terminé avant le ${formatedCourseDueDate}.`
     : undefined;
 
-  const emailContent: Record<SupportedLanguages, EmailContent> = {
+  const emailContent: Record<SupportedLanguages, EmailContent> = withEnglishLanguageFallback({
     en: {
       heading: "New course",
       paragraphs: [
@@ -92,7 +93,7 @@ export const getUserAssignedToCourseEmailTranslations = (
       ].filter(Boolean) as string[],
       buttonText: "MES COURS",
     },
-  };
+  });
 
   return emailContent[language];
 };

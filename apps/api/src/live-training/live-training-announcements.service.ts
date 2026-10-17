@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { withEnglishLanguageFallback } from "@repo/shared";
 import {
   ANNOUNCEMENT_EMAIL_TEMPLATES,
   ANNOUNCEMENT_SOURCE_TYPES,
@@ -148,35 +149,44 @@ export class LiveTrainingAnnouncementsService {
 
     switch (emailTemplate) {
       case ANNOUNCEMENT_EMAIL_TEMPLATES.LIVE_TRAINING_REMINDER:
-        return this.translate(language, {
-          en: `Training ${linkedTitle} starts at ${formattedStart}.`,
-          pl: `Szkolenie ${linkedTitle} rozpocznie się ${formattedStart}.`,
-          de: `Die Live-Schulung ${linkedTitle} beginnt am ${formattedStart}.`,
-          lt: `Tiesioginiai mokymai ${linkedTitle} prasidės ${formattedStart}.`,
-          cs: `Živé školení ${linkedTitle} začne ${formattedStart}.`,
-          es: `La formación en vivo ${linkedTitle} comienza el ${formattedStart}.`,
-          fr: `La formation en direct ${linkedTitle} commence le ${formattedStart}.`,
-        });
+        return this.translate(
+          language,
+          withEnglishLanguageFallback({
+            en: `Training ${linkedTitle} starts at ${formattedStart}.`,
+            pl: `Szkolenie ${linkedTitle} rozpocznie się ${formattedStart}.`,
+            de: `Die Live-Schulung ${linkedTitle} beginnt am ${formattedStart}.`,
+            lt: `Tiesioginiai mokymai ${linkedTitle} prasidės ${formattedStart}.`,
+            cs: `Živé školení ${linkedTitle} začne ${formattedStart}.`,
+            es: `La formación en vivo ${linkedTitle} comienza el ${formattedStart}.`,
+            fr: `La formation en direct ${linkedTitle} commence le ${formattedStart}.`,
+          }),
+        );
       case ANNOUNCEMENT_EMAIL_TEMPLATES.LIVE_TRAINING_STARTED:
-        return this.translate(language, {
-          en: `Training ${linkedTitle} is active now.`,
-          pl: `Szkolenie ${linkedTitle} jest teraz aktywne.`,
-          de: `Die Live-Schulung ${linkedTitle} ist jetzt aktiv.`,
-          lt: `Tiesioginiai mokymai ${linkedTitle} dabar vyksta.`,
-          cs: `Živé školení ${linkedTitle} nyní probíhá.`,
-          es: `La formación en vivo ${linkedTitle} está activa ahora.`,
-          fr: `La formation en direct ${linkedTitle} est en cours.`,
-        });
+        return this.translate(
+          language,
+          withEnglishLanguageFallback({
+            en: `Training ${linkedTitle} is active now.`,
+            pl: `Szkolenie ${linkedTitle} jest teraz aktywne.`,
+            de: `Die Live-Schulung ${linkedTitle} ist jetzt aktiv.`,
+            lt: `Tiesioginiai mokymai ${linkedTitle} dabar vyksta.`,
+            cs: `Živé školení ${linkedTitle} nyní probíhá.`,
+            es: `La formación en vivo ${linkedTitle} está activa ahora.`,
+            fr: `La formation en direct ${linkedTitle} est en cours.`,
+          }),
+        );
       default:
-        return this.translate(language, {
-          en: `Training ${linkedTitle} has ended.`,
-          pl: `Szkolenie ${linkedTitle} zostało zakończone.`,
-          de: `Die Live-Schulung ${linkedTitle} wurde beendet.`,
-          lt: `Tiesioginiai mokymai ${linkedTitle} baigėsi.`,
-          cs: `Živé školení ${linkedTitle} skončilo.`,
-          es: `La formación en vivo ${linkedTitle} ha finalizado.`,
-          fr: `La formation en direct ${linkedTitle} est terminée.`,
-        });
+        return this.translate(
+          language,
+          withEnglishLanguageFallback({
+            en: `Training ${linkedTitle} has ended.`,
+            pl: `Szkolenie ${linkedTitle} zostało zakończone.`,
+            de: `Die Live-Schulung ${linkedTitle} wurde beendet.`,
+            lt: `Tiesioginiai mokymai ${linkedTitle} baigėsi.`,
+            cs: `Živé školení ${linkedTitle} skončilo.`,
+            es: `La formación en vivo ${linkedTitle} ha finalizado.`,
+            fr: `La formation en direct ${linkedTitle} est terminée.`,
+          }),
+        );
     }
   }
 

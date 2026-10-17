@@ -680,7 +680,8 @@
       "lt": "Lituanien",
       "cs": "Tchèque",
       "es": "Espagnol",
-      "fr": "Français"
+      "fr": "Français",
+      "pt-AO": "Portugais (Angola)"
     },
     "lessonTypes": {
       "content": "Contenu",
@@ -1550,7 +1551,8 @@
       "czech": "tchèque",
       "lithuanian": "lituanien",
       "spanish": "Espagnol",
-      "french": "Français"
+      "french": "Français",
+      "angolanPortuguese": "Portugais (Angola)"
     }
   },
   "resetOnboarding": {
@@ -6510,6 +6512,7 @@
       "section": "{{kind}} {{number}}"
     },
     "errors": {
+      "unsupportedLanguage": "La création par IA ne prend pas encore en charge cette langue de cours. Utilisez l’éditeur natif.",
       "deepResearchPreferenceNotSaved": "La recherche approfondie a été activée pour cette demande, mais la préférence n’a pas pu être enregistrée pour les prochains messages.",
       "webSearchPreferenceNotSaved": "La recherche web a été autorisée pour cette demande, mais la préférence n’a pas pu être enregistrée pour les prochains messages.",
       "applicationFailed": "Les modifications sélectionnées n’ont pas pu être appliquées. Vérifiez l’état actuel du cours et réessayez.",

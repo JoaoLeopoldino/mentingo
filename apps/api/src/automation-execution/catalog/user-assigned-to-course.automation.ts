@@ -1,4 +1,5 @@
 import {
+  withEnglishLanguageFallback,
   AUTOMATION_EVENT_KINDS,
   AUTOMATION_MAPPING_TYPES,
   BUILT_IN_EMAIL_TEMPLATE_KEYS,
@@ -9,7 +10,7 @@ import type { BuiltInAutomationDefinition } from "../automation-execution.types"
 
 export const userAssignedToCourseAutomation: BuiltInAutomationDefinition = {
   eventKind: AUTOMATION_EVENT_KINDS.USER_ASSIGNED_TO_COURSE,
-  name: {
+  name: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Course assignment",
     [SUPPORTED_LANGUAGES.PL]: "Przypisanie do kursu",
     [SUPPORTED_LANGUAGES.DE]: "Kurszuweisung",
@@ -17,8 +18,8 @@ export const userAssignedToCourseAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Asignación de curso",
     [SUPPORTED_LANGUAGES.CS]: "Přiřazení kurzu",
     [SUPPORTED_LANGUAGES.LT]: "Kurso priskyrimas",
-  },
-  description: {
+  }),
+  description: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Sent when a learner is assigned to a course.",
     [SUPPORTED_LANGUAGES.PL]: "Wysyłane, gdy uczestnik zostanie przypisany do kursu.",
     [SUPPORTED_LANGUAGES.DE]: "Wird gesendet, wenn einem Lernenden ein Kurs zugewiesen wird.",
@@ -26,7 +27,7 @@ export const userAssignedToCourseAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Se envía cuando se asigna un curso a un participante.",
     [SUPPORTED_LANGUAGES.CS]: "Odesílá se, když je účastníkovi přiřazen kurz.",
     [SUPPORTED_LANGUAGES.LT]: "Siunčiama, kai besimokančiajam priskiriamas kursas.",
-  },
+  }),
   templateKey: BUILT_IN_EMAIL_TEMPLATE_KEYS.ASSIGNMENT_WITH_DEADLINE,
   legacySettingKey: "userCourseAssignment",
   mappings: {

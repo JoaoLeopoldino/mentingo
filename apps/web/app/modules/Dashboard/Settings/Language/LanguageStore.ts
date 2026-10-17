@@ -1,7 +1,8 @@
+import { normalizeSupportedLanguage } from "@repo/shared";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import { detectBrowserLanguage, isSupportedLanguage } from "../../../../utils/browser-language";
+import { detectBrowserLanguage } from "../../../../utils/browser-language";
 
 import type { SupportedLanguages } from "@repo/shared";
 
@@ -23,13 +24,16 @@ export const useLanguageStore = create<LanguageStore>()(
       initializeLanguage: (applicationLang) => {
         const currentState = get();
 
-        if (applicationLang && isSupportedLanguage(applicationLang)) {
-          set({ language: applicationLang });
-          return applicationLang;
+        const preferredLanguage = normalizeSupportedLanguage(applicationLang);
+        if (preferredLanguage) {
+          set({ language: preferredLanguage });
+          return preferredLanguage;
         }
 
-        if (currentState.language && isSupportedLanguage(currentState.language)) {
-          return currentState.language;
+        const storedLanguage = normalizeSupportedLanguage(currentState.language);
+        if (storedLanguage) {
+          set({ language: storedLanguage });
+          return storedLanguage;
         }
 
         const browserLang = detectBrowserLanguage();

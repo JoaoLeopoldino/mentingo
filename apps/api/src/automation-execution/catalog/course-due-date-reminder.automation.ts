@@ -1,4 +1,5 @@
 import {
+  withEnglishLanguageFallback,
   AUTOMATION_EVENT_KINDS,
   AUTOMATION_MAPPING_TYPES,
   BUILT_IN_EMAIL_TEMPLATE_KEYS,
@@ -9,7 +10,7 @@ import type { BuiltInAutomationDefinition } from "../automation-execution.types"
 
 export const courseDueDateReminderAutomation: BuiltInAutomationDefinition = {
   eventKind: AUTOMATION_EVENT_KINDS.COURSE_DUE_DATE_REMINDER,
-  name: {
+  name: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Course due-date reminder",
     [SUPPORTED_LANGUAGES.PL]: "Przypomnienie o terminie kursu",
     [SUPPORTED_LANGUAGES.DE]: "Erinnerung an die Kursfrist",
@@ -17,8 +18,8 @@ export const courseDueDateReminderAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Recordatorio de la fecha límite del curso",
     [SUPPORTED_LANGUAGES.CS]: "Připomenutí termínu kurzu",
     [SUPPORTED_LANGUAGES.LT]: "Priminimas apie kurso terminą",
-  },
-  description: {
+  }),
+  description: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Sent when a course deadline is approaching.",
     [SUPPORTED_LANGUAGES.PL]: "Wysyłane, gdy zbliża się termin ukończenia kursu.",
     [SUPPORTED_LANGUAGES.DE]: "Wird gesendet, wenn die Frist für einen Kurs näher rückt.",
@@ -26,7 +27,7 @@ export const courseDueDateReminderAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Se envía cuando se acerca la fecha límite de un curso.",
     [SUPPORTED_LANGUAGES.CS]: "Odesílá se, když se blíží termín dokončení kurzu.",
     [SUPPORTED_LANGUAGES.LT]: "Siunčiama artėjant kurso užbaigimo terminui.",
-  },
+  }),
   templateKey: BUILT_IN_EMAIL_TEMPLATE_KEYS.DEADLINE_UPCOMING,
   mappings: {
     course_name: { type: AUTOMATION_MAPPING_TYPES.EVENT_FIELD, field: "course_name" },

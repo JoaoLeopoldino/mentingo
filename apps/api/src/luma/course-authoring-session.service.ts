@@ -16,7 +16,7 @@ import { FileGuard } from "src/file/guards/file.guard";
 
 import { CourseAuthoringContextBridgeService } from "./course-authoring-context-bridge.service";
 import { CourseAuthoringContextService } from "./course-authoring-context.service";
-import { toWireAuthoringOperation } from "./course-authoring-operation.mapper";
+import { requireLumaLanguage, toWireAuthoringOperation } from "./course-authoring-operation.mapper";
 import { LumaService } from "./luma.service";
 import { authoringSourceUploadResponseSchema } from "./schema/course-authoring-application.schema";
 import {
@@ -52,7 +52,8 @@ export class CourseAuthoringSessionService {
 
   /** Prepares identities and native context before creating a durable authoring session. */
   async open(courseId: UUIDType, input: CreateAuthoringSessionBody, actor: CurrentUserType) {
-    await this.context.prepareBlockIdentities(courseId, input.language, actor);
+    const language = requireLumaLanguage(input.language);
+    await this.context.prepareBlockIdentities(courseId, language, actor);
     const context = await this.context.getContext(courseId, { language: input.language }, actor);
     const client = await this.lumaService.getLumaClient();
     const session = this.validateSession(
@@ -61,7 +62,7 @@ export class CourseAuthoringSessionService {
           commandId: input.commandId,
           courseId,
           actorId: actor.userId,
-          language: input.language,
+          language,
           context,
         }),
       ),

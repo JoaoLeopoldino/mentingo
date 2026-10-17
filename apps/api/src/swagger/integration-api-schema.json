@@ -1049,6 +1049,10 @@
                 {
                   "const": "fr",
                   "type": "string"
+                },
+                {
+                  "const": "pt-AO",
+                  "type": "string"
                 }
               ]
             }
@@ -1688,6 +1692,10 @@
               },
               {
                 "const": "fr",
+                "type": "string"
+              },
+              {
+                "const": "pt-AO",
                 "type": "string"
               }
             ]
@@ -2745,6 +2753,10 @@
               {
                 "const": "fr",
                 "type": "string"
+              },
+              {
+                "const": "pt-AO",
+                "type": "string"
               }
             ]
           }
@@ -2964,6 +2976,10 @@
                       {
                         "const": "fr",
                         "type": "string"
+                      },
+                      {
+                        "const": "pt-AO",
+                        "type": "string"
                       }
                     ]
                   }
@@ -2996,6 +3012,10 @@
                     },
                     {
                       "const": "fr",
+                      "type": "string"
+                    },
+                    {
+                      "const": "pt-AO",
                       "type": "string"
                     }
                   ]

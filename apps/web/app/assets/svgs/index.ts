@@ -1,3 +1,4 @@
+export { Globe } from "lucide-react";
 export { default as Category } from "./category.svg?react";
 export { default as Course } from "./course.svg?react";
 export { default as Dashboard } from "./dashboard.svg?react";

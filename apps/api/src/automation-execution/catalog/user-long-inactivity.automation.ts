@@ -1,4 +1,5 @@
 import {
+  withEnglishLanguageFallback,
   AUTOMATION_EVENT_KINDS,
   AUTOMATION_MAPPING_TYPES,
   BUILT_IN_EMAIL_TEMPLATE_KEYS,
@@ -9,7 +10,7 @@ import type { BuiltInAutomationDefinition } from "../automation-execution.types"
 
 export const userLongInactivityAutomation: BuiltInAutomationDefinition = {
   eventKind: AUTOMATION_EVENT_KINDS.USER_LONG_INACTIVITY,
-  name: {
+  name: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Long inactivity reminder",
     [SUPPORTED_LANGUAGES.PL]: "Przypomnienie po długiej nieaktywności",
     [SUPPORTED_LANGUAGES.DE]: "Erinnerung bei längerer Inaktivität",
@@ -17,8 +18,8 @@ export const userLongInactivityAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Recordatorio tras una inactividad prolongada",
     [SUPPORTED_LANGUAGES.CS]: "Připomenutí po dlouhé neaktivitě",
     [SUPPORTED_LANGUAGES.LT]: "Priminimas po ilgo neaktyvumo",
-  },
-  description: {
+  }),
+  description: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Sent when a learner has been inactive for a longer period.",
     [SUPPORTED_LANGUAGES.PL]: "Wysyłane, gdy uczestnik pozostaje nieaktywny przez dłuższy czas.",
     [SUPPORTED_LANGUAGES.DE]:
@@ -29,7 +30,7 @@ export const userLongInactivityAutomation: BuiltInAutomationDefinition = {
       "Se envía cuando un participante lleva un período prolongado sin actividad.",
     [SUPPORTED_LANGUAGES.CS]: "Odesílá se, když je účastník delší dobu neaktivní.",
     [SUPPORTED_LANGUAGES.LT]: "Siunčiama, kai besimokantysis ilgą laiką yra neaktyvus.",
-  },
+  }),
   templateKey: BUILT_IN_EMAIL_TEMPLATE_KEYS.LONG_INACTIVITY_COURSE,
   legacySettingKey: "userLongInactivity",
   mappings: {

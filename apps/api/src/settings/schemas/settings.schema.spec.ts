@@ -5,7 +5,7 @@ import {
 } from "@repo/shared";
 import { Value } from "@sinclair/typebox/value";
 
-import { dashboardSettingsSchema } from "./settings.schema";
+import { dashboardSettingsSchema, studentSettingsJSONContentSchema } from "./settings.schema";
 
 describe("semantic dashboard settings validation", () => {
   it("accepts a canonical layout with a revision", () => {
@@ -42,5 +42,19 @@ describe("semantic dashboard settings validation", () => {
         widgets: [],
       }),
     ).toBe(false);
+  });
+});
+
+describe("interface language settings", () => {
+  it("accepts canonical Angola Portuguese for persistent user settings", () => {
+    expect(Value.Check(studentSettingsJSONContentSchema.properties.language, "pt-AO")).toBe(true);
+  });
+
+  it("rejects unknown languages and unnormalized regional aliases", () => {
+    for (const language of ["zz", "pt-PT", "pt_ao"]) {
+      expect(Value.Check(studentSettingsJSONContentSchema.properties.language, language)).toBe(
+        false,
+      );
+    }
   });
 });

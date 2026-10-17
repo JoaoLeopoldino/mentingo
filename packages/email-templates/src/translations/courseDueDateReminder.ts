@@ -1,3 +1,4 @@
+import { withEnglishLanguageFallback } from "@repo/shared";
 import { SupportedLanguages } from "@repo/shared";
 import { EmailContent } from "types";
 
@@ -5,7 +6,7 @@ const getDaysLabel = (language: SupportedLanguages, daysBeforeDueDate: number) =
   const normalizedDaysBeforeDueDate = Number(daysBeforeDueDate);
 
   if (Number.isNaN(normalizedDaysBeforeDueDate)) {
-    const labels: Record<SupportedLanguages, string> = {
+    const labels: Record<SupportedLanguages, string> = withEnglishLanguageFallback({
       en: "soon",
       pl: "wkrótce",
       de: "bald",
@@ -13,13 +14,13 @@ const getDaysLabel = (language: SupportedLanguages, daysBeforeDueDate: number) =
       cs: "brzy",
       es: "pronto",
       fr: "bientôt",
-    };
+    });
 
     return labels[language];
   }
 
   if (normalizedDaysBeforeDueDate === 1) {
-    const labels: Record<SupportedLanguages, string> = {
+    const labels: Record<SupportedLanguages, string> = withEnglishLanguageFallback({
       en: "tomorrow",
       pl: "jutro",
       de: "morgen",
@@ -27,13 +28,13 @@ const getDaysLabel = (language: SupportedLanguages, daysBeforeDueDate: number) =
       cs: "zítra",
       es: "mañana",
       fr: "demain",
-    };
+    });
 
     return labels[language];
   }
 
   if (normalizedDaysBeforeDueDate === 0) {
-    const labels: Record<SupportedLanguages, string> = {
+    const labels: Record<SupportedLanguages, string> = withEnglishLanguageFallback({
       en: "today",
       pl: "dziś",
       de: "heute",
@@ -41,12 +42,12 @@ const getDaysLabel = (language: SupportedLanguages, daysBeforeDueDate: number) =
       cs: "dnes",
       es: "hoy",
       fr: "aujourd'hui",
-    };
+    });
 
     return labels[language];
   }
 
-  const labels: Record<SupportedLanguages, string> = {
+  const labels: Record<SupportedLanguages, string> = withEnglishLanguageFallback({
     en: `in ${normalizedDaysBeforeDueDate} days`,
     pl: `za ${normalizedDaysBeforeDueDate} ${normalizedDaysBeforeDueDate === 1 ? "dzień" : "dni"}`,
     de: `in ${daysBeforeDueDate} Tagen`,
@@ -54,7 +55,7 @@ const getDaysLabel = (language: SupportedLanguages, daysBeforeDueDate: number) =
     cs: `za ${daysBeforeDueDate} dní`,
     es: `en ${normalizedDaysBeforeDueDate} días`,
     fr: `dans ${normalizedDaysBeforeDueDate} jours`,
-  };
+  });
 
   return labels[language];
 };
@@ -67,7 +68,7 @@ export const getCourseDueDateReminderEmailTranslations = (
 ) => {
   const daysLabel = getDaysLabel(language, daysBeforeDueDate);
 
-  const emailContent: Record<SupportedLanguages, EmailContent> = {
+  const emailContent: Record<SupportedLanguages, EmailContent> = withEnglishLanguageFallback({
     en: {
       heading: "Course deadline approaching",
       paragraphs: [`The deadline to complete course "${courseName}" is ${daysLabel}.`],
@@ -103,7 +104,7 @@ export const getCourseDueDateReminderEmailTranslations = (
       paragraphs: [`La date limite pour terminer le cours « ${courseName} » est ${daysLabel}.`],
       buttonText: "OUVRIR LE COURS",
     },
-  };
+  });
 
   return emailContent[language];
 };

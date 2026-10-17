@@ -1,4 +1,5 @@
 import {
+  withEnglishLanguageFallback,
   AUTOMATION_EVENT_KINDS,
   AUTOMATION_MAPPING_TYPES,
   BUILT_IN_EMAIL_TEMPLATE_KEYS,
@@ -9,7 +10,7 @@ import type { BuiltInAutomationDefinition } from "../automation-execution.types"
 
 export const userShortInactivityAutomation: BuiltInAutomationDefinition = {
   eventKind: AUTOMATION_EVENT_KINDS.USER_SHORT_INACTIVITY,
-  name: {
+  name: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Short inactivity reminder",
     [SUPPORTED_LANGUAGES.PL]: "Przypomnienie po krótkiej nieaktywności",
     [SUPPORTED_LANGUAGES.DE]: "Erinnerung bei kurzer Inaktivität",
@@ -17,8 +18,8 @@ export const userShortInactivityAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Recordatorio tras una breve inactividad",
     [SUPPORTED_LANGUAGES.CS]: "Připomenutí po krátké neaktivitě",
     [SUPPORTED_LANGUAGES.LT]: "Priminimas po trumpo neaktyvumo",
-  },
-  description: {
+  }),
+  description: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Sent when a learner has recently stopped progressing.",
     [SUPPORTED_LANGUAGES.PL]: "Wysyłane, gdy uczestnik niedawno przestał robić postępy.",
     [SUPPORTED_LANGUAGES.DE]:
@@ -27,7 +28,7 @@ export const userShortInactivityAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Se envía cuando un participante ha dejado de avanzar recientemente.",
     [SUPPORTED_LANGUAGES.CS]: "Odesílá se, když účastník nedávno přestal dělat pokroky.",
     [SUPPORTED_LANGUAGES.LT]: "Siunčiama, kai besimokantysis neseniai nustojo daryti pažangą.",
-  },
+  }),
   templateKey: BUILT_IN_EMAIL_TEMPLATE_KEYS.SHORT_INACTIVITY_COURSE,
   legacySettingKey: "userShortInactivity",
   mappings: {

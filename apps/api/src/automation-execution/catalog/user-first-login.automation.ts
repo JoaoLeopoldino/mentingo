@@ -1,4 +1,5 @@
 import {
+  withEnglishLanguageFallback,
   AUTOMATION_EVENT_KINDS,
   AUTOMATION_MAPPING_TYPES,
   BUILT_IN_EMAIL_TEMPLATE_KEYS,
@@ -9,7 +10,7 @@ import type { BuiltInAutomationDefinition } from "../automation-execution.types"
 
 export const userFirstLoginAutomation: BuiltInAutomationDefinition = {
   eventKind: AUTOMATION_EVENT_KINDS.USER_FIRST_LOGIN,
-  name: {
+  name: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "First login",
     [SUPPORTED_LANGUAGES.PL]: "Pierwsze logowanie",
     [SUPPORTED_LANGUAGES.DE]: "Erste Anmeldung",
@@ -17,8 +18,8 @@ export const userFirstLoginAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Primer inicio de sesión",
     [SUPPORTED_LANGUAGES.CS]: "První přihlášení",
     [SUPPORTED_LANGUAGES.LT]: "Pirmasis prisijungimas",
-  },
-  description: {
+  }),
+  description: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Sent after a learner's first successful login.",
     [SUPPORTED_LANGUAGES.PL]: "Wysyłane po pierwszym udanym logowaniu uczestnika.",
     [SUPPORTED_LANGUAGES.DE]:
@@ -28,7 +29,7 @@ export const userFirstLoginAutomation: BuiltInAutomationDefinition = {
       "Se envía después del primer inicio de sesión correcto de un participante.",
     [SUPPORTED_LANGUAGES.CS]: "Odesílá se po prvním úspěšném přihlášení účastníka.",
     [SUPPORTED_LANGUAGES.LT]: "Siunčiama po pirmojo sėkmingo besimokančiojo prisijungimo.",
-  },
+  }),
   templateKey: BUILT_IN_EMAIL_TEMPLATE_KEYS.USER_FIRST_LOGIN,
   legacySettingKey: "userFirstLogin",
   mappings: {

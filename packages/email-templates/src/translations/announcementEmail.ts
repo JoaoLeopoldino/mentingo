@@ -1,3 +1,4 @@
+import { withEnglishLanguageFallback } from "@repo/shared";
 import { EmailContent } from "types";
 
 import type { SupportedLanguages } from "@repo/shared";
@@ -7,7 +8,7 @@ export const getAnnouncementEmailTranslations = (
   title: string,
   content: string,
 ) => {
-  const emailContent: Record<SupportedLanguages, EmailContent> = {
+  const emailContent: Record<SupportedLanguages, EmailContent> = withEnglishLanguageFallback({
     en: {
       heading: title,
       paragraphs: [content],
@@ -43,7 +44,7 @@ export const getAnnouncementEmailTranslations = (
       paragraphs: [content],
       buttonText: "Ouvrir les notifications",
     },
-  };
+  });
 
   return emailContent[language];
 };

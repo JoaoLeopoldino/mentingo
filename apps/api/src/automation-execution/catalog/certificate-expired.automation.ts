@@ -1,4 +1,5 @@
 import {
+  withEnglishLanguageFallback,
   AUTOMATION_EVENT_KINDS,
   AUTOMATION_MAPPING_TYPES,
   BUILT_IN_EMAIL_TEMPLATE_KEYS,
@@ -9,7 +10,7 @@ import type { BuiltInAutomationDefinition } from "../automation-execution.types"
 
 export const certificateExpiredAutomation: BuiltInAutomationDefinition = {
   eventKind: AUTOMATION_EVENT_KINDS.CERTIFICATE_EXPIRED,
-  name: {
+  name: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Certificate expired",
     [SUPPORTED_LANGUAGES.PL]: "Certyfikat wygasł",
     [SUPPORTED_LANGUAGES.DE]: "Zertifikat abgelaufen",
@@ -17,8 +18,8 @@ export const certificateExpiredAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Certificado vencido",
     [SUPPORTED_LANGUAGES.CS]: "Platnost certifikátu vypršela",
     [SUPPORTED_LANGUAGES.LT]: "Sertifikato galiojimas pasibaigė",
-  },
-  description: {
+  }),
+  description: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Sent when a learner's certificate expires or is reset.",
     [SUPPORTED_LANGUAGES.PL]: "Wysyłane, gdy certyfikat uczestnika wygasa lub zostaje zresetowany.",
     [SUPPORTED_LANGUAGES.DE]:
@@ -31,7 +32,7 @@ export const certificateExpiredAutomation: BuiltInAutomationDefinition = {
       "Odesílá se, když platnost certifikátu účastníka vyprší nebo je certifikát resetován.",
     [SUPPORTED_LANGUAGES.LT]:
       "Siunčiama, kai besimokančiojo sertifikato galiojimas pasibaigia arba sertifikatas nustatomas iš naujo.",
-  },
+  }),
   templateKey: BUILT_IN_EMAIL_TEMPLATE_KEYS.CERTIFICATE_MANUALLY_RESET,
   mappings: {
     course_name: { type: AUTOMATION_MAPPING_TYPES.EVENT_FIELD, field: "course_name" },

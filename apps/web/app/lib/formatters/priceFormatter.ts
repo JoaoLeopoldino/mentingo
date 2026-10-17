@@ -90,6 +90,7 @@ function getMaximumFractionDigits(currency: CurrencyCode): number {
 export function getCurrencySymbol(language: string): CurrencyCode {
   const loweCaseLanguage = language.toLowerCase();
   const languageCurrencyMap: Record<string, CurrencyCode> = {
+    "pt-ao": "AOA",
     pl: "PLN",
     en: "USD",
     es: "EUR",

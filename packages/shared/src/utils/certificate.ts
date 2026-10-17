@@ -48,6 +48,19 @@ export const CERTIFICATE_KIND = {
 export type CertificateKind = (typeof CERTIFICATE_KIND)[keyof typeof CERTIFICATE_KIND];
 
 const certificateTranslations = {
+  "pt-AO": {
+    certificate: "CERTIFICADO",
+    courseCompletion: "DE FORMAÇÃO",
+    certifyThat: "CERTIFICA-SE QUE",
+    successfulCompletion: {
+      [CERTIFICATE_KIND.COURSE]: "concluiu com aproveitamento a acção de formação",
+      [CERTIFICATE_KIND.LEARNING_PATH]: "concluiu com aproveitamento o percurso de aprendizagem",
+    },
+    confirmation: "confirmando a participação no programa de formação completo.",
+    date: "Data",
+    expiryDate: "Válido até",
+    signature: "Assinatura",
+  },
   pl: {
     certificate: "CERTYFIKAT",
     courseCompletion: "UKOŃCZENIA KURSU",

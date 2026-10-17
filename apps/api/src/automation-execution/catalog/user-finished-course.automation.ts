@@ -1,4 +1,5 @@
 import {
+  withEnglishLanguageFallback,
   AUTOMATION_EVENT_KINDS,
   AUTOMATION_MAPPING_TYPES,
   BUILT_IN_EMAIL_TEMPLATE_KEYS,
@@ -9,7 +10,7 @@ import type { BuiltInAutomationDefinition } from "../automation-execution.types"
 
 export const userFinishedCourseAutomation: BuiltInAutomationDefinition = {
   eventKind: AUTOMATION_EVENT_KINDS.USER_FINISHED_COURSE,
-  name: {
+  name: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Course completion",
     [SUPPORTED_LANGUAGES.PL]: "Ukończenie kursu",
     [SUPPORTED_LANGUAGES.DE]: "Kursabschluss",
@@ -17,8 +18,8 @@ export const userFinishedCourseAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Finalización de curso",
     [SUPPORTED_LANGUAGES.CS]: "Dokončení kurzu",
     [SUPPORTED_LANGUAGES.LT]: "Kurso užbaigimas",
-  },
-  description: {
+  }),
+  description: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Sent when a learner completes a course.",
     [SUPPORTED_LANGUAGES.PL]: "Wysyłane, gdy uczestnik ukończy kurs.",
     [SUPPORTED_LANGUAGES.DE]: "Wird gesendet, wenn ein Lernender einen Kurs abschließt.",
@@ -26,7 +27,7 @@ export const userFinishedCourseAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Se envía cuando un participante completa un curso.",
     [SUPPORTED_LANGUAGES.CS]: "Odesílá se, když účastník dokončí kurz.",
     [SUPPORTED_LANGUAGES.LT]: "Siunčiama, kai besimokantysis užbaigia kursą.",
-  },
+  }),
   templateKey: BUILT_IN_EMAIL_TEMPLATE_KEYS.COMPLETION_WITH_CERTIFICATE,
   legacySettingKey: "userCourseFinished",
   mappings: {

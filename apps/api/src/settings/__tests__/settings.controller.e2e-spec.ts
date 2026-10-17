@@ -62,9 +62,9 @@ describe("SettingsController (e2e)", () => {
         testCookies = await cookieFor(testUser, app);
       });
 
-      it("should update user settings (e.g., change language)", async () => {
+      it.each(["de", "pt-AO"])("persists the canonical interface language %s", async (language) => {
         const updatePayload = {
-          language: "de",
+          language,
         };
 
         const response = await request(app.getHttpServer())
@@ -74,7 +74,7 @@ describe("SettingsController (e2e)", () => {
           .expect(200);
 
         expect(response.body).toBeDefined();
-        expect(response.body.data.language).toBe("de");
+        expect(response.body.data.language).toBe(language);
 
         const updatedSettingInDb = await db.query.settings.findFirst({
           where: (s, { eq }) => eq(s.userId, testUser.id),
@@ -83,7 +83,7 @@ describe("SettingsController (e2e)", () => {
         const userSettings = updatedSettingInDb?.settings as StudentSettings;
 
         expect(updatedSettingInDb).toBeDefined();
-        expect(userSettings?.language).toBe("de");
+        expect(userSettings?.language).toBe(language);
       });
 
       it("should return 400 if invalid data is provided", async () => {

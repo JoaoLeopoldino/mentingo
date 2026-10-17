@@ -1,9 +1,10 @@
+import { withEnglishLanguageFallback } from "@repo/shared";
 import { SUPPORTED_LANGUAGES, type SupportedLanguages } from "@repo/shared";
 
 import type { EmailSubjectKey } from "./email-subjects.types";
 
 export const EMAIL_SUBJECTS_TRANSLATIONS = {
-  welcomeEmail: {
+  welcomeEmail: withEnglishLanguageFallback({
     en: "Welcome to our platform!",
     pl: "Witamy na naszej platformie!",
     de: "Willkommen auf unserer Plattform!",
@@ -11,8 +12,8 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
     cs: "Vítejte na naší platformě!",
     es: "¡Bienvenido a nuestra plataforma!",
     fr: "Bienvenue sur notre plateforme !",
-  },
-  passwordRecoveryEmail: {
+  }),
+  passwordRecoveryEmail: withEnglishLanguageFallback({
     en: "Password recovery",
     pl: "Odzyskiwanie hasła",
     de: "Passwort-Wiederherstellung",
@@ -20,8 +21,8 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
     cs: "Obnovení hesla",
     es: "Recuperación de contraseña",
     fr: "Récupération du mot de passe",
-  },
-  passwordReminderEmail: {
+  }),
+  passwordReminderEmail: withEnglishLanguageFallback({
     en: "Account creation reminder",
     pl: "Przypomnienie o utworzeniu konta",
     de: "Erinnerung zur Erstellung deines Kontos",
@@ -29,8 +30,8 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
     cs: "Připomenutí vytvoření účtu",
     es: "Recordatorio de creación de cuenta",
     fr: "Rappel de création de compte",
-  },
-  userInviteEmail: {
+  }),
+  userInviteEmail: withEnglishLanguageFallback({
     en: "You're invited to the platform!",
     pl: "Zapraszamy na platformę!",
     de: "Du bist auf die Plattform eingeladen!",
@@ -38,8 +39,8 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
     cs: "Jsi pozván(a) na platformu!",
     es: "¡Te han invitado a la plataforma!",
     fr: "Vous êtes invité(e) à rejoindre la plateforme !",
-  },
-  userFirstLoginEmail: {
+  }),
+  userFirstLoginEmail: withEnglishLanguageFallback({
     en: "First login!",
     pl: "Pierwsze logowanie!",
     de: "Erste Anmeldung!",
@@ -47,8 +48,8 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
     cs: "První přihlášení!",
     es: "¡Primer inicio de sesión!",
     fr: "Première connexion !",
-  },
-  userCourseAssignmentEmail: {
+  }),
+  userCourseAssignmentEmail: withEnglishLanguageFallback({
     en: "New course - {{courseName}}",
     pl: "Nowy kurs - {{courseName}}",
     de: "Neuer Kurs - {{courseName}}",
@@ -56,8 +57,8 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
     cs: "Nový kurz - {{courseName}}",
     es: "Nuevo curso - {{courseName}}",
     fr: "Nouveau cours - {{courseName}}",
-  },
-  userShortInactivityEmail: {
+  }),
+  userShortInactivityEmail: withEnglishLanguageFallback({
     en: "Continue your course - {{courseName}}",
     pl: "Kontynuuj kurs - {{courseName}}",
     de: "Setze deinen Kurs fort - {{courseName}}",
@@ -65,8 +66,8 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
     cs: "Pokračuj ve svém kurzu - {{courseName}}",
     es: "Continúa tu curso - {{courseName}}",
     fr: "Continuez votre cours - {{courseName}}",
-  },
-  userShortInactivityPlatformEmail: {
+  }),
+  userShortInactivityPlatformEmail: withEnglishLanguageFallback({
     en: "Continue your journey on the platform",
     pl: "Kontynuuj naukę na platformie",
     de: "Setze deine Lernreise auf der Plattform fort",
@@ -74,8 +75,8 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
     cs: "Pokračuj ve své cestě na platformě",
     es: "Continúa tu aprendizaje en la plataforma",
     fr: "Poursuivez votre parcours sur la plateforme",
-  },
-  userLongInactivityEmail: {
+  }),
+  userLongInactivityEmail: withEnglishLanguageFallback({
     en: "Come back to your courses",
     pl: "Wróć do swoich kursów",
     de: "Kehre zu deinen Kursen zurück",
@@ -83,8 +84,8 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
     cs: "Vrať se ke svým kurzům",
     es: "Vuelve a tus cursos",
     fr: "Reprenez vos cours",
-  },
-  userChapterFinishedEmail: {
+  }),
+  userChapterFinishedEmail: withEnglishLanguageFallback({
     en: "Module completed - {{chapterName}}",
     pl: "Ukończono moduł - {{chapterName}}",
     de: "Modul abgeschlossen - {{chapterName}}",
@@ -92,8 +93,8 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
     cs: "Modul dokončen - {{chapterName}}",
     es: "Módulo completado - {{chapterName}}",
     fr: "Module terminé - {{chapterName}}",
-  },
-  userCourseFinishedEmail: {
+  }),
+  userCourseFinishedEmail: withEnglishLanguageFallback({
     en: "Course completed - {{courseName}}",
     pl: "Ukończono kurs - {{courseName}}",
     de: "Kurs abgeschlossen - {{courseName}}",
@@ -101,8 +102,8 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
     cs: "Kurz dokončen - {{courseName}}",
     es: "Curso completado - {{courseName}}",
     fr: "Cours terminé - {{courseName}}",
-  },
-  certificateExpirationWarningEmail: {
+  }),
+  certificateExpirationWarningEmail: withEnglishLanguageFallback({
     en: "Certificate expires soon - {{courseName}}",
     pl: "Certyfikat wkrótce wygaśnie - {{courseName}}",
     de: "Zertifikat läuft bald ab - {{courseName}}",
@@ -110,8 +111,8 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
     cs: "Certifikát brzy vyprší - {{courseName}}",
     es: "El certificado caduca pronto - {{courseName}}",
     fr: "Le certificat expire bientôt - {{courseName}}",
-  },
-  certificateExpiredEmail: {
+  }),
+  certificateExpiredEmail: withEnglishLanguageFallback({
     en: "Certificate reset - {{courseName}}",
     pl: "Certyfikat zresetowany - {{courseName}}",
     de: "Zertifikat zurückgesetzt - {{courseName}}",
@@ -119,8 +120,8 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
     cs: "Certifikát resetován - {{courseName}}",
     es: "Certificado restablecido - {{courseName}}",
     fr: "Certificat réinitialisé - {{courseName}}",
-  },
-  adminNewUserEmail: {
+  }),
+  adminNewUserEmail: withEnglishLanguageFallback({
     en: "A new user has registered on your platform",
     pl: "Nowy użytkownik zarejestrował się na Twojej platformie",
     de: "Ein Benutzer hat sich auf deiner Plattform registriert",
@@ -128,8 +129,8 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
     cs: "Na tvé platformě se zaregistroval nový uživatel",
     es: "Un nuevo usuario se ha registrado en tu plataforma",
     fr: "Un nouvel utilisateur s'est inscrit sur votre plateforme",
-  },
-  adminCourseFinishedEmail: {
+  }),
+  adminCourseFinishedEmail: withEnglishLanguageFallback({
     en: "A user has completed a course on your platform",
     pl: "Użytkownik ukończył kurs na Twojej platformie",
     de: "Ein Benutzer hat einen Kurs auf deiner Plattform abgeschlossen",
@@ -137,8 +138,8 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
     cs: "Uživatel dokončil kurz na tvé platformě",
     es: "Un usuario ha completado un curso en tu plataforma",
     fr: "Un utilisateur a terminé un cours sur votre plateforme",
-  },
-  adminOverdueCoursesEmail: {
+  }),
+  adminOverdueCoursesEmail: withEnglishLanguageFallback({
     en: "Overdue courses notification",
     pl: "Powiadomienie o zaległych kursach",
     de: "Benachrichtigung über überfällige Kurse",
@@ -146,8 +147,8 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
     cs: "Upozornění na kurzy po termínu",
     es: "Notificación de cursos vencidos",
     fr: "Notification de cours en retard",
-  },
-  courseDueDateReminderEmail: {
+  }),
+  courseDueDateReminderEmail: withEnglishLanguageFallback({
     en: "Course deadline approaching - {{courseName}}",
     pl: "Zbliża się termin kursu - {{courseName}}",
     de: "Kursfrist naht - {{courseName}}",
@@ -155,8 +156,8 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
     cs: "Termín kurzu se blíží - {{courseName}}",
     es: "Se acerca la fecha límite del curso - {{courseName}}",
     fr: "L'échéance du cours approche - {{courseName}}",
-  },
-  magicLinkEmail: {
+  }),
+  magicLinkEmail: withEnglishLanguageFallback({
     en: "Login link",
     pl: "Link do logowania",
     de: "Anmeldelink",
@@ -164,8 +165,8 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
     cs: "Přihlašovací odkaz",
     es: "Enlace de inicio de sesión",
     fr: "Lien de connexion",
-  },
-  courseChatMentionEmail: {
+  }),
+  courseChatMentionEmail: withEnglishLanguageFallback({
     en: "You were mentioned in {{courseName}}",
     pl: "Oznaczono Cię w kursie {{courseName}}",
     de: "Du wurdest in {{courseName}} erwähnt",
@@ -173,7 +174,7 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
     cs: "Byl(a) jste zmíněn(a) v kurzu {{courseName}}",
     es: "Te han mencionado en {{courseName}}",
     fr: "Vous avez été mentionné(e) dans {{courseName}}",
-  },
+  }),
 } as const;
 
 export const getEmailSubject = (

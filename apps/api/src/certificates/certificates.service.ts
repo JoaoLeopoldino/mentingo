@@ -9,6 +9,7 @@ import {
   Inject,
 } from "@nestjs/common";
 import {
+  withEnglishLanguageFallback,
   buildCertificateHtmlDocument as buildSharedCertificateHtmlDocument,
   buildCertificateMarkup,
   CERTIFICATE_ARCHIVE_REASONS,
@@ -873,7 +874,7 @@ export class CertificatesService implements OnModuleDestroy {
   }
 
   private getSharePageContent(context: ShareRenderContext, embeddedImageSrc: string) {
-    const translations = {
+    const translations = withEnglishLanguageFallback({
       pl: {
         openLabel: "Otwórz platformę",
         pageTitle: `Certyfikat ukończenia kursu "${context.certificate.courseTitle}"`,
@@ -909,7 +910,7 @@ export class CertificatesService implements OnModuleDestroy {
         pageTitle: `Certificat de réussite du cours « ${context.certificate.courseTitle} »`,
         pageDescription: `${context.certificate.fullName} a terminé le cours « ${context.certificate.courseTitle} » et obtenu un certificat.`,
       },
-    } as const satisfies Record<
+    }) satisfies Record<
       SupportedLanguages,
       { openLabel: string; pageTitle: string; pageDescription: string }
     >;

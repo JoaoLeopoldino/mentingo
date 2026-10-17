@@ -1,3 +1,4 @@
+import { withEnglishLanguageFallback } from "@repo/shared";
 import { SupportedLanguages } from "@repo/shared";
 import { EmailContent } from "types";
 
@@ -6,7 +7,7 @@ export const getUserFinishedCourseEmailTranslations = (
   courseName: string,
   hasCertificate: boolean,
 ) => {
-  const emailContent: Record<SupportedLanguages, EmailContent> = {
+  const emailContent: Record<SupportedLanguages, EmailContent> = withEnglishLanguageFallback({
     en: {
       heading: "Course completed",
       paragraphs: [
@@ -63,7 +64,7 @@ export const getUserFinishedCourseEmailTranslations = (
       ],
       buttonText: hasCertificate ? "TÉLÉCHARGER LE CERTIFICAT" : "CONTINUER À APPRENDRE",
     },
-  };
+  });
 
   return emailContent[language];
 };

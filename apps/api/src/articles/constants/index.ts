@@ -1,4 +1,5 @@
-export const baseArticleTitle = {
+import { withEnglishLanguageFallback } from "@repo/shared";
+export const baseArticleTitle = withEnglishLanguageFallback({
   en: "Untitled Article",
   pl: "Artykuł bez tytułu",
   de: "Unbenannter Artikel",
@@ -6,9 +7,9 @@ export const baseArticleTitle = {
   cs: "Nezařazený článek",
   es: "Artículo sin título",
   fr: "Article sans titre",
-};
+});
 
-export const baseArticleSectionTitle = {
+export const baseArticleSectionTitle = withEnglishLanguageFallback({
   en: "Untitled section",
   pl: "Sekcja bez tytułu",
   de: "Unbenannter Abschnitt",
@@ -16,4 +17,4 @@ export const baseArticleSectionTitle = {
   cs: "Nezařazená sekce",
   es: "Sección sin título",
   fr: "Section sans titre",
-};
+});

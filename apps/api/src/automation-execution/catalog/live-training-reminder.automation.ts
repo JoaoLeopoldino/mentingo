@@ -1,4 +1,5 @@
 import {
+  withEnglishLanguageFallback,
   AUTOMATION_EVENT_KINDS,
   AUTOMATION_MAPPING_TYPES,
   BUILT_IN_EMAIL_TEMPLATE_KEYS,
@@ -10,7 +11,7 @@ import type { BuiltInAutomationDefinition } from "../automation-execution.types"
 export const liveTrainingReminderAutomation: BuiltInAutomationDefinition = {
   eventKind: AUTOMATION_EVENT_KINDS.LIVE_TRAINING_REMINDER,
   legacyDescription: "Sent when a live training is reminder.",
-  name: {
+  name: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Live training reminder",
     [SUPPORTED_LANGUAGES.PL]: "Przypomnienie o szkoleniu na żywo",
     [SUPPORTED_LANGUAGES.DE]: "Erinnerung an eine Live-Schulung",
@@ -18,8 +19,8 @@ export const liveTrainingReminderAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Recordatorio de formación en directo",
     [SUPPORTED_LANGUAGES.CS]: "Připomenutí živého školení",
     [SUPPORTED_LANGUAGES.LT]: "Priminimas apie tiesioginius mokymus",
-  },
-  description: {
+  }),
+  description: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Sent as a reminder for an upcoming live training.",
     [SUPPORTED_LANGUAGES.PL]: "Wysyłane jako przypomnienie o nadchodzącym szkoleniu na żywo.",
     [SUPPORTED_LANGUAGES.DE]: "Wird als Erinnerung an eine bevorstehende Live-Schulung gesendet.",
@@ -27,7 +28,7 @@ export const liveTrainingReminderAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Se envía como recordatorio de una próxima formación en directo.",
     [SUPPORTED_LANGUAGES.CS]: "Odesílá se jako připomenutí nadcházejícího živého školení.",
     [SUPPORTED_LANGUAGES.LT]: "Siunčiama kaip priminimas apie artėjančius tiesioginius mokymus.",
-  },
+  }),
   templateKey: BUILT_IN_EMAIL_TEMPLATE_KEYS.LIVE_TRAINING_REMINDER,
   mappings: {
     title: { type: AUTOMATION_MAPPING_TYPES.EVENT_FIELD, field: "title" },

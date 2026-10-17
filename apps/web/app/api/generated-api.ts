@@ -112,7 +112,7 @@ export interface RegisterBody {
    */
   lastName: string;
   password: string;
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   formAnswers?: object;
 }
 
@@ -341,7 +341,7 @@ export interface CreatePasswordBody {
   password: string;
   /** @minLength 1 */
   createToken: string;
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface CreatePasswordResponse {
@@ -501,8 +501,8 @@ export interface GetPublicRegistrationFormResponse {
       type: "checkbox";
       /** @minLength 1 */
       label: string;
-      baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-      availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+      baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+      availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
       required: boolean;
       displayOrder: number;
       archived: boolean;
@@ -515,13 +515,13 @@ export interface GetPublicRegistrationFormResponse {
 export interface GetUserSettingsResponse {
   data:
     | {
-        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         /** @default false */
         isMFAEnabled: boolean;
         MFASecret: string | null;
       }
     | {
-        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         /** @default false */
         isMFAEnabled: boolean;
         MFASecret: string | null;
@@ -533,13 +533,13 @@ export interface GetUserSettingsResponse {
 
 export type UpdateUserSettingsBody =
   | {
-      language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+      language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       /** @default false */
       isMFAEnabled?: boolean;
       MFASecret?: string | null;
     }
   | {
-      language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+      language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       /** @default false */
       isMFAEnabled?: boolean;
       MFASecret?: string | null;
@@ -551,13 +551,13 @@ export type UpdateUserSettingsBody =
 export interface UpdateUserSettingsResponse {
   data:
     | {
-        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         /** @default false */
         isMFAEnabled: boolean;
         MFASecret: string | null;
       }
     | {
-        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         /** @default false */
         isMFAEnabled: boolean;
         MFASecret: string | null;
@@ -713,7 +713,7 @@ export interface ResetDashboardSettingsResponse {
 
 export interface UpdateAdminNewUserNotificationResponse {
   data: {
-    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     /** @default false */
     isMFAEnabled: boolean;
     MFASecret: string | null;
@@ -1112,7 +1112,7 @@ export interface UpdateLearningPathsEnabledResponse {
 
 export interface UpdateAdminFinishedCourseNotificationResponse {
   data: {
-    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     /** @default false */
     isMFAEnabled: boolean;
     MFASecret: string | null;
@@ -1124,7 +1124,7 @@ export interface UpdateAdminFinishedCourseNotificationResponse {
 
 export interface UpdateAdminOverdueCourseNotificationResponse {
   data: {
-    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     /** @default false */
     isMFAEnabled: boolean;
     MFASecret: string | null;
@@ -1204,9 +1204,11 @@ export interface GetAdminRegistrationFormResponse {
         es?: string;
         /** @minLength 1 */
         fr?: string;
+        /** @minLength 1 */
+        "pt-AO"?: string;
       };
-      baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-      availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+      baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+      availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
       required: boolean;
       displayOrder: number;
       archived: boolean;
@@ -1236,9 +1238,11 @@ export interface UpdateRegistrationFormBody {
       es?: string;
       /** @minLength 1 */
       fr?: string;
+      /** @minLength 1 */
+      "pt-AO"?: string;
     };
-    baseLanguage?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales?: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales?: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     required: boolean;
     displayOrder: number;
     archived: boolean;
@@ -1266,9 +1270,11 @@ export interface UpdateRegistrationFormResponse {
         es?: string;
         /** @minLength 1 */
         fr?: string;
+        /** @minLength 1 */
+        "pt-AO"?: string;
       };
-      baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-      availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+      baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+      availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
       required: boolean;
       displayOrder: number;
       archived: boolean;
@@ -1342,7 +1348,7 @@ export interface UpdateConfigWarningDismissedBody {
 
 export interface UpdateConfigWarningDismissedResponse {
   data: {
-    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     /** @default false */
     isMFAEnabled: boolean;
     MFASecret: string | null;
@@ -1763,7 +1769,7 @@ export interface CreateUserBody {
   lastName: string;
   roleSlugs: string[];
   managedGroupIds?: string[];
-  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface CreateUserResponse {
@@ -1823,8 +1829,8 @@ export interface GetAllGroupsResponse {
     id: string;
     name: string;
     characteristic: string | null;
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     users?: {
       id: string;
       createdAt: string;
@@ -1853,8 +1859,8 @@ export interface GetGroupByIdResponse {
     id: string;
     name: string;
     characteristic: string | null;
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     users?: {
       id: string;
       createdAt: string;
@@ -1877,8 +1883,8 @@ export interface GetUserGroupsResponse {
     id: string;
     name: string;
     characteristic: string | null;
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     users?: {
       id: string;
       createdAt: string;
@@ -1904,7 +1910,7 @@ export interface GetUserGroupsResponse {
 export interface CreateGroupBody {
   name: string;
   characteristic?: string;
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface CreateGroupResponse {
@@ -1918,7 +1924,7 @@ export interface CreateGroupResponse {
 export interface UpdateGroupBody {
   name?: string;
   characteristic?: string;
-  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface UpdateGroupResponse {
@@ -1927,8 +1933,8 @@ export interface UpdateGroupResponse {
     id: string;
     name: string;
     characteristic?: string | null;
-    availableLocales?: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    baseLanguage?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    availableLocales?: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    baseLanguage?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     createdAt: string;
     updatedAt: string;
     isMandatory?: boolean;
@@ -1954,8 +1960,8 @@ export interface CreateLanguageResponse {
     sequenceEnabled: boolean;
     /** @format uuid */
     authorId: string;
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     createdAt: string;
     updatedAt: string;
   };
@@ -1966,14 +1972,14 @@ export interface DeleteLanguageResponse {
     /** @format uuid */
     id: string;
     title: string;
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     createdAt: string | null;
   };
 }
 
 export interface UpdateBaseLanguageBody {
-  baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface UpdateBaseLanguageResponse {
@@ -1981,8 +1987,8 @@ export interface UpdateBaseLanguageResponse {
     /** @format uuid */
     id: string;
     title: string;
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     createdAt: string | null;
   };
 }
@@ -2015,8 +2021,8 @@ export interface GetGroupsByCourseResponse {
     id: string;
     name: string;
     characteristic?: string | null;
-    availableLocales?: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    baseLanguage?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    availableLocales?: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    baseLanguage?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     createdAt: string;
     updatedAt: string;
     isMandatory?: boolean;
@@ -2234,8 +2240,8 @@ export interface GetAvailableCourseCategoriesResponse {
     /** @format uuid */
     id: string;
     title: string;
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     createdAt: string | null;
   }[];
   pagination: {
@@ -2401,8 +2407,8 @@ export interface GetCourseResponse {
     slug: string;
     stripeProductId: string | null;
     stripePriceId: string | null;
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     dueDate: string | null;
     isManagerPreview?: boolean;
   };
@@ -2470,10 +2476,10 @@ export interface GetBetaCourseByIdResponse {
             matchedWord?: string | null;
             scaleAnswer?: number | null;
             /** @default "en" */
-            language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
           }[];
           /** @default "en" */
-          language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+          language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         }[];
         aiMentor?: {
           /** @format uuid */
@@ -2518,8 +2524,8 @@ export interface GetBetaCourseByIdResponse {
     thumbnailS3SingedUrl?: string | null;
     trailerUrl?: string | null;
     title: string;
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     sourceCourseId?: string | null;
     sourceTenantId?: string | null;
   };
@@ -2550,7 +2556,7 @@ export type CreateCourseBody = {
   isScorm?: boolean;
   hasCertificate?: boolean;
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 } & {
   chapters?: string[];
 };
@@ -2618,7 +2624,7 @@ export interface GetCourseDuplicationJobStatusResponse {
 
 export interface UpdateCourseMediaBody {
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   /**
    * @min 0
    * @max 100
@@ -2656,7 +2662,7 @@ export interface UpdateCourseBody {
   categoryId?: string;
   chapters?: string[];
   /** @default "en" */
-  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface UpdateCourseResponse {
@@ -3126,10 +3132,10 @@ export type BetaCreateChapterBody = {
         matchedWord?: string | null;
         scaleAnswer?: number | null;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       }[];
       /** @default "en" */
-      language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+      language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     }[];
     aiMentor?: {
       /** @format uuid */
@@ -3210,10 +3216,10 @@ export type UpdateChapterBody = ({
         matchedWord?: string | null;
         scaleAnswer?: number | null;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       }[];
       /** @default "en" */
-      language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+      language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     }[];
     aiMentor?: {
       /** @format uuid */
@@ -3241,7 +3247,7 @@ export type UpdateChapterBody = ({
   courseId?: string;
 }) & {
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 };
 
 export interface UpdateChapterResponse {
@@ -3341,7 +3347,7 @@ export interface GetLessonByIdResponse {
           questionId?: string;
         }[];
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         passQuestion: boolean | null;
       }[];
       questionCount: number;
@@ -3359,7 +3365,7 @@ export interface GetLessonByIdResponse {
     displayOrder: number;
     isExternal?: boolean;
     nextLessonId: string | null;
-    userLanguage?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    userLanguage?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     status?: "active" | "completed" | "archived";
     /** @format uuid */
     threadId?: string;
@@ -3542,10 +3548,10 @@ export type BetaCreateLessonBody = {
       matchedWord?: string | null;
       scaleAnswer?: number | null;
       /** @default "en" */
-      language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+      language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     }[];
     /** @default "en" */
-    language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   }[];
   aiMentor?: {
     /** @format uuid */
@@ -3585,7 +3591,7 @@ export interface BetaCreateLiveTrainingLessonBody {
   /** @format uuid */
   chapterId: string;
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   displayOrder?: number;
   contextId?: string;
   liveTraining?: {
@@ -3640,7 +3646,7 @@ export interface AttachLiveTrainingLessonBody {
    */
   title: string;
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   liveTraining?: {
     /**
      * @minLength 1
@@ -3732,10 +3738,10 @@ export type BetaCreateAiMentorLessonBody = {
       matchedWord?: string | null;
       scaleAnswer?: number | null;
       /** @default "en" */
-      language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+      language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     }[];
     /** @default "en" */
-    language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   }[];
   liveTrainingId?: string | null;
   updatedAt?: string;
@@ -3863,10 +3869,10 @@ export type BetaUpdateAiMentorLessonBody = ({
       matchedWord?: string | null;
       scaleAnswer?: number | null;
       /** @default "en" */
-      language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+      language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     }[];
     /** @default "en" */
-    language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   }[];
   liveTrainingId?: string | null;
   updatedAt?: string;
@@ -3877,7 +3883,7 @@ export type BetaUpdateAiMentorLessonBody = ({
   customTtsReference?: string | null;
 }) & {
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 };
 
 export interface BetaUpdateAiMentorLessonResponse {
@@ -3929,10 +3935,10 @@ export type BetaCreateQuizLessonBody = {
       matchedWord?: string | null;
       scaleAnswer?: number | null;
       /** @default "en" */
-      language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+      language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     }[];
     /** @default "en" */
-    language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   }[];
 } & {
   /** @format uuid */
@@ -3991,10 +3997,10 @@ export type BetaUpdateQuizLessonBody = ({
       matchedWord?: string | null;
       scaleAnswer?: number | null;
       /** @default "en" */
-      language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+      language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     }[];
     /** @default "en" */
-    language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   }[];
 } & {
   /** @format uuid */
@@ -4002,7 +4008,7 @@ export type BetaUpdateQuizLessonBody = ({
   displayOrder?: number;
 }) & {
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 };
 
 export interface BetaUpdateQuizLessonResponse {
@@ -4051,10 +4057,10 @@ export type BetaUpdateLessonBody = ({
       matchedWord?: string | null;
       scaleAnswer?: number | null;
       /** @default "en" */
-      language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+      language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     }[];
     /** @default "en" */
-    language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   }[];
   aiMentor?: {
     /** @format uuid */
@@ -4076,7 +4082,7 @@ export type BetaUpdateLessonBody = ({
   contextId?: string;
 }) & {
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 };
 
 export interface BetaUpdateLessonResponse {
@@ -4112,7 +4118,7 @@ export interface EvaluationQuizBody {
         }
     )[];
   }[];
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface EvaluationQuizResponse {
@@ -4164,7 +4170,7 @@ export interface UpdateEmbedLessonBody {
   /** @format uuid */
   lessonId: string;
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface UpdateEmbedLessonResponse {
@@ -4224,9 +4230,9 @@ export interface GetConfigurationResponse {
       id: string;
       description: string;
     }[];
-    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
   } | null;
 }
 
@@ -4308,9 +4314,9 @@ export interface ReplaceConfigurationResponse {
       id: string;
       description: string;
     }[];
-    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
   };
 }
 
@@ -4379,9 +4385,9 @@ export interface UpdateTranslationsResponse {
       id: string;
       description: string;
     }[];
-    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
   };
 }
 
@@ -5923,10 +5929,10 @@ export interface GetAiMentorConfigurationResponse {
         needsConfiguration: boolean;
         hasMissingTranslations: boolean;
         /** @default "en" */
-        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         /** @default "en" */
-        baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-        availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+        baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+        availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
         type: "teacher";
         taskGoal: string;
         expertise: string;
@@ -5944,10 +5950,10 @@ export interface GetAiMentorConfigurationResponse {
         needsConfiguration: boolean;
         hasMissingTranslations: boolean;
         /** @default "en" */
-        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         /** @default "en" */
-        baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-        availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+        baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+        availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
         type: "roleplay";
         scenario: string;
         aiRole: string;
@@ -6000,10 +6006,10 @@ export interface ReplaceAiMentorConfigurationResponse {
         needsConfiguration: boolean;
         hasMissingTranslations: boolean;
         /** @default "en" */
-        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         /** @default "en" */
-        baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-        availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+        baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+        availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
         type: "teacher";
         taskGoal: string;
         expertise: string;
@@ -6021,10 +6027,10 @@ export interface ReplaceAiMentorConfigurationResponse {
         needsConfiguration: boolean;
         hasMissingTranslations: boolean;
         /** @default "en" */
-        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         /** @default "en" */
-        baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-        availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+        baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+        availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
         type: "roleplay";
         scenario: string;
         aiRole: string;
@@ -6075,10 +6081,10 @@ export interface UpdateAiMentorConfigurationTranslationsResponse {
         needsConfiguration: boolean;
         hasMissingTranslations: boolean;
         /** @default "en" */
-        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         /** @default "en" */
-        baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-        availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+        baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+        availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
         type: "teacher";
         taskGoal: string;
         expertise: string;
@@ -6096,10 +6102,10 @@ export interface UpdateAiMentorConfigurationTranslationsResponse {
         needsConfiguration: boolean;
         hasMissingTranslations: boolean;
         /** @default "en" */
-        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         /** @default "en" */
-        baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-        availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+        baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+        availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
         type: "roleplay";
         scenario: string;
         aiRole: string;
@@ -7390,7 +7396,7 @@ export type GetCertificateResponse = {
 export interface DownloadCertificateBody {
   /** @format uuid */
   certificateId: string;
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface CreateCertificateShareLinkBody {
@@ -7470,7 +7476,7 @@ export interface GetTodayPracticeResponse {
     /** @format uuid */
     id: string;
     practiceDate: string;
-    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     title: string | null;
     aiMentorName: string | null;
     threadId: string | null;
@@ -7504,7 +7510,7 @@ export interface GetTodayPracticeResponse {
 }
 
 export interface CreatePracticeBody {
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   /**
    * @minLength 1
    * @maxLength 3000
@@ -7517,7 +7523,7 @@ export interface CreatePracticeResponse {
     /** @format uuid */
     id: string;
     practiceDate: string;
-    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     title: string | null;
     aiMentorName: string | null;
     threadId: string | null;
@@ -7555,7 +7561,7 @@ export interface GetPracticeResponse {
     /** @format uuid */
     id: string;
     practiceDate: string;
-    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     title: string | null;
     aiMentorName: string | null;
     threadId: string | null;
@@ -7593,7 +7599,7 @@ export interface RetryPracticeResponse {
     /** @format uuid */
     id: string;
     practiceDate: string;
-    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     title: string | null;
     aiMentorName: string | null;
     threadId: string | null;
@@ -7631,7 +7637,7 @@ export interface ReplayPracticeResponse {
     /** @format uuid */
     id: string;
     practiceDate: string;
-    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     title: string | null;
     aiMentorName: string | null;
     threadId: string | null;
@@ -7672,7 +7678,7 @@ export interface GetThreadResponse {
     practiceSessionId: string | null;
     /** @format uuid */
     userId: string;
-    userLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    userLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     createdAt: string;
     updatedAt: string;
     status: "active" | "completed" | "archived";
@@ -7942,7 +7948,7 @@ export interface UploadAssetBody {
   /** @format uuid */
   contextId?: string;
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   title: string;
   description: string;
   visibility?: "public" | "private";
@@ -8091,7 +8097,7 @@ export interface GetLiveTrainingResponse {
 
 export interface CreateLiveTrainingBody {
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   /**
    * @minLength 1
    * @maxLength 120
@@ -8143,7 +8149,7 @@ export interface GetHostCandidatesResponse {
 
 export type UpdateLiveTrainingBody = {
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 } & {
   /**
    * @minLength 1
@@ -8471,8 +8477,8 @@ export interface GetAllAnnouncementsResponse {
     sourceId: string | null;
     title: string;
     content: string;
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     deletedAt: string | null;
     isRead: boolean | null;
   }[];
@@ -8506,8 +8512,8 @@ export interface GetAnnouncementsForUserResponse {
     sourceId: string | null;
     title: string;
     content: string;
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     deletedAt: string | null;
     isRead: boolean;
   }[];
@@ -8522,10 +8528,10 @@ export interface GetAnnouncementsForUserResponse {
 export interface CreateAnnouncementBody {
   /** @default null */
   groupId: string | null;
-  baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   /** @minItems 1 */
   translations: {
-    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     /**
      * @minLength 1
      * @maxLength 120
@@ -8555,8 +8561,8 @@ export interface CreateAnnouncementResponse {
     sourceId: string | null;
     title: string;
     content: string;
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     deletedAt: string | null;
   };
 }
@@ -8677,7 +8683,7 @@ export interface UpsertProgressBody {
    */
   activeWatchSecondsDelta?: number;
   /** @default "en" */
-  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface UpsertProgressResponse {
@@ -8711,7 +8717,7 @@ export interface CreateCheckoutSessionBody {
   productDescription?: string;
   courseId: string;
   customerId: string;
-  locale: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  locale: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   priceId: string;
 }
 
@@ -8923,9 +8929,9 @@ export interface EnqueueEmailTemplateTestBody {
     description?: string;
   }[];
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   /** @default "en" */
-  baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   subject: {
     en?: string;
     pl?: string;
@@ -8934,6 +8940,7 @@ export interface EnqueueEmailTemplateTestBody {
     cs?: string;
     es?: string;
     fr?: string;
+    "pt-AO"?: string;
   };
   content: {
     en?: {
@@ -9729,6 +9736,138 @@ export interface EnqueueEmailTemplateTestBody {
       )[];
     };
     fr?: {
+      type: "doc";
+      version: 1;
+      content: (
+        | {
+            type: "header";
+            attrs: {
+              source: "tenant_branding";
+            };
+          }
+        | {
+            type: "heading";
+            content: {
+              type: "paragraph";
+              content?: {
+                type: "text";
+                text: string;
+                marks?: (
+                  | {
+                      type: "bold";
+                    }
+                  | {
+                      type: "italic";
+                    }
+                  | {
+                      type: "link";
+                      attrs: {
+                        /** @minLength 1 */
+                        href: string;
+                      };
+                    }
+                )[];
+              }[];
+            }[];
+          }
+        | {
+            type: "text";
+            content: {
+              type: "paragraph";
+              content?: {
+                type: "text";
+                text: string;
+                marks?: (
+                  | {
+                      type: "bold";
+                    }
+                  | {
+                      type: "italic";
+                    }
+                  | {
+                      type: "link";
+                      attrs: {
+                        /** @minLength 1 */
+                        href: string;
+                      };
+                    }
+                )[];
+              }[];
+            }[];
+          }
+        | {
+            type: "button";
+            attrs: {
+              /** @minLength 1 */
+              label: string;
+              /** @minLength 1 */
+              url: string;
+            };
+          }
+        | {
+            type: "image";
+            attrs: {
+              /** @minLength 1 */
+              src: string;
+              alt: string;
+              /**
+               * @min 1
+               * @max 1200
+               */
+              width?: number;
+            };
+          }
+        | {
+            type: "divider";
+            attrs?: {
+              /**
+               * @min 1
+               * @max 200
+               */
+              height: number;
+            };
+          }
+        | {
+            type: "spacer";
+            attrs: {
+              /**
+               * @min 0
+               * @max 200
+               */
+              height: number;
+            };
+          }
+        | {
+            type: "footer";
+            attrs: {
+              text: string;
+            };
+            content?: {
+              type: "paragraph";
+              content?: {
+                type: "text";
+                text: string;
+                marks?: (
+                  | {
+                      type: "bold";
+                    }
+                  | {
+                      type: "italic";
+                    }
+                  | {
+                      type: "link";
+                      attrs: {
+                        /** @minLength 1 */
+                        href: string;
+                      };
+                    }
+                )[];
+              }[];
+            }[];
+          }
+      )[];
+    };
+    "pt-AO"?: {
       type: "doc";
       version: 1;
       content: (
@@ -9970,6 +10109,7 @@ export interface DuplicateEmailTemplateResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     subject: {
       en?: string;
@@ -9979,6 +10119,7 @@ export interface DuplicateEmailTemplateResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     content: {
       en?: {
@@ -10905,12 +11046,144 @@ export interface DuplicateEmailTemplateResponse {
             }
         )[];
       };
+      "pt-AO"?: {
+        type: "doc";
+        version: 1;
+        content: (
+          | {
+              type: "header";
+              attrs: {
+                source: "tenant_branding";
+              };
+            }
+          | {
+              type: "heading";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "text";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "button";
+              attrs: {
+                /** @minLength 1 */
+                label: string;
+                /** @minLength 1 */
+                url: string;
+              };
+            }
+          | {
+              type: "image";
+              attrs: {
+                /** @minLength 1 */
+                src: string;
+                alt: string;
+                /**
+                 * @min 1
+                 * @max 1200
+                 */
+                width?: number;
+              };
+            }
+          | {
+              type: "divider";
+              attrs?: {
+                /**
+                 * @min 1
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "spacer";
+              attrs: {
+                /**
+                 * @min 0
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "footer";
+              attrs: {
+                text: string;
+              };
+              content?: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+        )[];
+      };
     };
     status: ("draft" | "published" | "archived") | null;
     /** @default "en" */
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     createdAt: string | null;
     updatedAt: string | null;
     publishedAt: string | null;
@@ -11010,6 +11283,7 @@ export interface ListEmailTemplatesResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     subject: {
       en?: string;
@@ -11019,6 +11293,7 @@ export interface ListEmailTemplatesResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     content: {
       en?: {
@@ -11945,12 +12220,144 @@ export interface ListEmailTemplatesResponse {
             }
         )[];
       };
+      "pt-AO"?: {
+        type: "doc";
+        version: 1;
+        content: (
+          | {
+              type: "header";
+              attrs: {
+                source: "tenant_branding";
+              };
+            }
+          | {
+              type: "heading";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "text";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "button";
+              attrs: {
+                /** @minLength 1 */
+                label: string;
+                /** @minLength 1 */
+                url: string;
+              };
+            }
+          | {
+              type: "image";
+              attrs: {
+                /** @minLength 1 */
+                src: string;
+                alt: string;
+                /**
+                 * @min 1
+                 * @max 1200
+                 */
+                width?: number;
+              };
+            }
+          | {
+              type: "divider";
+              attrs?: {
+                /**
+                 * @min 1
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "spacer";
+              attrs: {
+                /**
+                 * @min 0
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "footer";
+              attrs: {
+                text: string;
+              };
+              content?: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+        )[];
+      };
     };
     status: ("draft" | "published" | "archived") | null;
     /** @default "en" */
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     createdAt: string | null;
     updatedAt: string | null;
     publishedAt: string | null;
@@ -12056,6 +12463,7 @@ export interface GetBuiltInEmailTemplateResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     subject: {
       en?: string;
@@ -12065,6 +12473,7 @@ export interface GetBuiltInEmailTemplateResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     content: {
       en?: {
@@ -12991,12 +13400,144 @@ export interface GetBuiltInEmailTemplateResponse {
             }
         )[];
       };
+      "pt-AO"?: {
+        type: "doc";
+        version: 1;
+        content: (
+          | {
+              type: "header";
+              attrs: {
+                source: "tenant_branding";
+              };
+            }
+          | {
+              type: "heading";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "text";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "button";
+              attrs: {
+                /** @minLength 1 */
+                label: string;
+                /** @minLength 1 */
+                url: string;
+              };
+            }
+          | {
+              type: "image";
+              attrs: {
+                /** @minLength 1 */
+                src: string;
+                alt: string;
+                /**
+                 * @min 1
+                 * @max 1200
+                 */
+                width?: number;
+              };
+            }
+          | {
+              type: "divider";
+              attrs?: {
+                /**
+                 * @min 1
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "spacer";
+              attrs: {
+                /**
+                 * @min 0
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "footer";
+              attrs: {
+                text: string;
+              };
+              content?: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+        )[];
+      };
     };
     status: ("draft" | "published" | "archived") | null;
     /** @default "en" */
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     createdAt: string | null;
     updatedAt: string | null;
     publishedAt: string | null;
@@ -13096,6 +13637,7 @@ export interface CreateDraftFromBuiltInEmailTemplateResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     subject: {
       en?: string;
@@ -13105,6 +13647,7 @@ export interface CreateDraftFromBuiltInEmailTemplateResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     content: {
       en?: {
@@ -14031,12 +14574,144 @@ export interface CreateDraftFromBuiltInEmailTemplateResponse {
             }
         )[];
       };
+      "pt-AO"?: {
+        type: "doc";
+        version: 1;
+        content: (
+          | {
+              type: "header";
+              attrs: {
+                source: "tenant_branding";
+              };
+            }
+          | {
+              type: "heading";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "text";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "button";
+              attrs: {
+                /** @minLength 1 */
+                label: string;
+                /** @minLength 1 */
+                url: string;
+              };
+            }
+          | {
+              type: "image";
+              attrs: {
+                /** @minLength 1 */
+                src: string;
+                alt: string;
+                /**
+                 * @min 1
+                 * @max 1200
+                 */
+                width?: number;
+              };
+            }
+          | {
+              type: "divider";
+              attrs?: {
+                /**
+                 * @min 1
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "spacer";
+              attrs: {
+                /**
+                 * @min 0
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "footer";
+              attrs: {
+                text: string;
+              };
+              content?: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+        )[];
+      };
     };
     status: ("draft" | "published" | "archived") | null;
     /** @default "en" */
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     createdAt: string | null;
     updatedAt: string | null;
     publishedAt: string | null;
@@ -14136,6 +14811,7 @@ export interface GetEmailTemplateResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     subject: {
       en?: string;
@@ -14145,6 +14821,7 @@ export interface GetEmailTemplateResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     content: {
       en?: {
@@ -15071,12 +15748,144 @@ export interface GetEmailTemplateResponse {
             }
         )[];
       };
+      "pt-AO"?: {
+        type: "doc";
+        version: 1;
+        content: (
+          | {
+              type: "header";
+              attrs: {
+                source: "tenant_branding";
+              };
+            }
+          | {
+              type: "heading";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "text";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "button";
+              attrs: {
+                /** @minLength 1 */
+                label: string;
+                /** @minLength 1 */
+                url: string;
+              };
+            }
+          | {
+              type: "image";
+              attrs: {
+                /** @minLength 1 */
+                src: string;
+                alt: string;
+                /**
+                 * @min 1
+                 * @max 1200
+                 */
+                width?: number;
+              };
+            }
+          | {
+              type: "divider";
+              attrs?: {
+                /**
+                 * @min 1
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "spacer";
+              attrs: {
+                /**
+                 * @min 0
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "footer";
+              attrs: {
+                text: string;
+              };
+              content?: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+        )[];
+      };
     };
     status: ("draft" | "published" | "archived") | null;
     /** @default "en" */
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     createdAt: string | null;
     updatedAt: string | null;
     publishedAt: string | null;
@@ -15127,6 +15936,7 @@ export interface CreateEmailTemplateBody {
     cs?: string;
     es?: string;
     fr?: string;
+    "pt-AO"?: string;
   };
   subject: {
     en?: string;
@@ -15136,6 +15946,7 @@ export interface CreateEmailTemplateBody {
     cs?: string;
     es?: string;
     fr?: string;
+    "pt-AO"?: string;
   };
   content: {
     en?: {
@@ -16062,9 +16873,141 @@ export interface CreateEmailTemplateBody {
           }
       )[];
     };
+    "pt-AO"?: {
+      type: "doc";
+      version: 1;
+      content: (
+        | {
+            type: "header";
+            attrs: {
+              source: "tenant_branding";
+            };
+          }
+        | {
+            type: "heading";
+            content: {
+              type: "paragraph";
+              content?: {
+                type: "text";
+                text: string;
+                marks?: (
+                  | {
+                      type: "bold";
+                    }
+                  | {
+                      type: "italic";
+                    }
+                  | {
+                      type: "link";
+                      attrs: {
+                        /** @minLength 1 */
+                        href: string;
+                      };
+                    }
+                )[];
+              }[];
+            }[];
+          }
+        | {
+            type: "text";
+            content: {
+              type: "paragraph";
+              content?: {
+                type: "text";
+                text: string;
+                marks?: (
+                  | {
+                      type: "bold";
+                    }
+                  | {
+                      type: "italic";
+                    }
+                  | {
+                      type: "link";
+                      attrs: {
+                        /** @minLength 1 */
+                        href: string;
+                      };
+                    }
+                )[];
+              }[];
+            }[];
+          }
+        | {
+            type: "button";
+            attrs: {
+              /** @minLength 1 */
+              label: string;
+              /** @minLength 1 */
+              url: string;
+            };
+          }
+        | {
+            type: "image";
+            attrs: {
+              /** @minLength 1 */
+              src: string;
+              alt: string;
+              /**
+               * @min 1
+               * @max 1200
+               */
+              width?: number;
+            };
+          }
+        | {
+            type: "divider";
+            attrs?: {
+              /**
+               * @min 1
+               * @max 200
+               */
+              height: number;
+            };
+          }
+        | {
+            type: "spacer";
+            attrs: {
+              /**
+               * @min 0
+               * @max 200
+               */
+              height: number;
+            };
+          }
+        | {
+            type: "footer";
+            attrs: {
+              text: string;
+            };
+            content?: {
+              type: "paragraph";
+              content?: {
+                type: "text";
+                text: string;
+                marks?: (
+                  | {
+                      type: "bold";
+                    }
+                  | {
+                      type: "italic";
+                    }
+                  | {
+                      type: "link";
+                      attrs: {
+                        /** @minLength 1 */
+                        href: string;
+                      };
+                    }
+                )[];
+              }[];
+            }[];
+          }
+      )[];
+    };
   };
   /** @default "en" */
-  baseLanguage?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  baseLanguage?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface CreateEmailTemplateResponse {
@@ -16159,6 +17102,7 @@ export interface CreateEmailTemplateResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     subject: {
       en?: string;
@@ -16168,6 +17112,7 @@ export interface CreateEmailTemplateResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     content: {
       en?: {
@@ -17094,12 +18039,144 @@ export interface CreateEmailTemplateResponse {
             }
         )[];
       };
+      "pt-AO"?: {
+        type: "doc";
+        version: 1;
+        content: (
+          | {
+              type: "header";
+              attrs: {
+                source: "tenant_branding";
+              };
+            }
+          | {
+              type: "heading";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "text";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "button";
+              attrs: {
+                /** @minLength 1 */
+                label: string;
+                /** @minLength 1 */
+                url: string;
+              };
+            }
+          | {
+              type: "image";
+              attrs: {
+                /** @minLength 1 */
+                src: string;
+                alt: string;
+                /**
+                 * @min 1
+                 * @max 1200
+                 */
+                width?: number;
+              };
+            }
+          | {
+              type: "divider";
+              attrs?: {
+                /**
+                 * @min 1
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "spacer";
+              attrs: {
+                /**
+                 * @min 0
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "footer";
+              attrs: {
+                text: string;
+              };
+              content?: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+        )[];
+      };
     };
     status: ("draft" | "published" | "archived") | null;
     /** @default "en" */
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     createdAt: string | null;
     updatedAt: string | null;
     publishedAt: string | null;
@@ -17142,6 +18219,7 @@ export interface UpdateEmailTemplateBody {
     cs?: string;
     es?: string;
     fr?: string;
+    "pt-AO"?: string;
   };
   subject?: {
     en?: string;
@@ -17151,6 +18229,7 @@ export interface UpdateEmailTemplateBody {
     cs?: string;
     es?: string;
     fr?: string;
+    "pt-AO"?: string;
   };
   content?: {
     en?: {
@@ -18077,6 +19156,138 @@ export interface UpdateEmailTemplateBody {
           }
       )[];
     };
+    "pt-AO"?: {
+      type: "doc";
+      version: 1;
+      content: (
+        | {
+            type: "header";
+            attrs: {
+              source: "tenant_branding";
+            };
+          }
+        | {
+            type: "heading";
+            content: {
+              type: "paragraph";
+              content?: {
+                type: "text";
+                text: string;
+                marks?: (
+                  | {
+                      type: "bold";
+                    }
+                  | {
+                      type: "italic";
+                    }
+                  | {
+                      type: "link";
+                      attrs: {
+                        /** @minLength 1 */
+                        href: string;
+                      };
+                    }
+                )[];
+              }[];
+            }[];
+          }
+        | {
+            type: "text";
+            content: {
+              type: "paragraph";
+              content?: {
+                type: "text";
+                text: string;
+                marks?: (
+                  | {
+                      type: "bold";
+                    }
+                  | {
+                      type: "italic";
+                    }
+                  | {
+                      type: "link";
+                      attrs: {
+                        /** @minLength 1 */
+                        href: string;
+                      };
+                    }
+                )[];
+              }[];
+            }[];
+          }
+        | {
+            type: "button";
+            attrs: {
+              /** @minLength 1 */
+              label: string;
+              /** @minLength 1 */
+              url: string;
+            };
+          }
+        | {
+            type: "image";
+            attrs: {
+              /** @minLength 1 */
+              src: string;
+              alt: string;
+              /**
+               * @min 1
+               * @max 1200
+               */
+              width?: number;
+            };
+          }
+        | {
+            type: "divider";
+            attrs?: {
+              /**
+               * @min 1
+               * @max 200
+               */
+              height: number;
+            };
+          }
+        | {
+            type: "spacer";
+            attrs: {
+              /**
+               * @min 0
+               * @max 200
+               */
+              height: number;
+            };
+          }
+        | {
+            type: "footer";
+            attrs: {
+              text: string;
+            };
+            content?: {
+              type: "paragraph";
+              content?: {
+                type: "text";
+                text: string;
+                marks?: (
+                  | {
+                      type: "bold";
+                    }
+                  | {
+                      type: "italic";
+                    }
+                  | {
+                      type: "link";
+                      attrs: {
+                        /** @minLength 1 */
+                        href: string;
+                      };
+                    }
+                )[];
+              }[];
+            }[];
+          }
+      )[];
+    };
   };
   /** @maxItems 100 */
   placeholders?: {
@@ -18182,6 +19393,7 @@ export interface UpdateEmailTemplateResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     subject: {
       en?: string;
@@ -18191,6 +19403,7 @@ export interface UpdateEmailTemplateResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     content: {
       en?: {
@@ -19117,12 +20330,144 @@ export interface UpdateEmailTemplateResponse {
             }
         )[];
       };
+      "pt-AO"?: {
+        type: "doc";
+        version: 1;
+        content: (
+          | {
+              type: "header";
+              attrs: {
+                source: "tenant_branding";
+              };
+            }
+          | {
+              type: "heading";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "text";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "button";
+              attrs: {
+                /** @minLength 1 */
+                label: string;
+                /** @minLength 1 */
+                url: string;
+              };
+            }
+          | {
+              type: "image";
+              attrs: {
+                /** @minLength 1 */
+                src: string;
+                alt: string;
+                /**
+                 * @min 1
+                 * @max 1200
+                 */
+                width?: number;
+              };
+            }
+          | {
+              type: "divider";
+              attrs?: {
+                /**
+                 * @min 1
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "spacer";
+              attrs: {
+                /**
+                 * @min 0
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "footer";
+              attrs: {
+                text: string;
+              };
+              content?: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+        )[];
+      };
     };
     status: ("draft" | "published" | "archived") | null;
     /** @default "en" */
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     createdAt: string | null;
     updatedAt: string | null;
     publishedAt: string | null;
@@ -19132,7 +20477,7 @@ export interface UpdateEmailTemplateResponse {
 
 export interface UpdateEmailTemplateBaseLanguageBody {
   /** @default "en" */
-  baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface UpdateEmailTemplateBaseLanguageResponse {
@@ -19227,6 +20572,7 @@ export interface UpdateEmailTemplateBaseLanguageResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     subject: {
       en?: string;
@@ -19236,6 +20582,7 @@ export interface UpdateEmailTemplateBaseLanguageResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     content: {
       en?: {
@@ -20162,12 +21509,144 @@ export interface UpdateEmailTemplateBaseLanguageResponse {
             }
         )[];
       };
+      "pt-AO"?: {
+        type: "doc";
+        version: 1;
+        content: (
+          | {
+              type: "header";
+              attrs: {
+                source: "tenant_branding";
+              };
+            }
+          | {
+              type: "heading";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "text";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "button";
+              attrs: {
+                /** @minLength 1 */
+                label: string;
+                /** @minLength 1 */
+                url: string;
+              };
+            }
+          | {
+              type: "image";
+              attrs: {
+                /** @minLength 1 */
+                src: string;
+                alt: string;
+                /**
+                 * @min 1
+                 * @max 1200
+                 */
+                width?: number;
+              };
+            }
+          | {
+              type: "divider";
+              attrs?: {
+                /**
+                 * @min 1
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "spacer";
+              attrs: {
+                /**
+                 * @min 0
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "footer";
+              attrs: {
+                text: string;
+              };
+              content?: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+        )[];
+      };
     };
     status: ("draft" | "published" | "archived") | null;
     /** @default "en" */
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     createdAt: string | null;
     updatedAt: string | null;
     publishedAt: string | null;
@@ -20179,7 +21658,7 @@ export interface PublishEmailTemplateBody {
   /** @uniqueItems true */
   confirmedAutomationIds?: string[];
   /** @default "en" */
-  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface PublishEmailTemplateResponse {
@@ -20274,6 +21753,7 @@ export interface PublishEmailTemplateResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     subject: {
       en?: string;
@@ -20283,6 +21763,7 @@ export interface PublishEmailTemplateResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     content: {
       en?: {
@@ -21209,12 +22690,144 @@ export interface PublishEmailTemplateResponse {
             }
         )[];
       };
+      "pt-AO"?: {
+        type: "doc";
+        version: 1;
+        content: (
+          | {
+              type: "header";
+              attrs: {
+                source: "tenant_branding";
+              };
+            }
+          | {
+              type: "heading";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "text";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "button";
+              attrs: {
+                /** @minLength 1 */
+                label: string;
+                /** @minLength 1 */
+                url: string;
+              };
+            }
+          | {
+              type: "image";
+              attrs: {
+                /** @minLength 1 */
+                src: string;
+                alt: string;
+                /**
+                 * @min 1
+                 * @max 1200
+                 */
+                width?: number;
+              };
+            }
+          | {
+              type: "divider";
+              attrs?: {
+                /**
+                 * @min 1
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "spacer";
+              attrs: {
+                /**
+                 * @min 0
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "footer";
+              attrs: {
+                text: string;
+              };
+              content?: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+        )[];
+      };
     };
     status: ("draft" | "published" | "archived") | null;
     /** @default "en" */
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     createdAt: string | null;
     updatedAt: string | null;
     publishedAt: string | null;
@@ -21314,6 +22927,7 @@ export interface ArchiveEmailTemplateResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     subject: {
       en?: string;
@@ -21323,6 +22937,7 @@ export interface ArchiveEmailTemplateResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     content: {
       en?: {
@@ -22249,12 +23864,144 @@ export interface ArchiveEmailTemplateResponse {
             }
         )[];
       };
+      "pt-AO"?: {
+        type: "doc";
+        version: 1;
+        content: (
+          | {
+              type: "header";
+              attrs: {
+                source: "tenant_branding";
+              };
+            }
+          | {
+              type: "heading";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "text";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "button";
+              attrs: {
+                /** @minLength 1 */
+                label: string;
+                /** @minLength 1 */
+                url: string;
+              };
+            }
+          | {
+              type: "image";
+              attrs: {
+                /** @minLength 1 */
+                src: string;
+                alt: string;
+                /**
+                 * @min 1
+                 * @max 1200
+                 */
+                width?: number;
+              };
+            }
+          | {
+              type: "divider";
+              attrs?: {
+                /**
+                 * @min 1
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "spacer";
+              attrs: {
+                /**
+                 * @min 0
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "footer";
+              attrs: {
+                text: string;
+              };
+              content?: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+        )[];
+      };
     };
     status: ("draft" | "published" | "archived") | null;
     /** @default "en" */
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     createdAt: string | null;
     updatedAt: string | null;
     publishedAt: string | null;
@@ -22358,6 +24105,7 @@ export interface RemoveEmailTemplateLanguageResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     subject: {
       en?: string;
@@ -22367,6 +24115,7 @@ export interface RemoveEmailTemplateLanguageResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     content: {
       en?: {
@@ -23293,12 +25042,144 @@ export interface RemoveEmailTemplateLanguageResponse {
             }
         )[];
       };
+      "pt-AO"?: {
+        type: "doc";
+        version: 1;
+        content: (
+          | {
+              type: "header";
+              attrs: {
+                source: "tenant_branding";
+              };
+            }
+          | {
+              type: "heading";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "text";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "button";
+              attrs: {
+                /** @minLength 1 */
+                label: string;
+                /** @minLength 1 */
+                url: string;
+              };
+            }
+          | {
+              type: "image";
+              attrs: {
+                /** @minLength 1 */
+                src: string;
+                alt: string;
+                /**
+                 * @min 1
+                 * @max 1200
+                 */
+                width?: number;
+              };
+            }
+          | {
+              type: "divider";
+              attrs?: {
+                /**
+                 * @min 1
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "spacer";
+              attrs: {
+                /**
+                 * @min 0
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "footer";
+              attrs: {
+                text: string;
+              };
+              content?: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+        )[];
+      };
     };
     status: ("draft" | "published" | "archived") | null;
     /** @default "en" */
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     createdAt: string | null;
     updatedAt: string | null;
     publishedAt: string | null;
@@ -23398,6 +25279,7 @@ export interface RestoreEmailTemplateResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     subject: {
       en?: string;
@@ -23407,6 +25289,7 @@ export interface RestoreEmailTemplateResponse {
       cs?: string;
       es?: string;
       fr?: string;
+      "pt-AO"?: string;
     };
     content: {
       en?: {
@@ -24333,12 +26216,144 @@ export interface RestoreEmailTemplateResponse {
             }
         )[];
       };
+      "pt-AO"?: {
+        type: "doc";
+        version: 1;
+        content: (
+          | {
+              type: "header";
+              attrs: {
+                source: "tenant_branding";
+              };
+            }
+          | {
+              type: "heading";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "text";
+              content: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+          | {
+              type: "button";
+              attrs: {
+                /** @minLength 1 */
+                label: string;
+                /** @minLength 1 */
+                url: string;
+              };
+            }
+          | {
+              type: "image";
+              attrs: {
+                /** @minLength 1 */
+                src: string;
+                alt: string;
+                /**
+                 * @min 1
+                 * @max 1200
+                 */
+                width?: number;
+              };
+            }
+          | {
+              type: "divider";
+              attrs?: {
+                /**
+                 * @min 1
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "spacer";
+              attrs: {
+                /**
+                 * @min 0
+                 * @max 200
+                 */
+                height: number;
+              };
+            }
+          | {
+              type: "footer";
+              attrs: {
+                text: string;
+              };
+              content?: {
+                type: "paragraph";
+                content?: {
+                  type: "text";
+                  text: string;
+                  marks?: (
+                    | {
+                        type: "bold";
+                      }
+                    | {
+                        type: "italic";
+                      }
+                    | {
+                        type: "link";
+                        attrs: {
+                          /** @minLength 1 */
+                          href: string;
+                        };
+                      }
+                  )[];
+                }[];
+              }[];
+            }
+        )[];
+      };
     };
     status: ("draft" | "published" | "archived") | null;
     /** @default "en" */
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    completeLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     createdAt: string | null;
     updatedAt: string | null;
     publishedAt: string | null;
@@ -24358,9 +26373,9 @@ export interface PreviewEmailTemplateBody {
     description?: string;
   }[];
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   /** @default "en" */
-  baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   subject: {
     en?: string;
     pl?: string;
@@ -24369,6 +26384,7 @@ export interface PreviewEmailTemplateBody {
     cs?: string;
     es?: string;
     fr?: string;
+    "pt-AO"?: string;
   };
   content: {
     en?: {
@@ -25295,6 +27311,138 @@ export interface PreviewEmailTemplateBody {
           }
       )[];
     };
+    "pt-AO"?: {
+      type: "doc";
+      version: 1;
+      content: (
+        | {
+            type: "header";
+            attrs: {
+              source: "tenant_branding";
+            };
+          }
+        | {
+            type: "heading";
+            content: {
+              type: "paragraph";
+              content?: {
+                type: "text";
+                text: string;
+                marks?: (
+                  | {
+                      type: "bold";
+                    }
+                  | {
+                      type: "italic";
+                    }
+                  | {
+                      type: "link";
+                      attrs: {
+                        /** @minLength 1 */
+                        href: string;
+                      };
+                    }
+                )[];
+              }[];
+            }[];
+          }
+        | {
+            type: "text";
+            content: {
+              type: "paragraph";
+              content?: {
+                type: "text";
+                text: string;
+                marks?: (
+                  | {
+                      type: "bold";
+                    }
+                  | {
+                      type: "italic";
+                    }
+                  | {
+                      type: "link";
+                      attrs: {
+                        /** @minLength 1 */
+                        href: string;
+                      };
+                    }
+                )[];
+              }[];
+            }[];
+          }
+        | {
+            type: "button";
+            attrs: {
+              /** @minLength 1 */
+              label: string;
+              /** @minLength 1 */
+              url: string;
+            };
+          }
+        | {
+            type: "image";
+            attrs: {
+              /** @minLength 1 */
+              src: string;
+              alt: string;
+              /**
+               * @min 1
+               * @max 1200
+               */
+              width?: number;
+            };
+          }
+        | {
+            type: "divider";
+            attrs?: {
+              /**
+               * @min 1
+               * @max 200
+               */
+              height: number;
+            };
+          }
+        | {
+            type: "spacer";
+            attrs: {
+              /**
+               * @min 0
+               * @max 200
+               */
+              height: number;
+            };
+          }
+        | {
+            type: "footer";
+            attrs: {
+              text: string;
+            };
+            content?: {
+              type: "paragraph";
+              content?: {
+                type: "text";
+                text: string;
+                marks?: (
+                  | {
+                      type: "bold";
+                    }
+                  | {
+                      type: "italic";
+                    }
+                  | {
+                      type: "link";
+                      attrs: {
+                        /** @minLength 1 */
+                        href: string;
+                      };
+                    }
+                )[];
+              }[];
+            }[];
+          }
+      )[];
+    };
   };
 }
 
@@ -25327,7 +27475,7 @@ export interface PreviewEmailTemplateResponse {
         )
       | null;
     /** @default "en" */
-    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     subject: string;
     html: string;
     text: string;
@@ -25760,7 +27908,7 @@ export interface ListAvailableEmailTemplatesResponse {
         };
     name: string;
     /** @default "en" */
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     placeholders: {
       name: string;
       label: string;
@@ -26097,7 +28245,7 @@ export interface SimulateAutomationBody {
   };
   sampleValues?: object;
   /** @default "en" */
-  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface SimulateAutomationResponse {
@@ -26210,7 +28358,7 @@ export interface SimulateAutomationResponse {
       subject: string;
       html: string;
       /** @default "en" */
-      language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+      language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     }[];
   };
 }
@@ -29581,7 +31729,7 @@ export interface GetAutomationRunResponse {
         | "failed"
         | "cancelled";
       attemptCount: number;
-      language: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr") | null;
+      language: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO") | null;
       createdAt: string;
       completedAt: string | null;
       reasonCode: string | null;
@@ -29595,7 +31743,7 @@ export interface PrepareAiMentorStatisticsProgressBody {
   /** @format uuid */
   studentId: string;
   /** @default "en" */
-  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface GetAllCategoriesResponse {
@@ -29603,8 +31751,8 @@ export interface GetAllCategoriesResponse {
     /** @format uuid */
     id: string;
     title: string;
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     createdAt: string | null;
   }[];
   pagination: {
@@ -29620,15 +31768,15 @@ export interface GetCategoryByIdResponse {
     /** @format uuid */
     id: string;
     title: string;
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     createdAt: string | null;
   };
 }
 
 export interface CreateCategoryBody {
   title: string;
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface CreateCategoryResponse {
@@ -29643,7 +31791,7 @@ export interface UpdateCategoryBody {
   /** @format uuid */
   id?: string;
   title?: string;
-  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface UpdateCategoryResponse {
@@ -29651,8 +31799,8 @@ export interface UpdateCategoryResponse {
     /** @format uuid */
     id: string;
     title: string;
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     createdAt: string | null;
   };
 }
@@ -29997,8 +32145,8 @@ export interface GetLearningPathsResponse {
     sequenceEnabled: boolean;
     /** @format uuid */
     authorId: string;
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     createdAt: string;
     updatedAt: string;
   } & {
@@ -30052,8 +32200,8 @@ export interface GetLearningPathByIdResponse {
     sequenceEnabled: boolean;
     /** @format uuid */
     authorId: string;
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     createdAt: string;
     updatedAt: string;
   } & {
@@ -30093,7 +32241,7 @@ export interface GetLearningPathByIdResponse {
 }
 
 export interface CreateLearningPathBody {
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   title: string;
   description: string;
   thumbnailReference?: string | null;
@@ -30128,15 +32276,15 @@ export interface CreateLearningPathResponse {
     sequenceEnabled: boolean;
     /** @format uuid */
     authorId: string;
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     createdAt: string;
     updatedAt: string;
   };
 }
 
 export interface UpdateLearningPathBody {
-  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   title?: string;
   description?: string;
   thumbnailReference?: string | null;
@@ -30171,8 +32319,8 @@ export interface UpdateLearningPathResponse {
     sequenceEnabled: boolean;
     /** @format uuid */
     authorId: string;
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     createdAt: string;
     updatedAt: string;
   };
@@ -30517,7 +32665,7 @@ export interface RunReportBody {
         }
     )[];
   };
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   /**
    * @min 1
    * @default 1
@@ -31156,7 +33304,7 @@ export interface UpdateReportConfigurationResponse {
 
 export interface CreateReportExportBody {
   format: "xlsx" | "pdf";
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   query: {
     view: "organisation" | "developmentPaths" | "course" | "learner";
     /**
@@ -31239,7 +33387,7 @@ export interface CreateReportExportBody {
           }
       )[];
     };
-    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     /**
      * @min 1
      * @default 1
@@ -31291,7 +33439,7 @@ export type InitScormImportBody =
         /** @format uuid */
         categoryId: string;
         /** @default "en" */
-        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         status?: "draft" | "published" | "private";
         thumbnailS3Key?: string;
         priceInCents?: number;
@@ -31312,7 +33460,7 @@ export type InitScormImportBody =
         chapterId: string;
         title: string;
         /** @default "en" */
-        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       };
     }
   | {
@@ -31328,7 +33476,7 @@ export type InitScormImportBody =
       metadata: {
         title: string;
         /** @default "en" */
-        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       };
     };
 
@@ -31415,7 +33563,7 @@ export interface CommitScormAttemptBody {
   /** @format uuid */
   courseId: string;
   values: object;
-  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface CommitScormAttemptResponse {
@@ -31440,7 +33588,7 @@ export interface FinishScormAttemptBody {
   /** @format uuid */
   courseId: string;
   values: object;
-  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface FinishScormAttemptResponse {
@@ -31520,7 +33668,7 @@ export interface CreateTenantBody {
   adminFirstName: string;
   /** @minLength 1 */
   adminLastName: string;
-  adminLanguage?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  adminLanguage?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface CreateTenantResponse {
@@ -31713,8 +33861,8 @@ export interface GetGroupsResponse {
     id: string;
     name: string;
     characteristic: string | null;
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     users?: {
       id: string;
       createdAt: string;
@@ -32040,8 +34188,8 @@ export interface GetQAResponse {
   id: string;
   title: string | null;
   description: string | null;
-  baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-  availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+  baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+  availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
 }
 
 export type GetAllQAResponse = {
@@ -32049,14 +34197,14 @@ export type GetAllQAResponse = {
   id: string;
   title: string | null;
   description: string | null;
-  baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-  availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+  baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+  availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
 }[];
 
 export interface CreateQABody {
   title: string;
   description: string;
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface CreateQAResponse {
@@ -32080,8 +34228,8 @@ export interface GetDraftNewsListResponse {
     status: string;
     isPublic: boolean;
     /** @default "en" */
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     publishedAt: string | null;
     authorName: string;
     authorDeleted: boolean;
@@ -32142,7 +34290,7 @@ export interface GenerateNewsPreviewBody {
   /** @format uuid */
   newsId: string;
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   content: string;
 }
 
@@ -32162,8 +34310,8 @@ export interface GetNewsResponse {
     status: string;
     isPublic: boolean;
     /** @default "en" */
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     publishedAt: string | null;
     authorName: string;
     authorDeleted: boolean;
@@ -32223,8 +34371,8 @@ export interface GetNewsListResponse {
     status: string;
     isPublic: boolean;
     /** @default "en" */
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     publishedAt: string | null;
     authorName: string;
     authorDeleted: boolean;
@@ -32283,7 +34431,7 @@ export interface GetNewsListResponse {
 
 export interface CreateNewsBody {
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface CreateNewsResponse {
@@ -32302,7 +34450,7 @@ export interface UpdateNewsResponse {
 
 export interface AddNewLanguageBody {
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface AddNewLanguageResponse {
@@ -32336,7 +34484,7 @@ export interface UploadFileToNewsResponse {
 
 export interface CreateArticleSectionBody {
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface CreateArticleSectionResponse {
@@ -32352,8 +34500,8 @@ export interface GetArticleSectionResponse {
     id: string;
     title: string;
     /** @default "en" */
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     assignedArticlesCount: number;
   };
 }
@@ -32361,7 +34509,7 @@ export interface GetArticleSectionResponse {
 export interface UpdateArticleSectionBody {
   translations: {
     /** @default "en" */
-    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     title?: string;
   }[];
 }
@@ -32375,7 +34523,7 @@ export interface UpdateArticleSectionResponse {
 
 export interface AddNewLanguageToSectionBody {
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface AddNewLanguageToSectionResponse {
@@ -32468,8 +34616,8 @@ export interface GetArticleResponse {
     status: string;
     isPublic: boolean;
     /** @default "en" */
-    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+    baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
     publishedAt: string | null;
     authorName: string;
     authorDeleted: boolean;
@@ -32584,7 +34732,7 @@ export type GetArticlesResponse = {
 
 export interface CreateArticleBody {
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   /** @format uuid */
   sectionId: string;
 }
@@ -32610,7 +34758,7 @@ export interface UploadFileToArticleBody {
    */
   file?: File;
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   title: string;
   description: string;
   visibility?: "public" | "private";
@@ -32627,7 +34775,7 @@ export interface GenerateArticlePreviewBody {
   /** @format uuid */
   articleId: string;
   /** @default "en" */
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
   content: string;
 }
 
@@ -32640,7 +34788,7 @@ export interface GenerateArticlePreviewResponse {
 export interface OpenAuthoringSessionBody {
   /** @format uuid */
   commandId: string;
-  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+  language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
 }
 
 export interface OpenAuthoringSessionResponse {
@@ -32655,7 +34803,7 @@ export interface OpenAuthoringSessionResponse {
     sessionId: string;
     /** @format uuid */
     courseId: string;
-    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     status: "active" | "paused" | "stopped" | "discarded";
     snapshotSequence: number;
     workspaceRevision: number;
@@ -32771,7 +34919,7 @@ export interface ListAuthoringSessionsResponse {
     sessionId: string;
     /** @format uuid */
     courseId: string;
-    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     status: "active" | "paused" | "stopped" | "discarded";
     /**
      * @minLength 1
@@ -32803,7 +34951,7 @@ export interface GetAuthoringSessionResponse {
     sessionId: string;
     /** @format uuid */
     courseId: string;
-    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     status: "active" | "paused" | "stopped" | "discarded";
     snapshotSequence: number;
     workspaceRevision: number;
@@ -32998,7 +35146,7 @@ export type SendAuthoringCommandBody =
           /** @format uuid */
           targetId: string;
           kind: "course" | "chapter" | "lesson" | "block" | "question";
-          language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+          language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
           baselineHash: string | null;
           blockIds: string[];
           questionIds?: string[];
@@ -33045,7 +35193,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -33275,7 +35423,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -33291,7 +35439,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -33308,7 +35456,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -33341,7 +35489,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -33357,7 +35505,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -33373,7 +35521,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -33384,7 +35532,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -33426,7 +35574,7 @@ export type SendAuthoringCommandBody =
           /** @format uuid */
           targetId: string;
           kind: "course" | "chapter" | "lesson" | "block" | "question";
-          language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+          language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
           baselineHash: string | null;
           blockIds: string[];
           questionIds?: string[];
@@ -33473,7 +35621,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -33703,7 +35851,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -33719,7 +35867,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -33736,7 +35884,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -33769,7 +35917,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -33785,7 +35933,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -33801,7 +35949,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -33812,7 +35960,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -33853,7 +36001,7 @@ export type SendAuthoringCommandBody =
           /** @format uuid */
           targetId: string;
           kind: "course" | "chapter" | "lesson" | "block" | "question";
-          language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+          language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
           baselineHash: string | null;
           blockIds: string[];
           questionIds?: string[];
@@ -33900,7 +36048,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -34130,7 +36278,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -34146,7 +36294,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -34163,7 +36311,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -34196,7 +36344,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -34212,7 +36360,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -34228,7 +36376,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -34239,7 +36387,7 @@ export type SendAuthoringCommandBody =
             operationId: string;
             /** @format uuid */
             targetId: string;
-            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+            language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
             baselineHash: string | null;
             dependencies: string[];
             fieldBaselines?: object;
@@ -34420,7 +36568,7 @@ export interface GetAuthoringCourseContextResponse {
   data: {
     /** @format uuid */
     courseId: string;
-    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
     course: {
       /** @format uuid */
       id: string;
@@ -34575,10 +36723,10 @@ export interface GetAuthoringCourseContextResponse {
               needsConfiguration: boolean;
               hasMissingTranslations: boolean;
               /** @default "en" */
-              language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+              language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
               /** @default "en" */
-              baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-              availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+              baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+              availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
               type: "teacher";
               taskGoal: string;
               expertise: string;
@@ -34596,10 +36744,10 @@ export interface GetAuthoringCourseContextResponse {
               needsConfiguration: boolean;
               hasMissingTranslations: boolean;
               /** @default "en" */
-              language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+              language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
               /** @default "en" */
-              baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-              availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+              baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+              availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
               type: "roleplay";
               scenario: string;
               aiRole: string;
@@ -34648,9 +36796,9 @@ export interface GetAuthoringCourseContextResponse {
             id: string;
             description: string;
           }[];
-          language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-          baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-          availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr")[];
+          language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+          baseLanguage: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+          availableLocales: ("en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO")[];
         } | null;
         blocks?: {
           /** @format uuid */
@@ -35867,7 +38015,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     settingsControllerGetPublicRegistrationForm: (
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -36597,7 +38745,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     statisticsControllerGetUserStatistics: (
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -36618,7 +38766,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     statisticsControllerGetStats: (
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -36667,7 +38815,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     statisticsControllerGetDashboardIncompleteCourses: (
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -36687,9 +38835,6 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     statisticsControllerGetDashboardDeadlineRisks: (
       query?: {
-        /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-        type?: "overdue" | "dueSoon";
         /**
          * @min 1
          * @default 1
@@ -36701,6 +38846,9 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
          * @default 20
          */
         perPage?: number;
+        /** @default "en" */
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+        type?: "overdue" | "dueSoon";
       },
       params: RequestParams = {},
     ) =>
@@ -36721,7 +38869,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     statisticsControllerGetDashboardDeadlineRiskCourseSummaries: (
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         urgencyOrder?: "mostUrgent" | "leastUrgent";
         /** @min 1 */
         page?: number;
@@ -36751,12 +38899,12 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       courseId: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-        sortBy?: "name" | "dueDate" | "urgency" | "studentCount";
-        sortDirection?: "asc" | "desc";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         urgency?: "overdue" | "dueSoon";
         /** @maxLength 200 */
         search?: string;
+        sortBy?: "name" | "dueDate" | "urgency" | "studentCount";
+        sortDirection?: "asc" | "desc";
         /** @min 1 */
         page?: number;
         /**
@@ -36837,7 +38985,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @format uuid */
         id: string;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -37199,7 +39347,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         page?: number;
         perPage?: number;
         sort?: string;
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -37220,7 +39368,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     groupControllerGetGroupById: (
       groupId: string,
       query?: {
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -37280,7 +39428,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         page?: number;
         perPage?: number;
         sort?: string;
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -37333,7 +39481,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     groupControllerCreateLanguage: (
       groupId: string,
       query?: {
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -37354,7 +39502,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     groupControllerDeleteLanguage: (
       groupId: string,
       query?: {
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -37419,7 +39567,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     groupControllerGetGroupsByCourse: (
       courseId: string,
       query?: {
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -37444,7 +39592,11 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         category?: string;
         author?: string;
         creationDateRange?: string[];
+        /** @min 1 */
+        page?: number;
+        perPage?: number;
         status?: "draft" | "published" | "private";
+        isArchived?: "true" | "false" | "all";
         sort?:
           | "title"
           | "category"
@@ -37458,12 +39610,8 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           | "-author"
           | "-chapterCount"
           | "-enrolledParticipantsCount";
-        /** @min 1 */
-        page?: number;
-        perPage?: number;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-        isArchived?: "true" | "false" | "all";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -37487,7 +39635,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         page?: number;
         perPage?: number;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -37530,7 +39678,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           | "-chapterCount"
           | "-enrolledParticipantsCount";
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -37551,7 +39699,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     courseControllerGetStudentDashboardSummary: (
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -37587,6 +39735,9 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       courseId: string,
       query?: {
         keyword?: string;
+        /** @min 1 */
+        page?: number;
+        perPage?: number;
         sort?:
           | "enrolledAt"
           | "firstName"
@@ -37600,10 +39751,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           | "-isEnrolledByGroup";
         groups?: string[];
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-        /** @min 1 */
-        page?: number;
-        perPage?: number;
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -37648,7 +39796,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @format uuid */
         excludeCourseId?: string;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -37693,7 +39841,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @format uuid */
         excludeCourseId?: string;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -37716,7 +39864,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         limit?: number;
         days?: number;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -37736,15 +39884,15 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     courseControllerGetContentCreatorCourses: (
       query: {
+        title?: string;
+        description?: string;
         /** @format uuid */
         authorId: string;
         scope?: "all" | "enrolled" | "available";
         /** @format uuid */
         excludeCourseId?: string;
-        title?: string;
-        description?: string;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -37766,7 +39914,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query: {
         id: string;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -37804,7 +39952,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query: {
         id: string;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -37827,7 +39975,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @format uuid */
         id: string;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -37850,7 +39998,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @format uuid */
         id: string;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -38205,9 +40353,9 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     courseControllerUnenrollCourses: (
       query?: {
+        userIds?: string[];
         /** @format uuid */
         courseId?: string;
-        userIds?: string[];
       },
       params: RequestParams = {},
     ) =>
@@ -38250,13 +40398,13 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     courseControllerGetCourseLearningTimeStatistics: (
       courseId: string,
       query?: {
+        search?: string;
+        page?: number;
+        perPage?: number;
         /** @format uuid */
         userId?: string;
         /** @format uuid */
         groupId?: string;
-        search?: string;
-        page?: number;
-        perPage?: number;
         sort?: "studentName" | "totalSeconds" | "-studentName" | "-totalSeconds";
       },
       params: RequestParams = {},
@@ -38279,7 +40427,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       courseId: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -38303,7 +40451,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @format uuid */
         groupId?: string;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -38341,7 +40489,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           | "-lastActivity"
           | "-lastCompletedLessonName";
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -38365,9 +40513,9 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         page?: number;
         perPage?: number;
         quizId?: string;
+        search?: string;
         /** @format uuid */
         groupId?: string;
-        search?: string;
         sort?:
           | "studentName"
           | "quizName"
@@ -38380,7 +40528,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           | "-attempts"
           | "-lastAttempt";
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -38404,9 +40552,9 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         page?: number;
         perPage?: number;
         lessonId?: string;
+        search?: string;
         /** @format uuid */
         groupId?: string;
-        search?: string;
         sort?:
           | "studentName"
           | "lessonName"
@@ -38419,7 +40567,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           | "-lastSession"
           | "-lastCompletedLessonName";
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -38441,7 +40589,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       courseId: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -38462,7 +40610,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       courseId: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -38483,7 +40631,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       courseId: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -38504,7 +40652,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       courseId: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -38629,7 +40777,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @format uuid */
         id: string;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -38757,7 +40905,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         description?: string;
         lessonCompleted?: string;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -38779,7 +40927,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       id: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         /** @format uuid */
         studentId?: string;
       },
@@ -39021,7 +41169,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         lessonId?: string;
         /** @format binary */
         file: File;
-        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         title: string;
         description: string;
         contextId?: string;
@@ -39196,7 +41344,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     aiJudgeConfigurationControllerGetConfiguration: (
       lessonId: string,
       query?: {
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -39236,7 +41384,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     aiJudgeConfigurationControllerUpdateTranslations: (
       lessonId: string,
-      language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr",
+      language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO",
       data: UpdateTranslationsBody,
       params: RequestParams = {},
     ) =>
@@ -39348,7 +41496,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       lessonId: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -39388,7 +41536,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     aiMentorConfigurationControllerUpdateAiMentorConfigurationTranslations: (
       lessonId: string,
-      language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr",
+      language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO",
       data: UpdateAiMentorConfigurationTranslationsBody,
       params: RequestParams = {},
     ) =>
@@ -39501,7 +41649,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @format uuid */
         id: string;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -39523,7 +41671,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       courseId: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         /** @format uuid */
         groupId?: string;
         search?: string;
@@ -39550,14 +41698,14 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     certificatesControllerGetAllCertificates: (
       query?: {
-        /** @format uuid */
-        userId?: string;
-        /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
         /** @min 1 */
         page?: number;
         perPage?: number;
         sort?: string;
+        /** @format uuid */
+        userId?: string;
+        /** @default "en" */
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -39578,7 +41726,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     certificatesControllerGetDashboardSummary: (
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -39599,7 +41747,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     certificatesControllerGetDashboardCertificates: (
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         /** @min 1 */
         page?: number;
         /** @min 1 */
@@ -39628,7 +41776,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @format uuid */
         courseId?: string;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -39707,7 +41855,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       courseId: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -39734,7 +41882,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         perPage?: number;
         search?: string;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -39772,17 +41920,10 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CertificatesControllerGetCertificateSharePage
      * @request GET:/api/certificates/share
      */
-    certificatesControllerGetCertificateSharePage: (
-      query: {
-        certificateId: string;
-        lang: string;
-      },
-      params: RequestParams = {},
-    ) =>
+    certificatesControllerGetCertificateSharePage: (params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/certificates/share`,
         method: "GET",
-        query: query,
         ...params,
       }),
 
@@ -39792,17 +41933,10 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CertificatesControllerGetCertificateShareImage
      * @request GET:/api/certificates/share-image
      */
-    certificatesControllerGetCertificateShareImage: (
-      query: {
-        certificateId: string;
-        lang: string;
-      },
-      params: RequestParams = {},
-    ) =>
+    certificatesControllerGetCertificateShareImage: (params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/certificates/share-image`,
         method: "GET",
-        query: query,
         ...params,
       }),
 
@@ -39988,9 +42122,9 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         from?: string;
         /** @format date-time */
         to?: string;
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
         type?: "practice" | "ai-mentor";
         status?: "active" | "completed" | "archived";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -40011,7 +42145,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     adminAiThreadsControllerGetAdminAiThreadDetails: (
       threadId: string,
       query?: {
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -40120,7 +42254,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         search?: string;
         type?: "image" | "video" | "pdf" | "presentation" | "document" | "other";
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -40142,7 +42276,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       id: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -40284,7 +42418,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @format uuid */
         courseId?: string;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -40324,7 +42458,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       id: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -40409,7 +42543,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @format binary */
         file: File;
         relationshipType: "live_training_before" | "live_training_after";
-        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -40433,7 +42567,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       resourceId: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -40456,7 +42590,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       resourceId: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -40477,7 +42611,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     liveTrainingSessionsControllerGetSessions: (
       liveTrainingId: string,
       query?: {
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -40498,7 +42632,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     liveTrainingSessionsControllerStartSession: (
       liveTrainingId: string,
       query?: {
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -40519,7 +42653,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     liveTrainingSessionsControllerJoinCurrentSession: (
       liveTrainingId: string,
       query?: {
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -40540,7 +42674,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     liveTrainingSessionsControllerGetParticipantProfilePictures: (
       liveTrainingId: string,
       query?: {
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -40562,7 +42696,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       liveTrainingId: string,
       sessionId: string,
       query?: {
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -40584,7 +42718,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       liveTrainingId: string,
       sessionId: string,
       query?: {
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -40617,13 +42751,13 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     announcementsControllerGetAllAnnouncements: (
       query?: {
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
-        feed?: "all" | "admin_announcements" | "system";
-        status?: "scheduled" | "published";
         /** @min 1 */
         page?: number;
         /** @min 1 */
         perPage?: number;
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+        feed?: "all" | "admin_announcements" | "system";
+        status?: "scheduled" | "published";
       },
       params: RequestParams = {},
     ) =>
@@ -40680,11 +42814,11 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         content?: string;
         search?: string;
         isRead?: string;
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
         /** @min 1 */
         page?: number;
         /** @min 1 */
         perPage?: number;
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -41086,7 +43220,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     emailTemplateManagementControllerListEmailTemplateEvents: (
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -41191,7 +43325,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @maxLength 200 */
         search?: string;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -41430,7 +43564,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     emailTemplateManagementControllerRemoveEmailTemplateLanguage: (
       id: string,
-      language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr",
+      language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO",
       params: RequestParams = {},
     ) =>
       this.request<RemoveEmailTemplateLanguageResponse, any>({
@@ -41495,7 +43629,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         search?: string;
         status?: "draft" | "enabled" | "disabled" | "archived";
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -41517,7 +43651,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       data: CreateAutomationBody,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -41545,7 +43679,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @format uuid */
         id?: string;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         /** @min 1 */
         page?: number;
         /**
@@ -41573,7 +43707,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     automationManagementControllerListAutomationEvents: (
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -41594,7 +43728,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     automationManagementControllerListAvailableEmailTemplates: (
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -41615,7 +43749,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     automationManagementControllerListBuiltInAutomationTemplates: (
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -41685,7 +43819,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         | "live_training_ended",
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -41707,7 +43841,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       id: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -41730,7 +43864,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       data: UpdateAutomationBody,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -41768,7 +43902,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       id: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -41791,7 +43925,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       data: ApplyAutomationBody,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -41815,7 +43949,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       id: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -41837,7 +43971,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       id: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -41859,7 +43993,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       id: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -41973,7 +44107,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         page?: number;
         perPage?: number;
         sort?: "title" | "creationDate" | "-title" | "-creationDate";
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -42010,7 +44144,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     categoryControllerGetCategoryById: (
       id: string,
       query?: {
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -42051,7 +44185,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     categoryControllerCreateLanguage: (
       id: string,
       query?: {
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -42072,7 +44206,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     categoryControllerDeleteLanguage: (
       id: string,
       query?: {
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -42449,7 +44583,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @min 1 */
         page?: number;
         perPage?: number;
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         searchQuery?: string;
       },
       params: RequestParams = {},
@@ -42490,7 +44624,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     learningPathControllerGetLearningPathById: (
       learningPathId: string,
       query?: {
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -42548,7 +44682,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     learningPathControllerCreateLanguage: (
       learningPathId: string,
       query?: {
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -42628,6 +44762,9 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       learningPathId: string,
       query?: {
         keyword?: string;
+        /** @min 1 */
+        page?: number;
+        perPage?: number;
         sort?:
           | "enrolledAt"
           | "firstName"
@@ -42640,9 +44777,6 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           | "-email"
           | "-isEnrolledByGroup";
         groups?: string[];
-        /** @min 1 */
-        page?: number;
-        perPage?: number;
       },
       params: RequestParams = {},
     ) =>
@@ -42841,7 +44975,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @format uuid */
         learningPathId?: string;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -42896,17 +45030,10 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name LearningPathCertificateControllerGetCertificateSharePage
      * @request GET:/api/learning-path/certificates/share
      */
-    learningPathCertificateControllerGetCertificateSharePage: (
-      query: {
-        certificateId: string;
-        lang: string;
-      },
-      params: RequestParams = {},
-    ) =>
+    learningPathCertificateControllerGetCertificateSharePage: (params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/learning-path/certificates/share`,
         method: "GET",
-        query: query,
         ...params,
       }),
 
@@ -42916,17 +45043,10 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name LearningPathCertificateControllerGetCertificateShareImage
      * @request GET:/api/learning-path/certificates/share-image
      */
-    learningPathCertificateControllerGetCertificateShareImage: (
-      query: {
-        certificateId: string;
-        lang: string;
-      },
-      params: RequestParams = {},
-    ) =>
+    learningPathCertificateControllerGetCertificateShareImage: (params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/learning-path/certificates/share-image`,
         method: "GET",
-        query: query,
         ...params,
       }),
 
@@ -42941,7 +45061,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @maxLength 500 */
         searchQuery?: string;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         mode?: "keyword" | "hybrid";
       },
       params: RequestParams = {},
@@ -42979,7 +45099,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     reportControllerGetReportOptions: (
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         /** @maxLength 200 */
         search?: string;
       },
@@ -43114,7 +45234,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     reportControllerDownloadSummaryReport: (
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         /** @format uuid */
         courseId?: string;
       },
@@ -43317,10 +45437,10 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query?: {
         /** @format uuid */
         lessonId?: string;
-        /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
         /** @format uuid */
         scoId?: string;
+        /** @default "en" */
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -43695,7 +45815,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         page?: number;
         perPage?: number;
         sort?: "name" | "createdAt";
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -43862,12 +45982,12 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @min 1 */
         perPage?: number;
         search?: string;
+        status?: "active" | "inactive";
         sort?:
           | "lastActivity"
           | "activityCountLast14Days"
           | "-lastActivity"
           | "-activityCountLast14Days";
-        status?: "active" | "inactive";
       },
       params: RequestParams = {},
     ) =>
@@ -44017,25 +46137,6 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         perPage?: number;
         keyword?: string;
         email?: string;
-        resourceType?:
-          | "user"
-          | "course"
-          | "chapter"
-          | "lesson"
-          | "announcement"
-          | "group"
-          | "settings"
-          | "integration"
-          | "category"
-          | "qa"
-          | "news"
-          | "article"
-          | "articleSection"
-          | "live_training"
-          | "learning_path"
-          | "scorm"
-          | "email_template"
-          | "automation";
         from?: string;
         to?: string;
         actionTypes?:
@@ -44119,6 +46220,25 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
               | "play_scorm"
               | "complete_scorm"
             )[];
+        resourceType?:
+          | "user"
+          | "course"
+          | "chapter"
+          | "lesson"
+          | "announcement"
+          | "group"
+          | "settings"
+          | "integration"
+          | "category"
+          | "qa"
+          | "news"
+          | "article"
+          | "articleSection"
+          | "live_training"
+          | "learning_path"
+          | "scorm"
+          | "email_template"
+          | "automation";
       },
       params: RequestParams = {},
     ) =>
@@ -44140,7 +46260,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       qaId: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -44163,7 +46283,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       data: UpdateQABody,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -44198,7 +46318,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     qaControllerGetAllQa: (
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -44236,7 +46356,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       qaId: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -44257,7 +46377,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       qaId: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -44277,7 +46397,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     newsControllerGetDraftNewsList: (
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         /** @min 1 */
         page?: number;
       },
@@ -44340,7 +46460,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       id: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -44420,7 +46540,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     newsControllerGetNewsList: (
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         /** @min 1 */
         page?: number;
       },
@@ -44460,7 +46580,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       id: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -44483,7 +46603,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       data: {
         /** @format binary */
         file: File;
-        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         title: string;
         description: string;
         visibility?: "public" | "private";
@@ -44528,7 +46648,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       id: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -44604,7 +46724,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       id: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -44624,7 +46744,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     articlesControllerGetDraftArticles: (
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -44645,7 +46765,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     articlesControllerGetArticleToc: (
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         isDraftMode?: boolean | "true" | "false";
       },
       params: RequestParams = {},
@@ -44688,7 +46808,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       id: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         isDraftMode?: boolean | "true" | "false";
       },
       params: RequestParams = {},
@@ -44746,7 +46866,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     articlesControllerGetArticles: (
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -44805,7 +46925,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       id: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -45100,8 +47220,8 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     courseAuthoringControllerGetAuthoringCourseContext: (
       courseId: string,
       query?: {
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
         lessonIds?: string[];
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -45173,7 +47293,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     phishingControllerGetPhishingOptions: (
       query?: {
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -45241,7 +47361,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     phishingControllerGetPhishingReport: (
       id: string,
       query?: {
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -45312,7 +47432,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @minLength 1 */
         end?: string;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         /** @minLength 1 */
         timezone?: string;
       },
@@ -45339,7 +47459,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         /** @minLength 1 */
         end?: string;
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
         /** @minLength 1 */
         timezone?: string;
         view?: "all" | "upcoming";
@@ -45366,7 +47486,7 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       eventId: string,
       query?: {
         /** @default "en" */
-        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr";
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>

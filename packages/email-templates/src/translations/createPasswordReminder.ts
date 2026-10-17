@@ -1,8 +1,9 @@
+import { withEnglishLanguageFallback } from "@repo/shared";
 import { SupportedLanguages } from "@repo/shared";
 import { EmailContent } from "types";
 
 export const getCreatePasswordReminderEmailTranslations = (language: SupportedLanguages) => {
-  const emailContent: Record<SupportedLanguages, EmailContent> = {
+  const emailContent: Record<SupportedLanguages, EmailContent> = withEnglishLanguageFallback({
     en: {
       heading: "Reminder",
       paragraphs: [
@@ -59,7 +60,7 @@ export const getCreatePasswordReminderEmailTranslations = (language: SupportedLa
       ],
       buttonText: "CRÉER UN MOT DE PASSE",
     },
-  };
+  });
 
   return emailContent[language];
 };

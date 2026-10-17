@@ -685,7 +685,8 @@
       "lt": "Litevština",
       "cs": "Čeština",
       "es": "Španělština",
-      "fr": "Francouzština"
+      "fr": "Francouzština",
+      "pt-AO": "Portugalština (Angola)"
     },
     "lessonTypes": {
       "content": "Obsah",
@@ -1560,7 +1561,8 @@
       "czech": "Čeština",
       "lithuanian": "Litevština",
       "spanish": "Španělština",
-      "french": "Francouzština"
+      "french": "Francouzština",
+      "angolanPortuguese": "Portugalština (Angola)"
     }
   },
   "resetOnboarding": {
@@ -6780,6 +6782,7 @@
       "section": "{{kind}} {{number}}"
     },
     "errors": {
+      "unsupportedLanguage": "Tvorba pomocí AI zatím nepodporuje tento jazyk kurzu. Použijte nativní editor.",
       "applicationFailed": "Vybrané změny nelze použít. Zkontrolujte nejnovější stav kurzu a zkuste to znovu.",
       "applicationNotFound": "Výsledek této aplikace již není dostupný.",
       "assessmentAttemptsAcknowledgementRequired": "Vybraný kvíz má existující pokusy. Před použitím zkontrolujte a potvrďte dopad na studenty.",

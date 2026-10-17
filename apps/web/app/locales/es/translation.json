@@ -682,7 +682,8 @@
       "lt": "Lituano",
       "cs": "Checo",
       "es": "Español",
-      "fr": "Francés"
+      "fr": "Francés",
+      "pt-AO": "Portugués (Angola)"
     },
     "lessonTypes": {
       "content": "Contenido",
@@ -1548,7 +1549,8 @@
       "czech": "Checo",
       "lithuanian": "Lituano",
       "spanish": "Español",
-      "french": "Francés"
+      "french": "Francés",
+      "angolanPortuguese": "Portugués (Angola)"
     }
   },
   "resetOnboarding": {
@@ -6724,6 +6726,7 @@
       "section": "{{kind}} {{number}}"
     },
     "errors": {
+      "unsupportedLanguage": "La creación con IA aún no admite este idioma del curso. Utilice el editor nativo.",
       "deepResearchPreferenceNotSaved": "La investigación profunda se activó para esta solicitud, pero no se pudo guardar la preferencia para los próximos mensajes.",
       "webSearchPreferenceNotSaved": "La búsqueda web se permitió para esta solicitud, pero no se pudo guardar la preferencia para los próximos mensajes.",
       "applicationFailed": "No se pudieron aplicar los cambios seleccionados. Revisa el estado actual del curso y vuelve a intentarlo.",

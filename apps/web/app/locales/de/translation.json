@@ -679,7 +679,8 @@
       "lt": "Litauisch",
       "cs": "Tschechisch",
       "es": "Spanisch",
-      "fr": "Französisch"
+      "fr": "Französisch",
+      "pt-AO": "Portugiesisch (Angola)"
     },
     "lessonTypes": {
       "content": "Inhalt",
@@ -1554,7 +1555,8 @@
       "czech": "Tschechisch",
       "lithuanian": "Litauisch",
       "spanish": "Spanisch",
-      "french": "Französisch"
+      "french": "Französisch",
+      "angolanPortuguese": "Portugiesisch (Angola)"
     }
   },
   "resetOnboarding": {
@@ -6766,6 +6768,7 @@
       "section": "{{kind}} {{number}}"
     },
     "errors": {
+      "unsupportedLanguage": "KI-Autorenschaft unterstützt diese Kurssprache noch nicht. Verwenden Sie den nativen Editor.",
       "applicationFailed": "Die ausgewählten Änderungen konnten nicht übernommen werden. Prüfen Sie den aktuellen Kursstand und versuchen Sie es erneut.",
       "applicationNotFound": "Das Ergebnis der Änderungsübernahme ist nicht mehr verfügbar.",
       "assessmentAttemptsAcknowledgementRequired": "Für einen ausgewählten Test liegen bereits Versuche vor. Prüfen und bestätigen Sie vor der Übernahme die Auswirkungen auf Lernende.",

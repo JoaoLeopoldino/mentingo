@@ -102,7 +102,7 @@ export class StripeService {
       ui_mode: "embedded",
       allow_promotion_codes: allowPromotionCode,
       redirect_on_completion: "never",
-      locale,
+      locale: locale === "pt-AO" ? "pt" : locale,
       payment_intent_data: {
         metadata: {
           courseId,

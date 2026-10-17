@@ -1,3 +1,4 @@
+import { withEnglishLanguageFallback } from "@repo/shared";
 import { SupportedLanguages } from "@repo/shared";
 import { EmailContent } from "types";
 
@@ -5,7 +6,7 @@ export const getUserInviteEmailTranslations = (
   language: SupportedLanguages,
   invitedByUserName: string,
 ) => {
-  const emailContent: Record<SupportedLanguages, EmailContent> = {
+  const emailContent: Record<SupportedLanguages, EmailContent> = withEnglishLanguageFallback({
     en: {
       heading: "You're invited",
       paragraphs: [
@@ -62,7 +63,7 @@ export const getUserInviteEmailTranslations = (
       ],
       buttonText: "REJOINDRE MAINTENANT",
     },
-  };
+  });
 
   return emailContent[language];
 };

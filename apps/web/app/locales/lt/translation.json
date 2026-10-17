@@ -679,7 +679,8 @@
       "lt": "Lietuvių",
       "cs": "Čekų",
       "es": "Ispanų",
-      "fr": "Prancūzų"
+      "fr": "Prancūzų",
+      "pt-AO": "Portugalų (Angola)"
     },
     "lessonTypes": {
       "content": "Turinys",
@@ -1554,7 +1555,8 @@
       "czech": "Čekų",
       "lithuanian": "Lietuvių",
       "spanish": "Ispanų",
-      "french": "Prancūzų"
+      "french": "Prancūzų",
+      "angolanPortuguese": "Portugalų (Angola)"
     }
   },
   "resetOnboarding": {
@@ -6775,6 +6777,7 @@
       "section": "{{kind}} {{number}}"
     },
     "errors": {
+      "unsupportedLanguage": "DI kūrimas dar nepalaiko šios kurso kalbos. Naudokite įprastą redaktorių.",
       "applicationFailed": "Pasirinktų pakeitimų nepavyko pritaikyti. Peržiūrėkite naujausią kurso būseną ir bandykite dar kartą.",
       "applicationNotFound": "Šis pritaikymo rezultatas nebeprieinamas.",
       "assessmentAttemptsAcknowledgementRequired": "Pasirinkta viktorina turi bandymų. Prieš taikydami peržiūrėkite ir patvirtinkite poveikį besimokantiesiems.",

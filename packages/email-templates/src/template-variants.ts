@@ -1,3 +1,4 @@
+import { withEnglishLanguageFallback } from "@repo/shared";
 import {
   BUILT_IN_EMAIL_TEMPLATE_KEYS as KEYS,
   AUTOMATION_EVENT_KINDS as EVENTS,
@@ -21,7 +22,7 @@ import { deriveEmailTemplatePublicationUsage } from "./template-usage";
 import type { PublishedEmailTemplate, EmailTemplateVariant } from "./publication.types";
 
 const suffixes = {
-  withDeadline: {
+  withDeadline: withEnglishLanguageFallback({
     en: "with deadline",
     pl: "z terminem",
     de: "mit Frist",
@@ -29,8 +30,8 @@ const suffixes = {
     es: "con fecha límite",
     cs: "s termínem",
     lt: "su terminu",
-  },
-  withoutDeadline: {
+  }),
+  withoutDeadline: withEnglishLanguageFallback({
     en: "without deadline",
     pl: "bez terminu",
     de: "ohne Frist",
@@ -38,8 +39,8 @@ const suffixes = {
     es: "sin fecha límite",
     cs: "bez termínu",
     lt: "be termino",
-  },
-  withCertificate: {
+  }),
+  withCertificate: withEnglishLanguageFallback({
     en: "with certificate",
     pl: "z certyfikatem",
     de: "mit Zertifikat",
@@ -47,8 +48,8 @@ const suffixes = {
     es: "con certificado",
     cs: "s certifikátem",
     lt: "su pažymėjimu",
-  },
-  withoutCertificate: {
+  }),
+  withoutCertificate: withEnglishLanguageFallback({
     en: "without certificate",
     pl: "bez certyfikatu",
     de: "ohne Zertifikat",
@@ -56,8 +57,8 @@ const suffixes = {
     es: "sin certificado",
     cs: "bez certifikátu",
     lt: "be pažymėjimo",
-  },
-  reset: {
+  }),
+  reset: withEnglishLanguageFallback({
     en: "reset by administrator",
     pl: "reset przez administratora",
     de: "vom Administrator zurückgesetzt",
@@ -65,8 +66,8 @@ const suffixes = {
     es: "restablecido por el administrador",
     cs: "resetováno správcem",
     lt: "nustatyta iš naujo administratoriaus",
-  },
-  expired: {
+  }),
+  expired: withEnglishLanguageFallback({
     en: "validity ended",
     pl: "koniec ważności",
     de: "Gültigkeit abgelaufen",
@@ -74,8 +75,8 @@ const suffixes = {
     es: "vigencia finalizada",
     cs: "platnost vypršela",
     lt: "galiojimas baigėsi",
-  },
-  course: {
+  }),
+  course: withEnglishLanguageFallback({
     en: "course",
     pl: "kurs",
     de: "Kurs",
@@ -83,8 +84,8 @@ const suffixes = {
     es: "curso",
     cs: "kurz",
     lt: "kursas",
-  },
-  platform: {
+  }),
+  platform: withEnglishLanguageFallback({
     en: "platform",
     pl: "platforma",
     de: "Plattform",
@@ -92,8 +93,8 @@ const suffixes = {
     es: "plataforma",
     cs: "platforma",
     lt: "platforma",
-  },
-  today: {
+  }),
+  today: withEnglishLanguageFallback({
     en: "due today",
     pl: "termin dzisiaj",
     de: "heute fällig",
@@ -101,8 +102,8 @@ const suffixes = {
     es: "vence hoy",
     cs: "termín dnes",
     lt: "terminas šiandien",
-  },
-  tomorrow: {
+  }),
+  tomorrow: withEnglishLanguageFallback({
     en: "due tomorrow",
     pl: "termin jutro",
     de: "morgen fällig",
@@ -110,8 +111,8 @@ const suffixes = {
     es: "vence mañana",
     cs: "termín zítra",
     lt: "terminas rytoj",
-  },
-  upcoming: {
+  }),
+  upcoming: withEnglishLanguageFallback({
     en: "upcoming deadline",
     pl: "nadchodzący termin",
     de: "bevorstehende Frist",
@@ -119,7 +120,7 @@ const suffixes = {
     es: "próxima fecha límite",
     cs: "blížící se termín",
     lt: "artėjantis terminas",
-  },
+  }),
 } as const;
 const course = "{{ course_name }}";
 

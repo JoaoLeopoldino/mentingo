@@ -1,3 +1,4 @@
+import { withEnglishLanguageFallback } from "@repo/shared";
 import { CERTIFICATE_ARCHIVE_REASONS } from "@repo/shared";
 import { EmailContent } from "types";
 
@@ -10,7 +11,7 @@ export const getCertificateExpiredEmailTranslations = (
 ) => {
   const isManualReset = reason === CERTIFICATE_ARCHIVE_REASONS.MANUAL_RESET;
 
-  const emailContent: Record<SupportedLanguages, EmailContent> = {
+  const emailContent: Record<SupportedLanguages, EmailContent> = withEnglishLanguageFallback({
     en: {
       heading: isManualReset ? "Certificate reset" : "Certificate expired",
       paragraphs: [
@@ -81,7 +82,7 @@ export const getCertificateExpiredEmailTranslations = (
       ],
       buttonText: "OUVRIR LE COURS",
     },
-  };
+  });
 
   return emailContent[language];
 };

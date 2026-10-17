@@ -1,4 +1,5 @@
 import {
+  withEnglishLanguageFallback,
   AUTOMATION_EVENT_KINDS,
   AUTOMATION_MAPPING_TYPES,
   BUILT_IN_EMAIL_TEMPLATE_KEYS,
@@ -9,7 +10,7 @@ import type { BuiltInAutomationDefinition } from "../automation-execution.types"
 
 export const passwordReminderAutomation: BuiltInAutomationDefinition = {
   eventKind: AUTOMATION_EVENT_KINDS.PASSWORD_REMINDER,
-  name: {
+  name: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Password creation reminder",
     [SUPPORTED_LANGUAGES.PL]: "Przypomnienie o utworzeniu hasła",
     [SUPPORTED_LANGUAGES.DE]: "Erinnerung an die Passworterstellung",
@@ -17,8 +18,8 @@ export const passwordReminderAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Recordatorio de creación de contraseña",
     [SUPPORTED_LANGUAGES.CS]: "Připomenutí vytvoření hesla",
     [SUPPORTED_LANGUAGES.LT]: "Priminimas sukurti slaptažodį",
-  },
-  description: {
+  }),
+  description: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Sent when a user needs to finish creating a password.",
     [SUPPORTED_LANGUAGES.PL]: "Wysyłane, gdy użytkownik musi dokończyć tworzenie hasła.",
     [SUPPORTED_LANGUAGES.DE]:
@@ -28,7 +29,7 @@ export const passwordReminderAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Se envía cuando un usuario debe terminar de crear su contraseña.",
     [SUPPORTED_LANGUAGES.CS]: "Odesílá se, když uživatel potřebuje dokončit vytvoření hesla.",
     [SUPPORTED_LANGUAGES.LT]: "Siunčiama, kai naudotojas turi baigti kurti slaptažodį.",
-  },
+  }),
   templateKey: BUILT_IN_EMAIL_TEMPLATE_KEYS.PASSWORD_REMINDER,
   mappings: {
     create_password_link: {

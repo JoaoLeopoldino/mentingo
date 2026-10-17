@@ -1,8 +1,9 @@
+import { withEnglishLanguageFallback } from "@repo/shared";
 import { SupportedLanguages } from "@repo/shared";
 import { EmailContent } from "types";
 
 export const getMagicLinkEmailTranslations = (language: SupportedLanguages) => {
-  const emailContent: Record<SupportedLanguages, EmailContent> = {
+  const emailContent: Record<SupportedLanguages, EmailContent> = withEnglishLanguageFallback({
     en: {
       heading: "Login Link",
       paragraphs: [
@@ -52,7 +53,7 @@ export const getMagicLinkEmailTranslations = (language: SupportedLanguages) => {
       ],
       buttonText: "OUVRIR LE LIEN DE CONNEXION",
     },
-  };
+  });
 
   return emailContent[language];
 };

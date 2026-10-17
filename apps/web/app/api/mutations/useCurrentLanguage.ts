@@ -1,3 +1,5 @@
+import { normalizeSupportedLanguage } from "@repo/shared";
+
 import { useLanguageStore } from "../../modules/Dashboard/Settings/Language/LanguageStore";
 import { useCurrentUser } from "../queries/useCurrentUser";
 import { useUserSettings } from "../queries/useUserSettings";
@@ -7,11 +9,13 @@ export function useCurrentLanguage() {
   const { data: userSettings } = useUserSettings();
   const { language: fallbackLanguage } = useLanguageStore();
 
+  const preferredLanguage = normalizeSupportedLanguage(userSettings?.language);
+
   if (currentUser) {
     return {
-      language: userSettings?.language || fallbackLanguage,
-      isFromDatabase: !!userSettings?.language,
-      isFromLocalStorage: !userSettings?.language && !!fallbackLanguage,
+      language: preferredLanguage || fallbackLanguage,
+      isFromDatabase: !!preferredLanguage,
+      isFromLocalStorage: !preferredLanguage && !!fallbackLanguage,
       currentUser,
       userSettings,
     };

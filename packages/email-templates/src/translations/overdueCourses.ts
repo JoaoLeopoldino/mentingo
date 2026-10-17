@@ -1,3 +1,4 @@
+import { withEnglishLanguageFallback } from "@repo/shared";
 import { SupportedLanguages } from "@repo/shared";
 import { EmailContent } from "types";
 
@@ -39,71 +40,73 @@ export const getOverdueCoursesEmailTranslations = (
   language: SupportedLanguages,
   courses: OverdueCoursesEmailCourse[],
 ) => {
-  const labels: Record<SupportedLanguages, OverdueCoursesEmailLabels> = {
-    en: {
-      heading: "Students with overdue courses",
-      intro: "Some students did not finish their courses on time:",
-      buttonText: "VIEW COURSES",
-      courseLabel: "Course",
-      groupLabel: "Group",
-      dueDateLabel: "Due date",
-      studentsLabel: "Students",
+  const labels: Record<SupportedLanguages, OverdueCoursesEmailLabels> = withEnglishLanguageFallback(
+    {
+      en: {
+        heading: "Students with overdue courses",
+        intro: "Some students did not finish their courses on time:",
+        buttonText: "VIEW COURSES",
+        courseLabel: "Course",
+        groupLabel: "Group",
+        dueDateLabel: "Due date",
+        studentsLabel: "Students",
+      },
+      pl: {
+        heading: "Zaległe kursy studentów",
+        intro: "Niektórzy studenci nie ukończyli kursów w wymaganym terminie:",
+        buttonText: "PRZEJDŹ DO KURSÓW",
+        courseLabel: "Kurs",
+        groupLabel: "Grupa",
+        dueDateLabel: "Termin",
+        studentsLabel: "Studenci",
+      },
+      de: {
+        heading: "Teilnehmende mit überfälligen Kursen",
+        intro: "Einige Teilnehmende haben ihre Kurse nicht rechtzeitig abgeschlossen:",
+        buttonText: "KURSE ANZEIGEN",
+        courseLabel: "Kurs",
+        groupLabel: "Gruppe",
+        dueDateLabel: "Fälligkeitsdatum",
+        studentsLabel: "Teilnehmende",
+      },
+      lt: {
+        heading: "Studentai su vėluojančiais kursais",
+        intro: "Kai kurie studentai nebaigė kursų laiku:",
+        buttonText: "PERŽIŪRĖTI KURSUS",
+        courseLabel: "Kursas",
+        groupLabel: "Grupė",
+        dueDateLabel: "Terminas",
+        studentsLabel: "Studentai",
+      },
+      cs: {
+        heading: "Studenti s kurzy po termínu",
+        intro: "Někteří studenti nedokončili kurzy v požadovaném termínu:",
+        buttonText: "ZOBRAZIT KURZY",
+        courseLabel: "Kurz",
+        groupLabel: "Skupina",
+        dueDateLabel: "Termín",
+        studentsLabel: "Studenti",
+      },
+      es: {
+        heading: "Estudiantes con cursos vencidos",
+        intro: "Algunos estudiantes no completaron sus cursos a tiempo:",
+        buttonText: "VER CURSOS",
+        courseLabel: "Curso",
+        groupLabel: "Grupo",
+        dueDateLabel: "Fecha límite",
+        studentsLabel: "Estudiantes",
+      },
+      fr: {
+        heading: "Apprenants ayant des cours en retard",
+        intro: "Certains apprenants n'ont pas terminé leurs cours à temps :",
+        buttonText: "VOIR LES COURS",
+        courseLabel: "Cours",
+        groupLabel: "Groupe",
+        dueDateLabel: "Date limite",
+        studentsLabel: "Apprenants",
+      },
     },
-    pl: {
-      heading: "Zaległe kursy studentów",
-      intro: "Niektórzy studenci nie ukończyli kursów w wymaganym terminie:",
-      buttonText: "PRZEJDŹ DO KURSÓW",
-      courseLabel: "Kurs",
-      groupLabel: "Grupa",
-      dueDateLabel: "Termin",
-      studentsLabel: "Studenci",
-    },
-    de: {
-      heading: "Teilnehmende mit überfälligen Kursen",
-      intro: "Einige Teilnehmende haben ihre Kurse nicht rechtzeitig abgeschlossen:",
-      buttonText: "KURSE ANZEIGEN",
-      courseLabel: "Kurs",
-      groupLabel: "Gruppe",
-      dueDateLabel: "Fälligkeitsdatum",
-      studentsLabel: "Teilnehmende",
-    },
-    lt: {
-      heading: "Studentai su vėluojančiais kursais",
-      intro: "Kai kurie studentai nebaigė kursų laiku:",
-      buttonText: "PERŽIŪRĖTI KURSUS",
-      courseLabel: "Kursas",
-      groupLabel: "Grupė",
-      dueDateLabel: "Terminas",
-      studentsLabel: "Studentai",
-    },
-    cs: {
-      heading: "Studenti s kurzy po termínu",
-      intro: "Někteří studenti nedokončili kurzy v požadovaném termínu:",
-      buttonText: "ZOBRAZIT KURZY",
-      courseLabel: "Kurz",
-      groupLabel: "Skupina",
-      dueDateLabel: "Termín",
-      studentsLabel: "Studenti",
-    },
-    es: {
-      heading: "Estudiantes con cursos vencidos",
-      intro: "Algunos estudiantes no completaron sus cursos a tiempo:",
-      buttonText: "VER CURSOS",
-      courseLabel: "Curso",
-      groupLabel: "Grupo",
-      dueDateLabel: "Fecha límite",
-      studentsLabel: "Estudiantes",
-    },
-    fr: {
-      heading: "Apprenants ayant des cours en retard",
-      intro: "Certains apprenants n'ont pas terminé leurs cours à temps :",
-      buttonText: "VOIR LES COURS",
-      courseLabel: "Cours",
-      groupLabel: "Groupe",
-      dueDateLabel: "Date limite",
-      studentsLabel: "Apprenants",
-    },
-  };
+  );
 
   const selectedLabels = labels[language];
 

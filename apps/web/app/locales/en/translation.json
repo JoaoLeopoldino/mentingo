@@ -679,7 +679,8 @@
       "lt": "Lithuanian",
       "cs": "Czech",
       "es": "Spanish",
-      "fr": "French"
+      "fr": "French",
+      "pt-AO": "Portuguese (Angola)"
     },
     "lessonTypes": {
       "content": "Content",
@@ -1555,7 +1556,8 @@
       "czech": "Czech",
       "lithuanian": "Lithuanian",
       "spanish": "Spanish",
-      "french": "French"
+      "french": "French",
+      "angolanPortuguese": "Portuguese (Angola)"
     }
   },
   "resetOnboarding": {
@@ -6787,6 +6789,7 @@
       "section": "{{kind}} {{number}}"
     },
     "errors": {
+      "unsupportedLanguage": "AI authoring does not yet support this course language. Use the native editor.",
       "applicationFailed": "The selected changes could not be applied. Review the latest course state and try again.",
       "applicationNotFound": "This application result is no longer available.",
       "assessmentAttemptsAcknowledgementRequired": "A selected quiz has existing attempts. Review and acknowledge the learner impact before applying.",

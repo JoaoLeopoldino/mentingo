@@ -1,4 +1,5 @@
 import {
+  withEnglishLanguageFallback,
   AUTOMATION_EVENT_KINDS,
   AUTOMATION_MAPPING_TYPES,
   BUILT_IN_EMAIL_TEMPLATE_KEYS,
@@ -9,7 +10,7 @@ import type { BuiltInAutomationDefinition } from "../automation-execution.types"
 
 export const announcementAutomation: BuiltInAutomationDefinition = {
   eventKind: AUTOMATION_EVENT_KINDS.ANNOUNCEMENT,
-  name: {
+  name: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Announcement",
     [SUPPORTED_LANGUAGES.PL]: "Ogłoszenie",
     [SUPPORTED_LANGUAGES.DE]: "Ankündigung",
@@ -17,8 +18,8 @@ export const announcementAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Anuncio",
     [SUPPORTED_LANGUAGES.CS]: "Oznámení",
     [SUPPORTED_LANGUAGES.LT]: "Skelbimas",
-  },
-  description: {
+  }),
+  description: withEnglishLanguageFallback({
     [SUPPORTED_LANGUAGES.EN]: "Sent when an announcement is delivered by email.",
     [SUPPORTED_LANGUAGES.PL]: "Wysyłane, gdy ogłoszenie jest dostarczane pocztą elektroniczną.",
     [SUPPORTED_LANGUAGES.DE]: "Wird gesendet, wenn eine Ankündigung per E-Mail zugestellt wird.",
@@ -26,7 +27,7 @@ export const announcementAutomation: BuiltInAutomationDefinition = {
     [SUPPORTED_LANGUAGES.ES]: "Se envía cuando un anuncio se entrega por correo electrónico.",
     [SUPPORTED_LANGUAGES.CS]: "Odesílá se při doručení oznámení e-mailem.",
     [SUPPORTED_LANGUAGES.LT]: "Siunčiama, kai skelbimas pristatomas el. paštu.",
-  },
+  }),
   templateKey: BUILT_IN_EMAIL_TEMPLATE_KEYS.ANNOUNCEMENT,
   mappings: {
     title: { type: AUTOMATION_MAPPING_TYPES.EVENT_FIELD, field: "title" },

@@ -11,6 +11,7 @@ import es from "~/locales/es/translation.json";
 import fr from "~/locales/fr/translation.json";
 import lt from "~/locales/lt/translation.json";
 import pl from "~/locales/pl/translation.json";
+import ptAO from "~/locales/pt-AO/translation.json";
 
 import { useEnrollCourse } from "./useEnrollCourse";
 
@@ -64,6 +65,7 @@ describe("useEnrollCourse", () => {
 
   it("has an archived enrollment message in every locale", () => {
     const translations = {
+      [SUPPORTED_LANGUAGES.PT_AO]: ptAO,
       [SUPPORTED_LANGUAGES.CS]: cs,
       [SUPPORTED_LANGUAGES.DE]: de,
       [SUPPORTED_LANGUAGES.EN]: en,

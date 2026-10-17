@@ -1,4 +1,5 @@
 import { Faker, en, pl, de, fr, es, cs_CZ, base } from "@faker-js/faker";
+import { withEnglishLanguageFallback } from "@repo/shared";
 import {
   SUPPORTED_LANGUAGES,
   AUTOMATION_PLACEHOLDER_TYPES,
@@ -10,7 +11,7 @@ import {
 
 import { AUTOMATION_EVENT_CATALOG } from "src/automations/catalog/automation-event-catalog";
 
-const PREVIEW_LOCALES: Record<SupportedLanguages, typeof en> = {
+const PREVIEW_LOCALES: Record<SupportedLanguages, typeof en> = withEnglishLanguageFallback({
   en,
   pl,
   de,
@@ -18,17 +19,18 @@ const PREVIEW_LOCALES: Record<SupportedLanguages, typeof en> = {
   es,
   cs: cs_CZ,
   lt: en,
-};
+});
 
-const PREVIEW_TEXT: Record<SupportedLanguages, { course: string; example: string }> = {
-  en: { course: "Leadership essentials", example: "Example" },
-  pl: { course: "Podstawy przywództwa", example: "Przykład" },
-  de: { course: "Grundlagen der Führung", example: "Beispiel" },
-  fr: { course: "Les bases du leadership", example: "Exemple" },
-  es: { course: "Fundamentos del liderazgo", example: "Ejemplo" },
-  cs: { course: "Základy vedení", example: "Příklad" },
-  lt: { course: "Lyderystės pagrindai", example: "Pavyzdys" },
-};
+const PREVIEW_TEXT: Record<SupportedLanguages, { course: string; example: string }> =
+  withEnglishLanguageFallback({
+    en: { course: "Leadership essentials", example: "Example" },
+    pl: { course: "Podstawy przywództwa", example: "Przykład" },
+    de: { course: "Grundlagen der Führung", example: "Beispiel" },
+    fr: { course: "Les bases du leadership", example: "Exemple" },
+    es: { course: "Fundamentos del liderazgo", example: "Ejemplo" },
+    cs: { course: "Základy vedení", example: "Příklad" },
+    lt: { course: "Lyderystės pagrindai", example: "Pavyzdys" },
+  });
 
 export function generateEmailPreviewRecipient(
   language: SupportedLanguages = SUPPORTED_LANGUAGES.EN,

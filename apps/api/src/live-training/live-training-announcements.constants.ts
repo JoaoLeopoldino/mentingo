@@ -1,11 +1,11 @@
-import { ANNOUNCEMENT_EMAIL_TEMPLATES } from "@repo/shared";
+import { withEnglishLanguageFallback, ANNOUNCEMENT_EMAIL_TEMPLATES } from "@repo/shared";
 
 import type { AnnouncementEmailTemplate, SupportedLanguages } from "@repo/shared";
 
 export const LIVE_TRAINING_REMINDER_OFFSET_MINUTES = 15;
 
 export const LIVE_TRAINING_ANNOUNCEMENT_TITLES = {
-  [ANNOUNCEMENT_EMAIL_TEMPLATES.LIVE_TRAINING_REMINDER]: {
+  [ANNOUNCEMENT_EMAIL_TEMPLATES.LIVE_TRAINING_REMINDER]: withEnglishLanguageFallback({
     en: "Live Training starts soon",
     pl: "Szkolenie na żywo rozpocznie się wkrótce",
     de: "Live-Schulung beginnt bald",
@@ -13,8 +13,8 @@ export const LIVE_TRAINING_ANNOUNCEMENT_TITLES = {
     cs: "Živé školení brzy začne",
     es: "La formación en vivo comenzará pronto",
     fr: "La formation en direct commence bientôt",
-  },
-  [ANNOUNCEMENT_EMAIL_TEMPLATES.LIVE_TRAINING_STARTED]: {
+  }),
+  [ANNOUNCEMENT_EMAIL_TEMPLATES.LIVE_TRAINING_STARTED]: withEnglishLanguageFallback({
     en: "Live Training has started",
     pl: "Szkolenie na żywo rozpoczęło się",
     de: "Live-Schulung hat begonnen",
@@ -22,8 +22,8 @@ export const LIVE_TRAINING_ANNOUNCEMENT_TITLES = {
     cs: "Živé školení začalo",
     es: "La formación en vivo ha comenzado",
     fr: "La formation en direct a commencé",
-  },
-  [ANNOUNCEMENT_EMAIL_TEMPLATES.LIVE_TRAINING_ENDED]: {
+  }),
+  [ANNOUNCEMENT_EMAIL_TEMPLATES.LIVE_TRAINING_ENDED]: withEnglishLanguageFallback({
     en: "Live Training has ended",
     pl: "Szkolenie na żywo zakończyło się",
     de: "Live-Schulung wurde beendet",
@@ -31,8 +31,8 @@ export const LIVE_TRAINING_ANNOUNCEMENT_TITLES = {
     cs: "Živé školení skončilo",
     es: "La formación en vivo ha finalizado",
     fr: "La formation en direct est terminée",
-  },
-  [ANNOUNCEMENT_EMAIL_TEMPLATES.DEFAULT]: {
+  }),
+  [ANNOUNCEMENT_EMAIL_TEMPLATES.DEFAULT]: withEnglishLanguageFallback({
     en: "Announcement",
     pl: "Ogłoszenie",
     de: "Ankündigung",
@@ -40,5 +40,5 @@ export const LIVE_TRAINING_ANNOUNCEMENT_TITLES = {
     cs: "Oznámení",
     es: "Anuncio",
     fr: "Annonce",
-  },
+  }),
 } satisfies Record<AnnouncementEmailTemplate, Record<SupportedLanguages, string>>;

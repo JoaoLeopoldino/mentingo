@@ -1,3 +1,4 @@
+import { withEnglishLanguageFallback } from "@repo/shared";
 import { SupportedLanguages } from "@repo/shared";
 import { EmailContent } from "types";
 
@@ -5,7 +6,7 @@ export const getPasswordRecoveryEmailTranslations = (
   language: SupportedLanguages,
   name: string,
 ) => {
-  const emailContent: Record<SupportedLanguages, EmailContent> = {
+  const emailContent: Record<SupportedLanguages, EmailContent> = withEnglishLanguageFallback({
     en: {
       heading: "Password Recovery",
       paragraphs: [
@@ -62,7 +63,7 @@ export const getPasswordRecoveryEmailTranslations = (
       ],
       buttonText: "RÉINITIALISER LE MOT DE PASSE",
     },
-  };
+  });
 
   return emailContent[language];
 };

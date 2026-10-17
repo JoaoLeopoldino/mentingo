@@ -1,0 +1,3178 @@
+{
+  "mcpConnection": {
+    "signIn": "Entrar"
+  },
+  "aiConversations": {
+    "owner": "Utilizador",
+    "retry": "Tentar novamente",
+    "started": "Iniciado",
+    "language": "Idioma",
+    "type": "Tipo",
+    "status": "Estado",
+    "allStatuses": "Todos os estados",
+    "statuses": {
+      "active": "Em curso",
+      "completed": "Concluído",
+      "archived": "Arquivado"
+    },
+    "title": "Conversas com IA"
+  },
+  "emailTemplates": {
+    "ui": {
+      "placeholderRequired": "Obrigatório",
+      "tableOfContents": "Índice",
+      "create": "Criar",
+      "status": "Estado",
+      "draft": "Rascunho",
+      "published": "Publicado",
+      "archived": "Arquivado",
+      "archive": "Arquivar",
+      "preview": "Pré-visualizar",
+      "publish": "Publicar",
+      "save": "Guardar",
+      "retry": "Tentar novamente",
+      "complete": "Concluir",
+      "blocks": {
+        "image": "Imagem"
+      }
+    }
+  },
+  "dashboardHome": {
+    "title": "O seu painel",
+    "subtitle": "Mantenha as informações e acções de formação mais importantes sempre acessíveis.",
+    "customize": "Personalizar painel",
+    "edit": {
+      "badge": "Em edição",
+      "widgetsButton": "Elementos do painel",
+      "restore": "Repor predefinições",
+      "restoreConfirm": "Repor a disposição predefinida do painel? A disposição actual será substituída.",
+      "changeSize": "Alterar tamanho de {{title}}",
+      "sizeTitle": "Tamanho do elemento",
+      "sizes": {
+        "1x1": "Compacto",
+        "2x1": "Largo",
+        "1x2": "Alto",
+        "2x2": "Grande",
+        "3x2": "Expandido",
+        "4x1": "Extra largo",
+        "4x2": "Destaque",
+        "4x3": "Destaque alto"
+      },
+      "drag": "Mover {{title}}",
+      "widgetLibrary": "Elementos do painel",
+      "widgetLibraryDescription": "Escolha os elementos que pretende apresentar no painel.",
+      "required": "Obrigatório",
+      "toggle": "Alternar {{title}}",
+      "confirm": "Sim",
+      "cancel": "Não"
+    },
+    "empty": {
+      "title": "O seu painel está vazio.",
+      "description": "Personalize o painel com os elementos de que necessita.",
+      "editDescription": "Active pelo menos um elemento na lista acima."
+    },
+    "error": {
+      "title": "Não foi possível carregar o painel.",
+      "description": "Tente novamente dentro de instantes.",
+      "retry": "Tentar novamente",
+      "invalidWidgetWidth": "Esta largura não é permitida para o elemento seleccionado.",
+      "invalidWidgetLayout": "A disposição do painel contém elementos indisponíveis ou duplicados.",
+      "invalidWidgetSize": "Este tamanho não é permitido para o elemento seleccionado.",
+      "requiredWidgetMissing": "Falta um elemento obrigatório no painel.",
+      "staleLayout": "O painel foi actualizado noutro local. Actualize a página e tente novamente."
+    },
+    "toast": {
+      "layoutSaved": "Alterações ao painel guardadas.",
+      "layoutSaveError": "Não foi possível guardar as alterações ao painel.",
+      "layoutReset": "A disposição predefinida do painel foi reposta.",
+      "layoutResetError": "Não foi possível repor a disposição predefinida do painel."
+    },
+    "widgets": {
+      "loadError": "Não foi possível carregar este elemento.",
+      "dataScope": {
+        "personal": "Os seus dados",
+        "otherUsers": "Dados da organização",
+        "personalTooltip": "Este elemento apresenta os seus dados pessoais de formação.",
+        "otherUsersTooltip": "Este elemento apresenta dados de formação de outros utilizadores da organização."
+      },
+      "trainingCompletionChartLabel": "{{completed}} de {{total}} inscrições concluídas, {{percentage}} por cento.",
+      "deadlineRisksPage": "Página {{page}} de {{totalPages}}",
+      "placeholderDescription": "Elemento do painel preparado para uma vista de dados específica",
+      "placeholderContent": "Este elemento está pronto para o respectivo conteúdo.",
+      "placeholderFooter": "Elemento de exemplo",
+      "s_placeholder_1": {
+        "title": "Elemento do formando 1"
+      },
+      "s_placeholder_2": {
+        "title": "Elemento do formando 2"
+      },
+      "s_placeholder_3": {
+        "title": "Elemento do formando 3"
+      },
+      "studentTiles": {
+        "continueLearning": {
+          "description": "Todas as formações que iniciou",
+          "empty": "Não tem formações em curso.",
+          "nextLesson": "Seguinte: {{title}}",
+          "openCourse": "Abrir formação",
+          "viewAll": "{{count}} formações em curso"
+        },
+        "requiredCourse": {
+          "description": "Todas as formações obrigatórias que ainda tem de concluir",
+          "empty": "Não tem formações obrigatórias por concluir.",
+          "overdue": "Em atraso",
+          "dueSoon": "Prazo próximo",
+          "scheduled": "Próximos",
+          "noDeadline": "Sem prazo",
+          "dueDate": "Prazo: {{date}}",
+          "noDueDate": "Sem data limite",
+          "total": "{{count}} formações obrigatórias",
+          "overdueCount": "{{count}} em atraso"
+        },
+        "courseCompletion": {
+          "description": "Resumo do progresso nas formações que lhe foram atribuídas",
+          "empty": "Ainda não lhe foram atribuídas formações.",
+          "completedOfTotal": "{{completed}} de {{total}} concluídos",
+          "completed": "Concluído",
+          "inProgress": "Em curso",
+          "notStarted": "Por iniciar"
+        },
+        "certificates": {
+          "description": "Os seus certificados válidos e as próximas expirações",
+          "empty": "Não tem certificados válidos.",
+          "active": "Certificados válidos",
+          "expiringSoon": "Expiram nos próximos 30 dias",
+          "cta": "Ver certificado",
+          "viewAll": "Ver todos os certificados",
+          "dialogTitle": "Os seus certificados",
+          "dialogDescription": "Consulte todos os certificados válidos que obteve.",
+          "issued": "Emitido em {{date}}",
+          "expires": "Expira em {{date}}",
+          "noExpiry": "Sem data de expiração",
+          "previous": "Anterior",
+          "next": "Seguinte",
+          "page": "Página {{page}} de {{totalPages}}"
+        },
+        "aiMentorPractice": {
+          "description": "Crie diariamente um cenário de prática específico",
+          "dailyRefreshInfo": "Pode gerar uma nova sessão de prática com IA por dia.",
+          "empty": "Descreva uma situação e pratique com o mentor de IA.",
+          "emptyPrompt": "Que conversa gostaria de conduzir com mais confiança?",
+          "startCta": "Iniciar prática",
+          "continueCta": "Continuar prática",
+          "feedbackCta": "Ver feedback",
+          "completedEyebrow": "Prática concluída",
+          "privateHint": "Um espaço privado para experimentar, ajustar e tentar novamente",
+          "status": {
+            "queued": "O seu cenário de prática está em fila de espera.",
+            "processing": "O seu cenário de prática está a ser preparado.",
+            "ready": "A prática de hoje está pronta.",
+            "failed": "Não foi possível gerar o cenário. Abra-o para tentar novamente."
+          }
+        }
+      },
+      "commonDescription": "Informações essenciais de relance",
+      "training_completion": {
+        "title": "Conclusão de formações",
+        "description": "Estado de conclusão de todas as inscrições em formações",
+        "completed": "Concluído",
+        "inProgress": "Em curso",
+        "notStarted": "Por iniciar",
+        "viewAnalytics": "Ver análise",
+        "empty": "Ainda não existem inscrições em formações.",
+        "assignCourses": "Atribuir formações"
+      },
+      "deadline_risks": {
+        "title": "Risco de incumprimento de prazos",
+        "description": "Formações obrigatórias que necessitam de atenção",
+        "sort": "Ordenar",
+        "sortMostUrgent": "Mais urgentes primeiro",
+        "sortLeastUrgent": "Menos urgentes primeiro",
+        "student": "Formando",
+        "group": "Grupo",
+        "learners": "Formandos",
+        "deadline": "Prazo",
+        "status": "Estado",
+        "searchStudents": "Pesquisar formandos",
+        "searchGroups": "Pesquisar grupos ou formandos",
+        "allStatuses": "Todos os estados",
+        "studentsEmpty": "Não há formandos afectados.",
+        "groupsEmpty": "Não há grupos afectados.",
+        "overdue": "Em atraso",
+        "dueSoon": "Prazo próximo",
+        "empty": "Neste momento não há prazos em risco.",
+        "overdueTitle": "Formações obrigatórias em atraso",
+        "dueSoonTitle": "Formações obrigatórias com prazo próximo",
+        "goToCourse": "Ir para a formação",
+        "affected_one": "{{count}} formando afectado",
+        "affected_other": "{{count}} formandos afectados"
+      },
+      "incomplete_courses": {
+        "title": "Formações por concluir",
+        "description": "Formações com mais inscrições por concluir",
+        "allCompleted": "Todas as formações com inscrições estão concluídas.",
+        "noEnrollments": "Ainda não existem inscrições em formações.",
+        "enrollments": "inscrições",
+        "notCompleted": "{{count}} por concluir"
+      },
+      "event_calendar": {
+        "title": "Calendário de eventos",
+        "description": "Eventos e prazos de formação deste mês",
+        "previousMonth": "Mês anterior",
+        "nextMonth": "Mês seguinte",
+        "selectMonth": "Seleccionar mês",
+        "selectYear": "Seleccionar ano",
+        "selectedDay": "Dia seleccionado",
+        "upcoming": "Próximos eventos",
+        "empty": "Não há eventos este mês.",
+        "liveTraining": "Acção de formação",
+        "courseDeadline": "Prazo da formação",
+        "weekdays": {
+          "mon": "Seg",
+          "tue": "Ter",
+          "wed": "Qua",
+          "thu": "Qui",
+          "fri": "Sex",
+          "sat": "Sáb",
+          "sun": "Dom"
+        }
+      },
+      "continue_learning": {
+        "title": "Continuar a formação"
+      },
+      "required_course": {
+        "title": "Formações obrigatórias"
+      },
+      "course_completion": {
+        "title": "Progresso da formação"
+      },
+      "certificates": {
+        "title": "Certificados de formação"
+      },
+      "ai_mentor_practice": {
+        "title": "Prática com mentor de IA",
+        "aiNotConfigured": "O mentor de IA não está configurado para esta organização."
+      },
+      "todoTasks": {
+        "title": "Lista de tarefas",
+        "description": "Pequenas tarefas do seu dia de trabalho",
+        "empty": "Ainda não há tarefas. Adicione uma abaixo.",
+        "placeholder": "Adicionar uma tarefa",
+        "add": "Adicionar tarefa",
+        "toggle": "Alternar {{title}}",
+        "edit": "Editar tarefa",
+        "delete": "Eliminar tarefa",
+        "reorder": "Reordenar tarefa",
+        "toast": {
+          "createSuccess": "Tarefa adicionada.",
+          "createError": "Não foi possível adicionar a tarefa.",
+          "updateSuccess": "Tarefa actualizada.",
+          "updateError": "Não foi possível actualizar a tarefa.",
+          "deleteSuccess": "Tarefa eliminada.",
+          "deleteError": "Não foi possível eliminar a tarefa.",
+          "reorderSuccess": "Ordem das tarefas guardada.",
+          "reorderError": "Não foi possível guardar a ordem das tarefas."
+        }
+      }
+    }
+  },
+  "aiMentorPractice": {
+    "viewFeedback": "Ver feedback",
+    "conversationTitle": "Prática com mentor de IA",
+    "mentorName": "Mentor de IA",
+    "send": "Enviar"
+  },
+  "common": {
+    "deletedUser": "Utilizador eliminado",
+    "button": {
+      "save": "Guardar",
+      "saving": "A guardar…",
+      "delete": "Eliminar",
+      "create": "Criar",
+      "cancel": "Cancelar",
+      "back": "Voltar",
+      "proceed": "Prosseguir",
+      "add": "Adicionar",
+      "close": "Fechar",
+      "goToDashboard": "Ir para o painel",
+      "goBack": "Voltar atrás",
+      "ignore": "Ignorar",
+      "clearAll": "Limpar tudo",
+      "validate": "Validar",
+      "edit": "Editar",
+      "uploading": "A carregar…",
+      "sending": "A enviar…",
+      "loading": "A carregar…",
+      "previous": "Anterior",
+      "next": "Seguinte"
+    },
+    "toast": {
+      "noAccess": "Não tem permissão para aceder a este recurso.",
+      "globalSettingsNotFound": "Não foram encontradas as definições globais.",
+      "somethingWentWrong": "Ocorreu um erro…",
+      "notFound": "Recurso não encontrado.",
+      "lessonAccessDenied": "Não tem permissão para aceder a esta lição.",
+      "tooManyRequests": "Demasiados pedidos. Tente novamente dentro de {{seconds}} segundos."
+    },
+    "tooltip": {
+      "soon": "Brevemente"
+    },
+    "tableOfContents": "Índice",
+    "roles": {
+      "admin": "Administrador",
+      "contentCreator": "Criador de conteúdos",
+      "trainer": "Formador",
+      "student": "Formando",
+      "groupManager": "Gestor de grupo"
+    },
+    "languages": {
+      "en": "Inglês",
+      "pl": "Polaco",
+      "de": "Alemão",
+      "lt": "Lituano",
+      "cs": "Checo",
+      "es": "Espanhol",
+      "fr": "Francês",
+      "pt-AO": "Português (Angola)"
+    },
+    "lessonTypes": {
+      "content": "Conteúdo",
+      "quiz": "Questionário",
+      "ai_mentor": "Mentor de IA",
+      "embed": "Conteúdo incorporado",
+      "scorm": "SCORM",
+      "live_training": "Acção de formação"
+    },
+    "error": {
+      "somethingWentWrong": "Ocorreu um erro.",
+      "threadMustBeActive": "A conversa tem de estar activa.",
+      "aiMentorConfigurationIncomplete": "A configuração do mentor de IA está incompleta.",
+      "aiJudgeConfigurationMissing": "Falta a configuração das condições de conclusão.",
+      "aiJudgeGenerationNotAwaitingRevision": "Esta geração não está a aguardar uma decisão de revisão.",
+      "aiMentorConfigurationGenerationNotAwaitingRevision": "Esta geração não está a aguardar uma decisão de revisão."
+    },
+    "loader": {
+      "textSequence": {
+        "aiMentor": {
+          "warmingUp": "A iniciar o mentor de IA…",
+          "preparingSimulation": "A preparar a simulação…",
+          "buildingContext": "A preparar o contexto do cenário…",
+          "takingLonger": "Esta operação está a demorar mais do que o habitual…"
+        }
+      }
+    },
+    "other": {
+      "active": "Activo",
+      "archived": "Arquivado",
+      "selected": "Seleccionado",
+      "allStatuses": "Todos os estados",
+      "draft": "Rascunho",
+      "all": "Todos",
+      "search": "Pesquisar",
+      "published": "Publicado",
+      "private": "Privado",
+      "publish": "Publicar",
+      "uploadingImage": "A carregar a imagem…",
+      "copyUrl": "O endereço foi copiado para a área de transferência.",
+      "dueDate": "Prazo: {{date}}",
+      "appVersion": "Versão da aplicação: {{version}}"
+    },
+    "continueWithGoogle": "Continuar com Google",
+    "continueWithMicrosoft": "Continuar com Microsoft",
+    "continueWithSlack": "Continuar com Slack",
+    "enterFullscreen": "Ecrã inteiro",
+    "exitFullscreen": "Sair do ecrã inteiro",
+    "refreshPage": "Actualizar a página"
+  },
+  "lessons": {
+    "sequenceUpdatedSuccessfully": "Sequência das lições actualizada com sucesso.",
+    "sequenceUpdateFailed": "Não foi possível actualizar a sequência das lições.",
+    "quizFeedbackUpdatedSuccessfully": "Opção de feedback do questionário actualizada com sucesso.",
+    "quizFeedbackUpdateFailed": "Não foi possível actualizar a opção de feedback do questionário.",
+    "videoCompletionTrackingUpdatedSuccessfully": "Opção de acompanhamento da visualização do vídeo actualizada com sucesso.",
+    "videoCompletionTrackingUpdateFailed": "Não foi possível actualizar a opção de acompanhamento da visualização do vídeo.",
+    "settingsUpdatedSuccessfully": "Definições actualizadas com sucesso.",
+    "settingsUpdateFailed": "Não foi possível actualizar as definições."
+  },
+  "uploadFile": {
+    "header": "Clique para carregar",
+    "subHeader": "ou arraste e largue",
+    "replace": "Clique para substituir",
+    "toast": {
+      "fileUploadedSuccessfully": "Ficheiro carregado com sucesso.",
+      "videoFailed": "Não foi possível carregar o vídeo.",
+      "videoTooLarge": "O ficheiro de vídeo excede o tamanho máximo permitido.",
+      "videoReady": "O vídeo está pronto a utilizar.",
+      "videoUploading": "O vídeo está a ser carregado. Não feche este separador.",
+      "videoUploadedProcessing": "O carregamento terminou e o vídeo está a ser processado. Já pode fechar este separador."
+    },
+    "errors": {
+      "uploadForbidden": "Este carregamento não pertence ao utilizador actual."
+    },
+    "details": {
+      "imageCrop": "PNG, JPG, JPEG ou SVG",
+      "video": "MP4, MOV, MPEG-2 ou HEVC (até 5 GB)",
+      "presentation": "PPT/PPTX (até 100 MB)"
+    },
+    "processing": {
+      "title": "Vídeo em processamento",
+      "body": "Pode continuar a editar. Será notificado quando estiver pronto."
+    },
+    "remove": {
+      "video": "Remover vídeo",
+      "presentation": "Remover apresentação"
+    }
+  },
+  "adminScorm": {
+    "header": "Carregar SCORM",
+    "field": {
+      "price": "Preço",
+      "category": "Categoria",
+      "description": "Descrição"
+    },
+    "other": {
+      "status": "Estado",
+      "free": "Gratuito"
+    },
+    "button": {
+      "back": "Voltar",
+      "status": "Estado"
+    },
+    "create": {
+      "metadataSection": "Detalhes da formação"
+    }
+  },
+  "adminCourseTypeSelector": {
+    "back": "Voltar",
+    "scorm": {
+      "title": "SCORM"
+    }
+  },
+  "navigationSideBar": {
+    "settings": "Definições",
+    "logout": "Terminar sessão",
+    "panel": "painel",
+    "menu": "Menu",
+    "close": "Fechar",
+    "profile": "Perfil",
+    "dashboard": "Painel",
+    "statistics": "Estatísticas",
+    "analytics": "Análise",
+    "progress": "Progresso",
+    "findInApplication": "Pesquisar na aplicação",
+    "courses": "Formações",
+    "learningPaths": "Percursos de desenvolvimento",
+    "calendar": "Calendário",
+    "content": "Conteúdo",
+    "categories": "Categorias",
+    "users": "Colaboradores",
+    "groups": "Grupos",
+    "articles": "Base de conhecimento",
+    "news": "Notícias",
+    "providerInformation": "Informações",
+    "announcements": "Comunicados",
+    "notifications": "Notificações",
+    "promotionCodes": "Códigos promocionais",
+    "manage": "Gerir",
+    "ariaLabels": {
+      "goToAvailableCourses": "Ir para as formações disponíveis"
+    },
+    "qa": "Perguntas e respostas",
+    "tenants": "Organizações",
+    "activityLogs": "Registos de actividade",
+    "reports": "Relatórios"
+  },
+  "calendarView": {
+    "title": "Calendário",
+    "create": {
+      "liveTrainingOption": {
+        "title": "Acção de formação"
+      },
+      "section": {
+        "permissions": "Permissões"
+      },
+      "field": {
+        "title": "Título",
+        "description": "Descrição",
+        "language": "Idioma",
+        "location": "Local"
+      },
+      "deliveryType": {
+        "online": "Ligado"
+      }
+    },
+    "details": {
+      "action": {
+        "goToCourse": "Ir para a formação"
+      },
+      "sourceType": {
+        "liveTraining": "Acção de formação"
+      },
+      "field": {
+        "location": "Local",
+        "group": "Grupo"
+      },
+      "deliveryType": {
+        "online": "Ligado"
+      },
+      "status": {
+        "scheduled": "Agendada",
+        "ended": "Terminada"
+      },
+      "availability": {
+        "free": "Gratuito"
+      },
+      "role": {
+        "admin": "Administrador",
+        "author": "Autor",
+        "trainer": "Formador"
+      }
+    }
+  },
+  "liveTrainingView": {
+    "title": "Acção de formação",
+    "status": {
+      "scheduled": "Agendada",
+      "active": "Activo",
+      "ended": "Terminada"
+    },
+    "deliveryType": {
+      "online": "Ligado"
+    },
+    "actions": {
+      "edit": "Editar",
+      "delete": "Eliminar"
+    },
+    "stage": {
+      "activeBadge": "Activo"
+    },
+    "sidebar": {
+      "status": "Estado",
+      "author": "Autor",
+      "trainer": "Formador",
+      "location": "Local",
+      "addHost": "Adicionar",
+      "addTrainer": "Adicionar"
+    },
+    "tabs": {
+      "settings": "Definições"
+    },
+    "files": {
+      "download": "Descarregar"
+    },
+    "meeting": {
+      "activeTitle": "A sessão está activa.",
+      "finishDialog": {
+        "cancel": "Cancelar"
+      }
+    },
+    "sessions": {
+      "status": {
+        "active": "Activo",
+        "ended": "Terminada"
+      },
+      "roles": {
+        "admin": "Administrador"
+      },
+      "attendance": {
+        "user": "Utilizador",
+        "role": "Papel"
+      }
+    },
+    "settings": {
+      "title": "Definições"
+    },
+    "boolean": {
+      "yes": "Sim",
+      "no": "Não"
+    },
+    "edit": {
+      "saveChanges": "Guardar alterações"
+    }
+  },
+  "newsView": {
+    "header": "Notícias",
+    "field": {
+      "title": "Título",
+      "content": "Conteúdo",
+      "image": "Imagem",
+      "status": "Estado"
+    },
+    "create": "Criar",
+    "edit": "Editar",
+    "status": {
+      "draft": "Rascunho",
+      "published": "Publicado",
+      "publishedMany": "Publicado"
+    },
+    "button": {
+      "delete": "Eliminar"
+    },
+    "preview": "Pré-visualizar",
+    "language": {
+      "label": "Idioma"
+    }
+  },
+  "globalSearch": {
+    "aiSearch": "Pesquisa por IA",
+    "hybridSearch": "Pesquisa híbrida",
+    "backToKeywords": "Voltar à pesquisa por palavras-chave",
+    "semanticUnavailable": "A pesquisa semântica está temporariamente indisponível. A mostrar correspondências por palavras-chave.",
+    "semanticPending": "Alguns conteúdos ainda estão a ser indexados. Os resultados poderão estar incompletos.",
+    "searchFailed": "A pesquisa falhou. Tente novamente.",
+    "clear": "Limpar pesquisa",
+    "loading": "A pesquisar…",
+    "notFound": "Não foram encontrados resultados",
+    "tryAgain": "Tente novamente com outras palavras-chave",
+    "search": "Pesquisar...",
+    "searchIn": "Pesquisar em {{companyName}}",
+    "searchInDescription": "Comece a escrever para pesquisar formações, comunicados e outros conteúdos.",
+    "navigate": "Navegar",
+    "goTo": "Ir para",
+    "close": "Fechar",
+    "entries": {
+      "users": "Colaboradores",
+      "categories": "Categorias",
+      "groups": "Grupos",
+      "allCourses": "Todas as formações",
+      "myCourses": "As minhas formações",
+      "availableCourses": "Formações disponíveis",
+      "noSearchResults": "Sem resultados para:",
+      "announcements": "Comunicados",
+      "lessons": "Lições",
+      "learningPaths": "Percursos de aprendizagem",
+      "news": "Notícias",
+      "articles": "Artigos",
+      "qa": "Perguntas e respostas"
+    }
+  },
+  "providerInformation": {
+    "title": "Informações do fornecedor",
+    "breadcrumbs": {
+      "providerInformation": "Informações do fornecedor"
+    }
+  },
+  "changeUserLanguageView": {
+    "header": "Alterar idioma",
+    "subHeader": "Seleccione o idioma que prefere utilizar.",
+    "field": {
+      "language": "Idioma"
+    },
+    "options": {
+      "english": "Inglês",
+      "polish": "Polaco",
+      "german": "Alemão",
+      "czech": "Checo",
+      "lithuanian": "Lituano",
+      "spanish": "Espanhol",
+      "french": "Francês",
+      "angolanPortuguese": "Português (Angola)"
+    }
+  },
+  "changeUserEmailView": {
+    "field": {
+      "email": "Correio electrónico"
+    }
+  },
+  "ssoEnforcementView": {
+    "switch": {
+      "enabled": "Activado",
+      "disabled": "Desactivado"
+    }
+  },
+  "userEmailTriggers": {
+    "switch": {
+      "enabled": "Activado",
+      "disabled": "Desactivado"
+    }
+  },
+  "inviteOnlyRegistrationView": {
+    "switch": {
+      "enabled": "Activado",
+      "disabled": "Desactivado"
+    }
+  },
+  "environmentConfigurationView": {
+    "button": {
+      "loading": "A carregar…"
+    },
+    "dialog": {
+      "aiCapabilities": {
+        "names": {
+          "aiMentor": "Mentor de IA"
+        },
+        "status": {
+          "enabled": "Activado",
+          "disabled": "Desactivado"
+        }
+      }
+    }
+  },
+  "createPasswordView": {
+    "header": "Criar nova palavra-passe",
+    "subHeader": "Introduza uma nova palavra-passe",
+    "field": {
+      "password": "Palavra-passe",
+      "confirmPassword": "Confirmar palavra-passe"
+    },
+    "validation": {
+      "passwordsDontMatch": "As palavras-passe não coincidem."
+    },
+    "button": {
+      "changePassword": "Criar palavra-passe"
+    },
+    "error": {
+      "invalidToken": "Esta ligação para criar a palavra-passe é inválida ou expirou."
+    }
+  },
+  "changePasswordView": {
+    "header": "Alterar palavra-passe",
+    "subHeader": "Actualize aqui a sua palavra-passe.",
+    "setPasswordHeader": "Definir palavra-passe",
+    "setPasswordSubHeader": "Crie uma palavra-passe para a sua conta.",
+    "field": {
+      "oldPassword": "Palavra-passe actual",
+      "newPassword": "Nova palavra-passe",
+      "confirmPassword": "Confirmar palavra-passe"
+    },
+    "validation": {
+      "oldPassword": "A palavra-passe actual é obrigatória.",
+      "newPassword": "A nova palavra-passe é obrigatória.",
+      "passwordsDontMatch": "As palavras-passe não coincidem."
+    },
+    "toast": {
+      "passwordChangedSuccessfully": "Palavra-passe alterada com sucesso.",
+      "passwordCreatedSuccessfully": "Palavra-passe criada com sucesso."
+    }
+  },
+  "forcedPasswordChangeView": {
+    "header": "Altere a sua palavra-passe",
+    "subHeader": "Por segurança, tem de definir uma nova palavra-passe antes de continuar.",
+    "submit": "Alterar palavra-passe"
+  },
+  "passwordValidationDisplay": {
+    "title": "Requisitos da palavra-passe",
+    "header": "A sua palavra-passe tem de conter:",
+    "passwordMinLength": "pelo menos 8 caracteres",
+    "passwordUppercase": "pelo menos uma letra maiúscula",
+    "passwordLowercase": "pelo menos uma letra minúscula",
+    "passwordNumber": "pelo menos um algarismo",
+    "passwordSpecial": "pelo menos um carácter especial",
+    "passwordsMatch": "As palavras-passe coincidem."
+  },
+  "contentCreatorView": {
+    "button": {
+      "collapse": "Recolher",
+      "edit": "Editar",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar"
+    },
+    "field": {
+      "firstName": "Nome",
+      "contactEmail": "Endereço de correio electrónico",
+      "contactPhone": "Número de telefone",
+      "jobTitle": "Título"
+    },
+    "other": {
+      "aboutTitle": "Sobre",
+      "pageTitle": "Perfil",
+      "about": "Sobre",
+      "courses": "Formações",
+      "title": "Título"
+    }
+  },
+  "changeUserInformationView": {
+    "header": "Alterar dados do colaborador",
+    "subHeader": "Actualize aqui a sua apresentação.",
+    "toast": {
+      "userUpdatedSuccessfully": "Colaborador actualizado com sucesso.",
+      "userDetailsUpdatedSuccessfully": "Dados do colaborador actualizados com sucesso.",
+      "updatedSelectedUsersSuccessfully": "Colaboradores seleccionados actualizados com sucesso.",
+      "deletedSelectedUsersSuccessfully": "Colaboradores seleccionados eliminados com sucesso.",
+      "archivedSelectedUsersSuccessfully": "Colaboradores seleccionados arquivados com sucesso.",
+      "archiveSelectedUsersError": "Não foi possível arquivar os colaboradores seleccionados.",
+      "passwordResetEmailsSent": "Mensagens de redefinição enviadas: {{sentCount}}. Ignoradas: {{skippedCount}}.",
+      "passwordResetEmailsError": "Não foi possível enviar as mensagens de redefinição da palavra-passe.",
+      "passwordCreationEmailsSent": "Mensagens de criação enviadas: {{sentCount}}. Ignoradas: {{skippedCount}}.",
+      "passwordCreationEmailsError": "Não foi possível enviar as mensagens de criação da palavra-passe.",
+      "passwordEmailsSent": "Mensagens sobre palavra-passe enviadas: {{sentCount}}. Redefinição: {{passwordResetSentCount}}. Criação: {{passwordCreationSentCount}}. Ignoradas: {{skippedCount}}.",
+      "passwordEmailsError": "Não foi possível enviar as mensagens sobre palavra-passe."
+    },
+    "field": {
+      "description": "Descrição",
+      "email": "Correio electrónico",
+      "phoneNumber": "Número de telefone",
+      "jobTitle": "Função"
+    },
+    "placeholder": {
+      "description": "A sua apresentação",
+      "phoneNumber": "O seu número de telefone",
+      "jobTitle": "A sua função"
+    }
+  },
+  "clientStatisticsView": {
+    "button": {
+      "enroll": "Inscrever",
+      "continue": "Continuar",
+      "start": "Iniciar",
+      "readMore": "Ler mais",
+      "tryAgain": "Tentar novamente",
+      "view": "Ver"
+    },
+    "other": {
+      "noData": "Sem dados",
+      "courses": "Formações",
+      "lessons": "Lições",
+      "completed": "Concluído",
+      "started": "Iniciado"
+    }
+  },
+  "profileWithCalendarView": {
+    "button": {
+      "settings": "Definições"
+    }
+  },
+  "adminStatisticsView": {
+    "other": {
+      "completed": "Concluído",
+      "noData": "Sem dados"
+    }
+  },
+  "adminPromotionCodesView": {
+    "status": {
+      "active": "Activo"
+    },
+    "field": {
+      "status": "Estado",
+      "type": "Tipo",
+      "createdAt": "Data de criação"
+    },
+    "breadcrumbs": {
+      "promotionCodes": "Códigos promocionais",
+      "createNew": "Criar",
+      "back": "Voltar"
+    },
+    "button": {
+      "createNew": "Criar"
+    }
+  },
+  "adminCoursesView": {
+    "filters": {
+      "placeholder": {
+        "title": "Pesquisar por título…",
+        "categories": "Categorias",
+        "states": "Estados"
+      },
+      "other": {
+        "draft": "Rascunho",
+        "published": "Publicado",
+        "private": "Privado"
+      }
+    },
+    "courses": {
+      "header": "Gerir formações",
+      "subHeader": "Todas as formações que pode consultar e editar"
+    },
+    "field": {
+      "title": "Título",
+      "author": "Autor",
+      "category": "Categoria",
+      "price": "Preço",
+      "type": "Tipo",
+      "scorm": "SCORM",
+      "state": "Estado",
+      "status": "Estado",
+      "sharedCourse": "Partilhado",
+      "createdAt": "Data de criação"
+    },
+    "lessonCard": {
+      "mappedTypes": {
+        "video": "Vídeo",
+        "presentation": "Apresentação",
+        "content": "Conteúdo",
+        "quiz": "Questionário",
+        "ai_mentor": "Mentor de IA",
+        "embed": "Conteúdo incorporado"
+      }
+    },
+    "other": {
+      "selected": "Seleccionado",
+      "noLessons": "Sem lições"
+    },
+    "button": {
+      "uploadScorm": "Carregar SCORM",
+      "createNew": "Criar",
+      "deleteSelected": "Eliminar seleccionados",
+      "bulkEdit": "Editar em lote",
+      "actions": "Acções da formação"
+    },
+    "dropdown": {
+      "changeCategory": "Alterar categoria",
+      "changeStatus": "Alterar estado",
+      "archive": "Arquivar",
+      "restore": "Restaurar",
+      "delete": "Eliminar"
+    },
+    "deleteModal": {
+      "titleSingle": "Eliminar formação",
+      "titleMultiple": "Eliminar formações",
+      "descriptionSingle": "Tem a certeza de que pretende eliminar esta formação? Esta acção não pode ser anulada.",
+      "descriptionMultiple": "Tem a certeza de que pretende eliminar {{count}} formações? Esta acção não pode ser anulada."
+    },
+    "archiveModal": {
+      "title": "Arquivar formações",
+      "description": "Arquivar {{count}} formações seleccionadas? Os formandos inscritos mantêm o acesso."
+    },
+    "restoreModal": {
+      "title": "Restaurar formações",
+      "description": "Restaurar {{count}} formações seleccionadas para o catálogo activo?"
+    },
+    "statusModal": {
+      "title": "Alterar estado da formação",
+      "description": "Escolha o novo estado para {{count}} formações seleccionadas."
+    },
+    "categoryModal": {
+      "title": "Alterar categoria da formação",
+      "description": "Escolha a nova categoria para {{count}} formações seleccionadas."
+    },
+    "toast": {
+      "deleteCourseSuccessfully": "Formação eliminada com sucesso.",
+      "deleteCourseFailed": "Não foi possível eliminar a formação.",
+      "deleteProtectedCourseFailed": "Não é possível eliminar uma formação publicada ou privada. Altere primeiro o estado para Rascunho.",
+      "bulkCategoryUpdateSuccessfully": "Categorias das formações actualizadas com sucesso.",
+      "bulkCategoryUpdateFailed": "Não foi possível actualizar as categorias das formações.",
+      "bulkCategoryUpdateForbidden": "Não tem permissão para actualizar uma ou mais formações seleccionadas.",
+      "bulkCategoryUpdateCategoryNotFound": "A categoria seleccionada não foi encontrada.",
+      "bulkArchiveUpdateSuccessfully": "Estado de arquivo das formações actualizado com sucesso.",
+      "bulkArchiveUpdateFailed": "Não foi possível actualizar o estado de arquivo das formações.",
+      "bulkArchiveUpdateForbidden": "Não tem permissão para arquivar ou restaurar uma ou mais formações seleccionadas.",
+      "bulkStatusUpdateSuccessfully": "Estados das formações actualizados com sucesso.",
+      "bulkStatusUpdateFailed": "Não foi possível actualizar os estados das formações.",
+      "bulkStatusUpdateForbidden": "Não tem permissão para actualizar uma ou mais formações seleccionadas.",
+      "noCoursesSelected": "Seleccione pelo menos uma formação."
+    }
+  },
+  "adminCategoriesView": {
+    "filters": {
+      "placeholder": {
+        "title": "Pesquisar por título…"
+      }
+    },
+    "field": {
+      "title": "Título",
+      "status": "Estado",
+      "createdAt": "Data de criação"
+    },
+    "button": {
+      "createNew": "Criar",
+      "deleteSelected": "Eliminar seleccionados"
+    },
+    "breadcrumbs": {
+      "categories": "Categorias",
+      "back": "Voltar"
+    }
+  },
+  "adminCategoryView": {
+    "field": {
+      "title": "Título",
+      "status": "Estado"
+    },
+    "language": {
+      "label": "Idioma"
+    },
+    "breadcrumbs": {
+      "categories": "Categorias",
+      "back": "Voltar"
+    }
+  },
+  "adminUsersView": {
+    "filters": {
+      "placeholder": {
+        "searchByKeyword": "Pesquisar por palavra-chave…",
+        "roles": "Papéis",
+        "groups": "Todos os grupos"
+      }
+    },
+    "field": {
+      "firstName": "Nome próprio",
+      "lastName": "Apelido",
+      "email": "Correio electrónico",
+      "role": "Papel",
+      "status": "Estado",
+      "createdAt": "Data de criação",
+      "group": "Grupo"
+    },
+    "other": {
+      "selected": "Seleccionado"
+    },
+    "toast": {
+      "cannotUpdateOwnRole": "O administrador não pode alterar o seu próprio papel.",
+      "noUserSelected": "Nenhum utilizador seleccionado.",
+      "noGroupSelected": "Seleccione pelo menos um grupo.",
+      "userMustHaveAtLeastOneRole": "O utilizador tem de ter pelo menos um papel.",
+      "trainerRoleRequiresLiveTraining": "O papel de formador só está disponível quando as acções de formação estão activadas."
+    },
+    "import": {
+      "toast": {
+        "processing": "A processar a importação de colaboradores…",
+        "success": "Importação concluída com sucesso.\nColaboradores importados: {{ importedUsersAmount }}.\nColaboradores existentes ignorados: {{ skippedUsersAmount }}."
+      }
+    },
+    "button": {
+      "createNew": "Criar",
+      "deleteSelected": "Eliminar seleccionados",
+      "edit": "Editar",
+      "import": "Importar colaboradores",
+      "bulkEdit": "Editar em lote",
+      "permissionsMatrix": "Matriz de permissões"
+    },
+    "permissionsMatrix": {
+      "title": "Matriz de permissões dos papéis de sistema",
+      "permission": "Permissão",
+      "empty": "Não há papéis disponíveis.",
+      "descriptionTemplates": {
+        "base": "Permite ao utilizador {{action}} {{resource}}.",
+        "withScope": "Permite ao utilizador {{action}} {{scope}} {{resource}}."
+      },
+      "actions": {
+        "read": "consultar",
+        "update": "editar",
+        "manage": "gerir",
+        "create": "criar",
+        "delete": "eliminar",
+        "share": "partilhar",
+        "render": "gerar",
+        "upload": "carregar",
+        "use": "utilizar",
+        "enrollment": "gerir inscrições em",
+        "statistics": "consultar estatísticas de",
+        "export": "exportar",
+        "checkout": "aceder ao pagamento de",
+        "ai_generation": "gerar com IA para"
+      },
+      "scopes": {
+        "self": "próprios",
+        "own": "próprios",
+        "public": "públicos",
+        "assigned": "atribuídos",
+        "manageable": "sob sua gestão"
+      },
+      "resources": {
+        "account": "dados da conta",
+        "user": "perfis de utilizadores",
+        "settings": "definições",
+        "env": "configuração do ambiente",
+        "category": "categorias",
+        "group": "grupos",
+        "course": "formações",
+        "course_discussion": "conversas das formações",
+        "learning_path": "percursos de desenvolvimento",
+        "learning_mode": "modo de formação",
+        "learning_progress": "progresso da formação",
+        "certificate": "certificados",
+        "file": "ficheiros",
+        "resource_library": "Biblioteca de recursos",
+        "ai": "funcionalidades de IA",
+        "announcement": "comunicados",
+        "news": "notícias",
+        "article": "artigos da base de conhecimento",
+        "qa": "perguntas e respostas",
+        "report": "relatórios",
+        "statistics": "estatísticas",
+        "billing": "facturação",
+        "integration_key": "chaves de integração",
+        "integration_api": "API de integração",
+        "tenant": "configuração da organização",
+        "calendar": "calendário",
+        "live_training": "acções de formação",
+        "activity_log": "registo de actividade",
+        "other": "funcionalidades da plataforma"
+      },
+      "descriptions": {
+        "phishing_manage": "Criar e gerir simulações de phishing.",
+        "phishing_report_read": "Consultar relatórios de simulações de phishing.",
+        "account_read_self": "Consultar os dados da sua própria conta.",
+        "account_update_self": "Editar os dados da sua própria conta.",
+        "user_read_self": "Consultar o seu próprio perfil de utilizador.",
+        "user_manage": "Gerir utilizadores, incluindo papéis e estado da conta.",
+        "settings_read_self": "Consultar o seu próprio perfil e preferências.",
+        "settings_update_self": "Actualizar o seu próprio perfil e preferências.",
+        "dashboard_read": "Consultar o seu painel.",
+        "todo_task_manage_self": "Criar e gerir as suas próprias tarefas.",
+        "settings_manage": "Gerir as definições globais da plataforma.",
+        "email_template_manage": "Gerir e publicar modelos de correio electrónico, carregar imagens e enviar mensagens de teste.",
+        "automation_manage": "Criar, editar, publicar e gerir automatismos.",
+        "automation_log_read": "Consultar registos de execução de automatismos.",
+        "env_read_public": "Consultar valores públicos da configuração do ambiente.",
+        "env_manage": "Gerir valores da configuração do ambiente.",
+        "category_read": "Consultar categorias de formações.",
+        "category_manage": "Criar, editar e eliminar categorias de formações.",
+        "group_read": "Consultar grupos de colaboradores.",
+        "group_manage": "Criar, editar e eliminar grupos de colaboradores.",
+        "learning_path_read": "Consultar percursos de desenvolvimento.",
+        "learning_path_create": "Criar percursos de desenvolvimento.",
+        "learning_path_update": "Editar qualquer percurso de desenvolvimento.",
+        "learning_path_update_own": "Editar percursos de desenvolvimento criados por este utilizador.",
+        "learning_path_delete": "Eliminar percursos de desenvolvimento.",
+        "learning_path_course_update": "Adicionar, remover e reordenar formações em qualquer percurso de desenvolvimento.",
+        "learning_path_course_update_own": "Adicionar, remover e reordenar formações nos seus próprios percursos de desenvolvimento.",
+        "learning_path_enrollment": "Gerir inscrições nos percursos de desenvolvimento.",
+        "learning_path_export": "Exportar percursos de desenvolvimento para organizações.",
+        "course_read_assigned": "Consultar formações atribuídas a este utilizador.",
+        "course_read_manageable": "Consultar formações que este utilizador pode gerir.",
+        "course_read": "Consultar conteúdos das formações.",
+        "course_create": "Criar formações.",
+        "course_update": "Editar qualquer formação.",
+        "course_update_own": "Editar formações criadas por este utilizador.",
+        "course_delete": "Eliminar formações.",
+        "course_enrollment": "Gerir inscrições em formações.",
+        "course_statistics": "Consultar análises e estatísticas das formações.",
+        "managed_group_results_read": "Consultar resultados dos formandos dos grupos sob sua gestão.",
+        "course_export": "Exportar dados de formações.",
+        "course_discussion_read": "Consultar conversas das formações.",
+        "course_discussion_message_create": "Criar mensagens nas conversas das formações.",
+        "course_discussion_message_react": "Reagir a mensagens nas conversas das formações.",
+        "course_discussion_message_delete_own": "Eliminar as suas próprias mensagens nas conversas das formações.",
+        "course_discussion_message_delete": "Eliminar mensagens nas conversas das formações.",
+        "learning_mode_use": "Utilizar funcionalidades do modo de formação.",
+        "learning_progress_update": "Actualizar o estado de progresso dos formandos.",
+        "certificate_read": "Consultar certificados.",
+        "certificate_share": "Partilhar certificados.",
+        "certificate_render": "Gerar ficheiros de certificados.",
+        "file_upload": "Carregar ficheiros para a plataforma.",
+        "file_delete": "Eliminar ficheiros directamente do armazenamento da plataforma.",
+        "resource_library_manage": "Gerir recursos privados na biblioteca de recursos.",
+        "ai_use": "Utilizar funcionalidades da plataforma com IA.",
+        "announcement_read": "Consultar comunicados.",
+        "announcement_create": "Criar comunicados.",
+        "announcement_delete": "Eliminar comunicados.",
+        "news_read_public": "Consultar notícias disponíveis.",
+        "news_manage": "Criar, editar e eliminar todas as notícias.",
+        "news_manage_own": "Criar, editar e eliminar as suas próprias notícias.",
+        "article_read_public": "Consultar artigos disponíveis da base de conhecimento.",
+        "article_manage": "Criar, editar e eliminar todos os artigos da base de conhecimento.",
+        "article_manage_own": "Criar, editar e eliminar os seus próprios artigos da base de conhecimento.",
+        "qa_read_public": "Consultar perguntas e respostas disponíveis.",
+        "qa_manage": "Criar, editar e eliminar todas as perguntas e respostas.",
+        "qa_manage_own": "Criar, editar e eliminar as suas próprias perguntas e respostas.",
+        "report_read": "Descarregar relatórios de formações dentro do âmbito permitido ao utilizador.",
+        "statistics_read_self": "Consultar as suas próprias estatísticas.",
+        "statistics_read": "Consultar estatísticas agregadas de formações dentro do âmbito permitido ao utilizador.",
+        "billing_checkout": "Aceder aos processos de pagamento.",
+        "billing_manage": "Gerir definições de facturação e subscrições.",
+        "integration_key_manage": "Gerir chaves da API de integração.",
+        "integration_api_use": "Utilizar endpoints da API de integração.",
+        "tenant_manage": "Gerir a configuração da organização.",
+        "calendar_read": "Consultar eventos do calendário.",
+        "live_training_read": "Consultar acções de formação.",
+        "live_training_create": "Criar acções de formação.",
+        "live_training_update": "Editar qualquer acção de formação.",
+        "live_training_update_own": "Editar acções de formação em que este utilizador é formador responsável.",
+        "live_training_delete": "Eliminar acções de formação.",
+        "live_training_delete_own": "Eliminar acções de formação criadas por este utilizador.",
+        "live_training_join": "Participar em sessões de formação.",
+        "live_training_start": "Iniciar sessões de formação.",
+        "live_training_end": "Terminar sessões de formação.",
+        "live_training_statistics": "Consultar presenças e estatísticas das acções de formação.",
+        "ai_thread_read": "Consultar todas as conversas de IA e respectivas avaliações guardadas.",
+        "activity_log_read": "Consultar registos de actividade.",
+        "course_ai_generation": "Gerar a estrutura e o conteúdo de formações com ferramentas de IA."
+      }
+    },
+    "dropdown": {
+      "roles": "Papéis",
+      "groups": "Grupos",
+      "passwordEmail": "Enviar mensagem sobre palavra-passe",
+      "passwordReset": "Enviar mensagem para redefinir palavra-passe",
+      "passwordCreation": "Reenviar mensagem para criar palavra-passe",
+      "delete": "Eliminar",
+      "archive": "Arquivar"
+    },
+    "modal": {
+      "title": {
+        "delete": "Pretende eliminar estas contas?",
+        "role": "Alterar papéis",
+        "group": "Alterar grupos",
+        "passwordEmail": "Enviar mensagem sobre palavra-passe",
+        "passwordReset": "Enviar mensagem para redefinir palavra-passe",
+        "passwordCreation": "Reenviar mensagem para criar palavra-passe",
+        "archive": "Arquivar contas de utilizadores",
+        "confirmation": "Tem a certeza de que pretende prosseguir?",
+        "import": "Importar colaboradores",
+        "importResult": "Resultado da importação"
+      },
+      "button": {
+        "delete": "Eliminar",
+        "role": "Guardar",
+        "group": "Guardar",
+        "passwordEmail": "Enviar",
+        "passwordReset": "Enviar",
+        "passwordCreation": "Enviar",
+        "archive": "Arquivar",
+        "continue": "Confirmar",
+        "downloadSample": "Descarregar ficheiro de exemplo"
+      },
+      "description": {
+        "delete": "Tem a certeza de que pretende eliminar estas contas? Esta acção é irreversível.",
+        "confirmationForGroup_one": "Vai alterar o grupo para {{ group }} de 1 colaborador.",
+        "confirmationForGroup_other": "Vai alterar o grupo para {{ group }} de {{ count }} colaboradores.",
+        "confirmationForRole_one": "Vai alterar o papel para {{ role }} de 1 colaborador.",
+        "confirmationForRole_other": "Vai alterar o papel para {{ role }} de {{ count }} colaboradores.",
+        "passwordEmail": "Enviar mensagens sobre palavra-passe aos utilizadores seleccionados. Quem já tem palavra-passe recebe uma ligação de redefinição; quem ainda não tem recebe uma ligação de criação.",
+        "passwordReset": "Enviar mensagens de redefinição aos utilizadores seleccionados que já têm palavra-passe. Os restantes serão ignorados.",
+        "passwordCreation": "Reenviar mensagens de criação aos utilizadores seleccionados sem palavra-passe. Quem já tem palavra-passe será ignorado.",
+        "archive": "Tem a certeza de que pretende arquivar estas contas?",
+        "import": "Carregue um ficheiro .csv ou .xlsx com as colunas: firstName, lastName, email, role (admin, student ou content_creator), groups (\"group1,group2\"), language (por exemplo, pt-AO ou en).",
+        "noUsersImported": "Não foram importados colaboradores.",
+        "noUsersSkipped": "Não foram ignorados colaboradores."
+      },
+      "placeholder": {
+        "group": "Seleccionar grupo",
+        "role": "Seleccionar papel"
+      },
+      "note": {
+        "import": "Nota: os utilizadores existentes serão ignorados. Os grupos indicados que não existam não serão criados. O campo language é opcional; se não for indicado ou for inválido, será usado o idioma do administrador."
+      },
+      "sampleFile": {
+        "filename": "users-import-sample.csv",
+        "row": {
+          "firstName": "Exemplo",
+          "lastName": "Formando",
+          "email": "sample.student@example.com",
+          "groupOne": "group1",
+          "groupTwo": "group2"
+        }
+      },
+      "tabs": {
+        "imported": "Importados",
+        "skipped": "Ignorados"
+      },
+      "importResult": {
+        "email": "Correio electrónico",
+        "processed": "{{count}} linhas processadas",
+        "reason": "Motivo"
+      }
+    },
+    "breadcrumbs": {
+      "users": "Colaboradores",
+      "createNew": "Criar colaborador",
+      "back": "Voltar",
+      "news": "Notícias"
+    }
+  },
+  "adminUserView": {
+    "header": "Criar colaborador",
+    "managedGroupsTooltip": "Os grupos seleccionados determinam as formações, progresso, resultados, tempo de formação e certificados que este utilizador pode consultar como gestor de grupo.",
+    "editUserHeader": "Dados do colaborador",
+    "tabs": {
+      "information": "Dados do colaborador",
+      "permissions": "Permissões"
+    },
+    "permissions": {
+      "title": "Permissões efectivas",
+      "effective": "Permissões do utilizador"
+    },
+    "placeholder": {
+      "role": "Seleccione um papel",
+      "groupId": "Seleccione um grupo",
+      "language": "Seleccione um idioma",
+      "managedGroups": "Seleccione os grupos sob gestão"
+    },
+    "field": {
+      "firstName": "Nome próprio",
+      "lastName": "Apelido",
+      "email": "Correio electrónico",
+      "role": "Papel",
+      "language": "Idioma",
+      "status": "Estado",
+      "groups": "Grupo",
+      "managedGroups": "Grupos sob gestão"
+    },
+    "toast": {
+      "userCreatedSuccessfully": "Colaborador criado com sucesso.",
+      "userWithAttemptsError": "Não é possível eliminar um utilizador com resultados de questionários associados. Apenas estão disponíveis a anonimização e o arquivo.",
+      "userWithCreatedCoursesError": "Não é possível eliminar um utilizador que seja autor de formações existentes. Apenas estão disponíveis a anonimização e o arquivo."
+    },
+    "button": {
+      "createUser": "Criar colaborador",
+      "passwordEmail": "Enviar mensagem sobre palavra-passe",
+      "passwordResetEmail": "Enviar mensagem para redefinir palavra-passe",
+      "passwordCreationEmail": "Reenviar mensagem para criar palavra-passe"
+    },
+    "error": {
+      "userNotFound": "Utilizador não encontrado"
+    },
+    "breadcrumbs": {
+      "users": "Colaboradores",
+      "userDetails": "Dados do colaborador",
+      "back": "Voltar"
+    }
+  },
+  "adminEnvsView": {
+    "groups": {
+      "liveTraining": {
+        "title": "Acção de formação"
+      }
+    },
+    "form": {
+      "save": "Guardar"
+    }
+  },
+  "adminGroupsView": {
+    "name": "Nome do grupo",
+    "characteristic": "Características",
+    "buttons": {
+      "create": "Criar",
+      "deleteSelected": "Eliminar seleccionados"
+    },
+    "groupSelect": {
+      "label": "Seleccionar grupos",
+      "noGroups": "Não foram encontrados grupos."
+    },
+    "newGroup": {
+      "header": "Criar grupo",
+      "card": {
+        "header": "Informações detalhadas",
+        "subheader": "Defina o nome e as características do grupo.",
+        "footer": "O mentor de IA utilizará estas informações nas conversas."
+      },
+      "fields": {
+        "name": "Nome",
+        "characteristic": "Características"
+      },
+      "cancel": "Cancelar",
+      "submit": "Publicar"
+    },
+    "updateGroup": {
+      "header": "Actualizar grupo",
+      "fields": {
+        "name": "Nome",
+        "description": "Descrição"
+      },
+      "submit": "Editar grupo",
+      "groupUpdatedSuccessfully": "Grupo actualizado com sucesso.",
+      "groupNotFound": "Grupo não encontrado."
+    },
+    "language": {
+      "languageCreated": "Idioma do grupo criado com sucesso.",
+      "languageDeleted": "Idioma do grupo eliminado com sucesso.",
+      "baseLanguageUpdated": "Idioma de origem do grupo actualizado com sucesso.",
+      "setBaseLanguage": "Definir como predefinido",
+      "setBaseTitle": "Definir idioma predefinido",
+      "setBaseDescription": "Tem a certeza de que pretende definir {{language}} como idioma predefinido?"
+    },
+    "deleteGroup": {
+      "title": "Confirmar eliminação",
+      "description": "Tem a certeza de que pretende eliminar estes grupos?",
+      "cancel": "Cancelar",
+      "submit": "Eliminar"
+    },
+    "breadcrumbs": {
+      "groups": "Grupos",
+      "createNew": "Criar",
+      "editGroup": "Editar grupo",
+      "back": "Voltar"
+    }
+  },
+  "enrollCourseView": {
+    "toast": {
+      "unenrollCourseSuccessfully": "Inscrição na formação anulada com sucesso."
+    }
+  },
+  "paymentView": {
+    "other": {
+      "enrollCourse": "Inscrever-se na formação"
+    }
+  },
+  "adminCourseView": {
+    "deadline": "Prazo",
+    "selectDate": "Seleccionar data",
+    "common": {
+      "settings": "Definições",
+      "status": "Estado",
+      "preview": "Pré-visualizar"
+    },
+    "toast": {
+      "courseNotFound": "Formação não encontrada."
+    },
+    "errors": {
+      "notFound": {
+        "course": "Formação não encontrada."
+      },
+      "forbidden": {
+        "archivedCourseEnrollment": "Não é possível inscrever colaboradores numa formação arquivada."
+      }
+    },
+    "settings": {
+      "breadcrumbs": {
+        "back": "Voltar",
+        "createNew": "Criar"
+      },
+      "sideSection": {
+        "button": {
+          "enroll": "Inscrever"
+        }
+      },
+      "field": {
+        "category": "Categoria",
+        "description": "Descrição"
+      },
+      "other": {
+        "enableCertificate": "Activar certificado",
+        "activeCertificatesStat": "Certificados válidos",
+        "resetUsersStudent": "Formando",
+        "resetUsersEmail": "Correio electrónico",
+        "resetScope": {
+          "groups": "Grupos",
+          "users": "Colaboradores"
+        },
+        "certificatePreviewButton": "Pré-visualizar",
+        "certificatePreviewCourseName": "Nome da formação"
+      },
+      "validation": {
+        "groupIdsRequired": "Seleccione pelo menos um grupo."
+      },
+      "header": "Criar uma formação",
+      "transferOwnership": {
+        "dialog": {
+          "cancel": "Cancelar"
+        }
+      }
+    },
+    "curriculum": {
+      "other": {
+        "chapter": "Capítulo",
+        "lesson": "Lição",
+        "edit": "Editar",
+        "create": "Criar"
+      },
+      "chapter": {
+        "field": {
+          "title": "Título"
+        },
+        "other": {
+          "public": "Público"
+        }
+      },
+      "lesson": {
+        "button": {
+          "saveLesson": "Guardar"
+        },
+        "breadcrumbs": {
+          "back": "Voltar"
+        },
+        "settings": {
+          "title": "Definições"
+        },
+        "liveTraining": {
+          "createNewTab": "Criar"
+        },
+        "field": {
+          "title": "Título",
+          "description": "Descrição",
+          "options": "Opções",
+          "image": "Imagem",
+          "type": "Tipo",
+          "aiMentor": "Mentor de IA",
+          "taskDescription": "Descrição da tarefa"
+        },
+        "placeholder": {
+          "option": "Opção"
+        },
+        "aiMentorGeneration": {
+          "stages": {
+            "ready": "Pronto"
+          },
+          "useCurrentDraft": "Continuar"
+        },
+        "aiJudge": {
+          "passingThreshold": "Limiar de aprovação",
+          "complete": "Concluir",
+          "score": "Classificação",
+          "generation": {
+            "stages": {
+              "ready": "Pronto"
+            },
+            "useCurrentDraft": "Continuar"
+          }
+        },
+        "other": {
+          "content": "Conteúdo",
+          "quiz": "Questionário",
+          "aiMentor": "Mentor de IA",
+          "embed": "Conteúdo incorporado",
+          "scorm": "SCORM",
+          "liveTraining": "Acção de formação",
+          "true": "Verdadeiro",
+          "false": "Falso",
+          "option": "Opção",
+          "emoji": {
+            "search": "Pesquisar",
+            "loading": "A carregar…"
+          },
+          "betaTooltip": "Esta funcionalidade está em versão de teste. Pode conter erros ou não funcionar totalmente como previsto. A utilização é da sua responsabilidade."
+        }
+      }
+    },
+    "status": {
+      "header": "Estado",
+      "draftHeader": "Rascunho",
+      "publishedHeader": "Publicado",
+      "privateHeader": "Privado"
+    },
+    "pricing": {
+      "freeCourseHeader": "Gratuito",
+      "field": {
+        "price": "Preço"
+      }
+    },
+    "enrolled": {
+      "filters": {
+        "placeholder": {
+          "searchByKeyword": "Pesquisar por palavra-chave…",
+          "groups": "Todos os grupos"
+        }
+      },
+      "enroll": "Inscrever",
+      "table": {
+        "name": "Nome",
+        "email": "Correio electrónico"
+      },
+      "enrollGroups": "Inscrever grupos"
+    },
+    "breadcrumbs": {
+      "courses": "Formações",
+      "back": "Voltar"
+    },
+    "statistics": {
+      "title": "Estatísticas",
+      "tabs": {
+        "progress": "Progresso",
+        "certificates": "Certificados de formação"
+      },
+      "certificates": {
+        "email": "Correio electrónico",
+        "groups": "Grupos",
+        "status": "Estado",
+        "statuses": {
+          "active": "Activo"
+        }
+      },
+      "field": {
+        "studentName": "Formando",
+        "groupName": "Grupo",
+        "quizName": "Questionário",
+        "quizScore": "Classificação",
+        "lessonName": "Lição",
+        "score": "Classificação"
+      },
+      "overview": {
+        "completionRate": "Taxa de conclusão"
+      }
+    },
+    "sharedCourse": {
+      "badgeMaster": "Partilhado",
+      "badgeExported": "Partilhado"
+    }
+  },
+  "registerView": {
+    "header": "Registar",
+    "subHeader": "Introduza os seus dados para criar uma conta.",
+    "subHeaderSSO": "Registe-se com a sua conta Google ou Microsoft.",
+    "field": {
+      "firstName": "Nome próprio",
+      "lastName": "Apelido",
+      "email": "Correio electrónico",
+      "password": "Palavra-passe",
+      "birthday": "Data de nascimento",
+      "birthdayPlaceholder": "Seleccionar data",
+      "requiredBadge": "Obrigatório",
+      "optionalBadge": "Opcional"
+    },
+    "other": {
+      "alreadyHaveAccount": "Já tem conta?",
+      "orContinueWith": "Ou continuar com"
+    },
+    "button": {
+      "createAccount": "Criar uma conta",
+      "signIn": "Entrar"
+    },
+    "validation": {
+      "firstName": "O nome próprio é obrigatório.",
+      "lastName": "O apelido é obrigatório.",
+      "email": "Endereço de correio electrónico inválido.",
+      "birthday": "Tem de ter pelo menos {{ageLimit}} anos.",
+      "requiredCheckbox": "Este consentimento é obrigatório."
+    },
+    "toast": {
+      "userAlreadyExists": "Já existe um utilizador com este endereço de correio electrónico.",
+      "createAccountFailed": "Não foi possível criar a conta. Tente novamente.",
+      "requiredFormFieldMissing": "Aceite todos os consentimentos obrigatórios.",
+      "invalidFormField": "Um dos campos de registo enviados é inválido."
+    }
+  },
+  "courseChapterView": {
+    "other": {
+      "lesson": "Lição",
+      "lessons": "Lições",
+      "quiz": "Questionário",
+      "quizzes": "Questionários",
+      "free": "Gratuito",
+      "public": "Público"
+    }
+  },
+  "forgotPasswordView": {
+    "header": "Esqueceu-se da palavra-passe?",
+    "subHeader": "Introduza o endereço de correio electrónico associado à sua conta. Receberá uma ligação para redefinir a palavra-passe.",
+    "field": {
+      "email": "Endereço de correio electrónico"
+    },
+    "validation": {
+      "email": "Endereço de correio electrónico inválido."
+    },
+    "button": {
+      "resetPassword": "Redefinir palavra-passe",
+      "backToLogin": "Voltar ao início de sessão"
+    },
+    "toast": {
+      "resetPassword": "Foi enviada uma ligação para redefinir a palavra-passe para o seu correio electrónico."
+    }
+  },
+  "loginView": {
+    "header": "Entrar",
+    "subHeader": "Introduza o seu endereço de correio electrónico para aceder à conta.",
+    "subHeaderSSO": "Entre com a sua conta Google ou Microsoft.",
+    "validation": {
+      "email": "Endereço de correio electrónico inválido.",
+      "password": "A palavra-passe é obrigatória."
+    },
+    "other": {
+      "forgotPassword": "Esqueceu-se da palavra-passe?",
+      "useMagicLink": "Enviar ligação de acesso por correio electrónico",
+      "dontHaveAccount": "Ainda não tem conta?",
+      "rememberMe": "Manter a sessão iniciada",
+      "signUp": "Registar",
+      "orContinueWith": "Ou continuar com"
+    },
+    "button": {
+      "login": "Entrar"
+    },
+    "field": {
+      "email": "Correio electrónico",
+      "password": "Palavra-passe"
+    },
+    "magicLink": {
+      "subHeader": "Estamos a validar a ligação de acesso. Esta operação pode demorar alguns instantes.",
+      "checking": "A verificar a ligação de acesso…",
+      "success": "Ligação de acesso validada. A redireccionar…",
+      "error": "A ligação de acesso é inválida ou expirou.",
+      "backToLogin": "Voltar ao início de sessão"
+    }
+  },
+  "magicLinkView": {
+    "validation": {
+      "email": "Endereço de correio electrónico inválido."
+    },
+    "field": {
+      "email": "Endereço de correio electrónico"
+    },
+    "button": {
+      "backToLogin": "Voltar ao início de sessão"
+    }
+  },
+  "studentCoursesView": {
+    "courseUnavailable": {
+      "accessTitle": "A formação está indisponível.",
+      "accessDescription": "Inicie sessão ou crie uma conta para continuar para a formação.",
+      "goToLogin": "Ir para o início de sessão",
+      "goToCourseList": "Ir para a lista de formações",
+      "goToHome": "Ir para o início",
+      "notFoundTitle": "Formação não encontrada.",
+      "notFoundDescription": "Não foi possível encontrar esta formação."
+    },
+    "other": {
+      "cannotFindCourses": "Não foram encontradas formações.",
+      "changeSearchCriteria": "Altere os critérios de pesquisa ou tente novamente mais tarde.",
+      "freeLessons": "Lições gratuitas!",
+      "successfullyEnrolledToCourse": "Inscrição na formação efectuada com sucesso."
+    },
+    "breadcrumbs": {
+      "courses": "Formações"
+    },
+    "button": {
+      "continue": "Continuar",
+      "enroll": "Inscrever",
+      "view": "Ver",
+      "readMore": "Ler mais",
+      "playChapter": "Iniciar capítulo"
+    },
+    "enrolledCourses": {
+      "header": "As suas formações",
+      "subHeader": "Formações em que está inscrito"
+    },
+    "availableCourses": {
+      "header": "Formações disponíveis",
+      "subHeader": "Todas as formações disponíveis para inscrição",
+      "filters": {
+        "placeholder": {
+          "title": "Pesquisar por título…",
+          "categories": "Categorias",
+          "sort": "Ordenar"
+        }
+      },
+      "headerOptions": {
+        "image": "Imagem",
+        "title": "Nome da formação",
+        "category": "Categoria",
+        "description": "Descrição",
+        "author": "Autor"
+      }
+    },
+    "modernView": {
+      "continueLearning": "Continuar a formação",
+      "topCourses": "As 5 formações mais populares",
+      "hero": {
+        "start": "Iniciar",
+        "moreInfo": "Mais informações",
+        "info": "Informação"
+      },
+      "featuredCourse": {
+        "label": "Formação em destaque",
+        "none": "Escolher formação em destaque",
+        "search": "Pesquisar formações publicadas…",
+        "empty": "Não foram encontradas formações publicadas.",
+        "clear": "Remover formação em destaque",
+        "loadMore": "Carregar mais formações",
+        "updated": "Formação em destaque actualizada.",
+        "updateFailed": "Não foi possível actualizar a formação em destaque."
+      },
+      "lessonsCount_one": "{{count}} lição",
+      "lessonsCount_other": "{{count}} lições"
+    }
+  },
+  "studentQuizSummaryView": {
+    "header": "Parabéns!",
+    "subHeader": "Concluiu o questionário!",
+    "other": {
+      "yourScore": "A sua classificação:",
+      "tryAgain": "Tentar novamente"
+    },
+    "button": {
+      "backToCourse": "Voltar à formação"
+    }
+  },
+  "studentLessonView": {
+    "error": {
+      "lessonIdNotFound": "Identificador da lição não encontrado.",
+      "notAuthorizedTitle": "Acesso não autorizado.",
+      "notAuthorizedDescription": "Não está autorizado a aceder a esta lição.",
+      "goBackToCourse": "Voltar à formação"
+    },
+    "other": {
+      "lesson": "Lição",
+      "chapter": "Capítulo",
+      "correctAnswers": "Respostas correctas:",
+      "correctSentence": "Frase correcta:",
+      "question": "Pergunta",
+      "answers": "Respostas:",
+      "true": "Verdadeiro",
+      "false": "Falso",
+      "oneOrTwoWordSentence": "Instrução: dê uma resposta breve (1–2 frases).",
+      "threeOrFiveWordSentence": "Instrução: dê uma resposta desenvolvida (3–5 frases).",
+      "single": "Única",
+      "multiple": "Múltipla",
+      "fillInTheBlanks": "Preencha os espaços em branco.",
+      "notAnswered": "Sem resposta",
+      "selectQuestion": "seleccione a pergunta.",
+      "trueOrFalseQuestion": "Pergunta de verdadeiro ou falso.",
+      "multipleChoice": "Pergunta de escolha múltipla.",
+      "singleChoice": "Pergunta de escolha única",
+      "passingThreshold": "Limiar de aprovação: {{threshold}}% ({{correct}} de {{questionsNumber}} perguntas)",
+      "score": "Classificação: {{score}}% ({{correct}} de {{questionsNumber}} perguntas)",
+      "contentCantBeEmbedded": "Não é possível incorporar este conteúdo.",
+      "openInNewTab": "Abrir num novo separador",
+      "scale_1_5": "Pergunta de escala (1–5)"
+    },
+    "aiMentor": {
+      "title": "Sessão com mentor de IA",
+      "description": "Esta sessão utiliza inteligência artificial. O mentor orientará a lição segundo as instruções do formador."
+    },
+    "scorm": {
+      "loading": "A carregar o conteúdo SCORM…",
+      "launchFailed": "Não foi possível iniciar o conteúdo SCORM.",
+      "launchFailedBody": "Tente novamente. Se o problema persistir, poderá ser necessário voltar a carregar o pacote SCORM.",
+      "saveFailed": "Não foi possível guardar o progresso SCORM.",
+      "saving": "A guardar o progresso",
+      "previousSco": "Secção anterior",
+      "nextSco": "Secção seguinte",
+      "tryAgain": "Tentar novamente",
+      "lessonFinished": "Lição SCORM concluída.",
+      "progressReset": "Progresso SCORM reiniciado.",
+      "progressUpdated": "Progresso SCORM actualizado."
+    },
+    "liveTraining": {
+      "activeLabel": "Acção de formação",
+      "activeTitle": "A sessão está activa.",
+      "scheduledLabel": "Agendada",
+      "scheduledTitle": "A acção de formação está agendada.",
+      "endedLabel": "Terminada",
+      "endedTitle": "A acção de formação já terminou.",
+      "inactiveLabel": "Acção de formação",
+      "inactiveTitle": "Não há nenhuma acção de formação activa.",
+      "locationNotice": "Local",
+      "notAvailable": "A acção de formação não está disponível para esta lição."
+    },
+    "videoProcessing": {
+      "title": "O vídeo está a ser processado.",
+      "body": "Aguarde um momento. O vídeo será apresentado aqui quando estiver pronto."
+    },
+    "videoProgress": {
+      "label": "Progresso do vídeo",
+      "completedSummary": "{{completed}} de {{total}} concluídos",
+      "overviewAriaLabel": "Progresso do vídeo da lição",
+      "segmentAriaLabel": "Progresso do vídeo {{index}}: {{progress}}% visualizado",
+      "requirementSingle": "Veja o vídeo completo para concluir esta lição.",
+      "requirementMultiple": "Veja todos os vídeos para concluir esta lição.",
+      "errors": {
+        "resourceNotFound": "Não foi possível guardar o progresso do vídeo desta lição.",
+        "unsupportedLessonType": "O progresso de vídeo só está disponível em lições de conteúdo.",
+        "unsupportedBucketSize": "O progresso do vídeo utiliza um intervalo de acompanhamento não suportado.",
+        "invalidResourceType": "Este recurso não pode ser acompanhado como vídeo de uma lição.",
+        "trackingDisabled": "O acompanhamento de visualização está desactivado para esta formação.",
+        "accessDenied": "Não tem permissão para actualizar o progresso do vídeo desta lição."
+      }
+    },
+    "requiredVideoLeave": {
+      "title": "Concluir a visualização antes de sair?",
+      "descriptionSingle": "Esta lição exige a visualização integral do vídeo antes da conclusão.",
+      "descriptionMultiple": "Esta lição exige a visualização integral de todos os vídeos antes da conclusão.",
+      "exitAnyway": "Sair mesmo assim",
+      "continueWatching": "Continuar a ver",
+      "remember": "Não voltar a mostrar nesta formação"
+    },
+    "playNext": {
+      "title": "A seguir",
+      "description": "A iniciar o seguinte dentro de {{seconds}} s",
+      "descriptionNoCountdown": "A iniciar o seguinte",
+      "playNow": "Reproduzir agora",
+      "cancel": "Cancelar"
+    },
+    "placeholder": {
+      "openQuestion": "Escreva aqui a sua resposta"
+    },
+    "tooltip": {
+      "retakeAvailableIn": "Bloqueado durante {{time}} horas após a última repetição.",
+      "cooldown": "O questionário ficará bloqueado durante {{time}} horas após a última tentativa.",
+      "noCooldown": "Sem período de espera.",
+      "beta": "Esta funcionalidade está em versão de teste. Pode conter erros ou não funcionar totalmente como previsto. A utilização é da sua responsabilidade."
+    },
+    "breadcrumbs": {
+      "availableCourses": "Formações disponíveis",
+      "yourCourses": "As suas formações",
+      "back": "Voltar"
+    },
+    "button": {
+      "previous": "Anterior",
+      "complete": "Concluir",
+      "next": "Seguinte",
+      "submit": "Submeter",
+      "retake": "Repetir",
+      "autoplay": "Reprodução automática"
+    },
+    "sideSection": {
+      "header": "Índice:",
+      "other": {
+        "courseProgress": "Progresso da formação:"
+      }
+    },
+    "validation": {
+      "answerCannotBeEmpty": "A resposta não pode ficar vazia.",
+      "atLeastOneOptionMustBeSelected": "Tem de seleccionar pelo menos uma opção na pergunta {{questionId}}.",
+      "answerCannotBeEmptyForDragAndDropQuestion": "A resposta não pode ficar vazia na pergunta de arrastar e largar {{questionId}}.",
+      "answerCannotBeEmptyForTextQuestion": "A resposta não pode ficar vazia na pergunta de texto {{questionId}}.",
+      "invalidSelectionForSingleAnswer": "Selecção inválida para uma pergunta de resposta única.",
+      "invalidFormatForMultiAnswer": "Formato inválido para perguntas de resposta múltipla.",
+      "trueOrFalseRequired": "É necessária uma resposta de verdadeiro ou falso.",
+      "photoQuestionMustHaveAnswer": "É necessária uma resposta para esta pergunta com imagem.",
+      "unansweredQuestions": "Ainda não verificou todas as respostas. Reveja-as e tente novamente.",
+      "unansweredQuestionsWithNames": "Responda às perguntas em falta: {{questionNames}}",
+      "quizAlreadyAnswered": "Já respondeu a este questionário.",
+      "lessonAssignmentRequired": "Esta lição não lhe foi atribuída.",
+      "quizEvaluationFailed": "Não foi possível avaliar o questionário. Tente novamente.",
+      "quizNotAnsweredYet": "Ainda não respondeu a este questionário.",
+      "courseEnrollmentRequired": "Não está inscrito nesta formação.",
+      "quizRetakeUnavailable": "As respostas não podem ser reiniciadas devido ao limite de tentativas ou ao período de espera.",
+      "quizResetFailed": "Não foi possível reiniciar as respostas. Tente novamente."
+    }
+  },
+  "studentCourseView": {
+    "header": "Capítulos",
+    "subHeader": "Consulte abaixo todos os capítulos desta formação.",
+    "recommendedHeader": "Poderá ter interesse em",
+    "recommendedSubheader": "Consulte abaixo formações sobre temas ou áreas de conhecimento semelhantes.",
+    "otherAuthorCoursesHeader": "Mais formações de",
+    "otherAuthorCoursesSubheader": "Consulte abaixo outras formações do mesmo autor.",
+    "other": {
+      "cannotFindCourses": "Não foram encontradas formações.",
+      "changeSearchCriteria": "Altere os critérios de pesquisa ou tente novamente mais tarde."
+    },
+    "lesson": {
+      "missingAnswer": "Resposta em falta",
+      "yourAnswer": "A sua resposta",
+      "studentsAnswer": "Resposta do formando",
+      "singleChoice": "Pergunta de escolha única",
+      "multipleChoice": "Pergunta de escolha múltipla",
+      "trueOfFalseChoice": "Pergunta de verdadeiro ou falso",
+      "oneOrTwoWordSentence": "Dê uma resposta breve (1–2 frases).",
+      "threeOrFiveWordSentence": "Dê uma resposta desenvolvida (3–5 frases).",
+      "aiMentorLesson": {
+        "sendMessage": "Escreva uma mensagem…",
+        "check": "Verificar",
+        "aiMentorName": "Mentor de IA",
+        "retake": "Repetir",
+        "userName": "Utilizador",
+        "typing": "A escrever uma resposta…",
+        "send": "Enviar",
+        "addEmoji": "Adicionar emoji",
+        "closeVoiceMode": "Fechar modo de voz",
+        "toggleVoiceInput": "Alternar entrada de voz",
+        "dictateVoiceInput": "Ditar mensagem",
+        "startVoiceMentor": "Falar com o mentor",
+        "stopVoiceRecording": "Parar gravação de voz",
+        "taskDescription": "Descrição da tarefa",
+        "taskButton": "Descrição da tarefa",
+        "resultButton": "Resultado",
+        "resultButtonDisabledTooltip": "Verifique primeiro a lição para consultar o resultado.",
+        "taskDescriptionExpand": "Clique para expandir",
+        "taskDescriptionCollapse": "Clique para recolher",
+        "evaluation": {
+          "passedTitle": "Lição aprovada",
+          "failedTitle": "Lição não aprovada",
+          "passedDescription": "A sua resposta cumpriu os requisitos desta lição.",
+          "failedDescription": "Reveja o feedback e tente novamente quando estiver preparado.",
+          "scoreLabel": "Classificação",
+          "scoreValue": "{{score}}/{{maxScore}} condições cumpridas ({{percentage}}%)",
+          "thresholdLabel": "Limiar de aprovação",
+          "thresholdValue": "{{requiredScore}}/{{maxScore}} necessários ({{threshold}}%)",
+          "feedbackTitle": "Aspectos a melhorar",
+          "criticalErrorsTitle": "O que impediu a conclusão",
+          "criteriaTitle": "Detalhe dos critérios",
+          "criterionScore": "{{score}}/{{maxScore}} pontos",
+          "noFeedbackTitle": "Não há feedback detalhado disponível.",
+          "noFeedbackDescription": "Esta avaliação não tem critérios pontuados e não foram detectados erros impeditivos na sua tentativa.",
+          "loadingTitle": "A verificar a sua tentativa",
+          "loadingDescription": "A analisar a conversa segundo os critérios da lição. Esta operação pode demorar alguns instantes.",
+          "openDetails": "Abrir detalhes da avaliação",
+          "kicker": "Revisão do mentor de IA",
+          "title": "Resumo da conversa",
+          "scoreTotal": "/ {{maxScore}} pontos",
+          "summary": "{{percentage}}% · limiar de aprovação {{requiredScore}}/{{maxScore}} pontos",
+          "percentage": "{{percentage}}%",
+          "tipTitle": "Sugestão do mentor de IA",
+          "tipNote": "Com base no que disse nesta conversa"
+        },
+        "voiceOverlay": {
+          "headerEyebrow": "Interface de voz",
+          "options": "Opções",
+          "exit": "Sair do modo de voz",
+          "mute": "Desactivar microfone",
+          "unmute": "Activar microfone",
+          "micOn": "Microfone activo",
+          "muted": "Microfone desactivado",
+          "mutedHint": "O microfone está desactivado. O mentor não consegue ouvi-lo.",
+          "youSaid": "Disse",
+          "recovery": {
+            "failedTitle": "Sessão de voz desligada",
+            "failedDescription": "Não foi possível restabelecer a ligação. Reinicie a sessão de voz para continuar.",
+            "restart": "Reiniciar sessão"
+          },
+          "states": {
+            "idle": {
+              "title": "Pronto",
+              "subtitle": "Toque para começar a falar"
+            },
+            "listening": {
+              "title": "A ouvir",
+              "subtitle": "A captar a sua voz"
+            },
+            "thinking": {
+              "title": "A processar",
+              "subtitle": "O modelo está a preparar uma resposta."
+            },
+            "speaking": {
+              "title": "A falar",
+              "subtitle": "A resposta do modelo está a ser reproduzida."
+            }
+          },
+          "responsePlaceholder": {
+            "thinking": "A analisar o seu pedido…",
+            "listening": "À espera da sua próxima pergunta…",
+            "default": "A pré-visualização da resposta será apresentada aqui."
+          }
+        },
+        "retakeModalTitle": "Tem a certeza de que pretende repetir a lição?",
+        "retakeModalDescription": "O progresso desta lição será reiniciado. Esta acção não pode ser anulada.",
+        "retakeLoadingTitle": "A preparar a sua próxima tentativa",
+        "retakeAccessDenied": "Só pode repetir esta lição se estiver inscrito na formação ou for o seu autor."
+      }
+    },
+    "sideSection": {
+      "optionHeader": "Opção",
+      "courseProgressHeader": "Progresso da formação",
+      "other": {
+        "author": "Autor",
+        "title": "Título",
+        "about": "Sobre",
+        "collapse": "Recolher",
+        "courseProgress": "Progresso da formação",
+        "options": "Opções",
+        "remainingChapters": "Capítulos por concluir",
+        "completedChapters": "Capítulos concluídos",
+        "noData": "Sem dados",
+        "informationText": "Retome rapidamente a sua lição mais recente."
+      },
+      "button": {
+        "shareCourse": "Partilhar esta formação",
+        "continueLearning": "Continuar a formação",
+        "startLearning": "Iniciar formação",
+        "enrollCourse": "Inscrever-se na formação",
+        "goToContentCreatorPage": "Ir para a página do criador de conteúdos",
+        "repeatLessons": "Repetir lições",
+        "enrollGroups": "Inscrever grupos"
+      }
+    },
+    "breadcrumbs": {
+      "availableCourses": "Formações disponíveis",
+      "yourCourses": "As suas formações",
+      "back": "Voltar"
+    },
+    "certificate": {
+      "button": {
+        "viewCertificate": "Ver certificado"
+      },
+      "courseCompleted": "Parabéns! Concluiu a formação e já pode aceder ao seu certificado."
+    },
+    "studentMode": {
+      "enter": "Entrar no modo de formação",
+      "exit": "Sair do modo de formação",
+      "bannerTitle": "Está a realizar esta formação no modo de formação.",
+      "bannerDescription": "O seu progresso está a ser acompanhado. As lições concluídas contam para a sua conclusão pessoal e para as estatísticas da formação.",
+      "exitBanner": "Sair do modo de formação",
+      "learningModeRequired": "O modo de formação não está activo para esta formação.",
+      "draftCourseTooltip": "Esta formação está em rascunho. Não é possível inscrever-se nem continuar a formação."
+    },
+    "tabs": {
+      "chapters": "Capítulos",
+      "chat": "Conversa",
+      "moreFromAuthor": "Mais do autor",
+      "statistics": "Estatísticas"
+    },
+    "courseChat": {
+      "title": "Conversa da formação",
+      "newThreadPlaceholder": "Iniciar uma conversa…",
+      "startThread": "Iniciar tópico",
+      "messagesTitle": "Mensagens",
+      "noThreadSelected": "Seleccionar tópico",
+      "emptyThreads": "Ainda não há conversas. Inicie a primeira.",
+      "emptyMessages": "Ainda não há mensagens.",
+      "replyPlaceholder": "Escreva uma resposta…",
+      "reply": "Responder",
+      "reactWith": "Reagir com {{reaction}}",
+      "deleteMessage": "Eliminar mensagem",
+      "deleteMessageConfirmationTitle": "Eliminar mensagem?",
+      "deleteMessageConfirmationDescription": "Esta mensagem será removida da conversa. As respostas poderão manter uma indicação da eliminação para preservar o sentido da conversa.",
+      "deletedMessage": "Esta mensagem foi eliminada.",
+      "repliesCount_one": "{{countLabel}} resposta",
+      "repliesCount_other": "{{countLabel}} respostas",
+      "loadMoreReplies": "Carregar mais respostas",
+      "send": "Enviar",
+      "selectThread": "Seleccione um tópico para ler as mensagens.",
+      "users": "Colaboradores",
+      "onlineCount": "{{online}}/{{total}} ligados",
+      "online": "Ligado",
+      "offline": "Desligado",
+      "emptyUsers": "Ainda não há utilizadores inscritos.",
+      "mentionedToast": "Alguém o mencionou na conversa da formação."
+    }
+  },
+  "studentChapterView": {
+    "chapterProgress": {
+      "header": "Índice:",
+      "courseProgress": "Progresso da formação"
+    },
+    "button": {
+      "open": "Abrir",
+      "continue": "Continuar",
+      "playChapter": "Iniciar capítulo"
+    },
+    "other": {
+      "enrollmentRequired": "Inscreva-se na formação para abrir esta lição.",
+      "purchaseRequired": "Adquira a formação para desbloquear esta lição."
+    }
+  },
+  "settings": {
+    "title": "Definições",
+    "supportModeNoAvailable": "Não há definições disponíveis para este utilizador no modo de suporte.",
+    "buttons": {
+      "cancel": "Cancelar",
+      "save": "Guardar"
+    },
+    "tabs": {
+      "account": "Conta",
+      "integrations": "Integrações",
+      "organization": "Organização",
+      "platformCustomization": "Personalização da plataforma"
+    },
+    "breadcrumbs": {
+      "settings": "Definições"
+    },
+    "toast": {
+      "error": {
+        "globalNotFound": "Não foram encontradas as definições globais.",
+        "userSettingsNotFound": "Não foram encontradas as definições do utilizador."
+      },
+      "qaSettingUpdatedSuccessfully": "Definições de perguntas e respostas actualizadas com sucesso.",
+      "ageLimitUpdatedSuccessfully": "Limite de idade actualizado com sucesso.",
+      "newsSettingUpdatedSuccessfully": "Definições de notícias actualizadas com sucesso.",
+      "articlesSettingUpdatedSuccessfully": "Definições da base de conhecimento actualizadas com sucesso.",
+      "learningPathsUpdatedSuccessfully": "Definições dos percursos de desenvolvimento actualizadas com sucesso."
+    }
+  },
+  "certificateBackgroundUpload": {
+    "button": {
+      "preview": "Pré-visualizar"
+    },
+    "other": {
+      "uploading": "A carregar…"
+    }
+  },
+  "adminPreferences": {
+    "header": "Preferências globais do administrador",
+    "subHeader": "Configurar definições das formações",
+    "notificationSettings": "Definições de notificações",
+    "courseSettings": "Definições das formações",
+    "field": {
+      "newUserNotifications": "Notificações de novos colaboradores",
+      "newUserNotificationsDescription": "Receber notificações quando é criado um colaborador",
+      "coursesVisibility": "Mostrar formações a visitantes",
+      "coursesVisibilityDescription": "Permitir que visitantes consultem a lista de formações e acedam a lições gratuitas sem iniciar sessão",
+      "modernCourseList": "Utilizar a vista moderna de formações",
+      "modernCourseListDescription": "Activar a nova apresentação da lista de formações com destaque e formações mais populares",
+      "courseListLayout": "Apresentação da lista de formações",
+      "courseListLayoutDescription": "Forma como as formações são apresentadas a todos os utilizadores",
+      "courseListLayoutClassic": "Clássica",
+      "courseListLayoutModern": "Moderna",
+      "courseListLayoutClassicDescription": "Grelha tradicional de formações",
+      "courseListLayoutModernDescription": "Secção de destaque com formações seleccionadas",
+      "courseListLayoutPreview": {
+        "continueLearning": "Continuar a formação",
+        "topCourses": "As 5 formações mais populares",
+        "availableCourses": "Formações disponíveis"
+      },
+      "courseDiscussions": "Activar conversas nas formações",
+      "courseDiscussionsDescription": "Permitir aos utilizadores inscritos consultar e participar nas conversas das formações",
+      "calendar": "Activar calendário",
+      "calendarDescription": "Permitir que os utilizadores consultem eventos agendados no calendário",
+      "liveTraining": "Activar acções de formação",
+      "liveTrainingDescription": "Permitir que os formadores criem e conduzam sessões de formação",
+      "liveTrainingMaxParallelSessions": "Máximo de sessões de formação simultâneas",
+      "liveTrainingMaxParallelSessionsDescription": "Limitar o número de sessões de formação que podem estar activas em simultâneo.",
+      "liveTrainingTooltip": "Active esta opção apenas se a organização pretender utilizar sessões conduzidas por formadores.",
+      "liveTrainingDisableBlockedTooltip_one": "Existe {{count}} utilizador com o papel de formador. Retire-lhe esse papel para desactivar esta funcionalidade.",
+      "liveTrainingDisableBlockedTooltip_other": "Existem {{count}} utilizadores com o papel de formador. Retire-lhes esse papel para desactivar esta funcionalidade.",
+      "finishedCourseNotification": "Notificações de conclusão de formação",
+      "finishedCourseNotificationDescription": "Receber notificações quando um utilizador conclui uma formação",
+      "studentsWithOverdueCourseNotification": "Notificações de formandos com formações em atraso",
+      "studentsWithOverdueCourseNotificationDescription": "Receber notificações quando existem formandos com formações em atraso"
+    },
+    "toast": {
+      "newUserNotificationsPreferenceChangeSuccess": "Preferências de notificação de novos colaboradores actualizadas com sucesso.",
+      "coursesVisibilityPreferenceChangeSuccess": "Preferências de visibilidade de formações para visitantes actualizadas com sucesso.",
+      "modernCourseListPreferenceChangeSuccess": "Preferência da lista moderna de formações actualizada com sucesso.",
+      "courseDiscussionsPreferenceChangeSuccess": "Preferência de conversas nas formações actualizada com sucesso.",
+      "calendarPreferenceChangeSuccess": "Preferência de calendário actualizada com sucesso.",
+      "liveTrainingPreferenceChangeSuccess": "Preferência de acções de formação actualizada com sucesso.",
+      "liveTrainingMaxParallelSessionsChangeSuccess": "Limite de sessões de formação actualizado com sucesso.",
+      "finishedCourseNotificationsPreferenceChangeSuccess": "Preferências de notificação de conclusão de formação actualizadas com sucesso.",
+      "finishedCourseNotificationsPreferenceChangeError": "Não foi possível actualizar as preferências de notificação de conclusão de formação.",
+      "overdueCourseNotificationsPreferenceChangeSuccess": "Preferências de notificação de formações em atraso actualizadas com sucesso.",
+      "overdueCourseNotificationsPreferenceChangeError": "Não foi possível actualizar as preferências de notificação de formações em atraso."
+    }
+  },
+  "registrationFormBuilder": {
+    "badge": "Registo",
+    "field": {
+      "requiredBadge": "Obrigatório",
+      "optionalBadge": "Opcional",
+      "archivedBadge": "Arquivado",
+      "archive": "Arquivar",
+      "restore": "Restaurar"
+    }
+  },
+  "mfa": {
+    "setup": {
+      "title": "Configurar autenticação multifactor",
+      "description": "Siga os passos abaixo para configurar a autenticação multifactor (MFA) da sua conta.",
+      "scanQr": "Leia o código QR abaixo com a sua aplicação de autenticação (Google Authenticator, Authy ou outra).",
+      "manualEntry": "Se não conseguir ler o código, introduza manualmente a chave na aplicação.",
+      "enterCode": "Introduza o código de 6 algarismos da aplicação e clique em «Verificar e activar MFA».",
+      "loadingQr": "A carregar o código QR…",
+      "secretLabel": "Chave secreta",
+      "tokenLabel": "Código MFA",
+      "verifyButton": "Verificar e activar MFA"
+    },
+    "verify": {
+      "title": "Verificar autenticação multifactor",
+      "description": "Siga os passos abaixo para verificar a autenticação multifactor (MFA) da sua conta.",
+      "openAuthenticator": "Abra a sua aplicação de autenticação",
+      "enterCode": "Introduza o código de 6 algarismos da aplicação",
+      "verifyToken": "Verificar código MFA",
+      "tokenLabel": "Código MFA",
+      "toast": {
+        "success": "MFA verificada com sucesso.",
+        "error": "Não foi possível verificar MFA."
+      }
+    }
+  },
+  "MFAEnforcementView": {
+    "header": "Obrigatoriedade de autenticação multifactor por papel",
+    "subHeader": "Exigir MFA para determinados papéis",
+    "description": "Esta definição permite exigir autenticação multifactor (MFA) para determinados papéis da organização.",
+    "roles": {
+      "admin": "Administrador",
+      "student": "Formando",
+      "content_creator": "Criador de conteúdos",
+      "trainer": "Formador",
+      "group_manager": "Gestor de grupo"
+    },
+    "switch": {
+      "enabled": "Activado",
+      "disabled": "Desactivado"
+    },
+    "toast": {
+      "mfaEnforcementUpdatedSuccessfully": "Definições de obrigatoriedade de MFA actualizadas com sucesso.",
+      "mfaEnforcementUpdateFailed": "Não foi possível actualizar as definições de obrigatoriedade de MFA."
+    }
+  },
+  "progressBadge": {
+    "completed": "Concluído",
+    "inProgress": "Em curso",
+    "notStarted": "Por iniciar",
+    "blocked": "Bloqueado"
+  },
+  "studentCertificateView": {
+    "header": "Certificados de formação",
+    "informations": {
+      "loading": "A carregar os certificados…",
+      "noCertificates": "Ainda não tem certificados. Conclua as formações para obter os respectivos certificados.",
+      "failedToLoad": "Não foi possível carregar os certificados. Tente novamente mais tarde.",
+      "failedToFetch": "Não foi possível obter os certificados. Tente novamente mais tarde.",
+      "preparingDownload": "O seu certificado está a ser preparado para descarga…",
+      "failedToDownload": "Não foi possível descarregar o certificado. Tente novamente mais tarde.",
+      "shareFailed": "Não foi possível preparar a ligação de partilha no LinkedIn. Tente novamente mais tarde.",
+      "htmlRequired": "Falta o conteúdo do certificado. Actualize a página e tente novamente.",
+      "pdfGenerationFailed": "Não foi possível gerar o PDF do certificado. Tente novamente.",
+      "shareImageGenerationFailed": "Não foi possível gerar a imagem de partilha do certificado. Tente novamente mais tarde.",
+      "alreadyExists": "O certificado já existe.",
+      "createFailed": "Não foi possível criar o certificado. Tente novamente mais tarde.",
+      "certificateNotFound": "Certificado não encontrado.",
+      "userNotFound": "Utilizador não encontrado.",
+      "courseNotFound": "Formação não encontrada.",
+      "courseCertificateDisabled": "Os certificados estão desactivados para esta formação.",
+      "courseCompletionRequired": "Tem de concluir a formação antes de gerar um certificado."
+    },
+    "button": {
+      "download": "Descarregar",
+      "preview": "Pré-visualizar",
+      "shareLinkedIn": "Partilhar no LinkedIn"
+    },
+    "controls": {
+      "languageToggle": "Alternar idioma",
+      "fontColor": "Cor do texto"
+    }
+  },
+  "announcements": {
+    "breadcrumbs": {
+      "announcements": "Comunicados"
+    },
+    "page": {
+      "header": "Comunicados",
+      "buttons": {
+        "new": "Criar"
+      }
+    },
+    "createPage": {
+      "buttons": {
+        "confirm": "Confirmar",
+        "cancel": "Cancelar"
+      },
+      "fields": {
+        "title": "Título",
+        "content": "Conteúdo",
+        "group": "Grupo",
+        "language": "Idioma"
+      },
+      "placeholders": {
+        "group": "Seleccionar grupo"
+      }
+    }
+  },
+  "notifications": {
+    "title": "Notificações",
+    "tabs": {
+      "all": "Todos"
+    },
+    "status": {
+      "scheduled": "Agendada",
+      "published": "Publicado"
+    }
+  },
+  "files": {
+    "toast": {
+      "uploadForbidden": "Não tem permissão para carregar um vídeo aqui.",
+      "uploadTargetNotFound": "Não foi encontrado o elemento ao qual pretende associar o vídeo.",
+      "invalidData": "Não foi possível carregar o ficheiro: os dados são inválidos.",
+      "fileEmpty": "Não foi possível carregar o ficheiro: está vazio.",
+      "contentTypeMismatch": "O tipo de conteúdo do ficheiro não corresponde ao tipo indicado.",
+      "invalidFileType": "Tipo de ficheiro inválido.",
+      "missingTenantContext": "Falta o contexto da organização para carregar o ficheiro.",
+      "presentationFileTooLarge": "A apresentação é demasiado grande. Carregue uma apresentação até {{size}} {{unit}}."
+    },
+    "import": {
+      "noFileUploaded": "Nenhum ficheiro carregado.",
+      "invalidFileData": "Não foi possível carregar o ficheiro: os dados são inválidos.",
+      "fileEmpty": "O ficheiro está vazio.",
+      "noValidUsers": "A importação falhou: não foram encontrados colaboradores válidos.",
+      "requiredDataMissing": "A importação falhou: faltam dados obrigatórios.",
+      "invalidFileType": "Tipo de ficheiro inválido. Carregue um ficheiro válido.",
+      "userFailReason": {
+        "alreadyExists": "Já existe um utilizador com este endereço de correio electrónico.",
+        "duplicateEmail": "Endereço de correio electrónico duplicado no ficheiro de importação.",
+        "invalidRole": "Papel inválido.",
+        "trainerRoleUnavailable": "O papel de formador exige que as acções de formação estejam activadas.",
+        "unknownGroup": "Grupo desconhecido."
+      }
+    }
+  },
+  "loginFilesUpload": {
+    "fileName": {
+      "label": "Nome"
+    },
+    "toast": {
+      "invalidFileType": "Tipo de ficheiro inválido. Carregue um ficheiro válido.",
+      "successfullyUploadedFile": "Ficheiro carregado com sucesso.",
+      "resourceNotFound": "Recurso não encontrado."
+    }
+  },
+  "richTextEditor": {
+    "placeholder": {
+      "lineHint": "Cole uma ligação YouTube/Vimeo/Canva, adicione Google Docs ou carregue um ficheiro."
+    },
+    "upload": {
+      "videoProgress": "A carregar o vídeo…"
+    },
+    "toolbar": {
+      "format": {
+        "placeholder": "Seleccionar formato",
+        "paragraph": "Parágrafo",
+        "h1": "Título 1",
+        "h2": "Título 2",
+        "h3": "Título 3",
+        "h4": "Título 4"
+      },
+      "bold": {
+        "tooltip": "Negrito: aplicar negrito ao texto seleccionado"
+      },
+      "italic": {
+        "tooltip": "Itálico: aplicar itálico ao texto seleccionado"
+      },
+      "strikethrough": {
+        "tooltip": "Rasurado: traçar uma linha sobre o texto seleccionado"
+      },
+      "bulletList": {
+        "tooltip": "Lista com marcas: iniciar uma lista com marcas"
+      },
+      "orderedList": {
+        "tooltip": "Lista numerada: iniciar uma lista numerada"
+      },
+      "taskList": {
+        "tooltip": "Lista de verificação: adicionar uma lista de verificação"
+      },
+      "blockquote": {
+        "tooltip": "Citação: formatar o texto como citação"
+      },
+      "codeBlock": {
+        "tooltip": "Bloco de código: formatar o texto como código"
+      },
+      "horizontalRule": {
+        "tooltip": "Separador horizontal: inserir uma linha divisória"
+      },
+      "table": {
+        "tooltip": "Tabela: inserir ou editar uma tabela",
+        "groups": {
+          "columns": "Colunas",
+          "rows": "Linhas",
+          "cells": "Células",
+          "headers": "Cabeçalhos"
+        },
+        "actions": {
+          "insert": "Inserir tabela",
+          "addColumnBefore": "Adicionar coluna antes",
+          "addColumnAfter": "Adicionar coluna depois",
+          "deleteColumn": "Eliminar coluna",
+          "addRowBefore": "Adicionar linha antes",
+          "addRowAfter": "Adicionar linha depois",
+          "deleteRow": "Eliminar linha",
+          "mergeCells": "Unir células",
+          "splitCell": "Dividir célula",
+          "mergeOrSplit": "Unir ou dividir",
+          "toggleHeaderRow": "Alternar linha de cabeçalho",
+          "toggleHeaderColumn": "Alternar coluna de cabeçalho",
+          "toggleHeaderCell": "Alternar célula de cabeçalho",
+          "fixTables": "Corrigir estrutura da tabela",
+          "deleteTable": "Eliminar tabela"
+        }
+      },
+      "undo": {
+        "tooltip": "Anular: reverter a última alteração"
+      },
+      "redo": {
+        "tooltip": "Refazer: aplicar novamente a última alteração anulada"
+      },
+      "link": {
+        "tooltip": "Ligação: transformar o texto seleccionado numa hiperligação",
+        "dialog": {
+          "title": "Inserir ligação",
+          "urlLabel": "Introduza o endereço da ligação",
+          "linkTextLabel": "Introduza o texto da ligação",
+          "linkTextPlaceholder": "Texto da ligação…",
+          "urlRequired": "O endereço é obrigatório.",
+          "urlInvalid": "Formato de endereço inválido.",
+          "linkTextRequired": "O texto da ligação é obrigatório."
+        }
+      },
+      "upload": {
+        "uploadFailed": "Não foi possível carregar o ficheiro.",
+        "tooltip": "Carregar: permite carregar um ficheiro"
+      },
+      "assetLibrary": {
+        "tooltip": "Biblioteca de recursos: inserir um ficheiro carregado anteriormente"
+      }
+    }
+  },
+  "richText": {
+    "uploadDisplayModeDialog": {
+      "options": {
+        "preview": {
+          "title": "Pré-visualizar"
+        },
+        "download": {
+          "title": "Descarregar"
+        }
+      }
+    },
+    "presentation": {
+      "title": "Apresentação"
+    },
+    "pdfPreview": {
+      "previous": "Anterior",
+      "next": "Seguinte"
+    },
+    "assetLibrary": {
+      "delete": "Eliminar",
+      "visibility": {
+        "public": "Público",
+        "private": "Privado"
+      },
+      "types": {
+        "image": "Imagem",
+        "video": "Vídeo",
+        "presentation": "Apresentação"
+      },
+      "entities": {
+        "lesson": "Lição",
+        "news": "Notícias"
+      }
+    }
+  },
+  "pages": {
+    "dashboard": "Painel",
+    "settings": "Definições",
+    "providerInformation": "Informações do fornecedor",
+    "courses": "Formações",
+    "profile": "Perfil",
+    "lesson": "Lição",
+    "lessonPreview": "Pré-visualização da lição",
+    "register": "Registo",
+    "passwordRecovery": "Recuperação da palavra-passe",
+    "login": "Entrar",
+    "magicLink": "Ligação de acesso",
+    "createNewPassword": "Criar nova palavra-passe",
+    "createAnnouncement": "Criar comunicado",
+    "announcements": "Comunicados",
+    "notifications": "Notificações",
+    "users": "Colaboradores",
+    "userDetails": "Dados do colaborador",
+    "createNewUser": "Criar colaborador",
+    "promotionCodes": "Códigos promocionais",
+    "promotionCodeDetails": "Detalhes do código promocional",
+    "createPromotionCode": "Criar código promocional",
+    "groups": "Grupos",
+    "editGroup": "Editar grupo",
+    "createGroup": "Criar grupo",
+    "editCourse": "Editar formação",
+    "createNewCategory": "Criar categoria",
+    "categoryDetails": "Detalhes da categoria",
+    "categories": "Categorias",
+    "createNewCourse": "Criar uma formação",
+    "admin": "Administrador",
+    "qa": "Perguntas e respostas",
+    "createQA": "Criar pergunta e resposta",
+    "analytics": "Análise",
+    "progress": "Progresso",
+    "calendar": "Calendário",
+    "activityLogs": "Registos de actividade",
+    "tenant": "Dados da organização",
+    "createTenant": "Criar organização",
+    "tenants": "Organizações",
+    "learningPaths": "Percursos de desenvolvimento",
+    "adminLearningPaths": "Percursos de desenvolvimento",
+    "adminLearningPathEditor": "Editor de percursos de desenvolvimento"
+  },
+  "learningPathsView": {
+    "title": "Percursos de desenvolvimento",
+    "status": {
+      "draft": "Rascunho",
+      "published": "Publicado",
+      "private": "Privado",
+      "not_started": "Por iniciar",
+      "in_progress": "Em curso",
+      "completed": "Concluído",
+      "blocked": "Bloqueado"
+    },
+    "badges": {
+      "certificate": "Certificado de formação"
+    },
+    "courseState": {
+      "inProgress": "Em curso",
+      "notStarted": "Por iniciar"
+    },
+    "enrollment": {
+      "manage": "Inscrever",
+      "groups": "Grupos",
+      "selectGroups": "Seleccionar grupos",
+      "filters": {
+        "placeholder": {
+          "searchByKeyword": "Pesquisar por palavra-chave…"
+        }
+      },
+      "enrollGroups": "Inscrever grupos",
+      "enroll": "Inscrever",
+      "table": {
+        "name": "Nome",
+        "email": "Correio electrónico"
+      }
+    },
+    "breadcrumbs": {
+      "learningPaths": "Percursos de desenvolvimento"
+    }
+  },
+  "adminLearningPathsView": {
+    "title": "Percursos de desenvolvimento",
+    "breadcrumbs": {
+      "learningPaths": "Percursos de desenvolvimento",
+      "create": "Criar",
+      "edit": "Editar"
+    },
+    "buttons": {
+      "edit": "Editar",
+      "save": "Guardar alterações"
+    },
+    "editor": {
+      "courses": "Formações",
+      "image": "Imagem",
+      "settings": "Definições"
+    },
+    "table": {
+      "title": "Título",
+      "status": "Estado",
+      "settings": "Definições",
+      "language": "Idioma",
+      "certificate": "Certificado de formação"
+    },
+    "form": {
+      "language": "Idioma",
+      "status": "Estado",
+      "title": "Título",
+      "description": "Descrição",
+      "includesCertificate": "Certificado de formação"
+    },
+    "courses": {
+      "delete": "Eliminar formação"
+    },
+    "sharedLearningPath": {
+      "badgeExported": "Partilhado"
+    }
+  },
+  "lessonPreview": {
+    "breadcrumbs": {
+      "browseCourses": "Consultar formações",
+      "lessonPreview": "Pré-visualizar"
+    },
+    "button": {
+      "back": "Voltar"
+    }
+  },
+  "studentOnboarding": {
+    "dashboard": {
+      "clientStatistics": "Este é o seu painel. Aqui pode consultar o progresso, as estatísticas e a actividade recente.",
+      "dailyStreak": "Acompanhe aqui a sequência de dias em que iniciou sessão."
+    },
+    "courses": {
+      "yourList": "Aqui encontra as suas formações…",
+      "availableListFilters": "Aqui pode consultar as formações disponíveis e inscrever-se."
+    },
+    "announcements": {
+      "stayInformed": "Aqui encontra comunicados dos formadores e coordenadores de formação."
+    },
+    "settings": {
+      "welcome": "Aqui pode gerir o perfil, editar dados, definir preferências e alterar a palavra-passe.",
+      "language": "Escolha aqui o idioma em que pretende utilizar a plataforma.",
+      "password": "Mantenha a sua palavra-passe segura e altere-a quando necessário."
+    },
+    "profile": {
+      "info": "Aqui pode consultar e editar os seus dados de perfil.",
+      "certificates": "Aqui pode consultar os certificados das suas formações."
+    },
+    "providerInformation": {
+      "welcome": "Conheça o fornecedor e os respectivos contactos."
+    }
+  },
+  "pagination": {
+    "showing": "A mostrar {{startItem}}–{{endItem}} de {{totalItems}} resultados",
+    "previous": "Anterior",
+    "next": "Seguinte",
+    "noData": "Não foram encontrados dados."
+  },
+  "qaView": {
+    "button": {
+      "createNew": "Criar pergunta e resposta"
+    },
+    "edit": {
+      "language": "Idioma"
+    },
+    "fields": {
+      "title": "Pergunta"
+    }
+  },
+  "adminArticleView": {
+    "toc": {
+      "title": "Base de conhecimento",
+      "actions": {
+        "add": "Adicionar"
+      }
+    },
+    "dialog": {
+      "createArticle": {
+        "create": "Criar"
+      }
+    },
+    "section": {
+      "languageLabel": "Idioma",
+      "fields": {
+        "title": "Título"
+      },
+      "language": {
+        "label": "Idioma"
+      }
+    },
+    "form": {
+      "saveButton": "Guardar",
+      "fields": {
+        "title": "Título",
+        "content": "Conteúdo",
+        "status": "Estado",
+        "isPublic": "Público"
+      },
+      "status": {
+        "draft": "Rascunho",
+        "published": "Publicado"
+      },
+      "preview": "Pré-visualizar"
+    }
+  },
+  "superAdminTenantsView": {
+    "title": "Organizações",
+    "actions": {
+      "create": "Criar organização"
+    },
+    "table": {
+      "name": "Nome",
+      "status": "Estado",
+      "yes": "Sim",
+      "no": "Não",
+      "edit": "Editar",
+      "delete": "Eliminar"
+    },
+    "status": {
+      "active": "Activo"
+    },
+    "create": {
+      "title": "Criar organização",
+      "submit": "Criar organização"
+    },
+    "form": {
+      "status": "Estado"
+    }
+  },
+  "auth": {
+    "error": {
+      "unauthenticated": "Utilizador não autenticado.",
+      "invalidEmailOrPassword": "Endereço de correio electrónico ou palavra-passe incorrectos.",
+      "invalidRefreshToken": "Token de renovação inválido.",
+      "adminRoleRequired": "É necessário o papel de administrador.",
+      "missingPermission": "Não tem permissão para aceder a este recurso.",
+      "sessionRevoked": "A sua sessão foi revogada. Inicie sessão novamente."
+    }
+  },
+  "sessionRevocation": {
+    "permissionsUpdated": "As suas permissões foram actualizadas. A actualizar a sessão para aplicar o novo acesso.",
+    "refreshFailed": "As suas permissões foram alteradas, mas não foi possível actualizar a sessão. Inicie sessão novamente."
+  },
+  "tenantInactive": {
+    "title": "Organização desactivada",
+    "description": "Este espaço de trabalho está inactivo. Se considera que se trata de um erro, contacte o administrador para restabelecer o acesso."
+  },
+  "integrationApiKey": {
+    "status": "Estado",
+    "active": "Activo"
+  },
+  "tenantSharing": {
+    "columns": {
+      "organization": "Organização",
+      "status": "Estado"
+    },
+    "status": {
+      "shared": "Partilhado",
+      "inProgress": "Em curso"
+    }
+  },
+  "masterCourse": {
+    "error": {
+      "courseNotFound": "Formação não encontrada."
+    }
+  },
+  "activityLogsView": {
+    "breadcrumbs": {
+      "activityLogs": "Registos de actividade"
+    },
+    "actions": {
+      "start_course": "Iniciado"
+    },
+    "entity": {
+      "chapter": "Capítulo",
+      "lesson": "Lição",
+      "question": "Pergunta",
+      "news": "Notícias",
+      "user": "Utilizador",
+      "group": "Grupo",
+      "category": "Categoria",
+      "settings": "Definições",
+      "qa": "Perguntas e respostas",
+      "live_training": "Acção de formação",
+      "scorm": "SCORM",
+      "global_settings": "Definições"
+    },
+    "table": {
+      "email": "Correio electrónico"
+    }
+  },
+  "modernCourseView": {
+    "common": {
+      "cancel": "Cancelar",
+      "close": "Fechar",
+      "saveChanges": "Guardar alterações",
+      "enabled": "Activado",
+      "disabled": "Desactivado"
+    },
+    "learningMode": {
+      "title": "Está a realizar esta formação no modo de formação.",
+      "description": "O seu progresso está a ser acompanhado. As lições concluídas contam para a sua conclusão pessoal e para as estatísticas da formação.",
+      "enter": "Entrar no modo de formação",
+      "exit": "Sair do modo de formação"
+    },
+    "draftCourseTooltip": "Esta formação está em rascunho. Não é possível inscrever-se nem continuar a formação.",
+    "overview": {
+      "courseSettings": "Definições da formação",
+      "manageCategories": "Gerir categorias",
+      "settingsDescription": "Gerir as definições desta formação.",
+      "titlePlaceholder": "Introduza o título da formação…",
+      "editMedia": "Editar recursos multimédia",
+      "continueLearning": "Continuar a formação",
+      "courseDetails": "Detalhes da formação",
+      "closeDetails": "Fechar detalhes da formação",
+      "aboutCourse": "Sobre esta formação",
+      "description": "Descrição",
+      "descriptionPlaceholder": "Introduza a descrição da formação…",
+      "whatYouWillMaster": "O que irá aprender",
+      "noLearningOutcomes": "Ainda não foram adicionados resultados de aprendizagem.",
+      "learningOutcomePlaceholder": "Adicionar um resultado de aprendizagem…",
+      "addLearningOutcome": "Adicionar resultado de aprendizagem",
+      "removeLearningOutcome": "Remover resultado de aprendizagem",
+      "closeSettings": "Fechar definições da formação",
+      "settingsComingSoon": "Definições disponíveis brevemente",
+      "settingsIntro": "Aqui poderá configurar:",
+      "settingsStatus": "Estado da formação (Rascunho/Publicado)",
+      "settingsPricing": "Preços e opções de pagamento",
+      "settingsAssignments": "Formandos e grupos atribuídos",
+      "settingsSequential": "Exigir conclusão sequencial",
+      "settingsVisibility": "Definições de visibilidade da formação",
+      "settingsPermissions": "Permissões de acesso"
+    },
+    "media": {
+      "title": "Editar recursos multimédia da formação",
+      "currentImage": "Imagem de destaque actual — ajustar posição",
+      "previewAlt": "Pré-visualização da imagem da formação",
+      "previewPosition": "Pré-visualizar com a posição actual",
+      "verticalPosition": "Posição vertical",
+      "uploadImage": "Carregar nova imagem de destaque",
+      "dropImage": "Largue aqui a imagem de destaque",
+      "browse": "ou clique para procurar",
+      "imageLimit": "PNG, JPG até 10 MB",
+      "imageRecommendation": "Recomendado: 1920×820 px (21:9)",
+      "trailer": "Vídeo de apresentação da formação (opcional)",
+      "dropVideo": "Largue aqui o vídeo de apresentação",
+      "videoLimit": "MP4, MOV até 50 MB",
+      "videoRecommendation": "Recomendado: 30–90 segundos",
+      "save": "Carregar recursos multimédia"
+    },
+    "stats": {
+      "yourProgress": "O seu progresso",
+      "remaining": "por concluir",
+      "courseFinished": "Formação concluída",
+      "chapterProgress_one": "{{completed}} / {{total}} capítulo",
+      "chapterProgress_other": "{{completed}} / {{total}} capítulos",
+      "duration": {
+        "minutes": "{{minutes}} min",
+        "hours": "{{hours}} h",
+        "hoursAndMinutes": "{{hours}} h {{minutes}} min"
+      },
+      "trackProgress": "para acompanhar o seu progresso.",
+      "deadline": "Prazo",
+      "daysLeft_one": "Falta {{count}} dia",
+      "daysLeft_other": "Faltam {{count}} dias",
+      "certificate": "Certificado de formação",
+      "uponCompletion": "Após a conclusão",
+      "notIssuedYet": "Ainda não emitido",
+      "aboutAuthor": "Sobre o autor"
+    },
+    "certificate": {
+      "close": "Fechar definições do certificado",
+      "title": "Definições do certificado",
+      "previewTitle": "Certificado de formação",
+      "certifies": "Certifica-se que",
+      "completed": "concluiu com aproveitamento",
+      "signaturePlaceholder": "Espaço para assinatura",
+      "enable": "Activar certificado",
+      "enableDescription": "Os formandos receberão um certificado após a conclusão da formação.",
+      "fontColor": "Cor do texto",
+      "uploadSignature": "Carregar assinatura",
+      "uploadSignatureHint": "Clique para carregar a imagem da assinatura",
+      "signatureLimit": "PNG, JPG até 2 MB",
+      "save": "Guardar certificado"
+    },
+    "deadline": {
+      "close": "Fechar definições de prazos",
+      "title": "Definições de prazos",
+      "enable": "Activar prazos",
+      "enableDescription": "Definir prazos específicos para diferentes grupos",
+      "current": "Prazo actual: {{deadline}}"
+    },
+    "author": {
+      "close": "Fechar definições do autor",
+      "pictureAlt": "Fotografia do autor",
+      "showSection": "Mostrar secção do autor",
+      "showSectionDescription": "Apresentar informações do autor na página da formação",
+      "otherCourses": "Outras formações"
+    },
+    "contents": {
+      "title": "Índice",
+      "statistics": "Estatísticas",
+      "edit": "Editar conteúdo",
+      "missingTranslationsTitle": "Traduções em falta",
+      "missingTranslationsDescription": "Falta a tradução de alguns conteúdos da formação no idioma seleccionado.",
+      "completedChapters_one": "{{count}} capítulo concluído",
+      "completedChapters_other": "{{count}} capítulos concluídos",
+      "lessons_one": "{{count}} lição",
+      "lessons_other": "{{count}} lições",
+      "showAllChapters": "Mostrar todos os capítulos (mais {{count}})",
+      "courseStatistics": "Estatísticas da formação",
+      "statisticsDescription": "Resumo do progresso e da participação dos formandos",
+      "totalStudents": "Total de formandos",
+      "completionRate": "Taxa de conclusão",
+      "averageTime": "Tempo médio despendido",
+      "averageRating": "Avaliação média",
+      "detailedStatisticsSoon": "Estatísticas detalhadas disponíveis brevemente",
+      "detailedStatisticsDescription": "Esta secção apresentará análises detalhadas, incluindo a evolução do progresso dos formandos, taxas de conclusão de capítulos e métricas de participação.",
+      "status": {
+        "started": "Iniciado",
+        "completed": "Concluído",
+        "inProgress": "Em curso",
+        "notStarted": "Por iniciar"
+      },
+      "lessonTypes": {
+        "content": "Conteúdo",
+        "quiz": "Questionário",
+        "aiMentor": "Mentor de IA",
+        "lesson": "Lição"
+      }
+    }
+  },
+  "courseAuthoring": {
+    "changeSet": {
+      "retry": "Tentar novamente",
+      "lessonCount": "{{count}} lições",
+      "lessonCount_one": "{{count}} lição",
+      "lessonCount_other": "{{count}} lições"
+    },
+    "reviewMode": {
+      "courseDetails": "Detalhes da formação"
+    },
+    "conversation": {
+      "sessionStatus": {
+        "active": "Activo"
+      },
+      "back": "Voltar à formação",
+      "close": "Fechar",
+      "collapse": "Recolher",
+      "retry": "Tentar novamente",
+      "questionPrevious": "Anterior",
+      "questionNext": "Seguinte"
+    },
+    "composer": {
+      "send": "Enviar"
+    },
+    "tools": {
+      "back": "Voltar"
+    },
+    "sources": {
+      "required": "Obrigatório",
+      "status": {
+        "ready": "Pronto"
+      }
+    },
+    "options": {
+      "label": "Opções"
+    },
+    "activityRail": {
+      "chapterLessonCount": "{{count}} lições",
+      "chapterLessonCount_one": "{{count}} lição",
+      "chapterLessonCount_other": "{{count}} lições",
+      "complete": "Concluir",
+      "yourAnswer": "A sua resposta",
+      "send": "Enviar",
+      "required": "Obrigatório",
+      "optional": "Opcional"
+    },
+    "review": {
+      "question": "Pergunta",
+      "ready": "Pronto",
+      "purposes": {
+        "lesson": "Lição"
+      },
+      "selectGroupForApply": "Seleccionar grupo",
+      "cancelFeedback": "Cancelar",
+      "sendFeedback": "Enviar",
+      "addFeedbackButtonLabel": "Adicionar"
+    },
+    "editors": {
+      "removeLearningOutcome": "Remover resultado de aprendizagem",
+      "title": "Título",
+      "true": "Verdadeiro",
+      "false": "Falso"
+    },
+    "errors": {
+      "unsupportedLanguage": "A criação por IA ainda não suporta este idioma da formação. Utilize o editor nativo."
+    }
+  },
+  "phishing": {
+    "retry": "Tentar novamente",
+    "edit": "Editar",
+    "columns": {
+      "status": "Estado",
+      "group": "Grupo"
+    },
+    "status": {
+      "scheduled": "Agendada",
+      "completed": "Concluído"
+    },
+    "courseStatuses": {
+      "not_started": "Por iniciar",
+      "in_progress": "Em curso",
+      "completed": "Concluído"
+    }
+  },
+  "reports": {
+    "scope": {
+      "groupLabel": "Grupos"
+    },
+    "filters": {
+      "selectDate": "Seleccionar data"
+    },
+    "fields": {
+      "groupId": "Grupo",
+      "certificate": "Certificado de formação"
+    },
+    "values": {
+      "notStarted": "Por iniciar",
+      "inProgress": "Em curso",
+      "completed": "Concluído",
+      "active": "Activo"
+    },
+    "saved": {
+      "save": "Guardar"
+    },
+    "results": {
+      "retry": "Tentar novamente"
+    },
+    "metrics": {
+      "learners": "Formandos",
+      "activeCertificates": "Certificados válidos",
+      "platformCourses": "Formações"
+    },
+    "breakdowns": {
+      "title": "Taxa de conclusão",
+      "tabs": {
+        "courses": "Formações",
+        "groups": "Grupos"
+      }
+    },
+    "exports": {
+      "download": "Descarregar"
+    },
+    "table": {
+      "status": "Estado",
+      "progress": "Progresso"
+    },
+    "title": "Relatórios",
+    "picker": {
+      "search": "Pesquisar"
+    }
+  },
+  "automations": {
+    "status": "Estado",
+    "allStatuses": "Todos os estados",
+    "close": "Fechar",
+    "archive": "Arquivar",
+    "statuses": {
+      "draft": "Rascunho",
+      "enabled": "Activo",
+      "archived": "Arquivado"
+    },
+    "executionStatuses": {
+      "skipped": "Ignorados"
+    }
+  },
+  "automationView": {
+    "filters": {
+      "all": "Todos",
+      "enabled": "Activo",
+      "archived": "Arquivado"
+    },
+    "status": {
+      "enabled": "Activo",
+      "draft": "Rascunho",
+      "archived": "Arquivado"
+    },
+    "table": {
+      "status": "Estado",
+      "menu": "Menu",
+      "manage": "Gerir"
+    },
+    "drawer": {
+      "descriptionLabel": "Descrição",
+      "statusLabel": "Estado",
+      "statusDraft": "Rascunho",
+      "statusEnabled": "Activo",
+      "statusArchived": "Arquivado",
+      "archive": "Arquivar",
+      "save": "Guardar alterações",
+      "cancel": "Cancelar",
+      "delete": "Eliminar"
+    },
+    "deleteDialog": {
+      "confirm": "Eliminar",
+      "cancel": "Cancelar"
+    },
+    "seedDefaults": {
+      "dialog": {
+        "cancel": "Cancelar"
+      }
+    }
+  },
+  "automationBuilder": {
+    "mapping": {
+      "required": "Obrigatório",
+      "optional": "Opcional"
+    },
+    "header": {
+      "save": "Guardar",
+      "active": "Activo",
+      "draft": "Rascunho",
+      "leaveDialog": {
+        "cancel": "Cancelar"
+      },
+      "deleteDialog": {
+        "confirm": "Eliminar",
+        "cancel": "Cancelar"
+      }
+    },
+    "blocks": {
+      "courseDeadline": "Prazo da formação",
+      "overdue": "Em atraso",
+      "userCourseFinished": "Formação concluída"
+    },
+    "canvas": {
+      "deleteNodeDialogCancel": "Cancelar"
+    },
+    "editPanel": {
+      "changeTriggerDialogCancel": "Cancelar",
+      "recipientAdmin": "Administrador",
+      "deleteNodeDialogCancel": "Cancelar"
+    },
+    "editAction": {
+      "language": "Idioma"
+    },
+    "variables": {
+      "userEmail": "Endereço de correio electrónico"
+    },
+    "simulation": {
+      "variableType": "Tipo",
+      "preview": {
+        "goToCourse": "Ir para a formação",
+        "label": "Pré-visualizar"
+      }
+    },
+    "condition": {
+      "yes": "Sim",
+      "no": "Não",
+      "skipped": "Ignorados"
+    }
+  },
+  "automationLogs": {
+    "status": {
+      "skipped": "Ignorados"
+    },
+    "filters": {
+      "all": "Todos os estados",
+      "skipped": "Ignorados"
+    },
+    "table": {
+      "status": "Estado"
+    },
+    "detail": {
+      "status": "Estado",
+      "language": "Idioma"
+    }
+  }
+}
