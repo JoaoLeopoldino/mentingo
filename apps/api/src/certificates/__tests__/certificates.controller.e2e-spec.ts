@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+
 import {
   CERTIFICATE_ARCHIVE_REASONS,
   CERTIFICATE_RESET_SCOPES,
@@ -28,6 +30,9 @@ import { SettingsService } from "../../settings/settings.service";
 import {
   activityLogs,
   certificates,
+  categories,
+  courses,
+  tenants,
   chapters,
   groupManagerGroups,
   lessons,
@@ -110,6 +115,128 @@ describe("CertificatesController (e2e)", () => {
 
   afterEach(async () => {
     await truncateAllTables(baseDb, db);
+  });
+
+  describe("certificate metadata authorization", () => {
+    it.each(["all", "certificate"])(
+      "denies another learner's metadata through %s",
+      async (endpoint) => {
+        const owner = await userFactory.withCredentials({ password }).withUserSettings(db).create();
+        const reader = await userFactory
+          .withCredentials({ password })
+          .withUserSettings(db)
+          .create();
+        const category = await categoryFactory.create();
+        const course = await courseFactory.create({
+          title: "Workplace safety",
+          authorId: owner.id,
+          categoryId: category.id,
+          thumbnailS3Key: null,
+          hasCertificate: true,
+        });
+        await db.insert(certificates).values({ userId: owner.id, courseId: course.id });
+        await request(app.getHttpServer())
+          .get(`/api/certificates/${endpoint}`)
+          .set("Cookie", await cookieFor(reader, app))
+          .query({ userId: owner.id, courseId: course.id, language: "en" })
+          .expect(404);
+      },
+    );
+    it.each(["all", "certificate"])(
+      "allows administrators and managed learners only through %s",
+      async (endpoint) => {
+        const admin = await userFactory
+          .withCredentials({ password })
+          .withAdminSettings(db)
+          .create();
+        const owner = await userFactory.withCredentials({ password }).withUserSettings(db).create();
+        const outsider = await userFactory
+          .withCredentials({ password })
+          .withUserSettings(db)
+          .create();
+        const manager = await userFactory
+          .withCredentials({ password })
+          .withUserSettings(db)
+          .create({ roleSlug: SYSTEM_ROLE_SLUGS.GROUP_MANAGER });
+        await assignSystemRoleToUserInTests(
+          db,
+          manager.id,
+          manager.tenantId,
+          SYSTEM_ROLE_SLUGS.GROUP_MANAGER,
+        );
+        const group = await groupFactory.withMembers([owner.id]).create();
+        await db
+          .insert(groupManagerGroups)
+          .values({ managerUserId: manager.id, groupId: group.id, tenantId: manager.tenantId });
+        const category = await categoryFactory.create();
+        const course = await courseFactory.create({
+          title: "Managed safety",
+          authorId: admin.id,
+          categoryId: category.id,
+          thumbnailS3Key: null,
+          hasCertificate: true,
+        });
+        await db.insert(certificates).values([
+          { userId: owner.id, courseId: course.id },
+          { userId: outsider.id, courseId: course.id },
+        ]);
+        for (const [reader, target, status] of [
+          [admin, owner, 200],
+          [manager, owner, 200],
+          [manager, outsider, 404],
+        ] as const) {
+          const response = await request(app.getHttpServer())
+            .get(`/api/certificates/${endpoint}`)
+            .set("Cookie", await cookieFor(reader, app))
+            .query({ userId: target.id, courseId: course.id, language: "en" });
+          const readerType = reader.id === admin.id ? "administrator" : "group manager";
+          expect({ readerType, status: response.status }).toEqual({ readerType, status });
+        }
+      },
+    );
+
+    it.each(["all", "certificate"])(
+      "denies an administrator reading another tenant through %s",
+      async (endpoint) => {
+        const admin = await userFactory
+          .withCredentials({ password })
+          .withAdminSettings(db)
+          .create();
+        const [foreignTenant] = await baseDb
+          .insert(tenants)
+          .values({
+            name: "Foreign synthetic tenant",
+            host: `https://foreign-${randomUUID()}.sprint.invalid`,
+          })
+          .returning();
+        const owner = await userFactory
+          .withCredentials({ password })
+          .create({ tenantId: foreignTenant.id });
+        const [category] = await baseDb
+          .insert(categories)
+          .values({ title: { en: "Foreign category" }, tenantId: foreignTenant.id })
+          .returning();
+        const [course] = await baseDb
+          .insert(courses)
+          .values({
+            title: { en: "Foreign safety" },
+            authorId: owner.id,
+            categoryId: category.id,
+            tenantId: foreignTenant.id,
+            thumbnailS3Key: null,
+            hasCertificate: true,
+          })
+          .returning();
+        await baseDb
+          .insert(certificates)
+          .values({ userId: owner.id, courseId: course.id, tenantId: foreignTenant.id });
+        await request(app.getHttpServer())
+          .get(`/api/certificates/${endpoint}`)
+          .set("Cookie", await cookieFor(admin, app))
+          .query({ userId: owner.id, courseId: course.id, language: "en" })
+          .expect(404);
+      },
+    );
   });
 
   describe("GET /api/certificates/all", () => {

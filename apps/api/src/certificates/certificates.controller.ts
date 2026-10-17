@@ -96,7 +96,7 @@ export class CertificatesController {
   }
 
   @Get("all")
-  @RequirePermission(PERMISSIONS.CERTIFICATE_READ)
+  @RequirePermission(PERMISSIONS.CERTIFICATE_READ, PERMISSIONS.MANAGED_GROUP_RESULTS_READ)
   @Validate({
     request: [
       { type: "query", name: "userId", schema: UUIDSchema },
@@ -110,17 +110,21 @@ export class CertificatesController {
   async getAllCertificates(
     @Query("userId") userId: UUIDType,
     @Query("language") language: SupportedLanguages,
-    @Query("page") page?: number,
-    @Query("perPage") perPage?: number,
-    @Query("sort") sort?: string,
+    @Query("page") page: number | undefined,
+    @Query("perPage") perPage: number | undefined,
+    @Query("sort") sort: string | undefined,
+    @CurrentUser() currentUser: CurrentUserType,
   ): Promise<PaginatedResponse<AllCertificatesResponse>> {
-    const data = await this.certificatesService.getAllCertificates({
-      userId,
-      page,
-      perPage,
-      language,
-      sort: sort as "createdAt",
-    });
+    const data = await this.certificatesService.getAllCertificates(
+      {
+        userId,
+        page,
+        perPage,
+        language,
+        sort: sort as "createdAt",
+      },
+      currentUser,
+    );
     return new PaginatedResponse(data);
   }
 
@@ -151,20 +155,23 @@ export class CertificatesController {
     @Query("language") language: SupportedLanguages,
     @Query("page") page: number | undefined,
     @Query("perPage") perPage: number | undefined,
-    @CurrentUser("userId") userId: UUIDType,
+    @CurrentUser() currentUser: CurrentUserType,
   ): Promise<PaginatedResponse<AllCertificatesResponse>> {
-    const data = await this.certificatesService.getAllCertificates({
-      userId,
-      page,
-      perPage,
-      language,
-      sort: "createdAt",
-    });
+    const data = await this.certificatesService.getAllCertificates(
+      {
+        userId: currentUser.userId,
+        page,
+        perPage,
+        language,
+        sort: "createdAt",
+      },
+      currentUser,
+    );
     return new PaginatedResponse(data);
   }
 
   @Get("certificate")
-  @RequirePermission(PERMISSIONS.CERTIFICATE_READ)
+  @RequirePermission(PERMISSIONS.CERTIFICATE_READ, PERMISSIONS.MANAGED_GROUP_RESULTS_READ)
   @Validate({
     request: [
       { type: "query", name: "userId", schema: UUIDSchema },
@@ -177,8 +184,14 @@ export class CertificatesController {
     @Query("userId") userId: UUIDType,
     @Query("courseId") courseId: UUIDType,
     @Query("language") language: SupportedLanguages,
+    @CurrentUser() currentUser: CurrentUserType,
   ): Promise<SingleCertificateResponse> {
-    const certificate = await this.certificatesService.getCertificate(userId, courseId, language);
+    const certificate = await this.certificatesService.getCertificate(
+      userId,
+      courseId,
+      language,
+      currentUser,
+    );
     return certificate;
   }
 

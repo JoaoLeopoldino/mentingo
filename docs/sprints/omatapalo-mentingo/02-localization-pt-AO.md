@@ -24,7 +24,7 @@ Base: `7a23e967`; branch `sprint/omatapalo-validation-20261017`. Ambiente isolad
 |---|---|
 | Node 22, `node --experimental-strip-types --test packages/shared/test/*.test.mjs` | **10 passaram**; cobertura/JSON/chaves/placeholders/markup/plurais/Intl/fallback |
 | Vitest localização + regressão de inscrição em curso arquivado | **8 passaram**, 2 ficheiros |
-| Jest: settings.schema, limite de idioma Luma, reports-access | **7 passaram**, 3 suites na primeira execução; foram acrescentadas duas asserções de esquema para validação final |
+| Jest: settings.schema, limite de idioma Luma, reports-access | **9 passaram**, 3 suites na execução final (6,103s), incluindo as duas asserções de esquema |
 | Integração SettingsController: `de`, `pt-AO` | **2 passaram**, 40 fora do filtro; resposta e valor persistido verificados; 262,707s incluindo preparação e compilação |
 | Typecheck web após regeneração e correcção de fixture | **Passou**, 101,01s medidos |
 | Build shared/email/prompts/runtime SCORM/gerador SCORM | **Passou** |
@@ -32,7 +32,7 @@ Base: `7a23e967`; branch `sprint/omatapalo-validation-20261017`. Ambiente isolad
 | Chrome real: visitante pt-AO, login fictício, mudança en → pt-AO, PUT 200, reload | **Confirmado** |
 | Catálogo com cartões efectivamente carregados em pt-AO | **Confirmado**; captura local |
 | Abertura de lição | **Confirmada**, questionário nativo aberto através do índice; interface pt-AO e conteúdo fictício inglês. Cinco checkpoints do script passaram |
-| Build web completo | Execução interrompida por pressão de recursos; repetição isolada pendente |
+| Build web completo | **Passou**, heap Node de 4 GB, 72,53s; tentativa anterior falhou por OOM |
 
 Os testes Vitest de idioma usam i18next e localStorage reais. Os testes de API usam a base isolada `guidebook_test`; o adapter de emails de teste não valida SMTP. Não foram utilizados mocks para apresentar a persistência de idioma como real.
 
@@ -58,7 +58,7 @@ TMPDIR="$PWD/.local/tmp" sprint_pnpm --filter web exec vitest run app/utils/lang
 TMPDIR="$PWD/.local/tmp" sprint_pnpm --filter api exec tsx ../../scripts/sprints/omatapalo/browser-smoke.mts
 ```
 
-Concluir o build web, verificar Android real, acrescentar idiomas aos canais em falta por lotes, rever terminologia com a Utu Lab e propor contribuição upstream. Manter um único registo de idiomas; não duplicar o frontend. A especificação funcional foi actualizada em `docs/specs/language-localization-business-spec.md`.
+Verificar Android real, acrescentar idiomas aos canais em falta por lotes, rever terminologia com a Utu Lab e propor contribuição upstream. Manter um único registo de idiomas; não duplicar o frontend. A especificação funcional foi actualizada em `docs/specs/language-localization-business-spec.md`.
 
 ## Tempo efectivo
 

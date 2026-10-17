@@ -1,6 +1,6 @@
 # Etapa 0 — recuperação e baseline
 
-Estado: serviços e aplicação local operacionais; validação final do build web em curso.
+Estado: serviços e aplicação local operacionais; builds API e web aprovados.
 
 Base: `7a23e967d88947238386c588663140c21a284294` (v4.23.0). Branch: `sprint/omatapalo-validation-20261017`. As alterações subsequentes pertencem a este branch; os hashes de entrega constarão do estado global.
 
@@ -38,7 +38,7 @@ Foram aplicadas as migrações à nova base `guidebook`. A carga existente do pr
 - API: mensagem real `Nest application successfully started`; frontend Vite disponível. HTTP local do frontend respondeu 200.
 - Login fictício, selector pt-AO e recarregamento confirmados no Chrome. A evidência de catálogo/lição está a ser reforçada; consultar o relatório de localização.
 - Typecheck web passou depois da regeneração do contrato e da actualização da fixture de idiomas (101,01s na execução medida).
-- Build web foi interrompido para aliviar pressão de memória durante testes concorrentes; não foi declarado aprovado. Será repetido isoladamente.
+- Build web: a execução com heap predefinido falhou por falta de memória; com `NODE_OPTIONS=--max-old-space-size=4096` passou em **72,53s**, incluindo build SPA e service worker.
 
 A instalação e os testes foram intercalados com a implementação pt-AO; não existe uma execução integral limpa de todas as suites sobre HEAD anterior às alterações. Estes resultados são baseline operacional do branch do sprint, não prova de ausência de defeitos no upstream.
 

@@ -52,7 +52,7 @@ import { OutboxPublisher } from "src/outbox/outbox.publisher";
 import { S3Service } from "src/s3/s3.service";
 import { SettingsService } from "src/settings/settings.service";
 import { DB, DB_ADMIN } from "src/storage/db/db.providers";
-import { certificates, courses, studentCourses } from "src/storage/schema";
+import { certificates, courses, studentCourses, users } from "src/storage/schema";
 
 import { CertificateRepository } from "./certificate.repository";
 import {
@@ -125,7 +125,9 @@ export class CertificatesService implements OnModuleDestroy {
 
   async getAllCertificates(
     query: CertificatesQuery,
+    currentUser: CurrentUserType,
   ): Promise<PaginatedResponse<AllCertificatesResponse>> {
+    await this.assertCanReadUserCertificates(query.userId, currentUser);
     const { userId, page = 1, perPage = DEFAULT_PAGE_SIZE, sort = "createdAt", language } = query;
     const { sortOrder } = getSortOptions(sort);
 
@@ -306,7 +308,9 @@ export class CertificatesService implements OnModuleDestroy {
     userId: UUIDType,
     courseId: UUIDType,
     language: SupportedLanguages,
+    currentUser: CurrentUserType,
   ): Promise<CertificateResponse | null> {
+    await this.assertCanReadUserCertificates(userId, currentUser);
     const certificate = await this.certificateRepository.findCertificateByUserAndCourse(
       userId,
       courseId,
@@ -1107,6 +1111,26 @@ export class CertificatesService implements OnModuleDestroy {
       .otherwise(() => null);
   }
 
+  private async assertCanReadUserCertificates(userId: UUIDType, currentUser: CurrentUserType) {
+    if (userId === currentUser.userId) return;
+
+    const learnerScope = getGroupManagerLearnerScopeCondition(currentUser, users.id, [
+      PERMISSIONS.USER_MANAGE,
+    ]);
+    if (!hasPermission(currentUser.permissions, PERMISSIONS.USER_MANAGE) && !learnerScope) {
+      throw new NotFoundException("studentCertificateView.informations.certificateNotFound");
+    }
+
+    const [target] = await this.db
+      .select({ id: users.id })
+      .from(users)
+      .where(and(eq(users.id, userId), eq(users.tenantId, currentUser.tenantId), learnerScope))
+      .limit(1);
+    if (!target) {
+      throw new NotFoundException("studentCertificateView.informations.certificateNotFound");
+    }
+  }
+
   private async assertCanManageCourseCertificates(
     courseId: UUIDType,
     currentUser: CurrentUserType,
@@ -1317,8 +1341,9 @@ export class CertificatesService implements OnModuleDestroy {
   }
 
   private async buildSystemActorEmail(tenantId: UUIDType): Promise<string> {
-    const { companyShortName } =
-      await this.settingsService.getCompanyInformationByTenantId(tenantId);
+    const { companyShortName } = await this.settingsService.getCompanyInformationByTenantId(
+      tenantId,
+    );
 
     const domain = this.normalizeCompanyShortNameForSystemActorEmail(companyShortName);
 
