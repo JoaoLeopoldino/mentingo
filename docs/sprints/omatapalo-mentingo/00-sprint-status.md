@@ -20,3 +20,7 @@ Início: **2026-10-17 14:56:11 UTC**. Os intervalos incluem downloads, espera po
 Commits: ambiente **`c6c53fc7`**; pt-AO **`6a649d65`**. Autorização: **`dc15e4f2`**. Ciclos/histórico seguem num commit separado. Não houve push, deployment ou utilização de dados/credenciais de clientes.
 
 Os relatórios 01–08 distinguem execução, testes, bloqueios e trabalho por iniciar. Não interpretar os ficheiros de etapas futuras como funcionalidades entregues. Logs, capturas, toolchain e segredos locais ficam em `.local/` ou ficheiros ignorados.
+
+## Retoma após reinício
+
+O worktree temporário desapareceu; os commits até `52ddc41a` foram recuperados no branch `sprint/omatapalo-resume-20261017`, em `.local/worktrees/omatapalo-20261017` dentro do checkout original. A implementação offline não consolidada precisa de reconstrução e nova validação. Os quatro serviços Docker e os dados sintéticos locais sobreviveram. A API e o frontend ainda não foram reiniciados nesta recuperação. Consultar [checkpoint de recuperação](09-recovery-checkpoint.md).
