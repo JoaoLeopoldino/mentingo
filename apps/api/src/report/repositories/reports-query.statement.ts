@@ -97,6 +97,9 @@ function buildQuizFactsCtes(context: ReportStatementContext): SQL {
             JOIN lessons l ON l.id = a.lesson_id AND l.tenant_id = aa.tenant_id
             JOIN chapters ch ON ch.id = l.chapter_id AND ch.tenant_id = aa.tenant_id
             WHERE aa.tenant_id = ${context.access.tenantId} AND aa.submission_status = 'submitted'
+              AND aa.learning_cycle = COALESCE((SELECT sc_cycle.learning_cycle FROM student_courses sc_cycle
+                WHERE sc_cycle.tenant_id = aa.tenant_id AND sc_cycle.course_id = ch.course_id
+                  AND sc_cycle.student_id = aa.learner_id), 1)
           ),
           scoped_quiz_attempts AS MATERIALIZED (
             SELECT qa.*

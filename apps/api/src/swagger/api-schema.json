@@ -8782,6 +8782,42 @@
         }
       }
     },
+    "/api/certificates/history": {
+      "get": {
+        "operationId": "CertificatesController_getLearningHistory",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "courseId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetLearningHistoryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/certificates/all": {
       "get": {
         "operationId": "CertificatesController_getAllCertificates",
@@ -58205,6 +58241,192 @@
             "required": [
               "data",
               "pagination"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "GetLearningHistoryResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "currentLearningCycle": {
+                "anyOf": [
+                  {
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "certificates": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "learningCycle": {
+                      "type": "integer"
+                    },
+                    "status": {
+                      "anyOf": [
+                        {
+                          "const": "active",
+                          "type": "string"
+                        },
+                        {
+                          "const": "archived",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "issuedAt": {
+                      "type": "string"
+                    },
+                    "expiresAt": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "archivedAt": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "learningCycle",
+                    "status",
+                    "issuedAt",
+                    "expiresAt",
+                    "archivedAt"
+                  ]
+                }
+              },
+              "assessmentAttempts": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "learningCycle": {
+                      "type": "integer"
+                    },
+                    "attemptNumber": {
+                      "type": "integer"
+                    },
+                    "result": {
+                      "type": "string"
+                    },
+                    "scorePercentage": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "submittedAt": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "learningCycle",
+                    "attemptNumber",
+                    "result",
+                    "scorePercentage",
+                    "submittedAt"
+                  ]
+                }
+              },
+              "scormAttempts": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "learningCycle": {
+                      "type": "integer"
+                    },
+                    "attemptNumber": {
+                      "type": "integer"
+                    },
+                    "completedAt": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "scoreRaw": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "completionStatus": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "learningCycle",
+                    "attemptNumber",
+                    "completedAt",
+                    "scoreRaw",
+                    "completionStatus"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "currentLearningCycle",
+              "certificates",
+              "assessmentAttempts",
+              "scormAttempts"
             ]
           }
         },

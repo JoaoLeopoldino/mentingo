@@ -1414,6 +1414,7 @@ export const studentCourses = pgTable(
   "student_courses",
   {
     ...id,
+    learningCycle: integer("learning_cycle").notNull().default(1),
     ...timestamps,
     studentId: uuid("student_id")
       .references(() => users.id)
@@ -1714,6 +1715,7 @@ export const scormAttempts = pgTable(
   "scorm_attempts",
   {
     ...id,
+    learningCycle: integer("learning_cycle").notNull().default(1),
     ...timestamps,
     studentId: uuid("student_id")
       .references(() => users.id, { onDelete: "cascade" })
@@ -1757,7 +1759,7 @@ export const scormAttempts = pgTable(
     scoIdx: index("scorm_attempts_sco_id_idx").on(table.scoId),
     studentPackageScoAttemptUniqueIdx: uniqueIndex(
       "scorm_attempts_student_package_sco_attempt_unique_idx",
-    ).on(table.studentId, table.packageId, table.scoId, table.attemptNumber),
+    ).on(table.studentId, table.packageId, table.scoId, table.learningCycle, table.attemptNumber),
   })),
 );
 
@@ -1966,6 +1968,7 @@ export const certificates = pgTable(
   "certificates",
   {
     ...id,
+    learningCycle: integer("learning_cycle").notNull().default(1),
     ...timestamps,
     userId: uuid("user_id")
       .references(() => users.id, { onDelete: "cascade" })
@@ -1987,6 +1990,9 @@ export const certificates = pgTable(
     tenantId,
   },
   withTenantIdIndex("certificates", (table) => ({
+    activeCycleUniqueIdx: uniqueIndex("certificates_active_user_course_cycle_idx")
+      .on(table.tenantId, table.userId, table.courseId, table.learningCycle)
+      .where(sql`${table.status} = 'active'`),
     activeExpiryIdx: index("certificates_active_expiry_idx").on(table.status, table.expiresAt),
     userCourseIdx: index("certificates_user_course_idx").on(table.userId, table.courseId),
   })),

@@ -13,6 +13,8 @@ import { and, eq } from "drizzle-orm";
 import puppeteer from "puppeteer";
 import request from "supertest";
 
+import { QuizRuntimeRepository } from "src/quiz/repositories/quiz-runtime.repository";
+import { QuizAttemptService } from "src/quiz/services/quiz-attempt.service";
 import { DB, DB_ADMIN } from "src/storage/db/db.providers";
 
 import { createE2ETest } from "../../../test/create-e2e-test";
@@ -37,6 +39,9 @@ import {
   groupManagerGroups,
   lessons,
   assessments,
+  assessmentQuestions,
+  assessmentAttemptQuestionAnswers,
+  assessmentAttemptOpenTextAnswers,
   assessmentAttempts,
   studentChapterProgress,
   studentCourses,
@@ -118,7 +123,7 @@ describe("CertificatesController (e2e)", () => {
   });
 
   describe("certificate metadata authorization", () => {
-    it.each(["all", "certificate"])(
+    it.each(["all", "certificate", "history"])(
       "denies another learner's metadata through %s",
       async (endpoint) => {
         const owner = await userFactory.withCredentials({ password }).withUserSettings(db).create();
@@ -142,7 +147,7 @@ describe("CertificatesController (e2e)", () => {
           .expect(404);
       },
     );
-    it.each(["all", "certificate"])(
+    it.each(["all", "certificate", "history"])(
       "allows administrators and managed learners only through %s",
       async (endpoint) => {
         const admin = await userFactory
@@ -195,7 +200,7 @@ describe("CertificatesController (e2e)", () => {
       },
     );
 
-    it.each(["all", "certificate"])(
+    it.each(["all", "certificate", "history"])(
       "denies an administrator reading another tenant through %s",
       async (endpoint) => {
         const admin = await userFactory
@@ -841,7 +846,59 @@ describe("CertificatesController (e2e)", () => {
   });
 
   describe("POST /api/certificates/course/:courseId/reset", () => {
-    it("archives active certificates, resets progress, and records activity", async () => {
+    it("issues once under concurrency and advances a duplicated renewal only once", async () => {
+      const admin = await userFactory.withCredentials({ password }).withAdminSettings(db).create();
+      const student = await userFactory.withCredentials({ password }).withUserSettings(db).create();
+      const category = await categoryFactory.create();
+      const course = await courseFactory.create({
+        title: "Concurrent safety",
+        authorId: admin.id,
+        categoryId: category.id,
+        hasCertificate: true,
+        thumbnailS3Key: null,
+      });
+      await db
+        .insert(studentCourses)
+        .values({
+          studentId: student.id,
+          courseId: course.id,
+          progress: "completed",
+          completedAt: new Date().toISOString(),
+        });
+      const issued = await inTenant(() =>
+        Promise.all([
+          certificatesService.createCertificate(student.id, course.id),
+          certificatesService.createCertificate(student.id, course.id),
+          certificatesService.createCertificate(student.id, course.id),
+        ]),
+      );
+      expect(new Set(issued.map((certificate) => certificate.id)).size).toBe(1);
+      const cookies = await cookieFor(admin, app);
+      const responses = await Promise.all(
+        [1, 2].map(() =>
+          request(app.getHttpServer())
+            .post(`/api/certificates/course/${course.id}/reset`)
+            .set("Cookie", cookies)
+            .send({ scope: CERTIFICATE_RESET_SCOPES.ALL, sendEmail: false })
+            .expect(201),
+        ),
+      );
+      expect(
+        responses.reduce((total, response) => total + response.body.affectedCertificateCount, 0),
+      ).toBe(1);
+      const [enrollment] = await db
+        .select()
+        .from(studentCourses)
+        .where(
+          and(eq(studentCourses.courseId, course.id), eq(studentCourses.studentId, student.id)),
+        );
+      expect(enrollment.learningCycle).toBe(2);
+      expect(
+        await db.select().from(certificates).where(eq(certificates.courseId, course.id)),
+      ).toHaveLength(1);
+    });
+
+    it("archives active certificates, resets progress, preserves attempts, and records activity", async () => {
       const admin = await userFactory
         .withCredentials({ password })
         .withAdminSettings(db)
@@ -890,18 +947,46 @@ describe("CertificatesController (e2e)", () => {
           availableLocales: ["en"],
         })
         .returning();
-      await db.insert(assessmentAttempts).values({
-        assessmentId: assessment.id,
-        language: "en",
-        learnerId: student.id,
-        attemptNumber: 1,
-        availablePoints: "1",
-        awardedPoints: "1",
-        scorePercentage: "100",
-        submissionStatus: "submitted",
-        gradingStatus: "graded",
-        result: "passed",
-        submittedAt: now,
+      const [question] = await db
+        .insert(assessmentQuestions)
+        .values({
+          assessmentId: assessment.id,
+          questionType: "brief_response",
+          displayOrder: 1,
+          gradingMode: "manual",
+          prompt: { en: "Name a safety precaution" },
+        })
+        .returning();
+      const [originalAttempt] = await db
+        .insert(assessmentAttempts)
+        .values({
+          assessmentId: assessment.id,
+          language: "en",
+          learnerId: student.id,
+          attemptNumber: 1,
+          availablePoints: "1",
+          awardedPoints: "1",
+          scorePercentage: "100",
+          submissionStatus: "submitted",
+          gradingStatus: "graded",
+          result: "passed",
+          submittedAt: now,
+        })
+        .returning();
+
+      const [originalAnswer] = await db
+        .insert(assessmentAttemptQuestionAnswers)
+        .values({
+          attemptId: originalAttempt.id,
+          questionId: question.id,
+          gradingStatus: "graded",
+          awardedPoints: "1",
+          submittedAt: now,
+        })
+        .returning();
+      await db.insert(assessmentAttemptOpenTextAnswers).values({
+        questionAnswerId: originalAnswer.id,
+        submittedText: "Use protective equipment.",
       });
 
       await db.insert(studentCourses).values({
@@ -966,6 +1051,7 @@ describe("CertificatesController (e2e)", () => {
         .where(
           and(eq(studentCourses.studentId, student.id), eq(studentCourses.courseId, course.id)),
         );
+      expect(studentCourse.learningCycle).toBe(2);
       expect(studentCourse.progress).toBe("not_started");
       expect(studentCourse.finishedChapterCount).toBe(0);
       expect(studentCourse.completedAt).toBeNull();
@@ -1007,7 +1093,71 @@ describe("CertificatesController (e2e)", () => {
         .select()
         .from(assessmentAttempts)
         .where(eq(assessmentAttempts.learnerId, student.id));
-      expect(quizAttempts).toHaveLength(0);
+      expect(quizAttempts).toHaveLength(1);
+      expect(quizAttempts[0].id).toBe(originalAttempt.id);
+      expect(quizAttempts[0].learningCycle).toBe(1);
+      expect(quizAttempts[0].scorePercentage).toBe("100.00");
+      const [preservedAnswer] = await db
+        .select()
+        .from(assessmentAttemptQuestionAnswers)
+        .where(eq(assessmentAttemptQuestionAnswers.id, originalAnswer.id));
+      expect(preservedAnswer).toEqual(originalAnswer);
+      const [preservedText] = await db
+        .select()
+        .from(assessmentAttemptOpenTextAnswers)
+        .where(eq(assessmentAttemptOpenTextAnswers.questionAnswerId, originalAnswer.id));
+      expect(preservedText.submittedText).toBe("Use protective equipment.");
+      const runtimeRepository = app.get(QuizRuntimeRepository);
+      expect(await runtimeRepository.findLatestAttempt(assessment.id, student.id)).toBeNull();
+      const nextAnswerId = randomUUID();
+      const nextAttempt = await app.get(QuizAttemptService).createSubmittedAttempt({
+        assessmentId: assessment.id,
+        learnerId: student.id,
+        language: "en",
+        availablePoints: "1",
+        awardedPoints: "0.5",
+        scorePercentage: "50",
+        gradingStatus: "graded",
+        result: "failed",
+        submittedAt: now,
+        gradedAt: now,
+        questionAnswers: [
+          {
+            id: nextAnswerId,
+            questionId: question.id,
+            gradingStatus: "graded",
+            awardedPoints: "0.5",
+            submittedAt: now,
+          },
+        ],
+        openTextAnswers: [{ questionAnswerId: nextAnswerId, submittedText: "New cycle answer" }],
+        choiceSelections: [],
+        statementAnswers: [],
+        blankAnswers: [],
+        scaleSelections: [],
+      });
+      expect(nextAttempt.attemptNumber).toBe(1);
+      expect((await runtimeRepository.findLatestAttempt(assessment.id, student.id))?.id).toBe(
+        nextAttempt.attemptId,
+      );
+      const retainedAttempts = await db
+        .select()
+        .from(assessmentAttempts)
+        .where(eq(assessmentAttempts.learnerId, student.id));
+      expect(retainedAttempts.map((attempt) => attempt.learningCycle).sort()).toEqual([1, 2]);
+      const historyResponse = await request(app.getHttpServer())
+        .get("/api/certificates/history")
+        .set("Cookie", await cookieFor(student, app))
+        .query({ userId: student.id, courseId: course.id })
+        .expect(200);
+      expect(historyResponse.body.data.currentLearningCycle).toBe(2);
+      expect(
+        historyResponse.body.data.assessmentAttempts.map(
+          (attempt: { learningCycle: number }) => attempt.learningCycle,
+        ),
+      ).toEqual([1, 2]);
+      expect(historyResponse.body.data.certificates[0].id).toBe(createdCertificate.id);
+      expect(historyResponse.body.data.certificates[0].status).toBe(CERTIFICATE_STATUSES.ARCHIVED);
 
       const [activityLog] = await db
         .select()

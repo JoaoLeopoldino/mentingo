@@ -12,10 +12,17 @@ export class QuizAttemptService {
 
   async createSubmittedAttempt(attemptData: PreparedQuizAttempt, db?: DatabasePg) {
     return this.quizRuntimeRepository.withTransaction(async (trx) => {
+      const learningCycle = await this.quizRuntimeRepository.findLearningCycle(
+        attemptData.assessmentId,
+        attemptData.learnerId,
+        trx,
+        true,
+      );
       const latestAttempt = await this.quizRuntimeRepository.findLatestAttempt(
         attemptData.assessmentId,
         attemptData.learnerId,
         trx,
+        learningCycle,
       );
       const attemptNumber = (latestAttempt?.attemptNumber ?? 0) + 1;
       const attempt = await this.quizRuntimeRepository.insertAttempt(
@@ -24,6 +31,7 @@ export class QuizAttemptService {
           language: attemptData.language,
           learnerId: attemptData.learnerId,
           attemptNumber,
+          learningCycle,
           submissionStatus: ASSESSMENT_ATTEMPT_SUBMISSION_STATUSES.SUBMITTED,
           gradingStatus: attemptData.gradingStatus,
           result: attemptData.result,

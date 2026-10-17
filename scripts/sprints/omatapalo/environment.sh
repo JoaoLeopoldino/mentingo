@@ -81,3 +81,7 @@ fi
 
 # pnpm must remain the repository-pinned version; do not use the system default.
 sprint_pnpm() { corepack pnpm@10.22.0 "$@"; }
+
+if [[ -x "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" ]]; then
+  export PUPPETEER_EXECUTABLE_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+fi

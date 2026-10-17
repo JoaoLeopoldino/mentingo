@@ -2,6 +2,8 @@ import { Readable } from "node:stream";
 
 import { EventBus } from "@nestjs/cqrs";
 import {
+  CERTIFICATE_RESET_SCOPES,
+  CERTIFICATE_STATUSES,
   COURSE_ENROLLMENT,
   SCORM_COMPLETION_STATUS,
   SCORM_PACKAGE_ENTITY_TYPE,
@@ -18,6 +20,7 @@ import { S3Service } from "src/s3/s3.service";
 import { DB, DB_ADMIN } from "src/storage/db/db.providers";
 import {
   chapters,
+  certificates,
   courses,
   lessons,
   scormAttempts,
@@ -220,6 +223,9 @@ const buildPackageWithoutManifest = () => {
   return zip.toBuffer();
 };
 
+const useRealStorage = process.env.SCORM_TEST_REAL_STORAGE === "true";
+const memoryStorageTest = useRealStorage ? it.skip : it;
+
 describe("ScormController (e2e)", () => {
   let app: INestApplication;
   let db: DatabasePg;
@@ -268,7 +274,10 @@ describe("ScormController (e2e)", () => {
     throw new Error(`SCORM package did not become ready: ${packageId}`);
   };
 
-  const importScormCourse = async (admin: UserWithCredentials) => {
+  const importScormCourse = async (
+    admin: UserWithCredentials,
+    packageBuffer = buildMinimalScormPackage(),
+  ) => {
     const category = await categoryFactory.create();
     const response = await attachScormPackage(
       request(app.getHttpServer())
@@ -280,6 +289,7 @@ describe("ScormController (e2e)", () => {
         .field("categoryId", category.id)
         .field("language", "en")
         .field("status", "published"),
+      packageBuffer,
     );
 
     expect(response.status).toBe(201);
@@ -317,12 +327,28 @@ describe("ScormController (e2e)", () => {
 
   beforeAll(async () => {
     s3Service = new InMemoryS3Service();
-    const e2e = await createE2ETest([
-      {
-        provide: S3Service,
-        useValue: s3Service,
-      },
-    ]);
+    if (useRealStorage) {
+      const database = new URL(process.env.DATABASE_TEST_URL ?? "");
+      if (
+        process.env.S3_ENDPOINT !== "http://127.0.0.1:59100" ||
+        process.env.S3_BUCKET_NAME !== "omatapalo-sprint" ||
+        database.hostname !== "127.0.0.1" ||
+        database.port !== "55432" ||
+        database.pathname !== "/guidebook_test"
+      ) {
+        throw new Error("Real SCORM storage tests require the isolated sprint services");
+      }
+    }
+    const e2e = await createE2ETest(
+      useRealStorage
+        ? []
+        : [
+            {
+              provide: S3Service,
+              useValue: s3Service,
+            },
+          ],
+    );
 
     app = e2e.app;
     db = app.get(DB);
@@ -341,6 +367,59 @@ describe("ScormController (e2e)", () => {
 
   afterAll(async () => {
     await app.close();
+  });
+
+  describe("SCORM 1.2 export interoperability", () => {
+    it("exports a real native course ZIP, validates its manifest and imports the exported package", async () => {
+      const admin = await createAdmin();
+      const student = await createStudent();
+      const course = await courseFactory.create({
+        authorId: admin.id,
+        title: "Synthetic workplace safety",
+        chapterCount: 1,
+        thumbnailS3Key: null,
+      });
+      const chapter = await chapterFactory.create({
+        courseId: course.id,
+        authorId: admin.id,
+        lessonCount: 1,
+      });
+      await db
+        .insert(lessons)
+        .values({
+          chapterId: chapter.id,
+          title: { en: "Protective equipment" },
+          type: "content",
+          displayOrder: 1,
+          description: { en: "<p>Use protective equipment at the worksite.</p>" },
+        });
+      const response = await request(app.getHttpServer())
+        .post(`/api/course/${course.id}/scorm-export`)
+        .query({ language: "en" })
+        .set("Cookie", await cookieFor(admin, app))
+        .buffer(true)
+        .parse((stream, callback) => {
+          const chunks: Buffer[] = [];
+          stream.on("data", (chunk: Buffer) => chunks.push(chunk));
+          stream.on("end", () => callback(null, Buffer.concat(chunks)));
+          stream.on("error", callback);
+        })
+        .expect(201);
+      expect(response.headers["content-type"]).toContain("application/zip");
+      const zip = new AdmZip(response.body);
+      const manifest = zip.readAsText("imsmanifest.xml");
+      expect(manifest).toContain("1.2");
+      expect(manifest).toContain('adlcp:scormtype="sco"');
+      expect(zip.getEntries().some((entry) => entry.entryName.endsWith("course.json"))).toBe(true);
+      const imported = await importScormCourse(admin, response.body);
+      const [sco] = await db.select().from(scormScos).where(eq(scormScos.id, imported.scoId));
+      expect(sco.launchPath).toBeTruthy();
+      await request(app.getHttpServer())
+        .post(`/api/course/${course.id}/scorm-export`)
+        .query({ language: "en" })
+        .set("Cookie", await cookieFor(student, app))
+        .expect(403);
+    });
   });
 
   describe("POST /api/scorm/course", () => {
@@ -515,6 +594,10 @@ describe("ScormController (e2e)", () => {
       const admin = await createAdmin();
       const student = await createStudent();
       const imported = await importScormCourse(admin);
+      await db
+        .update(courses)
+        .set({ hasCertificate: true })
+        .where(eq(courses.id, imported.courseId));
       await enrollStudent(student.id, imported.courseId);
 
       const studentCookies = await cookieFor(student, app);
@@ -637,6 +720,71 @@ describe("ScormController (e2e)", () => {
       expect(
         publishSpy.mock.calls.filter(([event]) => event instanceof UserCourseFinishedEvent),
       ).toHaveLength(1);
+      const [issued] = await db
+        .select()
+        .from(certificates)
+        .where(
+          and(eq(certificates.userId, student.id), eq(certificates.courseId, imported.courseId)),
+        );
+      expect(issued.learningCycle).toBe(1);
+      expect(issued.status).toBe(CERTIFICATE_STATUSES.ACTIVE);
+      await request(app.getHttpServer())
+        .post(`/api/certificates/course/${imported.courseId}/reset`)
+        .set("Cookie", await cookieFor(admin, app))
+        .send({ scope: CERTIFICATE_RESET_SCOPES.ALL, sendEmail: false })
+        .expect(201);
+      const [preserved] = await db
+        .select()
+        .from(scormRuntimeState)
+        .where(eq(scormRuntimeState.attemptId, launch.attemptId));
+      expect(preserved).toEqual(finishedState);
+      const [oldAttempt] = await db
+        .select()
+        .from(scormAttempts)
+        .where(eq(scormAttempts.id, launch.attemptId));
+      expect(oldAttempt.learningCycle).toBe(1);
+      await request(app.getHttpServer())
+        .post("/api/scorm/runtime/commit")
+        .set("Cookie", studentCookies)
+        .send(commitBody)
+        .expect(400);
+      const nextLaunch = await request(app.getHttpServer())
+        .get(`/api/scorm/runtime/launch?lessonId=${imported.lessonId}&language=en`)
+        .set("Cookie", studentCookies)
+        .expect(200);
+      expect(nextLaunch.body.data.attemptId).not.toBe(launch.attemptId);
+      expect(nextLaunch.body.data.runtime["cmi.core.entry"]).toBe("ab-initio");
+      expect(nextLaunch.body.data.runtime["cmi.suspend_data"] ?? "").toBe("");
+      const [nextAttempt] = await db
+        .select()
+        .from(scormAttempts)
+        .where(eq(scormAttempts.id, nextLaunch.body.data.attemptId));
+      expect(nextAttempt.learningCycle).toBe(2);
+      await request(app.getHttpServer())
+        .post("/api/scorm/runtime/finish")
+        .set("Cookie", studentCookies)
+        .send({
+          ...commitBody,
+          attemptId: nextAttempt.id,
+          values: { "cmi.core.lesson_status": "completed", "cmi.core.score.raw": "90" },
+        })
+        .expect(201);
+      const history = await db
+        .select()
+        .from(certificates)
+        .where(
+          and(eq(certificates.userId, student.id), eq(certificates.courseId, imported.courseId)),
+        );
+      expect(history).toHaveLength(2);
+      expect(history.find((certificate) => certificate.learningCycle === 1)?.status).toBe(
+        CERTIFICATE_STATUSES.ARCHIVED,
+      );
+      expect(history.find((certificate) => certificate.learningCycle === 2)?.status).toBe(
+        CERTIFICATE_STATUSES.ACTIVE,
+      );
+      expect(
+        await db.select().from(scormAttempts).where(eq(scormAttempts.studentId, student.id)),
+      ).toHaveLength(2);
     });
 
     it("requires every SCO to be completed without a failed success status", async () => {
@@ -884,28 +1032,31 @@ describe("ScormController (e2e)", () => {
   });
 
   describe("GET /api/scorm/content/:packageId/*", () => {
-    it("serves existing SCORM HTML inline when storage has a generic MIME type", async () => {
-      const admin = await createAdmin();
-      const imported = await importScormCourse(admin);
-      const [pkg] = await db
-        .select()
-        .from(scormPackages)
-        .where(eq(scormPackages.id, imported.packageId));
-      if (!pkg) throw new Error("Imported SCORM package was not persisted");
+    memoryStorageTest(
+      "serves existing SCORM HTML inline when storage has a generic MIME type",
+      async () => {
+        const admin = await createAdmin();
+        const imported = await importScormCourse(admin);
+        const [pkg] = await db
+          .select()
+          .from(scormPackages)
+          .where(eq(scormPackages.id, imported.packageId));
+        if (!pkg) throw new Error("Imported SCORM package was not persisted");
 
-      s3Service.setContentType(
-        `${pkg.extractedFilesReference}/index.html`,
-        "application/octet-stream",
-      );
+        s3Service.setContentType(
+          `${pkg.extractedFilesReference}/index.html`,
+          "application/octet-stream",
+        );
 
-      const response = await request(app.getHttpServer())
-        .get(`/api/scorm/content/${imported.packageId}/index.html`)
-        .set("Cookie", await cookieFor(admin, app))
-        .expect(200);
+        const response = await request(app.getHttpServer())
+          .get(`/api/scorm/content/${imported.packageId}/index.html`)
+          .set("Cookie", await cookieFor(admin, app))
+          .expect(200);
 
-      expect(response.headers["content-type"]).toContain("text/html");
-      expect(response.text).toContain("SCORM index");
-    });
+        expect(response.headers["content-type"]).toContain("text/html");
+        expect(response.text).toContain("SCORM index");
+      },
+    );
 
     it("serves extracted content to an authorized learner and admin", async () => {
       const admin = await createAdmin();

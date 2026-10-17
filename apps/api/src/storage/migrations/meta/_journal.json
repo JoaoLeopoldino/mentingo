@@ -1548,6 +1548,13 @@
       "when": 1792055706227,
       "tag": "0220_course_transfer_reliability",
       "breakpoints": true
+    },
+    {
+      "idx": 221,
+      "version": "7",
+      "when": 1792256403526,
+      "tag": "0221_outgoing_jackpot",
+      "breakpoints": true
     }
   ]
 }

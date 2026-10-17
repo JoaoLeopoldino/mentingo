@@ -1,4 +1,5 @@
 import { PERMISSIONS, SYSTEM_ROLE_SLUGS } from "@repo/shared";
+import { and, eq } from "drizzle-orm";
 
 import { DB } from "src/storage/db/db.providers";
 import {
@@ -27,6 +28,8 @@ describe("Report metric definitions (e2e)", () => {
   let actor: CurrentUserType;
   let groupId: string;
   let courseId: string;
+  let learnerId: string;
+  const firstCourseAssessmentIds: string[] = [];
 
   beforeAll(async () => {
     const context = await createE2ETest();
@@ -36,6 +39,7 @@ describe("Report metric definitions (e2e)", () => {
     const users = createUserFactory(db);
     const admin = await users.create({ roleSlug: SYSTEM_ROLE_SLUGS.ADMIN });
     const learner = await users.create({ roleSlug: SYSTEM_ROLE_SLUGS.STUDENT });
+    learnerId = learner.id;
     const unassigned = await users.create({ roleSlug: SYSTEM_ROLE_SLUGS.STUDENT });
     actor = {
       userId: admin.id,
@@ -77,6 +81,7 @@ describe("Report metric definitions (e2e)", () => {
           .insert(assessments)
           .values({ lessonId: lesson.id, passingScorePercentage: "60" })
           .returning();
+        if (index === 0) firstCourseAssessmentIds.push(assessment.id);
         await db.insert(assessmentAttempts).values([
           {
             assessmentId: assessment.id,
@@ -207,4 +212,22 @@ describe("Report metric definitions (e2e)", () => {
     expect(result.metrics.courseEnrollments).toBe(1);
     expect(result.metrics.averageScore).toBe(100);
   });
+  it("does not reuse previous-cycle scores or attempts in current compliance reports", async () => {
+    const db = app.get<DatabasePg>(DB);
+    await db.update(studentCourses).set({ learningCycle: 2 })
+      .where(and(eq(studentCourses.studentId, learnerId), eq(studentCourses.courseId, courseId)));
+    for (const assessmentId of firstCourseAssessmentIds) {
+      await db.insert(assessmentAttempts).values({
+        assessmentId, learnerId, language: "en", learningCycle: 2, attemptNumber: 1,
+        availablePoints: "100", awardedPoints: "20", scorePercentage: "20",
+        gradingStatus: "graded", submissionStatus: "submitted",
+        submittedAt: new Date().toISOString(), gradedAt: new Date().toISOString(),
+      });
+    }
+    const result = await service.getReport({ view: "organisation", language: "en", timezone: "UTC", groupIds: [groupId], page: 1, pageSize: 25 }, actor);
+    expect(result.rows.find((row) => row.course?.id === courseId)).toMatchObject({ score: 20, attempts: 2 });
+    const retained = await db.select().from(assessmentAttempts).where(eq(assessmentAttempts.learnerId, learnerId));
+    expect(retained.some((attempt) => attempt.learningCycle === 1)).toBe(true);
+  });
+
 });

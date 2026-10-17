@@ -63,3 +63,11 @@ Certificate reset actions archive matching active certificates, reset the releva
 ## Validação de acesso — Utu Lab / Omatapalo
 
 Os endpoints de metadados de certificados de formações recebem o actor autenticado. Um formando consulta os próprios certificados. Administradores com gestão de colaboradores podem consultar colaboradores do mesmo tenant; gestores consultam apenas membros dos grupos que gerem. A permissão de leitura de certificados, isoladamente, não permite consultar certificados de outras pessoas. Os testes negativos reproduziram acesso indevido antes da correcção e verificaram a recusa posterior, incluindo entre tenants. Consultar `docs/sprints/omatapalo-mentingo/03-scorm-certificates.md` para âmbito e resultados executados.
+
+## Renovação com preservação de evidências — sprint Omatapalo
+
+A renovação abre um novo ciclo de formação e conserva as avaliações, respostas e resultados anteriores. O formando volta a realizar a formação sem que a evidência antiga satisfaça o ciclo actual. Um administrador pode renovar a formação; pedidos concorrentes não devem criar certificados ou ciclos duplicados.
+
+A API autenticada de histórico permite consultar certificados e tentativas por ciclo, com o mesmo âmbito de acesso aplicado aos metadados de certificados. Ainda não existe um ecrã próprio. O histórico conserva resultados e estados, mas não arquiva uma versão imutável de cada pergunta ou conteúdo.
+
+Evidência: `certificates.controller.e2e-spec.ts` passou 41 testes com PostgreSQL real, incluindo renovação, preservação de respostas, concorrência e recusas de acesso entre utilizadores/tenants. A integração SCORM demonstrou dois ciclos completos, com um certificado por ciclo. A revogação e os certificados de percursos de aprendizagem continuam fora desta validação.

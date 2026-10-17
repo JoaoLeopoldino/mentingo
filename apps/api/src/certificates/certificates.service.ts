@@ -123,6 +123,11 @@ export class CertificatesService implements OnModuleDestroy {
     this.browserInitialization = null;
   }
 
+  async getLearningHistory(userId: UUIDType, courseId: UUIDType, currentUser: CurrentUserType) {
+    await this.assertCanReadUserCertificates(userId, currentUser);
+    return this.certificateRepository.findLearningHistory(userId, courseId, currentUser.tenantId);
+  }
+
   async getAllCertificates(
     query: CertificatesQuery,
     currentUser: CurrentUserType,
@@ -241,9 +246,10 @@ export class CertificatesService implements OnModuleDestroy {
   }
 
   async createCertificate(userId: UUIDType, courseId: UUIDType, trx?: DatabasePg) {
+    let shouldPrewarm = false;
     try {
       const executeInTransaction = async (transactionInstance: DatabasePg) => {
-        const { existingUser, existingCourse, completionDate } =
+        const { existingUser, existingCourse, completionDate, learningCycle } =
           await this.validateCertificateCreationPreconditions(
             userId,
             courseId,
@@ -276,12 +282,14 @@ export class CertificatesService implements OnModuleDestroy {
           courseId,
           issuedAt,
           expiresAt,
+          learningCycle,
           transactionInstance,
         );
 
         if (!createdCertificate) {
           throw new ConflictException("studentCertificateView.informations.createFailed");
         }
+        shouldPrewarm = true;
 
         return {
           ...createdCertificate,
@@ -295,7 +303,7 @@ export class CertificatesService implements OnModuleDestroy {
         ? await executeInTransaction(trx)
         : await this.db.transaction(executeInTransaction);
 
-      this.scheduleCertificateImagePrewarm(result.id);
+      if (shouldPrewarm) this.scheduleCertificateImagePrewarm(result.id);
 
       return result;
     } catch (error) {
@@ -349,13 +357,13 @@ export class CertificatesService implements OnModuleDestroy {
       const immediatelyExpiredCertificates =
         await this.certificateRepository.findExpiredActiveCertificatesForCourse(courseId, now, trx);
 
-      await this.archiveAndResetCertificates(
+      const archivedCertificates = await this.archiveAndResetCertificates(
         immediatelyExpiredCertificates,
         CERTIFICATE_ARCHIVE_REASONS.EXPIRED,
         trx,
       );
 
-      return { immediatelyExpiredCertificates };
+      return { immediatelyExpiredCertificates: archivedCertificates };
     });
 
     await this.publishArchivedCertificateEmailEvent(
@@ -380,8 +388,8 @@ export class CertificatesService implements OnModuleDestroy {
 
     const certificatesToReset = await this.resolveCertificatesForReset(courseId, body);
 
-    await this.db.transaction(async (trx) => {
-      await this.archiveAndResetCertificates(
+    const archivedCertificates = await this.db.transaction(async (trx) => {
+      return this.archiveAndResetCertificates(
         certificatesToReset,
         CERTIFICATE_ARCHIVE_REASONS.MANUAL_RESET,
         trx,
@@ -390,21 +398,22 @@ export class CertificatesService implements OnModuleDestroy {
 
     if (body.sendEmail !== false) {
       await this.publishArchivedCertificateEmailEvent(
-        certificatesToReset,
+        archivedCertificates,
         CERTIFICATE_ARCHIVE_REASONS.MANUAL_RESET,
       );
     }
 
     await this.recordCertificateActivities(
-      certificatesToReset,
+      archivedCertificates,
       ACTIVITY_LOG_ACTION_TYPES.RESET_CERTIFICATE,
       currentUser,
       CERTIFICATE_ARCHIVE_REASONS.MANUAL_RESET,
     );
 
     return {
-      affectedCertificateCount: certificatesToReset.length,
-      affectedUserCount: new Set(certificatesToReset.map((certificate) => certificate.userId)).size,
+      affectedCertificateCount: archivedCertificates.length,
+      affectedUserCount: new Set(archivedCertificates.map((certificate) => certificate.userId))
+        .size,
     };
   }
 
@@ -468,13 +477,11 @@ export class CertificatesService implements OnModuleDestroy {
         trx,
       );
 
-      await this.archiveAndResetCertificates(
+      return this.archiveAndResetCertificates(
         certificatesToExpire,
         CERTIFICATE_ARCHIVE_REASONS.EXPIRED,
         trx,
       );
-
-      return certificatesToExpire;
     });
 
     await this.publishArchivedCertificateEmailEvent(
@@ -1170,19 +1177,26 @@ export class CertificatesService implements OnModuleDestroy {
       });
   }
 
-  private async archiveAndResetCertificates(
-    certificatesToArchive: CertificateArchiveTarget[],
+  private async archiveAndResetCertificates<T extends CertificateArchiveTarget>(
+    certificatesToArchive: T[],
     reason: CertificateActivityReason,
     trx?: DatabasePg,
-  ) {
-    if (!certificatesToArchive.length) return;
+  ): Promise<T[]> {
+    if (!certificatesToArchive.length) return [];
 
     const certificateIds = certificatesToArchive.map((certificate) => certificate.id);
-
+    const archivedCertificates = await this.certificateRepository.archiveCertificates(
+      certificateIds,
+      reason,
+      trx,
+    );
+    // A competing renewal may already have claimed these certificates.
+    if (!archivedCertificates.length) return [];
     const progressResetTargets =
-      await this.certificateRepository.findProgressResetTargetsForCertificates(certificateIds, trx);
-
-    await this.certificateRepository.archiveCertificates(certificateIds, reason, trx);
+      await this.certificateRepository.findProgressResetTargetsForCertificates(
+        archivedCertificates.map((certificate) => certificate.id),
+        trx,
+      );
 
     await processInBatches(
       progressResetTargets,
@@ -1190,6 +1204,8 @@ export class CertificatesService implements OnModuleDestroy {
         this.certificateRepository.resetCourseProgress(courseId, userIds, trx),
       { batchSize: CERTIFICATE_PROGRESS_RESET_BATCH_SIZE },
     );
+    const archivedIds = new Set(archivedCertificates.map((certificate) => certificate.id));
+    return certificatesToArchive.filter((certificate) => archivedIds.has(certificate.id));
   }
 
   private async publishExpirationWarningEmailEvent(
@@ -1397,6 +1413,7 @@ export class CertificatesService implements OnModuleDestroy {
       existingUser,
       existingCourse,
       completionDate: courseCompletion.completedAt,
+      learningCycle: courseCompletion.learningCycle,
     };
   }
 

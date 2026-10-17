@@ -21,6 +21,7 @@ import { CurrentUserType } from "src/common/types/current-user.type";
 import { supportedLanguagesSchema } from "src/courses/schemas/course.schema";
 
 import {
+  certificateLearningHistorySchema,
   allCertificatesSchema,
   certificateResetOptionsResponseSchema,
   certificateResetUsersSchema,
@@ -44,6 +45,7 @@ import {
 } from "./certificates.types";
 
 import type {
+  CertificateLearningHistory,
   AllCertificatesResponse,
   CertificateResetOptionsResponse,
   CertificateResetUsersResponse,
@@ -92,6 +94,25 @@ export class CertificatesController {
         page,
         perPage,
       ),
+    );
+  }
+
+  @Get("history")
+  @RequirePermission(PERMISSIONS.CERTIFICATE_READ, PERMISSIONS.MANAGED_GROUP_RESULTS_READ)
+  @Validate({
+    request: [
+      { type: "query", name: "userId", schema: UUIDSchema },
+      { type: "query", name: "courseId", schema: UUIDSchema },
+    ],
+    response: baseResponse(certificateLearningHistorySchema),
+  })
+  async getLearningHistory(
+    @Query("userId") userId: UUIDType,
+    @Query("courseId") courseId: UUIDType,
+    @CurrentUser() currentUser: CurrentUserType,
+  ): Promise<BaseResponse<CertificateLearningHistory>> {
+    return new BaseResponse(
+      await this.certificatesService.getLearningHistory(userId, courseId, currentUser),
     );
   }
 

@@ -44,6 +44,19 @@ import type {
 export class ScormRepository {
   constructor(@Inject("DB") private readonly db: DatabasePg) {}
 
+  withTransaction<T>(work: (repository: ScormRepository, db: DatabasePg) => Promise<T>) {
+    return this.db.transaction((trx) => work(new ScormRepository(trx), trx));
+  }
+
+  async findLearningCycle(studentId: string, courseId: string) {
+    const [enrollment] = await this.db
+      .select({ learningCycle: studentCourses.learningCycle })
+      .from(studentCourses)
+      .where(and(eq(studentCourses.studentId, studentId), eq(studentCourses.courseId, courseId)))
+      .for("update");
+    return enrollment?.learningCycle ?? 1;
+  }
+
   async persistCoursePackage(params: PersistCoursePackageParams, dbInstance?: DatabasePg) {
     const persist = async (trx: DatabasePg) => {
       const [createdPackage] = await trx
@@ -290,6 +303,19 @@ export class ScormRepository {
     packageId: string;
     scoId: string;
   }) {
+    return this.withTransaction(async (repository) =>
+      repository.findOrCreateAttemptForCycle(params),
+    );
+  }
+
+  private async findOrCreateAttemptForCycle(params: {
+    studentId: string;
+    courseId: string;
+    lessonId: string;
+    packageId: string;
+    scoId: string;
+  }) {
+    const learningCycle = await this.findLearningCycle(params.studentId, params.courseId);
     const [existingAttempt] = await this.db
       .select()
       .from(scormAttempts)
@@ -298,6 +324,7 @@ export class ScormRepository {
           eq(scormAttempts.studentId, params.studentId),
           eq(scormAttempts.packageId, params.packageId),
           eq(scormAttempts.scoId, params.scoId),
+          eq(scormAttempts.learningCycle, learningCycle),
         ),
       )
       .orderBy(desc(scormAttempts.attemptNumber))
@@ -319,6 +346,7 @@ export class ScormRepository {
         packageId: params.packageId,
         scoId: params.scoId,
         attemptNumber: 1,
+        learningCycle,
       })
       .returning();
 
@@ -343,7 +371,7 @@ export class ScormRepository {
     return runtimeState;
   }
 
-  async findAttemptContext(attemptId: string) {
+  async findAttemptContext(attemptId: string, learningCycle?: number) {
     const [attempt] = await this.db
       .select({
         ...getTableColumns(scormAttempts),
@@ -352,7 +380,12 @@ export class ScormRepository {
       .from(scormAttempts)
       .innerJoin(scormPackages, eq(scormPackages.id, scormAttempts.packageId))
       .innerJoin(scormScos, eq(scormScos.id, scormAttempts.scoId))
-      .where(eq(scormAttempts.id, attemptId))
+      .where(
+        and(
+          eq(scormAttempts.id, attemptId),
+          learningCycle === undefined ? undefined : eq(scormAttempts.learningCycle, learningCycle),
+        ),
+      )
       .limit(1);
 
     return attempt;
@@ -387,6 +420,7 @@ export class ScormRepository {
     lessonId: string;
     completedStatuses: ScormCompletionStatus[];
     excludedSuccessStatuses?: ScormSuccessStatus[];
+    learningCycle?: number;
   }) {
     const successStatusCondition = params.excludedSuccessStatuses?.length
       ? or(
@@ -406,7 +440,11 @@ export class ScormRepository {
       .from(scormScos)
       .leftJoin(
         scormAttempts,
-        and(eq(scormAttempts.scoId, scormScos.id), eq(scormAttempts.studentId, params.studentId)),
+        and(
+          eq(scormAttempts.scoId, scormScos.id),
+          eq(scormAttempts.studentId, params.studentId),
+          eq(scormAttempts.learningCycle, params.learningCycle ?? 1),
+        ),
       )
       .leftJoin(scormRuntimeState, eq(scormRuntimeState.attemptId, scormAttempts.id))
       .where(
@@ -421,6 +459,7 @@ export class ScormRepository {
     packageId: string;
     completedStatuses: ScormCompletionStatus[];
     excludedSuccessStatuses?: ScormSuccessStatus[];
+    learningCycle?: number;
   }) {
     const successStatusCondition = params.excludedSuccessStatuses?.length
       ? or(
@@ -440,7 +479,11 @@ export class ScormRepository {
       .from(scormScos)
       .leftJoin(
         scormAttempts,
-        and(eq(scormAttempts.scoId, scormScos.id), eq(scormAttempts.studentId, params.studentId)),
+        and(
+          eq(scormAttempts.scoId, scormScos.id),
+          eq(scormAttempts.studentId, params.studentId),
+          eq(scormAttempts.learningCycle, params.learningCycle ?? 1),
+        ),
       )
       .leftJoin(scormRuntimeState, eq(scormRuntimeState.attemptId, scormAttempts.id))
       .where(eq(scormScos.packageId, params.packageId));

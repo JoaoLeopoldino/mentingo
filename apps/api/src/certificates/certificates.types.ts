@@ -1,4 +1,5 @@
 import type {
+  certificateLearningHistorySchema,
   allCertificatesSchema,
   certificateShareLinkResponseSchema,
   certificateResetOptionsResponseSchema,
@@ -101,3 +102,5 @@ export type CertificateActivityOperation =
   | typeof ACTIVITY_LOG_ACTION_TYPES.RESET_CERTIFICATE;
 
 export type CertificateActivityReason = CertificateArchiveReason;
+
+export type CertificateLearningHistory = Static<typeof certificateLearningHistorySchema>;

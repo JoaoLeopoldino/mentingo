@@ -49,3 +49,11 @@ For portability, authorized course managers can export supported Mentingo course
 ## Test Evidence
 
 API E2E coverage verifies SCORM course import, invalid manifest rejection, lesson import, separate language package attachment, runtime launch/commit/resume/finish, multi-SCO completion requirements, authorized content serving, and denial for unenrolled learners. Web E2E coverage verifies SCORM course creation, invalid package blocking, SCORM lesson creation/inspection/deletion, learner launch/resume/fullscreen/finish, and multi-SCO navigation/completion. A focused frontend test verifies that a cache-only runtime update does not finish and restart the active SCO. Course export E2E verifies SCORM zip export, packaged asset rewriting, rich-text asset export, and confirmation when unsupported lessons will be skipped.
+
+## Validação executada — sprint Omatapalo
+
+O percurso SCORM 1.2 foi validado pela API com ZIP sintético e armazenamento S3/RustFS local real: importação, lançamento, score, retoma, conclusão, certificado e renovação. O segundo ciclo conserva o estado e a tentativa anteriores; a tentativa antiga não pode alterar o novo ciclo.
+
+Um teste independente exporta um curso nativo para SCORM 1.2, inspecciona o manifest e reimporta o ZIP. Exportação e importação foram verificadas separadamente. O perfil final passou nove testes e excluiu um caso específico do armazenamento em memória. O detector MIME permanece determinístico nesta suite.
+
+Esta evidência não demonstra o player no navegador, Android, pacotes SCORM 2004, xAPI ou execução offline. Os relatórios do sprint identificam os comandos e limites da validação.

@@ -4,6 +4,10 @@ import { and, desc, eq, inArray } from "drizzle-orm";
 import { DatabasePg, type UUIDType } from "src/common";
 import { DB } from "src/storage/db/db.providers";
 import {
+  assessments,
+  lessons,
+  chapters,
+  studentCourses,
   assessmentAttempts,
   assessmentAttemptBlankAnswers,
   assessmentAttemptChoiceSelections,
@@ -69,7 +73,36 @@ export class QuizRuntimeRepository {
     await db.insert(assessmentAttemptScaleSelections).values(values);
   }
 
-  async findLatestAttempt(assessmentId: UUIDType, learnerId: UUIDType, db: DatabasePg = this.db) {
+  async findLearningCycle(
+    assessmentId: UUIDType,
+    learnerId: UUIDType,
+    db: DatabasePg = this.db,
+    lock = false,
+  ) {
+    const [context] = await db
+      .select({ courseId: chapters.courseId })
+      .from(assessments)
+      .innerJoin(lessons, eq(lessons.id, assessments.lessonId))
+      .innerJoin(chapters, eq(chapters.id, lessons.chapterId))
+      .where(eq(assessments.id, assessmentId));
+    if (!context) return 1;
+    const query = db
+      .select({ learningCycle: studentCourses.learningCycle })
+      .from(studentCourses)
+      .where(
+        and(eq(studentCourses.courseId, context.courseId), eq(studentCourses.studentId, learnerId)),
+      );
+    const [enrollment] = lock ? await query.for("update") : await query;
+    return enrollment?.learningCycle ?? 1;
+  }
+
+  async findLatestAttempt(
+    assessmentId: UUIDType,
+    learnerId: UUIDType,
+    db: DatabasePg = this.db,
+    cycle?: number,
+  ) {
+    const learningCycle = cycle ?? (await this.findLearningCycle(assessmentId, learnerId, db));
     const [attempt] = await db
       .select({
         id: assessmentAttempts.id,
@@ -81,6 +114,7 @@ export class QuizRuntimeRepository {
         and(
           eq(assessmentAttempts.assessmentId, assessmentId),
           eq(assessmentAttempts.learnerId, learnerId),
+          eq(assessmentAttempts.learningCycle, learningCycle),
         ),
       )
       .orderBy(desc(assessmentAttempts.attemptNumber))

@@ -276,6 +276,7 @@ export const assessmentAttempts = pgTable(
   "assessment_attempts",
   {
     ...id,
+    learningCycle: integer("learning_cycle").notNull().default(1),
     assessmentId: uuid("assessment_id")
       .references(() => assessments.id, { onDelete: "cascade" })
       .notNull(),
@@ -313,6 +314,7 @@ export const assessmentAttempts = pgTable(
       table.tenantId,
       table.assessmentId,
       table.learnerId,
+      table.learningCycle,
       table.attemptNumber,
     ),
     learnerAssessmentStartedIdx: index(

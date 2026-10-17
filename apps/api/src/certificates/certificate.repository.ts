@@ -51,10 +51,12 @@ import {
   assessments,
   assessmentAttempts,
   scormAttempts,
+  scormRuntimeState,
 } from "src/storage/schema";
 import { PROGRESS_STATUSES } from "src/utils/types/progress.type";
 
 import type {
+  CertificateLearningHistory,
   CertificateProgressResetTarget,
   FindCertificateResetUsersParams,
 } from "./certificates.types";
@@ -66,6 +68,92 @@ export class CertificateRepository {
     @Inject(DB_ADMIN) private readonly dbAdmin: DatabasePg,
     private readonly localizationService: LocalizationService,
   ) {}
+
+  async findLearningHistory(
+    userId: UUIDType,
+    courseId: UUIDType,
+    tenantId: UUIDType,
+  ): Promise<CertificateLearningHistory> {
+    return this.db.transaction(
+      async (trx) => {
+        const [enrollment] = await trx
+          .select({ learningCycle: studentCourses.learningCycle })
+          .from(studentCourses)
+          .where(
+            and(
+              eq(studentCourses.studentId, userId),
+              eq(studentCourses.courseId, courseId),
+              eq(studentCourses.tenantId, tenantId),
+            ),
+          );
+        const certificateHistory = await trx
+          .select({
+            id: certificates.id,
+            learningCycle: certificates.learningCycle,
+            status: certificates.status,
+            issuedAt: certificates.issuedAt,
+            expiresAt: certificates.expiresAt,
+            archivedAt: certificates.archivedAt,
+          })
+          .from(certificates)
+          .where(
+            and(
+              eq(certificates.userId, userId),
+              eq(certificates.courseId, courseId),
+              eq(certificates.tenantId, tenantId),
+            ),
+          )
+          .orderBy(certificates.learningCycle, certificates.issuedAt);
+        const assessmentHistory = await trx
+          .select({
+            id: assessmentAttempts.id,
+            learningCycle: assessmentAttempts.learningCycle,
+            attemptNumber: assessmentAttempts.attemptNumber,
+            result: assessmentAttempts.result,
+            scorePercentage: assessmentAttempts.scorePercentage,
+            submittedAt: assessmentAttempts.submittedAt,
+          })
+          .from(assessmentAttempts)
+          .innerJoin(assessments, eq(assessments.id, assessmentAttempts.assessmentId))
+          .innerJoin(lessons, eq(lessons.id, assessments.lessonId))
+          .innerJoin(chapters, eq(chapters.id, lessons.chapterId))
+          .where(
+            and(
+              eq(assessmentAttempts.learnerId, userId),
+              eq(chapters.courseId, courseId),
+              eq(assessmentAttempts.tenantId, tenantId),
+            ),
+          )
+          .orderBy(assessmentAttempts.learningCycle, assessmentAttempts.attemptNumber);
+        const scormHistory = await trx
+          .select({
+            id: scormAttempts.id,
+            learningCycle: scormAttempts.learningCycle,
+            attemptNumber: scormAttempts.attemptNumber,
+            completedAt: scormAttempts.completedAt,
+            scoreRaw: scormRuntimeState.scoreRaw,
+            completionStatus: scormRuntimeState.completionStatus,
+          })
+          .from(scormAttempts)
+          .leftJoin(scormRuntimeState, eq(scormRuntimeState.attemptId, scormAttempts.id))
+          .where(
+            and(
+              eq(scormAttempts.studentId, userId),
+              eq(scormAttempts.courseId, courseId),
+              eq(scormAttempts.tenantId, tenantId),
+            ),
+          )
+          .orderBy(scormAttempts.learningCycle, scormAttempts.attemptNumber);
+        return {
+          currentLearningCycle: enrollment?.learningCycle ?? null,
+          certificates: certificateHistory,
+          assessmentAttempts: assessmentHistory,
+          scormAttempts: scormHistory,
+        };
+      },
+      { isolationLevel: "repeatable read", accessMode: "read only" },
+    );
+  }
 
   async findCertificatesByUserId(
     userId: string,
@@ -400,6 +488,7 @@ export class CertificateRepository {
     const [courseCompletion] = await dbInstance
       .select({
         completedAt: studentCourses.completedAt,
+        learningCycle: studentCourses.learningCycle,
       })
       .from(studentCourses)
       .innerJoin(users, eq(users.id, studentCourses.studentId))
@@ -409,7 +498,8 @@ export class CertificateRepository {
           eq(studentCourses.courseId, courseId),
           isNull(users.deletedAt),
         ),
-      );
+      )
+      .for("update", { of: studentCourses });
 
     return courseCompletion;
   }
@@ -578,6 +668,7 @@ export class CertificateRepository {
     courseId: string,
     issuedAt: Date,
     expiresAt: Date | null,
+    learningCycle: number,
     trx?: DatabasePg,
   ) {
     const dbInstance = trx || this.db;
@@ -589,6 +680,7 @@ export class CertificateRepository {
         courseId,
         issuedAt: issuedAt.toISOString(),
         expiresAt: expiresAt?.toISOString() ?? null,
+        learningCycle,
       })
       .returning();
 
@@ -1050,25 +1142,18 @@ export class CertificateRepository {
       .from(chapters)
       .where(eq(chapters.courseId, courseId));
 
-    const courseAssessmentIds = dbInstance
-      .select({ id: assessments.id })
-      .from(assessments)
-      .innerJoin(lessons, eq(lessons.id, assessments.lessonId))
-      .innerJoin(chapters, eq(chapters.id, lessons.chapterId))
-      .where(eq(chapters.courseId, courseId));
-
     await dbInstance
-      .delete(assessmentAttempts)
+      .update(studentCourses)
+      .set({
+        learningCycle: sql`${studentCourses.learningCycle} + 1`,
+        progress: PROGRESS_STATUSES.NOT_STARTED,
+        finishedChapterCount: 0,
+        completedAt: null,
+        courseCompletionMetadata: null,
+      })
       .where(
-        and(
-          inArray(assessmentAttempts.assessmentId, courseAssessmentIds),
-          inArray(assessmentAttempts.learnerId, userIds),
-        ),
+        and(eq(studentCourses.courseId, courseId), inArray(studentCourses.studentId, userIds)),
       );
-
-    await dbInstance
-      .delete(scormAttempts)
-      .where(and(eq(scormAttempts.courseId, courseId), inArray(scormAttempts.studentId, userIds)));
 
     await dbInstance
       .update(studentLessonProgress)
@@ -1111,18 +1196,6 @@ export class CertificateRepository {
           eq(studentChapterProgress.courseId, courseId),
           inArray(studentChapterProgress.studentId, userIds),
         ),
-      );
-
-    await dbInstance
-      .update(studentCourses)
-      .set({
-        progress: PROGRESS_STATUSES.NOT_STARTED,
-        finishedChapterCount: 0,
-        completedAt: null,
-        courseCompletionMetadata: null,
-      })
-      .where(
-        and(eq(studentCourses.courseId, courseId), inArray(studentCourses.studentId, userIds)),
       );
   }
 }

@@ -900,112 +900,119 @@ export class ScormService {
 
   async commitRuntime(params: ScormRuntimeCommitParams | ScormRuntimeFinishParams) {
     const { body, currentUser, finish } = params;
+    return this.scormRepository.withTransaction(async (repository, trx) => {
+      const learningCycle = await repository.findLearningCycle(currentUser.userId, body.courseId);
 
-    const attemptContext = await this.scormRepository.findAttemptContext(body.attemptId);
+      const attemptContext = await repository.findAttemptContext(body.attemptId, learningCycle);
 
-    if (
-      !attemptContext ||
-      attemptContext.studentId !== currentUser.userId ||
-      attemptContext.packageId !== body.packageId ||
-      attemptContext.scoId !== body.scoId ||
-      attemptContext.lessonId !== body.lessonId ||
-      attemptContext.courseId !== body.courseId ||
-      attemptContext.scoLessonId !== body.lessonId
-    ) {
-      throw new BadRequestException("adminScorm.errors.runtime.invalidAttempt");
-    }
+      if (
+        !attemptContext ||
+        attemptContext.studentId !== currentUser.userId ||
+        attemptContext.packageId !== body.packageId ||
+        attemptContext.scoId !== body.scoId ||
+        attemptContext.lessonId !== body.lessonId ||
+        attemptContext.courseId !== body.courseId ||
+        attemptContext.scoLessonId !== body.lessonId
+      ) {
+        throw new BadRequestException("adminScorm.errors.runtime.invalidAttempt");
+      }
 
-    this.assertRuntimeValues(body.values);
+      this.assertRuntimeValues(body.values);
 
-    const existingRuntimeState = await this.scormRepository.findRuntimeState(body.attemptId);
-    const mergedCmiJson = {
-      ...this.asRuntimeJson(existingRuntimeState?.rawCmiJson),
-      ...body.values,
-    };
-    const shouldRollupSessionTime = finish && !attemptContext.completedAt;
+      const existingRuntimeState = await repository.findRuntimeState(body.attemptId);
+      const mergedCmiJson = {
+        ...this.asRuntimeJson(existingRuntimeState?.rawCmiJson),
+        ...body.values,
+      };
+      const shouldRollupSessionTime = finish && !attemptContext.completedAt;
 
-    if (shouldRollupSessionTime) {
-      mergedCmiJson[SCORM_1_2_CMI_KEYS.TOTAL_TIME] = addScorm12Times(
-        existingRuntimeState?.totalTime,
-        mergedCmiJson[SCORM_1_2_CMI_KEYS.SESSION_TIME],
-      );
-    }
-
-    const normalizedRuntimeState = this.normalizeRuntimeState(mergedCmiJson);
-
-    await this.scormRepository.upsertRuntimeState({
-      attemptId: body.attemptId,
-      rawCmiJson: mergedCmiJson,
-      ...normalizedRuntimeState,
-    });
-
-    const previouslyCompleted =
-      existingRuntimeState?.completionStatus === SCORM_COMPLETION_STATUS.COMPLETED;
-
-    const scoCompleted =
-      normalizedRuntimeState.completionStatus === SCORM_COMPLETION_STATUS.COMPLETED;
-
-    if (finish || scoCompleted) {
-      await this.scormRepository.markAttemptCompleted(body.attemptId);
-    }
-
-    const lessonCompleted = await this.scormRepository.areAllLessonScosCompleted({
-      studentId: currentUser.userId,
-      packageId: body.packageId,
-      lessonId: body.lessonId,
-      completedStatuses: [SCORM_COMPLETION_STATUS.COMPLETED],
-      excludedSuccessStatuses: [SCORM_SUCCESS_STATUS.FAILED],
-    });
-
-    if (scoCompleted && !previouslyCompleted && lessonCompleted) {
-      const packageCompleted = await this.scormRepository.areAllPackageScosCompleted({
-        studentId: currentUser.userId,
-        packageId: body.packageId,
-        completedStatuses: [SCORM_COMPLETION_STATUS.COMPLETED],
-        excludedSuccessStatuses: [SCORM_SUCCESS_STATUS.FAILED],
-      });
-
-      if (packageCompleted) {
-        await this.outboxPublisher.publish(
-          new CompleteScormEvent({
-            scormId: body.packageId,
-            actor: currentUser,
-            userId: currentUser.userId,
-          }),
-          this.db,
+      if (shouldRollupSessionTime) {
+        mergedCmiJson[SCORM_1_2_CMI_KEYS.TOTAL_TIME] = addScorm12Times(
+          existingRuntimeState?.totalTime,
+          mergedCmiJson[SCORM_1_2_CMI_KEYS.SESSION_TIME],
         );
       }
-    }
 
-    const progressResult = lessonCompleted
-      ? await this.studentLessonProgressService.markLessonAsCompleted({
-          id: body.lessonId,
+      const normalizedRuntimeState = this.normalizeRuntimeState(mergedCmiJson);
+
+      await repository.upsertRuntimeState({
+        attemptId: body.attemptId,
+        rawCmiJson: mergedCmiJson,
+        ...normalizedRuntimeState,
+      });
+
+      const previouslyCompleted =
+        existingRuntimeState?.completionStatus === SCORM_COMPLETION_STATUS.COMPLETED;
+
+      const scoCompleted =
+        normalizedRuntimeState.completionStatus === SCORM_COMPLETION_STATUS.COMPLETED;
+
+      if (finish || scoCompleted) {
+        await repository.markAttemptCompleted(body.attemptId);
+      }
+
+      const lessonCompleted = await repository.areAllLessonScosCompleted({
+        studentId: currentUser.userId,
+        packageId: body.packageId,
+        lessonId: body.lessonId,
+        completedStatuses: [SCORM_COMPLETION_STATUS.COMPLETED],
+        excludedSuccessStatuses: [SCORM_SUCCESS_STATUS.FAILED],
+        learningCycle,
+      });
+
+      if (scoCompleted && !previouslyCompleted && lessonCompleted) {
+        const packageCompleted = await repository.areAllPackageScosCompleted({
           studentId: currentUser.userId,
-          userPermissions: currentUser.permissions,
-          actor: currentUser,
-          language: body.language ?? SUPPORTED_LANGUAGES.EN,
-        })
-      : await this.studentLessonProgressService.markLessonAsIncomplete({
-          id: body.lessonId,
-          studentId: currentUser.userId,
-          userPermissions: currentUser.permissions,
-          actor: currentUser,
-          resetStarted:
-            normalizedRuntimeState.completionStatus === SCORM_COMPLETION_STATUS.NOT_ATTEMPTED,
+          packageId: body.packageId,
+          completedStatuses: [SCORM_COMPLETION_STATUS.COMPLETED],
+          excludedSuccessStatuses: [SCORM_SUCCESS_STATUS.FAILED],
+          learningCycle,
         });
 
-    const navigation = await this.scormRepository.findScoNavigation({
-      packageId: body.packageId,
-      lessonId: body.lessonId,
-      scoId: body.scoId,
-    });
+        if (packageCompleted) {
+          await this.outboxPublisher.publish(
+            new CompleteScormEvent({
+              scormId: body.packageId,
+              actor: currentUser,
+              userId: currentUser.userId,
+            }),
+            trx,
+          );
+        }
+      }
 
-    return {
-      lessonCompleted,
-      messageKey: progressResult.messageKey,
-      scormStatus: mergedCmiJson[SCORM_1_2_CMI_KEYS.LESSON_STATUS] ?? null,
-      nextScoId: navigation.nextScoId,
-    };
+      const progressResult = lessonCompleted
+        ? await this.studentLessonProgressService.markLessonAsCompleted({
+            id: body.lessonId,
+            studentId: currentUser.userId,
+            userPermissions: currentUser.permissions,
+            actor: currentUser,
+            dbInstance: trx,
+            language: body.language ?? SUPPORTED_LANGUAGES.EN,
+          })
+        : await this.studentLessonProgressService.markLessonAsIncomplete({
+            id: body.lessonId,
+            studentId: currentUser.userId,
+            userPermissions: currentUser.permissions,
+            actor: currentUser,
+            dbInstance: trx,
+            resetStarted:
+              normalizedRuntimeState.completionStatus === SCORM_COMPLETION_STATUS.NOT_ATTEMPTED,
+          });
+
+      const navigation = await repository.findScoNavigation({
+        packageId: body.packageId,
+        lessonId: body.lessonId,
+        scoId: body.scoId,
+      });
+
+      return {
+        lessonCompleted,
+        messageKey: progressResult.messageKey,
+        scormStatus: mergedCmiJson[SCORM_1_2_CMI_KEYS.LESSON_STATUS] ?? null,
+        nextScoId: navigation.nextScoId,
+      };
+    });
   }
 
   async getContentFile(params: {

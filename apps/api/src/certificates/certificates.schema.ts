@@ -1,4 +1,5 @@
 import {
+  CERTIFICATE_STATUSES,
   CERTIFICATE_RESET_SCOPES,
   COURSE_CERTIFICATE_STATUSES,
   SUPPORTED_LANGUAGES,
@@ -116,3 +117,37 @@ export const courseCertificateRowsSchema = paginatedResponse(
 );
 
 export const paginatedCertificatesSchema = paginatedResponse(allCertificatesSchema);
+
+export const certificateLearningHistorySchema = Type.Object({
+  currentLearningCycle: Type.Union([Type.Integer({ minimum: 1 }), Type.Null()]),
+  certificates: Type.Array(
+    Type.Object({
+      id: UUIDSchema,
+      learningCycle: Type.Integer(),
+      status: Type.Enum(CERTIFICATE_STATUSES),
+      issuedAt: Type.String(),
+      expiresAt: Type.Union([Type.String(), Type.Null()]),
+      archivedAt: Type.Union([Type.String(), Type.Null()]),
+    }),
+  ),
+  assessmentAttempts: Type.Array(
+    Type.Object({
+      id: UUIDSchema,
+      learningCycle: Type.Integer(),
+      attemptNumber: Type.Integer(),
+      result: Type.String(),
+      scorePercentage: Type.Union([Type.String(), Type.Null()]),
+      submittedAt: Type.String(),
+    }),
+  ),
+  scormAttempts: Type.Array(
+    Type.Object({
+      id: UUIDSchema,
+      learningCycle: Type.Integer(),
+      attemptNumber: Type.Integer(),
+      completedAt: Type.Union([Type.String(), Type.Null()]),
+      scoreRaw: Type.Union([Type.String(), Type.Null()]),
+      completionStatus: Type.Union([Type.String(), Type.Null()]),
+    }),
+  ),
+});
