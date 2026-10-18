@@ -59,3 +59,32 @@ Uma repetição Chrome encontrou uma corrida no próprio ensaio entre a resposta
 Início 11:11:17 UTC; checkpoint observado 14:11:02 UTC: 2 h 59 min 45 s de tempo de calendário, incluindo compilações, esperas de aprovação/ferramentas, diagnóstico e preparação de QA. Não corresponde a três horas exclusivas de programação. Ainda faltam múltiplas atribuições, filtros/paginação e ensaio PostgreSQL com 500 colaboradores, gestão explícita de avaliadores e a comparação final delimitada com Totara.
 
 Localização neste checkpoint: 6.173/6.173 chaves estruturais, 57 invariantes técnicos iguais a inglês, zero entradas inesperadamente por traduzir e zero erros de placeholders. Revisão linguística humana completa não realizada.
+
+## Atribuições profissionais, âmbito e paginação — checkpoint validado
+
+Migração 0233: alarga a tabela existente, preservando a função principal. Adiciona gestor, início/fim, identificador externo, estado e atribuições adicionais. Índices de colaborador/gestor e unicidade da principal activa/identificador externo. Atribuições anteriores preservadas com início desconhecido, sem inventar datas RH. Trocar a principal termina a atribuição anterior; não apaga o registo. A designação de gestor só dá âmbito a quem já tenha permissão de avaliação; não concede essa permissão.
+
+Antes/depois na base fictícia principal: cinco atribuições e hash `512d9dda5ee9af26f3da10e2f1ded73d`; campos originais e semântica principal preservados. A primeira verificação foi antecipada antes do fim do arranque e falhou por coluna ainda inexistente; foi repetida após a migração, com sucesso. Script `verify-competency-job-migration.mjs`; nenhuma alteração de dados nesse verificador.
+
+A matriz agrega duas funções activas e usa o maior mínimo obrigatório; um objectivo opcional superior não aumenta esse mínimo. Considera datas e ignora atribuições terminadas. Os grupos mantêm-se; não foi introduzido um organigrama paralelo. Atribuições com início futuro podem ser criadas, mas o término antecipado de uma atribuição futura ainda não tem um fluxo de cancelamento.
+
+Filtros por pessoa, unidade, função, estado e evidências por rever são aplicados antes da paginação. O filtro de evidências encontra também pendências de uma competência já demonstrada. O perfil aberto a partir da fila fica focado no colaborador, evitando desaparecer quando a pendência é resolvida. O histórico pessoal carregado pertence apenas às pessoas da página; a matriz usa avaliações correntes. Nomes dos responsáveis/avaliadores são resolvidos apenas a partir dos registos autorizados, sem expor o directório ou hashes de comandos.
+
+### Ensaios
+
+- Domínio: 21/21, 7,326 s na repetição final.
+- API/PostgreSQL/RLS: 11/11, 18,648 s; inclui 500 colaboradores, duas funções, âmbito da chefia RH, unicidade, histórico, filtros e limites de paginação.
+- 500 colaboradores fictícios, cinco pedidos HTTP sequenciais de 100: 141,04 / 68,81 / 64,07 / 66,27 / 81,24 ms; média 84,29 ms. Sem duplicação entre páginas, ordenação estável mesmo com nomes repetidos. O filtro de cumprimento encontra os 100 colaboradores fora da primeira página; o filtro de pendências encontra um colaborador com competência já demonstrada.
+- EXPLAIN real: Index Scan sobre `competency_assessments_tenant_id_user_id_competency_id_revision`; 0,023 ms de execução nessa consulta pontual. Não é teste de concorrência nem previsão de produção.
+- Chrome: 7/7 checkpoints, 19,726 s. Três papéis, frameworks/escalas, plano completo, fila global de evidências, duas funções/unidades, mínimo de nível 3 face a nível demonstrado 2 e término preservado. Capturas revistas: `16-enterprise-manager.png`, `16-enterprise-employee.png`, `16-enterprise-two-jobs.png`.
+- TypeScript API/web, lint do módulo e builds API/web concluídos. Uma advertência de console no benchmark é exclusivamente a saída de medição; sem dados de sessão.
+
+### Falhas intermédias tratadas
+
+O validador nativo exigiu alinhar a ordem dos parâmetros do controller com os decorators e aceitar booleanos de query como `true`/`false` textuais. O bloqueio por identificador externo precisou de cast SQL explícito para texto. O ensaio Chrome esperava uma expressão diferente da tradução existente; corrigida a expectativa para “Proficiência insuficiente”. Não se forçaram cliques nem se contornaram permissões. Houve também uma resposta 401 isolada numa execução anterior, não reproduzida nos onze cenários finais; origem não determinada e sem alteração ao mecanismo de autenticação.
+
+## Limites empresariais que permanecem
+
+Sem credenciação de avaliadores por especialidade, delegações ou escalonamento; a administração reutiliza utilizadores/permissões existentes. Escalas e categorias são básicas; competências antigas podem continuar sem framework. Definições dos planos e actividades não são editáveis após criação nesta fatia; devolução permite reapreciar a decisão e acrescentar evidências depois de reaprovação, mas alterar a definição requer actualmente outro plano. Declaração de actividade concluída não é verificação automática da conclusão do curso. O histórico de uma pessoa não tem paginação própria. Ligações a cursos/percursos não concedem acesso ou inscrição. Referências históricas impedem a eliminação física de recursos ligados, exigindo política de arquivo/retirada. Estas condições devem ser resolvidas/aceites antes de produção.
+
+**Checklist global inalterado: 22/32 = 68,75%.** Os quatro critérios originais de competências já estavam demonstrados; esta evolução reforça-os e não cria pontos artificiais. Android físico, ERP real, SCORM independente/xAPI, certificados públicos e operação continuam gates separados. Comparação publicada em [17](17-competency-totara-parity.md). Decisão: CONDITIONAL GO para piloto controlado.

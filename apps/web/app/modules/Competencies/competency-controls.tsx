@@ -17,11 +17,13 @@ export function Picker({
   label,
   options,
   optional = false,
+  defaultValue = "",
 }: {
   name: string;
   label: string;
   options: { id: string; name: string }[];
   optional?: boolean;
+  defaultValue?: string;
 }) {
   return (
     <Field label={label}>
@@ -30,7 +32,7 @@ export function Picker({
         aria-label={label}
         required={!optional}
         className="h-10 w-full min-w-0 max-w-full rounded border bg-background px-3"
-        defaultValue=""
+        defaultValue={defaultValue}
       >
         <option value="">—</option>
         {options.map((x) => (

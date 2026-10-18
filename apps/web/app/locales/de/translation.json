@@ -8154,7 +8154,8 @@
       "planChanged": "The plan has changed. Refresh and review the decision.",
       "activitiesIncomplete": "Report activity completion before requesting final assessment.",
       "planAssessmentRequired": "A valid sufficient professional assessment supported by accepted evidence from this plan is required.",
-      "requirementChanged": "The requirement has changed. Refresh and review the new version."
+      "requirementChanged": "The requirement has changed. Refresh and review the new version.",
+      "duplicateExternalId": "The external HR identifier is already used by another assignment."
     },
     "enterprise": {
       "formalAssessments": "Formal professional assessments",
@@ -8183,7 +8184,8 @@
         "document": "Document reference",
         "training": "Training record"
       },
-      "claimedLevel": "Claimed level"
+      "claimedLevel": "Claimed level",
+      "unknownActor": "User unavailable"
     },
     "plans": {
       "title": "Individual development plan",
@@ -8232,6 +8234,38 @@
       "mandatory": "Mandatory",
       "optional": "Optional",
       "requirementHistory": "Requirement version history"
+    },
+    "jobs": {
+      "title": "Job assignments",
+      "notice": "Active job requirements are combined. The highest mandatory minimum applies; a higher optional target does not raise that minimum. Groups remain organizational units in this module.",
+      "primary": "Primary job",
+      "additional": "Additional assignment",
+      "manager": "Responsible manager",
+      "unknownStart": "Start not recorded (legacy assignment)",
+      "externalId": "External HR assignment identifier",
+      "end": "End assignment",
+      "create": "Add job assignment",
+      "startsAt": "Start (now if empty)",
+      "endsAt": "Expected end (optional)",
+      "states": {
+        "active": "Active (subject to dates)",
+        "ended": "Ended"
+      },
+      "assessors": "Assessors with Mentingo permissions",
+      "assessorPolicy": "Existing permissions and group or job-assignment scope determine who can assess. Naming a manager does not grant permissions or allow self-assessment. Specialty-specific assessor credentials are not yet supported.",
+      "manageAssessor": "Manage profile, role and scope"
+    },
+    "team": {
+      "search": "Search employee",
+      "pendingOnly": "Only employees with evidence awaiting review",
+      "apply": "Apply filters",
+      "pagination": "Employee pagination",
+      "pageSummary": "Page {{page}} · {{count}} of {{total}} employees",
+      "previous": "Previous",
+      "next": "Next",
+      "pending": "Pending evidence",
+      "pendingScope": "Evidence for employees on this page. Use the pending-evidence filter to find work across the full authorised team.",
+      "back": "Return to team"
     }
   },
   "offlineRecovery": {

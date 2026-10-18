@@ -17,6 +17,7 @@ import {
   competencyRevocations,
   competencyEvidence,
   competencyEvidenceReviews,
+  users,
 } from "src/storage/schema";
 
 import { hashCompetencyCommand } from "./competency-command";
@@ -32,28 +33,45 @@ export class DevelopmentPlansRepository {
     return row;
   }
   async workspace(userIds: UUIDType[]) {
-    if (!userIds.length) return { plans: [], activities: [], history: [] };
+    if (!userIds.length) return { plans: [], activities: [], history: [], people: [] };
     const rows = await this.db
       .select()
       .from(plans)
       .where(inArray(plans.userId, userIds))
       .orderBy(desc(plans.createdAt));
-    if (!rows.length) return { plans: [], activities: [], history: [] };
+    if (!rows.length) return { plans: [], activities: [], history: [], people: [] };
     const ids = rows.map((x) => x.id);
+    const decisions = await this.db
+      .select()
+      .from(history)
+      .where(inArray(history.planId, ids))
+      .orderBy(desc(history.version));
+    const actorIds = [
+      ...new Set([
+        ...rows.map((x) => x.createdBy),
+        ...rows.flatMap((x) => (x.responsibleId ? [x.responsibleId] : [])),
+        ...decisions.map((x) => x.actorId),
+      ]),
+    ];
+    const people = await this.db
+      .select({
+        id: users.id,
+        name: sql<string>`concat_ws(' ', ${users.firstName}, ${users.lastName})`,
+      })
+      .from(users)
+      .where(inArray(users.id, actorIds));
     return {
       plans: rows.map(
         ({ commandHash: _hash, tenantId: _tenant, updatedAt: _updated, ...row }) => row,
       ),
       activities: await this.db.select().from(activities).where(inArray(activities.planId, ids)),
-      history: (
-        await this.db
-          .select()
-          .from(history)
-          .where(inArray(history.planId, ids))
-          .orderBy(desc(history.version))
-      ).map(({ commandHash: _hash, tenantId: _tenant, updatedAt: _updated, ...row }) => row),
+      history: decisions.map(
+        ({ commandHash: _hash, tenantId: _tenant, updatedAt: _updated, ...row }) => row,
+      ),
+      people,
     };
   }
+
   async create(body: CreateDevelopmentPlan, actorId: UUIDType) {
     const commandHash = hashCompetencyCommand(body, actorId);
     return this.db.transaction(async (trx) => {

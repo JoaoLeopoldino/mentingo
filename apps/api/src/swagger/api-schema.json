@@ -23076,6 +23076,118 @@
             }
           },
           {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100000,
+              "type": "integer"
+            }
+          },
+          {
+            "name": "perPage",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "type": "integer"
+            }
+          },
+          {
+            "name": "keyword",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "pendingEvidenceOnly",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "const": "true",
+                  "type": "string"
+                },
+                {
+                  "const": "false",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          {
+            "name": "organizationalUnitId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "jobRoleId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                {
+                  "const": "met",
+                  "type": "string"
+                },
+                {
+                  "const": "missing",
+                  "type": "string"
+                },
+                {
+                  "const": "insufficient",
+                  "type": "string"
+                },
+                {
+                  "const": "pending",
+                  "type": "string"
+                },
+                {
+                  "const": "rejected",
+                  "type": "string"
+                },
+                {
+                  "const": "expired",
+                  "type": "string"
+                },
+                {
+                  "const": "evidence_rejected",
+                  "type": "string"
+                },
+                {
+                  "const": "revoked",
+                  "type": "string"
+                },
+                {
+                  "const": "suspended",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          {
             "name": "language",
             "required": false,
             "in": "query",
@@ -23537,6 +23649,60 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CreateCompetencyScaleResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/competencies/job-assignments": {
+      "post": {
+        "operationId": "CompetenciesController_createCompetencyJobAssignment",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCompetencyJobAssignmentBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCompetencyJobAssignmentResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/competencies/job-assignments/{id}/end": {
+      "post": {
+        "operationId": "CompetenciesController_endCompetencyJobAssignment",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EndCompetencyJobAssignmentResponse"
                 }
               }
             }
@@ -190825,6 +190991,44 @@
                   "learningPaths"
                 ]
               },
+              "pagination": {
+                "type": "object",
+                "properties": {
+                  "page": {
+                    "type": "integer"
+                  },
+                  "perPage": {
+                    "type": "integer"
+                  },
+                  "total": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "page",
+                  "perPage",
+                  "total"
+                ]
+              },
+              "actors": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                }
+              },
               "canManage": {
                 "type": "boolean"
               },
@@ -190950,6 +191154,107 @@
                     "code",
                     "name",
                     "id"
+                  ]
+                }
+              },
+              "jobAssignments": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "userId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "jobRoleId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "organizationalUnitId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "managerId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "startsAt": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "endsAt": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "externalHrId": {
+                      "anyOf": [
+                        {
+                          "minLength": 1,
+                          "maxLength": 120,
+                          "pattern": "[^ ]",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "isPrimary": {
+                      "type": "boolean"
+                    },
+                    "state": {
+                      "anyOf": [
+                        {
+                          "const": "active",
+                          "type": "string"
+                        },
+                        {
+                          "const": "ended",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "userId",
+                    "jobRoleId",
+                    "organizationalUnitId",
+                    "managerId",
+                    "startsAt",
+                    "endsAt",
+                    "externalHrId",
+                    "isPrimary",
+                    "state",
+                    "createdAt"
                   ]
                 }
               },
@@ -191216,6 +191521,13 @@
                     "mandatory": {
                       "type": "boolean"
                     },
+                    "jobRoleIds": {
+                      "type": "array",
+                      "items": {
+                        "format": "uuid",
+                        "type": "string"
+                      }
+                    },
                     "assessmentId": {
                       "anyOf": [
                         {
@@ -191305,6 +191617,7 @@
                     "competencyId",
                     "requiredLevel",
                     "mandatory",
+                    "jobRoleIds",
                     "assessmentId",
                     "currentLevel",
                     "status",
@@ -191673,10 +191986,13 @@
             },
             "required": [
               "learning",
+              "pagination",
+              "actors",
               "canManage",
               "canAssess",
               "catalog",
               "roles",
+              "jobAssignments",
               "requirements",
               "requirementHistory",
               "units",
@@ -192372,6 +192688,25 @@
           "data": {
             "type": "object",
             "properties": {
+              "people": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                }
+              },
               "plans": {
                 "type": "array",
                 "items": {
@@ -192690,6 +193025,7 @@
               }
             },
             "required": [
+              "people",
               "plans",
               "activities",
               "history"
@@ -192901,6 +193237,25 @@
           "data": {
             "type": "object",
             "properties": {
+              "assessors": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                }
+              },
               "frameworks": {
                 "type": "array",
                 "items": {
@@ -193009,6 +193364,7 @@
               }
             },
             "required": [
+              "assessors",
               "frameworks",
               "scales"
             ]
@@ -193127,6 +193483,117 @@
         ]
       },
       "CreateCompetencyScaleResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "CreateCompetencyJobAssignmentBody": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "userId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "jobRoleId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "organizationalUnitId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "managerId": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "startsAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endsAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "externalHrId": {
+            "anyOf": [
+              {
+                "minLength": 1,
+                "maxLength": 120,
+                "pattern": "[^ ]",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "userId",
+          "jobRoleId",
+          "organizationalUnitId",
+          "managerId",
+          "startsAt",
+          "endsAt",
+          "externalHrId"
+        ]
+      },
+      "CreateCompetencyJobAssignmentResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "EndCompetencyJobAssignmentResponse": {
         "type": "object",
         "properties": {
           "data": {

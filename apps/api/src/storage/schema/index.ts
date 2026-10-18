@@ -3654,6 +3654,13 @@ export const competencyAssignments = pgTable(
     ...id,
     ...timestamps,
     tenantId,
+    isPrimary: boolean("is_primary").notNull().default(true),
+    state: text("state").$type<"active" | "ended">().notNull().default("active"),
+    managerId: uuid("manager_id").references(() => users.id, { onDelete: "restrict" }),
+    startsAt: timestampWithTimezone({ name: "starts_at" }),
+    endsAt: timestampWithTimezone({ name: "ends_at" }),
+    externalHrId: text("external_hr_id"),
+    commandHash: text("command_hash"),
     userId: uuid("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
@@ -3665,7 +3672,14 @@ export const competencyAssignments = pgTable(
       .references(() => groups.id, { onDelete: "restrict" }),
   },
   withTenantIdIndex("competency_assignments", (t) => ({
-    employeeUnique: unique().on(t.tenantId, t.userId),
+    activePrimaryUnique: uniqueIndex("competency_assignments_primary_active_unique")
+      .on(t.tenantId, t.userId)
+      .where(sql`${t.isPrimary} = true AND ${t.state} = 'active'`),
+    externalUnique: uniqueIndex("competency_assignments_external_unique")
+      .on(t.tenantId, t.externalHrId)
+      .where(sql`${t.externalHrId} IS NOT NULL`),
+    employeeIndex: index("competency_assignments_employee_idx").on(t.tenantId, t.userId, t.state),
+    managerIndex: index("competency_assignments_manager_idx").on(t.tenantId, t.managerId, t.state),
   })),
 );
 

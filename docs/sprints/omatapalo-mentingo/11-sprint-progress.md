@@ -106,3 +106,7 @@ O total de horas exclusivas de desenvolvimento não foi medido. O relatório 00 
 Sem alterar os **32 critérios**, foram demonstrados os quatro de competências, o de recuperação offline e a correcção/teste do Auto HLS. API de competências `ca797c72`, UI `067407d1`, cálculo de lacunas `848677e0`. Seis testes API/RLS, oito de domínio e cinco checkpoints Chrome de competências passaram. Dois percursos de recuperação offline passaram com seis checkpoints cada. O microbenchmark de domínio não fecha o gate de carga HTTP. O perfil do gestor foi testado pela API; a demonstração visual usou o administrador.
 
 A percentagem mede os mesmos critérios do checklist, não esforço consumido nem prontidão para produção. Android físico continua por executar. O catálogo UI chegou a 100% estrutural; a qualidade linguística e todos os canais não são declarados completos.
+
+## Evolução empresarial de competências — 18/10/2026
+
+Mantêm-se os 32 critérios e 22 demonstrações (68,75%). Os quatro critérios de competências passam a ter frameworks/escalas, versões obrigatórias/opcionais, decisões profissionais independentes das evidências, planos aprovados, funções simultâneas e UI real dos três papéis. Onze cenários API/PostgreSQL/RLS, 21 de domínio e sete checkpoints Chrome; paginação real com 500 colaboradores. O critério de carga concorrente/restore/operação permanece aberto: cinco pedidos sequenciais não o satisfazem. Evidências, falhas e limites no relatório 16; referência Totara no 17.

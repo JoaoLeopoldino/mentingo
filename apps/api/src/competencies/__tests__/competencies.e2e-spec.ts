@@ -1,11 +1,13 @@
 import { randomUUID } from "node:crypto";
 
 import { SYSTEM_ROLE_SLUGS } from "@repo/shared";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import request from "supertest";
 
 import { TenantDbRunnerService } from "src/storage/db/tenant-db-runner.service";
 import {
+  users,
+  competencyAssignments,
   competencyFrameworks,
   competencyRequirementVersions,
   competencyDevelopmentPlans,
@@ -34,6 +36,7 @@ describe("Enterprise competencies with real tenant RLS", () => {
   let db: DatabasePg;
   let dbAdmin: DatabasePg;
   let adminCookie: string;
+  let adminId: string;
   let managerCookie: string;
   let employeeCookie: string;
   let employeeId: string;
@@ -51,6 +54,7 @@ describe("Enterprise competencies with real tenant RLS", () => {
       .withAdminSettings(db)
       .withCredentials({ password: "password123" })
       .create();
+    adminId = admin.id;
     const manager = await factory
       .withUserSettings(db)
       .withCredentials({ password: "password123" })
@@ -698,41 +702,400 @@ describe("Enterprise competencies with real tenant RLS", () => {
     });
   });
   it("reuses immutable scales in frameworks and versions mandatory or optional professional requirements", async () => {
-    const framework = await request(app.getHttpServer()).post("/api/competencies/frameworks").set("Cookie", adminCookie).send({ code: randomUUID().toUpperCase(), name: "Operações Angola", description: "Luanda, Huíla e Benguela", categories: ["Segurança", "Operação"] }).expect(201);
-    const levels = [{ rank: 1, label: "Iniciado" }, { rank: 2, label: "Autónomo" }];
-    const scale = await request(app.getHttpServer()).post("/api/competencies/scales").set("Cookie", adminCookie).send({ code: randomUUID().toUpperCase(), name: "Proficiência operacional", levels }).expect(201);
-    const body = { code: randomUUID().toUpperCase(), name: "EPI com escala", description: "Avaliação profissional", category: "Segurança", levels, frameworkId: framework.body.data.id, scaleId: scale.body.data.id };
-    const catalog = await request(app.getHttpServer()).post("/api/competencies/catalog").set("Cookie", adminCookie).send(body).expect(201);
+    const framework = await request(app.getHttpServer())
+      .post("/api/competencies/frameworks")
+      .set("Cookie", adminCookie)
+      .send({
+        code: randomUUID().toUpperCase(),
+        name: "Operações Angola",
+        description: "Luanda, Huíla e Benguela",
+        categories: ["Segurança", "Operação"],
+      })
+      .expect(201);
+    const levels = [
+      { rank: 1, label: "Iniciado" },
+      { rank: 2, label: "Autónomo" },
+    ];
+    const scale = await request(app.getHttpServer())
+      .post("/api/competencies/scales")
+      .set("Cookie", adminCookie)
+      .send({ code: randomUUID().toUpperCase(), name: "Proficiência operacional", levels })
+      .expect(201);
+    const body = {
+      code: randomUUID().toUpperCase(),
+      name: "EPI com escala",
+      description: "Avaliação profissional",
+      category: "Segurança",
+      levels,
+      frameworkId: framework.body.data.id,
+      scaleId: scale.body.data.id,
+    };
+    const catalog = await request(app.getHttpServer())
+      .post("/api/competencies/catalog")
+      .set("Cookie", adminCookie)
+      .send(body)
+      .expect(201);
     const competencyId = catalog.body.data.id;
-    await request(app.getHttpServer()).post("/api/competencies/catalog").set("Cookie", adminCookie).send({ ...body, code: randomUUID().toUpperCase(), category: "Unknown category" }).expect(400);
-    await request(app.getHttpServer()).post("/api/competencies/catalog").set("Cookie", adminCookie).send({ ...body, code: randomUUID().toUpperCase(), levels: [{ rank: 1, label: "Different scale" }] }).expect(400);
-    await request(app.getHttpServer()).get("/api/competencies/framework-setup").set("Cookie", employeeCookie).expect(403);
-    const role = await request(app.getHttpServer()).post("/api/competencies/roles").set("Cookie", adminCookie).send({ code: randomUUID().toUpperCase(), name: "Técnico de segurança" }).expect(201);
-    const rule = { jobRoleId: role.body.data.id, competencyId, minimumLevel: 1, mandatory: true, effectiveFrom: "2026-01-01T00:00:00Z", effectiveUntil: null, courseId: null, learningPathId: null };
-    const set = (payload: object) => request(app.getHttpServer()).put("/api/competencies/requirements").set("Cookie", adminCookie).send(payload);
+    await request(app.getHttpServer())
+      .post("/api/competencies/catalog")
+      .set("Cookie", adminCookie)
+      .send({ ...body, code: randomUUID().toUpperCase(), category: "Unknown category" })
+      .expect(400);
+    await request(app.getHttpServer())
+      .post("/api/competencies/catalog")
+      .set("Cookie", adminCookie)
+      .send({
+        ...body,
+        code: randomUUID().toUpperCase(),
+        levels: [{ rank: 1, label: "Different scale" }],
+      })
+      .expect(400);
+    await request(app.getHttpServer())
+      .get("/api/competencies/framework-setup")
+      .set("Cookie", employeeCookie)
+      .expect(403);
+    const role = await request(app.getHttpServer())
+      .post("/api/competencies/roles")
+      .set("Cookie", adminCookie)
+      .send({ code: randomUUID().toUpperCase(), name: "Técnico de segurança" })
+      .expect(201);
+    const rule = {
+      jobRoleId: role.body.data.id,
+      competencyId,
+      minimumLevel: 1,
+      mandatory: true,
+      effectiveFrom: "2026-01-01T00:00:00Z",
+      effectiveUntil: null,
+      courseId: null,
+      learningPathId: null,
+    };
+    const set = (payload: object) =>
+      request(app.getHttpServer())
+        .put("/api/competencies/requirements")
+        .set("Cookie", adminCookie)
+        .send(payload);
     const requirement = await set(rule).expect(200);
-    const concurrent = await Promise.all([set({ ...rule, minimumLevel: 2, mandatory: false, expectedVersion: 1 }), set({ ...rule, minimumLevel: 2, mandatory: false, expectedVersion: 1 })]);
-    expect(concurrent.map(x => x.status).sort()).toEqual([200, 409]);
+    const concurrent = await Promise.all([
+      set({ ...rule, minimumLevel: 2, mandatory: false, expectedVersion: 1 }),
+      set({ ...rule, minimumLevel: 2, mandatory: false, expectedVersion: 1 }),
+    ]);
+    expect(concurrent.map((x) => x.status).sort()).toEqual([200, 409]);
     await set(rule).expect(409);
-    await request(app.getHttpServer()).put("/api/competencies/assignments").set("Cookie", adminCookie).send({ userId: employeeId, jobRoleId: role.body.data.id, organizationalUnitId: unitId }).expect(200);
+    await request(app.getHttpServer())
+      .put("/api/competencies/assignments")
+      .set("Cookie", adminCookie)
+      .send({ userId: employeeId, jobRoleId: role.body.data.id, organizationalUnitId: unitId })
+      .expect(200);
     let data = (await workspace(employeeCookie).expect(200)).body.data;
-    expect(data.requirementHistory.filter((x: { requirementId: string }) => x.requirementId === requirement.body.data.id)).toHaveLength(2);
-    expect(data.matrix.find((x: { competencyId: string }) => x.competencyId === competencyId)).toMatchObject({ requiredLevel: 2, mandatory: false });
-    await set({ ...rule, minimumLevel: 1, expectedVersion: 2, effectiveFrom: "2030-01-01T00:00:00Z" }).expect(200);
+    expect(
+      data.requirementHistory.filter(
+        (x: { requirementId: string }) => x.requirementId === requirement.body.data.id,
+      ),
+    ).toHaveLength(2);
+    expect(
+      data.matrix.find((x: { competencyId: string }) => x.competencyId === competencyId),
+    ).toMatchObject({ requiredLevel: 2, mandatory: false });
+    await set({
+      ...rule,
+      minimumLevel: 1,
+      expectedVersion: 2,
+      effectiveFrom: "2030-01-01T00:00:00Z",
+    }).expect(200);
     data = (await workspace(employeeCookie).expect(200)).body.data;
-    expect(data.matrix.find((x: { competencyId: string }) => x.competencyId === competencyId)).toMatchObject({ requiredLevel: 2, mandatory: false });
+    expect(
+      data.matrix.find((x: { competencyId: string }) => x.competencyId === competencyId),
+    ).toMatchObject({ requiredLevel: 2, mandatory: false });
     const runner = app.get(TenantDbRunnerService);
-    const [row] = await db.select().from(competencyFrameworks).where(eq(competencyFrameworks.id, framework.body.data.id));
+    const [row] = await db
+      .select()
+      .from(competencyFrameworks)
+      .where(eq(competencyFrameworks.id, framework.body.data.id));
     await runner.runWithTenant(row.tenantId, async () => {
       const scoped = app.get<DatabasePg>("DB");
-      expect(await scoped.update(competencyRequirementVersions).set({ minimumLevel: 1 }).where(eq(competencyRequirementVersions.requirementId, requirement.body.data.id)).returning()).toHaveLength(0);
+      expect(
+        await scoped
+          .update(competencyRequirementVersions)
+          .set({ minimumLevel: 1 })
+          .where(eq(competencyRequirementVersions.requirementId, requirement.body.data.id))
+          .returning(),
+      ).toHaveLength(0);
     });
-    const [otherTenant] = await dbAdmin.insert(tenants).values({ name: "Other framework tenant", host: `https://${randomUUID()}.local` }).returning();
+    const [otherTenant] = await dbAdmin
+      .insert(tenants)
+      .values({ name: "Other framework tenant", host: `https://${randomUUID()}.local` })
+      .returning();
     await runner.runWithTenant(otherTenant.id, async () => {
       const scoped = app.get<DatabasePg>("DB");
-      expect(await scoped.select().from(competencyFrameworks).where(eq(competencyFrameworks.id, framework.body.data.id))).toHaveLength(0);
-      expect(await scoped.select().from(competencyRequirementVersions).where(eq(competencyRequirementVersions.requirementId, requirement.body.data.id))).toHaveLength(0);
+      expect(
+        await scoped
+          .select()
+          .from(competencyFrameworks)
+          .where(eq(competencyFrameworks.id, framework.body.data.id)),
+      ).toHaveLength(0);
+      expect(
+        await scoped
+          .select()
+          .from(competencyRequirementVersions)
+          .where(eq(competencyRequirementVersions.requirementId, requirement.body.data.id)),
+      ).toHaveLength(0);
     });
   });
-
+  it("combines two active jobs, enforces HR manager scope and preserves ended assignments", async () => {
+    const competencyId = await create();
+    const makeRole = () =>
+      request(app.getHttpServer())
+        .post("/api/competencies/roles")
+        .set("Cookie", adminCookie)
+        .send({ code: randomUUID().toUpperCase(), name: "Operador polivalente" })
+        .expect(201);
+    const first = await makeRole();
+    const second = await makeRole();
+    for (const [jobRoleId, minimumLevel] of [
+      [first.body.data.id, 1],
+      [second.body.data.id, 2],
+    ] as const)
+      await request(app.getHttpServer())
+        .put("/api/competencies/requirements")
+        .set("Cookie", adminCookie)
+        .send({
+          jobRoleId,
+          competencyId,
+          minimumLevel,
+          effectiveFrom: "2026-01-01T00:00:00Z",
+          effectiveUntil: null,
+          courseId: null,
+          learningPathId: null,
+        })
+        .expect(200);
+    await request(app.getHttpServer())
+      .put("/api/competencies/assignments")
+      .set("Cookie", adminCookie)
+      .send({ userId: employeeId, jobRoleId: first.body.data.id, organizationalUnitId: unitId })
+      .expect(200);
+    const command = {
+      id: randomUUID(),
+      userId: employeeId,
+      jobRoleId: second.body.data.id,
+      organizationalUnitId: unitId,
+      managerId,
+      startsAt: "2026-01-01T00:00:00Z",
+      endsAt: null,
+      externalHrId: `fictional-HR-${randomUUID()}`,
+    };
+    const submit = (body: object, cookie = adminCookie) =>
+      request(app.getHttpServer())
+        .post("/api/competencies/job-assignments")
+        .set("Cookie", cookie)
+        .send(body);
+    await submit(command).expect(201);
+    await submit(command).expect(201);
+    await submit({ ...command, id: randomUUID() }).expect(409);
+    await submit({
+      ...command,
+      id: randomUUID(),
+      externalHrId: null,
+      managerId: employeeId,
+    }).expect(400);
+    await submit({ ...command, id: randomUUID(), externalHrId: null }, managerCookie).expect(403);
+    let data = (await workspace(employeeCookie).expect(200)).body.data;
+    expect(data.employees).toHaveLength(1);
+    expect(data.jobAssignments.filter((x: { state: string }) => x.state === "active")).toHaveLength(
+      2,
+    );
+    expect(
+      data.matrix.find((x: { competencyId: string }) => x.competencyId === competencyId),
+    ).toMatchObject({
+      requiredLevel: 2,
+      jobRoleIds: expect.arrayContaining([first.body.data.id, second.body.data.id]),
+    });
+    await request(app.getHttpServer())
+      .post(`/api/competencies/job-assignments/${command.id}/end`)
+      .set("Cookie", adminCookie)
+      .expect(201);
+    data = (await workspace(employeeCookie).expect(200)).body.data;
+    expect(data.jobAssignments.find((x: { id: string }) => x.id === command.id)).toMatchObject({
+      state: "ended",
+      isPrimary: false,
+    });
+    expect(
+      data.matrix.find((x: { competencyId: string }) => x.competencyId === competencyId),
+    ).toMatchObject({ requiredLevel: 1 });
+    // HR assignment grants scope only to an already authorised assessor, not a new role or permission.
+    const outsiderUnit = await createGroupFactory(db)
+      .withMembers([outsiderId])
+      .create({ name: "Apoio Huíla" });
+    const hrAssignment = {
+      ...command,
+      id: randomUUID(),
+      userId: outsiderId,
+      organizationalUnitId: outsiderUnit.id,
+      externalHrId: null,
+    };
+    await submit(hrAssignment).expect(201);
+    await workspace(managerCookie, outsiderId).expect(200);
+    await request(app.getHttpServer())
+      .post(`/api/competencies/job-assignments/${hrAssignment.id}/end`)
+      .set("Cookie", adminCookie)
+      .expect(201);
+    await workspace(managerCookie, outsiderId).expect(403);
+  });
+  it("paginates 500 fictional employees with stable ordering, pre-pagination status filters and scoped history", async () => {
+    const [owner] = await db.select().from(users).where(eq(users.id, employeeId));
+    const prefix = `Benchmark-${randomUUID()}`;
+    const factory = createUserFactory(db);
+    const records = Array.from({ length: 500 }, (_, index) => {
+      const built = factory.build();
+      return {
+        id: built.id,
+        tenantId: owner.tenantId,
+        email: built.email,
+        firstName: prefix,
+        lastName: `Fictício ${String(Math.floor(index / 5)).padStart(3, "0")}`,
+        language: "pt-AO" as const,
+      };
+    });
+    await db.insert(users).values(records);
+    const unit = await createGroupFactory(db)
+      .withMembers(records.map((x) => x.id))
+      .create({ name: "Benchmark 500 — Luanda, Huíla e Benguela (fictício)" });
+    await db.insert(groupManagerGroups).values({ managerUserId: managerId, groupId: unit.id });
+    const competencyId = await create();
+    const role = await request(app.getHttpServer())
+      .post("/api/competencies/roles")
+      .set("Cookie", adminCookie)
+      .send({ code: randomUUID().toUpperCase(), name: "Função de teste 500" })
+      .expect(201);
+    await request(app.getHttpServer())
+      .put("/api/competencies/requirements")
+      .set("Cookie", adminCookie)
+      .send({
+        jobRoleId: role.body.data.id,
+        competencyId,
+        minimumLevel: 2,
+        effectiveFrom: "2026-01-01T00:00:00Z",
+        effectiveUntil: null,
+        courseId: null,
+        learningPathId: null,
+      })
+      .expect(200);
+    await db
+      .insert(competencyAssignments)
+      .values(
+        records.map((x) => ({
+          tenantId: owner.tenantId,
+          userId: x.id,
+          jobRoleId: role.body.data.id,
+          organizationalUnitId: unit.id,
+          startsAt: "2026-01-01T00:00:00Z",
+        })),
+      );
+    await db
+      .insert(competencyAssessments)
+      .values(
+        records
+          .slice(400)
+          .map((x) => ({
+            tenantId: owner.tenantId,
+            userId: x.id,
+            competencyId,
+            level: 2,
+            revision: 1,
+            assessorId: adminId,
+            rationale: "Avaliação formal fictícia para ensaio de paginação",
+            commandHash: `fixture-${x.id}`,
+          })),
+      );
+    const seen = new Set<string>();
+    const timings: number[] = [];
+    for (let page = 1; page <= 5; page++) {
+      const started = performance.now();
+      const response = await request(app.getHttpServer())
+        .get("/api/competencies/workspace")
+        .query({
+          keyword: prefix,
+          page,
+          perPage: 100,
+          organizationalUnitId: unit.id,
+          jobRoleId: role.body.data.id,
+        })
+        .set("Cookie", managerCookie)
+        .expect(200);
+      timings.push(performance.now() - started);
+      expect(response.body.data.pagination).toEqual({ total: 500, page, perPage: 100 });
+      expect(response.body.data.employees).toHaveLength(100);
+      for (const user of response.body.data.employees) {
+        expect(seen.has(user.id)).toBe(false);
+        seen.add(user.id);
+      }
+      expect(
+        response.body.data.assessments.every((x: { userId: string }) =>
+          response.body.data.employees.some((e: { id: string }) => e.id === x.userId),
+        ),
+      ).toBe(true);
+      expect(JSON.stringify(response.body.data)).not.toContain("commandHash");
+    }
+    expect(seen.size).toBe(500);
+    const filtered = await request(app.getHttpServer())
+      .get("/api/competencies/workspace")
+      .query({ keyword: prefix, status: "met", page: 1, perPage: 50 })
+      .set("Cookie", managerCookie)
+      .expect(200);
+    expect(filtered.body.data.pagination.total).toBe(100);
+    expect(filtered.body.data.employees).toHaveLength(50);
+    expect(filtered.body.data.matrix.every((x: { status: string }) => x.status === "met")).toBe(
+      true,
+    );
+    await request(app.getHttpServer())
+      .post("/api/competencies/evidence")
+      .set("Cookie", managerCookie)
+      .send({
+        ...evidence(competencyId, "pending", records[400].id, 2),
+        source: "Evidência pendente de revisão — benchmark",
+      })
+      .expect(201);
+    const pending = await request(app.getHttpServer())
+      .get("/api/competencies/workspace")
+      .query({ keyword: prefix, status: "met", pendingEvidenceOnly: true, page: 1, perPage: 50 })
+      .set("Cookie", managerCookie)
+      .expect(200);
+    expect(pending.body.data.pagination.total).toBe(1);
+    expect(pending.body.data.employees[0].id).toBe(records[400].id);
+    const own = await request(app.getHttpServer())
+      .get("/api/competencies/workspace")
+      .query({ keyword: prefix })
+      .set("Cookie", employeeCookie)
+      .expect(200);
+    expect(own.body.data.pagination.total).toBe(0);
+    await request(app.getHttpServer())
+      .get("/api/competencies/workspace")
+      .query({ perPage: 101 })
+      .set("Cookie", managerCookie)
+      .expect(400);
+    await request(app.getHttpServer())
+      .get("/api/competencies/workspace")
+      .query({ page: 0 })
+      .set("Cookie", managerCookie)
+      .expect(400);
+    const indices = await db.execute(
+      sql`SELECT indexname FROM pg_indexes WHERE tablename IN ('competency_assignments','competency_assessments','competency_evidence_reviews')`,
+    );
+    expect(indices.some((x) => x.indexname === "competency_assignments_employee_idx")).toBe(true);
+    expect(indices.some((x) => x.indexname === "competency_assignments_manager_idx")).toBe(true);
+    const explain = await db.execute(
+      sql`EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) SELECT id FROM competency_assessments WHERE tenant_id=${owner.tenantId} AND user_id=${records[400].id} AND competency_id=${competencyId} ORDER BY revision DESC LIMIT 1`,
+    );
+    // eslint-disable-next-line no-console -- Synthetic local benchmark timings; no credentials.
+    console.log(
+      JSON.stringify({
+        benchmark: "Real PostgreSQL + HTTP sequential, not concurrent users",
+        employees: 500,
+        perPage: 100,
+        pageTimesMs: timings,
+        minMs: Math.min(...timings),
+        maxMs: Math.max(...timings),
+        averageMs: timings.reduce((a, b) => a + b, 0) / timings.length,
+        assessmentPlan: explain[0]["QUERY PLAN"],
+      }),
+    );
+  }, 120000);
 });

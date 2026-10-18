@@ -24,20 +24,26 @@ import { Field, Picker, BusyForm, value, optionalDate } from "./competency-contr
 import { CompetencyAssessmentPanel } from "./CompetencyAssessmentPanel";
 import { CompetencyFrameworksPanel } from "./CompetencyFrameworksPanel";
 import { DevelopmentPlansPanel } from "./DevelopmentPlansPanel";
+import { JobAssignmentsPanel } from "./JobAssignmentsPanel";
 
 import type { MetaFunction } from "@remix-run/react";
+import type { CompetencyWorkspaceQuery } from "~/api/queries/competency-workspace.types";
 
 export const meta: MetaFunction = ({ matches }) => setPageTitle(matches, "pages.competencies");
 
 export default function CompetenciesPage() {
   const { t } = useTranslation();
-  const { data, isPending, error } = useCompetencyWorkspace();
+  const [filters, setFilters] = useState<CompetencyWorkspaceQuery>({ page: 1, perPage: 25 });
+  const [tab, setTab] = useState("matrix");
+  const { data, isPending, error } = useCompetencyWorkspace(filters);
   const user = useCurrentUserStore((state) => state.currentUser);
   const [selected, setSelected] = useState("");
   const [frameworkId, setFrameworkId] = useState("");
   const [scaleId, setScaleId] = useState("");
   const { data: setup } = useCompetencyFrameworkSetup(Boolean(data?.canManage));
-  const { data: plans, error: plansError } = useDevelopmentPlans(selected || user?.id);
+  const employeeId =
+    selected || data?.employees.find((x) => x.id === user?.id)?.id || data?.employees[0]?.id;
+  const { data: plans, error: plansError } = useDevelopmentPlans(employeeId);
   const { mutateAsync: create, isPending: creating } = useCreateCompetency();
   const { mutateAsync: createRole, isPending: creatingRole } = useCreateCompetencyJobRole();
   const { mutateAsync: setRequirement, isPending: savingRequirement } =
@@ -65,8 +71,30 @@ export default function CompetenciesPage() {
   const selectedScale = setup?.scales.find((x) => x.id === scaleId);
   const active = data.catalog.filter((x) => x.active);
   const catalogName = (id: string) => data.catalog.find((x) => x.id === id)?.name ?? id;
-  const employeeName = (id: string) => data.employees.find((x) => x.id === id)?.name ?? id;
-  const employeeId = selected || user?.id || data.employees[0]?.id;
+  const unitNames = (userId: string, roleIds: string[]) => {
+    const now = Date.now();
+    const ids = new Set(
+      data.jobAssignments
+        .filter(
+          (x) =>
+            x.userId === userId &&
+            roleIds.includes(x.jobRoleId) &&
+            x.state === "active" &&
+            (!x.startsAt || Date.parse(x.startsAt) <= now) &&
+            (!x.endsAt || Date.parse(x.endsAt) > now),
+        )
+        .map((x) => x.organizationalUnitId),
+    );
+    return [...ids]
+      .map((id) => data.units.find((x) => x.id === id)?.name)
+      .filter(Boolean)
+      .join(" · ");
+  };
+  const employeeName = (id: string) =>
+    data.employees.find((x) => x.id === id)?.name ??
+    data.actors.find((x) => x.id === id)?.name ??
+    t("competencies.enterprise.unknownActor");
+
   const submit =
     (action: (data: FormData) => Promise<unknown>) => (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
@@ -83,10 +111,128 @@ export default function CompetenciesPage() {
           <h1 className="text-2xl font-semibold">{t("competencies.title")}</h1>
           <p className="mt-2 text-muted-foreground">{t("competencies.scope")}</p>
         </header>
-        <Tabs defaultValue="matrix">
+        <BusyForm
+          busy={busy}
+          className="rounded border p-4"
+          data-testid="competency-filters"
+          onSubmit={(event) => {
+            event.preventDefault();
+            const form = new FormData(event.currentTarget);
+            setSelected("");
+            setFilters({
+              page: 1,
+              perPage: 25,
+              keyword: value(form, "keyword") || undefined,
+              organizationalUnitId: value(form, "organizationalUnitId") || undefined,
+              jobRoleId: value(form, "jobRoleId") || undefined,
+              status: (value(form, "status") as CompetencyWorkspaceQuery["status"]) || undefined,
+              pendingEvidenceOnly: value(form, "pendingEvidenceOnly") === "on" || undefined,
+            });
+          }}
+        >
+          <div className="grid min-w-0 gap-3 md:grid-cols-2 xl:grid-cols-4">
+            <Field label={t("competencies.team.search")}>
+              <Input name="keyword" defaultValue={filters.keyword} maxLength={200} />
+            </Field>
+            <Picker
+              key={`unit:${filters.organizationalUnitId}`}
+              name="organizationalUnitId"
+              label={t("competencies.unit")}
+              options={data.units}
+              defaultValue={filters.organizationalUnitId}
+              optional
+            />
+            <Picker
+              key={`role:${filters.jobRoleId}`}
+              name="jobRoleId"
+              label={t("competencies.role")}
+              options={data.roles}
+              defaultValue={filters.jobRoleId}
+              optional
+            />
+            <Picker
+              key={`status:${filters.status}`}
+              name="status"
+              label={t("competencies.status")}
+              defaultValue={filters.status}
+              options={[
+                "met",
+                "missing",
+                "insufficient",
+                "pending",
+                "expired",
+                "evidence_rejected",
+                "revoked",
+                "suspended",
+              ].map((id) => ({ id, name: t(`competencies.states.${id}`) }))}
+              optional
+            />
+          </div>
+          {(data.canAssess || data.canManage) && (
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="pendingEvidenceOnly"
+                defaultChecked={
+                  filters.pendingEvidenceOnly === true || filters.pendingEvidenceOnly === "true"
+                }
+              />
+              {t("competencies.team.pendingOnly")}
+            </label>
+          )}
+          <Button type="submit">{t("competencies.team.apply")}</Button>
+        </BusyForm>
+        {filters.userId && (
+          <Button
+            variant="outline"
+            onClick={() => {
+              setSelected("");
+              setFilters({ page: 1, perPage: 25 });
+              setTab("matrix");
+            }}
+          >
+            {t("competencies.team.back")}
+          </Button>
+        )}
+        <nav
+          aria-label={t("competencies.team.pagination")}
+          className="flex flex-wrap items-center gap-3"
+        >
+          <p role="status">
+            {t("competencies.team.pageSummary", {
+              page: data.pagination.page,
+              total: data.pagination.total,
+              count: data.employees.length,
+            })}
+          </p>
+          <Button
+            variant="outline"
+            disabled={data.pagination.page <= 1}
+            onClick={() => {
+              setSelected("");
+              setFilters({ ...filters, page: data.pagination.page - 1 });
+            }}
+          >
+            {t("competencies.team.previous")}
+          </Button>
+          <Button
+            variant="outline"
+            disabled={data.pagination.page * data.pagination.perPage >= data.pagination.total}
+            onClick={() => {
+              setSelected("");
+              setFilters({ ...filters, page: data.pagination.page + 1 });
+            }}
+          >
+            {t("competencies.team.next")}
+          </Button>
+        </nav>
+        <Tabs value={tab} onValueChange={setTab}>
           <TabsList className="flex h-auto flex-wrap">
             <TabsTrigger value="matrix">{t("competencies.matrix")}</TabsTrigger>
             <TabsTrigger value="profile">{t("competencies.profile")}</TabsTrigger>
+            {(data.canManage || data.canAssess) && (
+              <TabsTrigger value="pending">{t("competencies.team.pending")}</TabsTrigger>
+            )}
             {data.canManage && (
               <>
                 <TabsTrigger value="catalog">{t("competencies.catalog")}</TabsTrigger>
@@ -118,15 +264,15 @@ export default function CompetenciesPage() {
                 </thead>
                 <tbody>
                   {data.matrix.map((row) => {
-                    const employee = data.employees.find((x) => x.id === row.userId);
                     return (
                       <tr key={`${row.userId}:${row.competencyId}`} className="border-t">
                         <td className="p-2">{employeeName(row.userId)}</td>
+                        <td className="p-2">{unitNames(row.userId, row.jobRoleIds)}</td>
                         <td className="p-2">
-                          {data.units.find((x) => x.id === employee?.organizationalUnitId)?.name}
-                        </td>
-                        <td className="p-2">
-                          {data.roles.find((x) => x.id === employee?.jobRoleId)?.name}
+                          {row.jobRoleIds
+                            .map((id) => data.roles.find((x) => x.id === id)?.name)
+                            .filter(Boolean)
+                            .join(" · ")}
                         </td>
                         <td className="p-2">{catalogName(row.competencyId)}</td>
                         <td className="p-2">
@@ -163,136 +309,185 @@ export default function CompetenciesPage() {
             </div>
             {!data.matrix.length && <p>{t("competencies.empty")}</p>}
           </TabsContent>
-          <TabsContent value="profile" className="space-y-4">
-            <Field label={t("competencies.employee")}>
-              <select
-                className="h-10 rounded border bg-background px-3"
-                value={employeeId}
-                aria-label={t("competencies.employee")}
-                onChange={(event) => setSelected(event.target.value)}
-              >
-                {employeeOptions.map((x) => (
-                  <option key={x.id} value={x.id}>
-                    {x.name}
-                  </option>
-                ))}
-              </select>
-            </Field>
-            <h2 className="text-xl font-semibold">
-              {t("competencies.enterprise.evidenceHistory")}
-            </h2>
-            {data.evidence
-              .filter((x) => x.userId === employeeId)
-              .map((item) => (
-                <article
-                  key={item.id}
-                  className="space-y-1 rounded border p-3"
-                  data-testid="competency-evidence"
-                >
-                  <h3 className="font-semibold">
-                    {catalogName(item.competencyId)} · {item.level} ·{" "}
-                    {t(
-                      `competencies.enterprise.reviewStates.${data.evidenceReviews.find((x) => x.evidenceId === item.id)?.status ?? item.status}`,
-                    )}
-                  </h3>
-                  <p>
-                    {item.source}: {item.evidence}
-                  </p>
-                  <p>
-                    {t("competencies.enterprise.recordedBy")}: {employeeName(item.recordedBy)} ·{" "}
-                    {item.assessedAt
-                      ? new Intl.DateTimeFormat("pt-AO", {
-                          timeZone: "Africa/Luanda",
-                          dateStyle: "short",
-                        }).format(new Date(item.assessedAt))
-                      : "—"}
-                  </p>
-                  {item.expiresAt && (
-                    <p>
-                      {t("competencies.expiry")}:{" "}
-                      {new Intl.DateTimeFormat("pt-AO", {
-                        timeZone: "Africa/Luanda",
-                        dateStyle: "short",
-                      }).format(new Date(item.expiresAt))}
-                    </p>
-                  )}
-                </article>
-              ))}
-            <BusyForm
-              busy={busy}
-              className="grid max-w-2xl gap-3 rounded border p-4"
-              onSubmit={submit((d) =>
-                record({
-                  userId: employeeId!,
-                  competencyId: value(d, "competencyId"),
-                  level: Number(value(d, "level")),
-                  status: "pending",
-                  developmentPlanId: value(d, "developmentPlanId") || null,
-                  evidenceType: value(d, "evidenceType") as
-                    | "observation"
-                    | "document"
-                    | "training"
-                    | "self_report",
-                  source: value(d, "source"),
-                  evidence: value(d, "evidence"),
-                  expiresAt: null,
-                  reviewAt: null,
-                }),
-              )}
-              data-testid="competency-evidence-form"
+          {(data.canManage || data.canAssess) && (
+            <TabsContent
+              value="pending"
+              className="space-y-3"
+              data-testid="competency-pending-queue"
             >
-              <h3 className="font-semibold">{t("competencies.recordEvidence")}</h3>
-              <Picker name="competencyId" label={t("competencies.competency")} options={active} />
-              <Picker
-                name="developmentPlanId"
-                label={t("competencies.plans.linkEvidence")}
-                optional
-                options={(plans?.plans ?? [])
-                  .filter(
-                    (x) => x.userId === employeeId && ["active", "submitted"].includes(x.state),
-                  )
-                  .map((x) => ({ id: x.id, name: x.title }))}
-              />
-              <Field label={t("competencies.enterprise.claimedLevel")}>
-                <Input name="level" type="number" min={1} max={20} required />
-              </Field>
-              <Field label={t("competencies.enterprise.evidenceType")}>
-                <select
-                  aria-label={t("competencies.enterprise.evidenceType")}
-                  name="evidenceType"
-                  className="h-10 rounded border bg-background px-3"
-                >
-                  {["self_report", "observation", "document", "training"].map((kind) => (
-                    <option key={kind} value={kind}>
-                      {t(`competencies.enterprise.types.${kind}`)}
-                    </option>
+              <p>{t("competencies.team.pendingScope")}</p>
+              {data.evidence
+                .filter(
+                  (x) =>
+                    (data.evidenceReviews.find((r) => r.evidenceId === x.id)?.status ??
+                      x.status) === "pending",
+                )
+                .map((proof) => (
+                  <article
+                    key={proof.id}
+                    className="rounded border p-4"
+                    data-testid="competency-pending-evidence"
+                  >
+                    <h2 className="font-semibold">
+                      {employeeName(proof.userId)} · {catalogName(proof.competencyId)}
+                    </h2>
+                    <p>
+                      {proof.source}: {proof.evidence}
+                    </p>
+                    <Button
+                      onClick={() => {
+                        setSelected(proof.userId);
+                        setFilters({ page: 1, perPage: 25, userId: proof.userId });
+                        setTab("profile");
+                      }}
+                    >
+                      {t("competencies.enterprise.reviewEvidence")}
+                    </Button>
+                  </article>
+                ))}
+            </TabsContent>
+          )}
+          <TabsContent value="profile" className="space-y-4">
+            {employeeId ? (
+              <>
+                <Field label={t("competencies.employee")}>
+                  <select
+                    className="h-10 w-full min-w-0 rounded border bg-background px-3"
+                    value={employeeId}
+                    aria-label={t("competencies.employee")}
+                    onChange={(event) => setSelected(event.target.value)}
+                  >
+                    {employeeOptions.map((x) => (
+                      <option key={x.id} value={x.id}>
+                        {x.name}
+                      </option>
+                    ))}
+                  </select>
+                </Field>
+                <h2 className="text-xl font-semibold">
+                  {t("competencies.enterprise.evidenceHistory")}
+                </h2>
+                {data.evidence
+                  .filter((x) => x.userId === employeeId)
+                  .map((item) => (
+                    <article
+                      key={item.id}
+                      className="space-y-1 rounded border p-3"
+                      data-testid="competency-evidence"
+                    >
+                      <h3 className="font-semibold">
+                        {catalogName(item.competencyId)} · {item.level} ·{" "}
+                        {t(
+                          `competencies.enterprise.reviewStates.${data.evidenceReviews.find((x) => x.evidenceId === item.id)?.status ?? item.status}`,
+                        )}
+                      </h3>
+                      <p>
+                        {item.source}: {item.evidence}
+                      </p>
+                      <p>
+                        {t("competencies.enterprise.recordedBy")}: {employeeName(item.recordedBy)} ·{" "}
+                        {item.createdAt
+                          ? new Intl.DateTimeFormat("pt-AO", {
+                              timeZone: "Africa/Luanda",
+                              dateStyle: "short",
+                            }).format(new Date(item.createdAt))
+                          : "—"}
+                      </p>
+                      {item.expiresAt && (
+                        <p>
+                          {t("competencies.expiry")}:{" "}
+                          {new Intl.DateTimeFormat("pt-AO", {
+                            timeZone: "Africa/Luanda",
+                            dateStyle: "short",
+                          }).format(new Date(item.expiresAt))}
+                        </p>
+                      )}
+                    </article>
                   ))}
-                </select>
-              </Field>
-              <Field label={t("competencies.source")}>
-                <Input name="source" maxLength={200} required />
-              </Field>
-              <Field label={t("competencies.evidence")}>
-                <Textarea name="evidence" maxLength={4000} required />
-              </Field>
-              <Button disabled={recording}>{t("competencies.save")}</Button>
-            </BusyForm>
-            {plansError && (
-              <p role="alert">
-                {getTranslatedApiErrorMessage(plansError, t, t("competencies.errors.failed"))}
-              </p>
+                <BusyForm
+                  busy={busy}
+                  className="grid max-w-2xl gap-3 rounded border p-4"
+                  onSubmit={submit((d) =>
+                    record({
+                      userId: employeeId!,
+                      competencyId: value(d, "competencyId"),
+                      level: Number(value(d, "level")),
+                      status: "pending",
+                      developmentPlanId: value(d, "developmentPlanId") || null,
+                      evidenceType: value(d, "evidenceType") as
+                        | "observation"
+                        | "document"
+                        | "training"
+                        | "self_report",
+                      source: value(d, "source"),
+                      evidence: value(d, "evidence"),
+                      expiresAt: null,
+                      reviewAt: null,
+                    }),
+                  )}
+                  data-testid="competency-evidence-form"
+                >
+                  <h3 className="font-semibold">{t("competencies.recordEvidence")}</h3>
+                  <Picker
+                    name="competencyId"
+                    label={t("competencies.competency")}
+                    options={active}
+                  />
+                  <Picker
+                    name="developmentPlanId"
+                    label={t("competencies.plans.linkEvidence")}
+                    optional
+                    options={(plans?.plans ?? [])
+                      .filter(
+                        (x) => x.userId === employeeId && ["active", "submitted"].includes(x.state),
+                      )
+                      .map((x) => ({ id: x.id, name: x.title }))}
+                  />
+                  <Field label={t("competencies.enterprise.claimedLevel")}>
+                    <Input name="level" type="number" min={1} max={20} required />
+                  </Field>
+                  <Field label={t("competencies.enterprise.evidenceType")}>
+                    <select
+                      aria-label={t("competencies.enterprise.evidenceType")}
+                      name="evidenceType"
+                      className="h-10 w-full min-w-0 rounded border bg-background px-3"
+                    >
+                      {["self_report", "observation", "document", "training"].map((kind) => (
+                        <option key={kind} value={kind}>
+                          {t(`competencies.enterprise.types.${kind}`)}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
+                  <Field label={t("competencies.source")}>
+                    <Input name="source" maxLength={200} required />
+                  </Field>
+                  <Field label={t("competencies.evidence")}>
+                    <Textarea name="evidence" maxLength={4000} required />
+                  </Field>
+                  <Button disabled={recording}>{t("competencies.save")}</Button>
+                </BusyForm>
+                {plansError && (
+                  <p role="alert">
+                    {getTranslatedApiErrorMessage(plansError, t, t("competencies.errors.failed"))}
+                  </p>
+                )}
+                <DevelopmentPlansPanel
+                  data={data}
+                  plans={plans}
+                  employeeId={employeeId!}
+                  canApprove={data.canManage || (data.canAssess && employeeId !== user?.id)}
+                />
+                <JobAssignmentsPanel data={data} setup={setup} employeeId={employeeId!} />
+                <CompetencyAssessmentPanel
+                  data={data}
+                  employeeId={employeeId!}
+                  canAssess={data.canManage || (data.canAssess && employeeId !== user?.id)}
+                />
+              </>
+            ) : (
+              <p>{t("competencies.empty")}</p>
             )}
-            <DevelopmentPlansPanel
-              data={data}
-              plans={plans}
-              employeeId={employeeId!}
-              canApprove={data.canManage || (data.canAssess && employeeId !== user?.id)}
-            />
-            <CompetencyAssessmentPanel
-              data={data}
-              employeeId={employeeId!}
-              canAssess={data.canManage || (data.canAssess && employeeId !== user?.id)}
-            />
           </TabsContent>
           {data.canManage && (
             <>

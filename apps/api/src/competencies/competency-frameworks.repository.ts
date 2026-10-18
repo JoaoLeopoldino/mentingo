@@ -1,9 +1,11 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { asc, eq } from "drizzle-orm";
+import { PERMISSIONS } from "@repo/shared";
+import { asc, eq, not, or, sql } from "drizzle-orm";
 
 import { DatabasePg } from "src/common";
+import { PermissionsService } from "src/permissions/permissions.service";
 import { DB } from "src/storage/db/db.providers";
-import { competencyFrameworks, competencyScales } from "src/storage/schema";
+import { competencyFrameworks, competencyScales, users } from "src/storage/schema";
 
 import type {
   CreateCompetencyFramework,
@@ -11,9 +13,29 @@ import type {
 } from "./competency-frameworks.schema";
 @Injectable()
 export class CompetencyFrameworksRepository {
-  constructor(@Inject(DB) private readonly db: DatabasePg) {}
+  constructor(
+    @Inject(DB) private readonly db: DatabasePg,
+    private readonly permissionsService: PermissionsService,
+  ) {}
   async setup() {
     return {
+      assessors: await this.db
+        .select({
+          id: users.id,
+          name: sql<string>`concat_ws(' ', ${users.firstName}, ${users.lastName})`,
+        })
+        .from(users)
+        .where(
+          or(
+            not(
+              this.permissionsService.excludeUsersWithPermission(
+                PERMISSIONS.COMPETENCY_ASSESS_MANAGED,
+              ),
+            ),
+            not(this.permissionsService.excludeUsersWithPermission(PERMISSIONS.COMPETENCY_MANAGE)),
+          ),
+        )
+        .orderBy(asc(users.firstName)),
       frameworks: await this.db
         .select()
         .from(competencyFrameworks)

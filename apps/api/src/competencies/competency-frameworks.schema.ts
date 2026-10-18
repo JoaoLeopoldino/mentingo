@@ -24,6 +24,7 @@ export const createCompetencyScaleSchema = Type.Object(
   { additionalProperties: false },
 );
 export const competencyFrameworkSetupSchema = Type.Object({
+  assessors: Type.Array(Type.Object({ id: UUIDSchema, name: Type.String() })),
   frameworks: Type.Array(
     Type.Object({
       ...createCompetencyFrameworkSchema.properties,

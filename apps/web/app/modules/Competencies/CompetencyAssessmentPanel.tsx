@@ -66,8 +66,9 @@ export function CompetencyAssessmentPanel({
           <p>{item.rationale}</p>
           <p>
             {t("competencies.assessor")}:{" "}
-            {data.employees.find((x) => x.id === item.assessorId)?.name ?? item.assessorId} ·{" "}
-            {formatLocalizedDate(language, item.assessedAt)}
+            {data.actors.find((x) => x.id === item.assessorId)?.name ??
+              t("competencies.enterprise.unknownActor")}{" "}
+            · {formatLocalizedDate(language, item.assessedAt)}
           </p>
           {item.expiresAt && (
             <p>

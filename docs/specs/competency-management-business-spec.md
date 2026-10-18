@@ -4,7 +4,7 @@
 
 A equipa de formação pode definir competências profissionais exigidas para uma função e identificar colaboradores que ainda não demonstraram o nível necessário. O gestor regista uma avaliação explícita, com fundamentação e datas; o colaborador consulta a sua situação e pode apresentar evidência para avaliação.
 
-O percurso entregue é um MVP local funcional. Usa os grupos do Mentingo como unidades organizacionais e uma função principal por colaborador. Não constitui uma suite de RH ou uma declaração de prontidão para produção.
+O percurso entregue é um MVP local funcional. Usa os grupos do Mentingo como unidades organizacionais e uma função principal e atribuições profissionais adicionais por colaborador. Não constitui uma suite de RH ou uma declaração de prontidão para produção.
 
 ## Quem utiliza
 
@@ -39,7 +39,7 @@ As formações recomendadas usam os mecanismos de acesso e inscrição existente
 - Âmbito e cálculo de lacunas em `competencies.service.ts`; RLS nas seis tabelas iniciais e nas três novas tabelas de revisões, avaliações e revogações. As evidências permitem SELECT/INSERT ao papel da aplicação, sem política UPDATE/DELETE.
 - Migrações normais Drizzle 0223/0225/0226/0227 e backfill 0228; política RLS 0224 gerada por script para SQL não representável nesta versão do Drizzle. Não houve edição manual dos contratos gerados.
 - Não existe atribuição automática a partir de notas, certificados ou IA. Não são necessários jobs/eventos para estes pequenos registos síncronos; efeitos posteriores devem reutilizar o outbox existente.
-- Níveis são imutáveis neste MVP; não há anexos binários, múltiplas funções simultâneas, paginação empresarial ou ensaio de carga. A identidade do avaliador é apresentada pelo identificador quando não pertence à lista visível ao utilizador.
+- Níveis são imutáveis neste MVP; não há anexos binários, ensaios de sessões concorrentes ou prova de operação de produção. A identidade do avaliador é apresentada pelo identificador quando não pertence à lista visível ao utilizador.
 - Novas permissões exigem início de sessão actualizado: sessões JWT anteriores podem continuar sem os novos privilégios até renovação/início de sessão.
 
 ## Evidência de testes
@@ -67,3 +67,13 @@ O administrador organiza novas competências em frameworks com categorias simple
 Requisitos obrigatórios e opcionais têm versões com autor e períodos de vigência. Ao alterar um requisito, o administrador preserva a versão anterior. Uma alteração futura só afecta a matriz quando entra em vigor; requisitos expirados deixam de ser exigidos sem recuperar versões anteriores. A interface permite consultar esse histórico. Alterações concorrentes exigem actualização da versão conhecida.
 
 Validação conjunta neste checkpoint: 18 testes de domínio, nove testes API/PostgreSQL/RLS e seis checkpoints Chrome nos três papéis. Os testes não demonstram ainda capacidade com 500 colaboradores nem paridade integral com Totara Learn/Perform.
+
+## Funções simultâneas e gestão operacional
+
+O administrador acrescenta uma função adicional, unidade/grupo, gestor autorizado, vigência e identificador externo de atribuição. Terminar uma atribuição ou substituir a principal preserva o registo anterior. O gestor indicado deve ter permissão existente de avaliação e só recebe âmbito enquanto a atribuição vigorar. Não se cria uma hierarquia RH paralela.
+
+A matriz combina os requisitos das funções activas numa única linha por competência. Aplica o maior mínimo obrigatório; um objectivo opcional superior de outra função não eleva esse mínimo. O perfil conserva avaliações independentemente de mudar a função. Gestores filtram a equipa por pessoa, unidade, função, estado e evidências por rever, incluindo novas evidências de competências já demonstradas. A partir da fila podem rever evidência e avaliar o colaborador sem perder o perfil quando a pendência é resolvida.
+
+A gestão de avaliadores mostra pessoas com permissões existentes e liga aos perfis administrativos; não corresponde a credenciação por especialidade. A administração de permissões e a designação da chefia são distintas.
+
+Ensaios actualizados: 21 testes de domínio, 11 API/PostgreSQL/RLS e sete checkpoints Chrome para três papéis. Paginação HTTP sequencial com 500 colaboradores fictícios: média 84,29 ms em cinco páginas de 100, sem duplicações; não demonstra 500 sessões simultâneas. Migração das cinco atribuições prévias preservou todos os campos originais.

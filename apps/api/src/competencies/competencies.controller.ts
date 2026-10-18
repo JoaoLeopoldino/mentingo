@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Patch, Post, Put, Query } from "@nestjs/common";
 import { PERMISSIONS, type SupportedLanguages } from "@repo/shared";
+import { Type } from "@sinclair/typebox";
 import { Validate } from "nestjs-typebox";
 
 import { BaseResponse, baseResponse, UUIDSchema, UUIDType } from "src/common";
@@ -35,7 +36,7 @@ import {
   createCompetencyScaleSchema,
   competencyFrameworkSetupSchema,
   CreateCompetencyFramework,
-  CreateCompetencyScale
+  CreateCompetencyScale,
 } from "./competency-frameworks.schema";
 import {
   createDevelopmentPlanSchema,
@@ -44,10 +45,14 @@ import {
   CreateDevelopmentPlan,
   DevelopmentPlanCommand,
 } from "./development-plans.schema";
+import {
+  createCompetencyJobAssignmentSchema,
+  CreateCompetencyJobAssignment,
+} from "./job-assignments.schema";
 
 import type { CompetencyWorkspace, CompetencyIdResponse } from "./competencies.schema";
-import type {
-  CompetencyFrameworkSetup} from "./competency-frameworks.schema";
+import type { CompetencyWorkspaceFilters } from "./competencies.types";
+import type { CompetencyFrameworkSetup } from "./competency-frameworks.schema";
 import type { DevelopmentPlansWorkspace } from "./development-plans.schema";
 @Controller("competencies")
 @RequirePermission(
@@ -61,17 +66,62 @@ export class CompetenciesController {
   @Validate({
     request: [
       { type: "query", name: "userId", schema: UUIDSchema, required: false },
+      {
+        type: "query",
+        name: "page",
+        schema: Type.Integer({ minimum: 1, maximum: 100000 }),
+        required: false,
+      },
+      {
+        type: "query",
+        name: "perPage",
+        schema: Type.Integer({ minimum: 1, maximum: 100 }),
+        required: false,
+      },
+      { type: "query", name: "keyword", schema: Type.String({ maxLength: 200 }), required: false },
+      {
+        type: "query",
+        name: "pendingEvidenceOnly",
+        schema: Type.Union([Type.Boolean(), Type.Literal("true"), Type.Literal("false")]),
+        required: false,
+      },
+      { type: "query", name: "organizationalUnitId", schema: UUIDSchema, required: false },
+      { type: "query", name: "jobRoleId", schema: UUIDSchema, required: false },
+      {
+        type: "query",
+        name: "status",
+        schema: competencyWorkspaceSchema.properties.matrix.items.properties.status,
+        required: false,
+      },
       { type: "query", name: "language", schema: supportedLanguagesSchema, required: false },
     ],
     response: baseResponse(competencyWorkspaceSchema),
   })
   async getCompetencyWorkspace(
     @Query("userId") userId: UUIDType | undefined,
+    @Query("page") page: number | undefined,
+    @Query("perPage") perPage: number | undefined,
+    @Query("keyword") keyword: string | undefined,
+    @Query("pendingEvidenceOnly") pendingEvidenceOnly: boolean | "true" | "false" | undefined,
+    @Query("organizationalUnitId") organizationalUnitId: UUIDType | undefined,
+    @Query("jobRoleId") jobRoleId: UUIDType | undefined,
+    @Query("status") status: CompetencyWorkspaceFilters["status"],
     @Query("language") language: SupportedLanguages | undefined,
     @CurrentUser() actor: CurrentUserType,
   ): Promise<BaseResponse<CompetencyWorkspace>> {
-    return new BaseResponse(await this.competenciesService.workspace(actor, userId, language));
+    return new BaseResponse(
+      await this.competenciesService.workspace(actor, userId, language, {
+        page,
+        perPage,
+        keyword,
+        pendingEvidenceOnly: pendingEvidenceOnly === true || pendingEvidenceOnly === "true",
+        organizationalUnitId,
+        jobRoleId,
+        status,
+      }),
+    );
   }
+
   @Post("catalog")
   @RequirePermission(PERMISSIONS.COMPETENCY_MANAGE)
   @Validate({
@@ -251,5 +301,29 @@ export class CompetenciesController {
     @CurrentUser() actor: CurrentUserType,
   ): Promise<BaseResponse<CompetencyIdResponse>> {
     return new BaseResponse(await this.competenciesService.createScale(actor, body));
+  }
+  @Post("job-assignments")
+  @RequirePermission(PERMISSIONS.COMPETENCY_MANAGE)
+  @Validate({
+    request: [{ type: "body", schema: createCompetencyJobAssignmentSchema }],
+    response: baseResponse(competencyIdResponseSchema),
+  })
+  async createCompetencyJobAssignment(
+    @Body() body: CreateCompetencyJobAssignment,
+    @CurrentUser() actor: CurrentUserType,
+  ): Promise<BaseResponse<CompetencyIdResponse>> {
+    return new BaseResponse(await this.competenciesService.createJobAssignment(actor, body));
+  }
+  @Post("job-assignments/:id/end")
+  @RequirePermission(PERMISSIONS.COMPETENCY_MANAGE)
+  @Validate({
+    request: [{ type: "param", name: "id", schema: UUIDSchema }],
+    response: baseResponse(competencyIdResponseSchema),
+  })
+  async endCompetencyJobAssignment(
+    @Param("id") id: UUIDType,
+    @CurrentUser() actor: CurrentUserType,
+  ): Promise<BaseResponse<CompetencyIdResponse>> {
+    return new BaseResponse(await this.competenciesService.endJobAssignment(actor, id));
   }
 }

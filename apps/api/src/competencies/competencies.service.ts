@@ -7,6 +7,8 @@ import {
 } from "@nestjs/common";
 import { type SupportedLanguages, PERMISSIONS, hasPermission } from "@repo/shared";
 
+import { PermissionsService } from "src/permissions/permissions.service";
+
 import { CompetenciesRepository } from "./competencies.repository";
 import { CompetencyFrameworksRepository } from "./competency-frameworks.repository";
 import { buildCompetencyGaps } from "./competency-gaps";
@@ -24,11 +26,13 @@ import type {
   CompetencyRevocation,
   EvidenceReview,
 } from "./competencies.schema";
+import type { CompetencyWorkspaceFilters } from "./competencies.types";
 import type {
   CreateCompetencyFramework,
   CreateCompetencyScale,
 } from "./competency-frameworks.schema";
 import type { CreateDevelopmentPlan, DevelopmentPlanCommand } from "./development-plans.schema";
+import type { CreateCompetencyJobAssignment } from "./job-assignments.schema";
 import type { UUIDType } from "src/common";
 import type { CurrentUserType } from "src/common/types/current-user.type";
 @Injectable()
@@ -37,6 +41,7 @@ export class CompetenciesService {
     private readonly competenciesRepository: CompetenciesRepository,
     private readonly developmentPlansRepository: DevelopmentPlansRepository,
     private readonly competencyFrameworksRepository: CompetencyFrameworksRepository,
+    private readonly permissionsService: PermissionsService,
   ) {}
   private manage(actor: CurrentUserType) {
     if (!hasPermission(actor.permissions, PERMISSIONS.COMPETENCY_MANAGE))
@@ -80,10 +85,11 @@ export class CompetenciesService {
     actor: CurrentUserType,
     userId?: UUIDType,
     language?: SupportedLanguages,
+    filters: CompetencyWorkspaceFilters = {},
   ): Promise<CompetencyWorkspace> {
     if (userId) await this.employee(actor, userId);
     const scope = userId ? [userId] : await this.scope(actor);
-    const [catalog, levels, roles, requirements, units, employees] = await Promise.all([
+    const [catalog, levels, roles, requirements, units, visibleEmployees] = await Promise.all([
       this.competenciesRepository.catalog(),
       this.competenciesRepository.levels(),
       this.competenciesRepository.roles(),
@@ -91,28 +97,86 @@ export class CompetenciesService {
       this.competenciesRepository.units(language),
       this.competenciesRepository.employees(scope),
     ]);
-    const evidence = await this.competenciesRepository.evidence(employees.map((x) => x.id));
-    const assessments = await this.competenciesRepository.assessments(employees.map((x) => x.id));
-    const revocations = await this.competenciesRepository.revocations(assessments.map((x) => x.id));
-    const evidenceReviews = await this.competenciesRepository.evidenceReviews(
-      evidence.map((x) => x.id),
+    const visibleIds = visibleEmployees.map((x) => x.id);
+    const allAssignments = await this.competenciesRepository.jobAssignments(visibleIds);
+    const now = Date.now();
+    const activeAssignments = allAssignments.filter(
+      (x) =>
+        x.state === "active" &&
+        (!x.startsAt || Date.parse(x.startsAt) <= now) &&
+        (!x.endsAt || Date.parse(x.endsAt) > now),
     );
-    const reviewsByEvidence = new Map<string, (typeof evidenceReviews)[number]>();
-    for (const row of evidenceReviews)
-      if (!reviewsByEvidence.has(row.evidenceId)) reviewsByEvidence.set(row.evidenceId, row);
-    const requirementHistory = await this.competenciesRepository.requirementHistory();
-    const matrix = buildCompetencyGaps({
-      employees,
-      catalog,
-      requirements: resolveCompetencyRequirements(requirementHistory),
-      orderedEvidence: evidence.map((row) => ({
-        ...row,
-        status: reviewsByEvidence.get(row.id)?.status ?? row.status,
-      })),
-      orderedAssessments: assessments,
-      revocations,
-    });
+    const keyword = filters.keyword?.trim().toLocaleLowerCase() ?? "";
+    const candidates = visibleEmployees.filter(
+      (x) =>
+        (!keyword || `${x.firstName} ${x.lastName}`.toLocaleLowerCase().includes(keyword)) &&
+        (!filters.organizationalUnitId ||
+          activeAssignments.some(
+            (a) => a.userId === x.id && a.organizationalUnitId === filters.organizationalUnitId,
+          )) &&
+        (!filters.jobRoleId ||
+          activeAssignments.some((a) => a.userId === x.id && a.jobRoleId === filters.jobRoleId)),
+    );
+    const candidateIds = candidates.map((x) => x.id);
+    const [heads, summaries, requirementHistory] = await Promise.all([
+      this.competenciesRepository.currentAssessments(candidateIds),
+      this.competenciesRepository.evidenceSummaries(candidateIds),
+      this.competenciesRepository.requirementHistory(),
+    ]);
+    const restrictions = await this.competenciesRepository.revocations(heads.map((x) => x.id));
+    const allMatrix = buildCompetencyGaps(
+      {
+        employees: candidates,
+        jobAssignments: activeAssignments,
+        catalog,
+        requirements: resolveCompetencyRequirements(requirementHistory, now),
+        orderedEvidence: summaries,
+        orderedAssessments: heads,
+        revocations: restrictions,
+      },
+      now,
+    );
+    const matchingIds = new Set(
+      allMatrix.filter((x) => !filters.status || x.status === filters.status).map((x) => x.userId),
+    );
+    // Status filtering precedes pagination; otherwise compliant users on later pages disappear.
+    const pendingIds = new Set(
+      summaries.filter((x) => x.status === "pending").map((x) => x.userId),
+    );
+    const matching = candidates.filter(
+      (x) =>
+        (!filters.status || matchingIds.has(x.id)) &&
+        (!filters.pendingEvidenceOnly || pendingIds.has(x.id)),
+    );
+    const page = Number(filters.page ?? 1);
+    const perPage = Number(filters.perPage ?? 50);
+    const employees = matching.slice((page - 1) * perPage, page * perPage);
+    const pageIds = employees.map((x) => x.id);
+    const pageSet = new Set(pageIds);
+    const [evidence, assessments] = await Promise.all([
+      this.competenciesRepository.evidence(pageIds),
+      this.competenciesRepository.assessments(pageIds),
+    ]);
+    const [revocations, evidenceReviews] = await Promise.all([
+      this.competenciesRepository.revocations(assessments.map((x) => x.id)),
+      this.competenciesRepository.evidenceReviews(evidence.map((x) => x.id)),
+    ]);
+    const actors = await this.competenciesRepository.actorNames([
+      ...evidence.map((x) => x.recordedBy),
+      ...assessments.map((x) => x.assessorId),
+      ...evidenceReviews.map((x) => x.reviewerId),
+      ...revocations.map((x) => x.responsibleId),
+      ...allAssignments
+        .filter((x) => pageSet.has(x.userId))
+        .flatMap((x) => (x.managerId ? [x.managerId] : [])),
+    ]);
+    const jobAssignments = allAssignments.filter((x) => pageSet.has(x.userId));
+    const matrix = allMatrix.filter(
+      (x) => pageSet.has(x.userId) && (!filters.status || x.status === filters.status),
+    );
     return {
+      pagination: { page, perPage, total: matching.length },
+      actors,
       canManage: hasPermission(actor.permissions, PERMISSIONS.COMPETENCY_MANAGE),
       canAssess: hasPermission(actor.permissions, PERMISSIONS.COMPETENCY_ASSESS_MANAGED),
       catalog: catalog.map((x) => ({
@@ -122,6 +186,7 @@ export class CompetenciesService {
           .map((l) => ({ rank: l.rank, label: l.label })),
       })),
       roles,
+      jobAssignments,
       requirements,
       requirementHistory,
       learning: hasPermission(actor.permissions, PERMISSIONS.COMPETENCY_MANAGE)
@@ -129,7 +194,7 @@ export class CompetenciesService {
         : { courses: [], learningPaths: [] },
       units: hasPermission(actor.permissions, PERMISSIONS.COMPETENCY_MANAGE)
         ? units
-        : units.filter((x) => employees.some((e) => e.organizationalUnitId === x.id)),
+        : units.filter((x) => allAssignments.some((a) => a.organizationalUnitId === x.id)),
       employees: employees.map((x) => ({
         id: x.id,
         name: [x.firstName, x.lastName].join(" "),
@@ -137,10 +202,16 @@ export class CompetenciesService {
         organizationalUnitId: x.organizationalUnitId,
       })),
       matrix,
-      evidence,
-      assessments,
-      revocations,
-      evidenceReviews,
+      evidence: evidence.map(({ tenantId: _tenant, updatedAt: _updated, ...row }) => row),
+      assessments: assessments.map(
+        ({ tenantId: _tenant, updatedAt: _updated, commandHash: _hash, ...row }) => row,
+      ),
+      revocations: revocations.map(
+        ({ tenantId: _tenant, updatedAt: _updated, commandHash: _hash, ...row }) => row,
+      ),
+      evidenceReviews: evidenceReviews.map(
+        ({ tenantId: _tenant, updatedAt: _updated, ...row }) => row,
+      ),
     };
   }
   async create(actor: CurrentUserType, body: CreateCompetency) {
@@ -322,5 +393,34 @@ export class CompetenciesService {
     const row = await this.competencyFrameworksRepository.createScale(body);
     if (!row) throw new ConflictException("competencies.errors.duplicateCode");
     return row;
+  }
+  async createJobAssignment(actor: CurrentUserType, body: CreateCompetencyJobAssignment) {
+    this.manage(actor);
+    await this.employee(actor, body.userId);
+    if (
+      !(await this.competenciesRepository.roles()).some((x) => x.id === body.jobRoleId) ||
+      !(await this.competenciesRepository.membership(body.userId, body.organizationalUnitId))
+    )
+      throw new BadRequestException("competencies.errors.invalidReference");
+    this.dates(body.startsAt, body.endsAt);
+    if (body.managerId) {
+      const [manager] = await this.competenciesRepository.employees([body.managerId]);
+      if (!manager || body.managerId === body.userId)
+        throw new BadRequestException("competencies.errors.invalidReference");
+      const access = await this.permissionsService.getUserAccess(body.managerId);
+      if (
+        !hasPermission(access.permissions, PERMISSIONS.COMPETENCY_ASSESS_MANAGED) &&
+        !hasPermission(access.permissions, PERMISSIONS.COMPETENCY_MANAGE)
+      )
+        throw new BadRequestException("competencies.errors.invalidReference");
+    }
+    return this.competenciesRepository.createJobAssignment(body, actor.userId);
+  }
+  async endJobAssignment(actor: CurrentUserType, id: UUIDType) {
+    this.manage(actor);
+    const row = await this.competenciesRepository.findJobAssignment(id);
+    if (!row) throw new NotFoundException("competencies.errors.notFound");
+    await this.employee(actor, row.userId);
+    return this.competenciesRepository.endJobAssignment(id, row.userId);
   }
 }

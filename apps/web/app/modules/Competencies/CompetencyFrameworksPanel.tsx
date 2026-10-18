@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
 
 import { useCreateCompetencyFramework } from "~/api/mutations/useCreateCompetencyFramework";
@@ -30,6 +31,20 @@ export function CompetencyFrameworksPanel({
     <section className="space-y-4" data-testid="competency-framework-setup">
       <h2 className="text-xl font-semibold">{t("competencies.frameworks.title")}</h2>
       <p className="text-sm text-muted-foreground">{t("competencies.frameworks.notice")}</p>
+      <details className="rounded border p-4">
+        <summary>{t("competencies.jobs.assessors")}</summary>
+        <p>{t("competencies.jobs.assessorPolicy")}</p>
+        <ul>
+          {setup?.assessors.map((x) => (
+            <li key={x.id}>
+              {x.name} ·{" "}
+              <Link className="underline" to={`/admin/users/${x.id}`}>
+                {t("competencies.jobs.manageAssessor")}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </details>
       <div className="grid gap-4 xl:grid-cols-2">
         <BusyForm
           busy={creatingFramework || creatingScale}

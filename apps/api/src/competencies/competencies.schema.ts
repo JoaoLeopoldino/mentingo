@@ -1,6 +1,8 @@
 import { Type, type Static } from "@sinclair/typebox";
 
 import { UUIDSchema } from "src/common";
+
+import { competencyJobAssignmentSchema } from "./job-assignments.schema";
 const name = Type.String({ minLength: 1, maxLength: 200, pattern: "[^ ]" });
 const text = Type.String({ maxLength: 4000 });
 const date = Type.String({ format: "date-time" });
@@ -157,10 +159,13 @@ export const competencyWorkspaceSchema = Type.Object({
     courses: Type.Array(Type.Object({ id: UUIDSchema, name: Type.String() })),
     learningPaths: Type.Array(Type.Object({ id: UUIDSchema, name: Type.String() })),
   }),
+  pagination: Type.Object({ page: Type.Integer(), perPage: Type.Integer(), total: Type.Integer() }),
+  actors: Type.Array(Type.Object({ id: UUIDSchema, name: Type.String() })),
   canManage: Type.Boolean(),
   canAssess: Type.Boolean(),
   catalog: Type.Array(competency),
   roles: Type.Array(role),
+  jobAssignments: Type.Array(competencyJobAssignmentSchema),
   requirements: Type.Array(requirement),
   requirementHistory: Type.Array(requirementVersion),
   units: Type.Array(Type.Object({ id: UUIDSchema, name: Type.String() })),
@@ -178,6 +183,7 @@ export const competencyWorkspaceSchema = Type.Object({
       competencyId: UUIDSchema,
       requiredLevel: Type.Integer(),
       mandatory: Type.Boolean(),
+      jobRoleIds: Type.Array(UUIDSchema),
       assessmentId: nullableId,
       currentLevel: Type.Union([Type.Integer(), Type.Null()]),
       status: Type.Union([

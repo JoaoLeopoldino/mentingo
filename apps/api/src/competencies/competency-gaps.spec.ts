@@ -153,3 +153,74 @@ it("applies suspension only during its effective interval", () => {
     )[0].status,
   ).toBe("met");
 });
+
+const job = (jobRoleId = "role") => ({
+  id: `job-${jobRoleId}`,
+  userId: "employee",
+  jobRoleId,
+  organizationalUnitId: "unit",
+  managerId: null,
+  startsAt: null,
+  endsAt: null,
+  externalHrId: null,
+  state: "active" as const,
+  isPrimary: jobRoleId === "role",
+  createdAt: "2026-01-01T00:00:00Z",
+});
+it("unions two active roles and uses the highest mandatory minimum without duplicate competency rows", () => {
+  const requirements = [
+    base.requirements[0],
+    { ...base.requirements[0], id: "req2", jobRoleId: "second", minimumLevel: 3 },
+  ];
+  const result = buildCompetencyGaps(
+    {
+      ...base,
+      requirements,
+      jobAssignments: [job(), job("second")],
+      orderedAssessments: [assessment(2)],
+    },
+    now,
+  );
+  expect(result).toHaveLength(1);
+  expect(result[0]).toMatchObject({
+    requiredLevel: 3,
+    mandatory: true,
+    status: "insufficient",
+    jobRoleIds: ["role", "second"],
+  });
+});
+it("does not let an optional higher level raise another role's mandatory target", () => {
+  const requirements = [
+    base.requirements[0],
+    { ...base.requirements[0], id: "req2", jobRoleId: "second", minimumLevel: 3, mandatory: false },
+  ];
+  expect(
+    buildCompetencyGaps(
+      {
+        ...base,
+        requirements,
+        jobAssignments: [job(), job("second")],
+        orderedAssessments: [assessment(2)],
+      },
+      now,
+    )[0],
+  ).toMatchObject({ requiredLevel: 2, mandatory: true, status: "met" });
+});
+it("excludes ended, expired and future assignments; legacy unknown start dates remain active", () => {
+  expect(
+    buildCompetencyGaps({ ...base, jobAssignments: [{ ...job(), state: "ended" }] }, now),
+  ).toEqual([]);
+  expect(
+    buildCompetencyGaps(
+      { ...base, jobAssignments: [{ ...job(), endsAt: "2026-01-01T00:00:00Z" }] },
+      now,
+    ),
+  ).toEqual([]);
+  expect(
+    buildCompetencyGaps(
+      { ...base, jobAssignments: [{ ...job(), startsAt: "2030-01-01T00:00:00Z" }] },
+      now,
+    ),
+  ).toEqual([]);
+  expect(buildCompetencyGaps({ ...base, jobAssignments: [job()] }, now)).toHaveLength(1);
+});

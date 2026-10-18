@@ -44,6 +44,15 @@ export function DevelopmentPlansPanel({
   const recommendation = data.matrix.find(
     (x) => x.userId === employeeId && x.competencyId === competencyId,
   );
+  const learningOptions = (
+    all: { id: string; name: string }[],
+    id: string | null | undefined,
+    label: string,
+  ) => {
+    if (data.canManage) return all;
+    if (!id) return [];
+    return [{ id, name: label }];
+  };
   return (
     <section className="space-y-4" data-testid="competency-development-plans">
       <h2 className="text-xl font-semibold">{t("competencies.plans.title")}</h2>
@@ -109,22 +118,28 @@ export function DevelopmentPlansPanel({
         <Field label={t("competencies.plans.activities")}>
           <Textarea name="activities" required maxLength={4000} />
         </Field>
-        {data.canManage && (
-          <>
-            <Picker
-              name="courseId"
-              label={t("competencies.course")}
-              options={data.learning.courses}
-              optional
-            />
-            <Picker
-              name="learningPathId"
-              label={t("competencies.learningPath")}
-              options={data.learning.learningPaths}
-              optional
-            />
-          </>
-        )}
+        <>
+          <Picker
+            name="courseId"
+            label={t("competencies.course")}
+            options={learningOptions(
+              data.learning.courses,
+              recommendation?.courseId,
+              t("competencies.course"),
+            )}
+            optional
+          />
+          <Picker
+            name="learningPathId"
+            label={t("competencies.learningPath")}
+            options={learningOptions(
+              data.learning.learningPaths,
+              recommendation?.learningPathId,
+              t("competencies.path"),
+            )}
+            optional
+          />
+        </>
         <Button type="submit">{t("competencies.plans.create")}</Button>
       </BusyForm>
       {!current.length && <p>{t("competencies.plans.empty")}</p>}
@@ -159,9 +174,7 @@ export function DevelopmentPlansPanel({
             </p>
             <p>
               {t("competencies.plans.responsible")}:{" "}
-              {data.employees.find((x) => x.id === plan.responsibleId)?.name ??
-                plan.responsibleId ??
-                "—"}
+              {plans?.people.find((x) => x.id === plan.responsibleId)?.name ?? "—"}
             </p>
             <ul className="list-inside list-disc">
               {items.map((item) => (
@@ -231,7 +244,8 @@ export function DevelopmentPlansPanel({
                     <li key={entry.id} className="rounded border p-2">
                       {t(`competencies.plans.actions.${entry.action}`)} ·{" "}
                       {formatLocalizedDate(language, entry.createdAt)} ·{" "}
-                      {data.employees.find((x) => x.id === entry.actorId)?.name ?? entry.actorId}
+                      {plans?.people.find((x) => x.id === entry.actorId)?.name ??
+                        t("competencies.enterprise.unknownActor")}
                       <p>{entry.rationale}</p>
                     </li>
                   ))}

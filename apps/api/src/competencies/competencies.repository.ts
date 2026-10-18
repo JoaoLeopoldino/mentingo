@@ -1,5 +1,5 @@
 import { BadRequestException, ConflictException, Inject, Injectable } from "@nestjs/common";
-import { and, asc, desc, eq, inArray, isNull, sql } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, isNull, or, lte, gt, sql } from "drizzle-orm";
 
 import { DatabasePg } from "src/common";
 import { LocalizationService } from "src/localization/localization.service";
@@ -35,6 +35,7 @@ import type {
   CompetencyRevocation,
   EvidenceReview,
 } from "./competencies.schema";
+import type { CreateCompetencyJobAssignment } from "./job-assignments.schema";
 import type { SupportedLanguages } from "@repo/shared";
 import type { UUIDType } from "src/common";
 @Injectable()
@@ -93,7 +94,22 @@ export class CompetenciesRepository {
         organizationalUnitId: competencyAssignments.organizationalUnitId,
       })
       .from(users)
-      .leftJoin(competencyAssignments, eq(competencyAssignments.userId, users.id))
+      .leftJoin(
+        competencyAssignments,
+        and(
+          eq(competencyAssignments.userId, users.id),
+          eq(competencyAssignments.isPrimary, true),
+          eq(competencyAssignments.state, "active"),
+          or(
+            isNull(competencyAssignments.startsAt),
+            lte(competencyAssignments.startsAt, new Date().toISOString()),
+          ),
+          or(
+            isNull(competencyAssignments.endsAt),
+            gt(competencyAssignments.endsAt, new Date().toISOString()),
+          ),
+        ),
+      )
       .where(
         and(
           isNull(users.deletedAt),
@@ -101,14 +117,44 @@ export class CompetenciesRepository {
           ids ? inArray(users.id, ids) : undefined,
         ),
       )
-      .orderBy(asc(users.firstName));
+      .orderBy(asc(users.firstName), asc(users.lastName), asc(users.id));
   }
   async managedUsers(managerId: UUIDType) {
-    return this.db
+    const byGroup = await this.db
       .selectDistinct({ id: groupUsers.userId })
       .from(groupUsers)
       .innerJoin(groupManagerGroups, eq(groupManagerGroups.groupId, groupUsers.groupId))
       .where(eq(groupManagerGroups.managerUserId, managerId));
+    const now = new Date().toISOString();
+    const byJob = await this.db
+      .selectDistinct({ id: competencyAssignments.userId })
+      .from(competencyAssignments)
+      .where(
+        and(
+          eq(competencyAssignments.managerId, managerId),
+          eq(competencyAssignments.state, "active"),
+          or(isNull(competencyAssignments.startsAt), lte(competencyAssignments.startsAt, now)),
+          or(isNull(competencyAssignments.endsAt), gt(competencyAssignments.endsAt, now)),
+        ),
+      );
+    return [...new Set([...byGroup, ...byJob].map((x) => x.id))].map((id) => ({ id }));
+  }
+  async jobAssignments(userIds: UUIDType[]) {
+    if (!userIds.length) return [];
+    return (
+      await this.db
+        .select()
+        .from(competencyAssignments)
+        .where(inArray(competencyAssignments.userId, userIds))
+        .orderBy(desc(competencyAssignments.createdAt))
+    ).map(({ commandHash: _hash, tenantId: _tenant, updatedAt: _updated, ...row }) => row);
+  }
+  async findJobAssignment(id: UUIDType) {
+    const [row] = await this.db
+      .select()
+      .from(competencyAssignments)
+      .where(eq(competencyAssignments.id, id));
+    return row;
   }
   async evidence(userIds: UUIDType[]) {
     if (!userIds.length) return [];
@@ -195,34 +241,106 @@ export class CompetenciesRepository {
           set: data,
         })
         .returning();
-      await trx
-        .insert(competencyRequirementVersions)
-        .values({
-          requirementId: row.id,
-          jobRoleId: row.jobRoleId,
-          competencyId: row.competencyId,
-          minimumLevel: row.minimumLevel,
-          mandatory: row.mandatory,
-          version: row.version,
-          effectiveFrom: row.effectiveFrom,
-          effectiveUntil: row.effectiveUntil,
-          courseId: row.courseId,
-          learningPathId: row.learningPathId,
-          recordedBy: actorId,
-        });
+      await trx.insert(competencyRequirementVersions).values({
+        requirementId: row.id,
+        jobRoleId: row.jobRoleId,
+        competencyId: row.competencyId,
+        minimumLevel: row.minimumLevel,
+        mandatory: row.mandatory,
+        version: row.version,
+        effectiveFrom: row.effectiveFrom,
+        effectiveUntil: row.effectiveUntil,
+        courseId: row.courseId,
+        learningPathId: row.learningPathId,
+        recordedBy: actorId,
+      });
       return { id: row.id };
     });
   }
   async assign(body: CompetencyAssignment) {
-    const [row] = await this.db
-      .insert(competencyAssignments)
-      .values(body)
-      .onConflictDoUpdate({
-        target: [competencyAssignments.tenantId, competencyAssignments.userId],
-        set: body,
-      })
-      .returning({ id: competencyAssignments.id });
-    return row;
+    return this.db.transaction(async (trx) => {
+      await trx.execute(
+        sql`SELECT pg_advisory_xact_lock(hashtextextended(${`job-assignments:${body.userId}`}, 0))`,
+      );
+      const [current] = await trx
+        .select()
+        .from(competencyAssignments)
+        .where(
+          and(
+            eq(competencyAssignments.userId, body.userId),
+            eq(competencyAssignments.isPrimary, true),
+            eq(competencyAssignments.state, "active"),
+          ),
+        );
+      if (
+        current?.jobRoleId === body.jobRoleId &&
+        current.organizationalUnitId === body.organizationalUnitId
+      )
+        return { id: current.id };
+      const now = new Date().toISOString();
+      if (current)
+        await trx
+          .update(competencyAssignments)
+          .set({ state: "ended", endsAt: now })
+          .where(eq(competencyAssignments.id, current.id));
+      const [row] = await trx
+        .insert(competencyAssignments)
+        .values({ ...body, startsAt: now })
+        .returning({ id: competencyAssignments.id });
+      return row;
+    });
+  }
+  async createJobAssignment(body: CreateCompetencyJobAssignment, actorId: UUIDType) {
+    const commandHash = hashCompetencyCommand(body, actorId);
+    return this.db.transaction(async (trx) => {
+      await trx.execute(
+        sql`SELECT pg_advisory_xact_lock(hashtextextended(${`job-assignments:${body.userId}`}, 0))`,
+      );
+      const [retry] = await trx
+        .select()
+        .from(competencyAssignments)
+        .where(eq(competencyAssignments.id, body.id));
+      if (retry) {
+        if (retry.commandHash !== commandHash)
+          throw new ConflictException("competencies.errors.commandConflict");
+        return { id: retry.id };
+      }
+      if (body.externalHrId) {
+        await trx.execute(
+          sql`SELECT pg_advisory_xact_lock(hashtextextended(concat(current_setting('app.tenant_id', true), ':job-external:', ${body.externalHrId}::text), 0))`,
+        );
+        const [duplicate] = await trx
+          .select({ id: competencyAssignments.id })
+          .from(competencyAssignments)
+          .where(eq(competencyAssignments.externalHrId, body.externalHrId));
+        if (duplicate) throw new ConflictException("competencies.errors.duplicateExternalId");
+      }
+      const [row] = await trx
+        .insert(competencyAssignments)
+        .values({ ...body, isPrimary: false, commandHash })
+        .returning({ id: competencyAssignments.id });
+      return row;
+    });
+  }
+  async endJobAssignment(id: UUIDType, userId: UUIDType) {
+    return this.db.transaction(async (trx) => {
+      await trx.execute(
+        sql`SELECT pg_advisory_xact_lock(hashtextextended(${`job-assignments:${userId}`}, 0))`,
+      );
+      const [current] = await trx
+        .select()
+        .from(competencyAssignments)
+        .where(eq(competencyAssignments.id, id));
+      if (current.state === "ended") return { id };
+      const now = new Date().toISOString();
+      if (current.startsAt && Date.parse(current.startsAt) > Date.parse(now))
+        throw new BadRequestException("competencies.errors.invalidDates");
+      await trx
+        .update(competencyAssignments)
+        .set({ state: "ended", endsAt: now })
+        .where(eq(competencyAssignments.id, id));
+      return { id };
+    });
   }
   async appendEvidence(body: CompetencyEvidence, actorId: UUIDType) {
     const assessed = body.status !== "pending";
@@ -237,6 +355,61 @@ export class CompetenciesRepository {
       })
       .returning({ id: competencyEvidence.id });
     return row;
+  }
+  async currentAssessments(userIds: UUIDType[]) {
+    if (!userIds.length) return [];
+    return this.db
+      .selectDistinctOn([competencyAssessments.userId, competencyAssessments.competencyId])
+      .from(competencyAssessments)
+      .where(inArray(competencyAssessments.userId, userIds))
+      .orderBy(
+        asc(competencyAssessments.userId),
+        asc(competencyAssessments.competencyId),
+        desc(competencyAssessments.revision),
+      );
+  }
+  async evidenceSummaries(userIds: UUIDType[]) {
+    if (!userIds.length) return [];
+    const latest = this.db
+      .selectDistinctOn([competencyEvidenceReviews.evidenceId], {
+        evidenceId: competencyEvidenceReviews.evidenceId,
+        status: competencyEvidenceReviews.status,
+      })
+      .from(competencyEvidenceReviews)
+      .innerJoin(
+        competencyEvidence,
+        eq(competencyEvidence.id, competencyEvidenceReviews.evidenceId),
+      )
+      .where(inArray(competencyEvidence.userId, userIds))
+      .orderBy(
+        asc(competencyEvidenceReviews.evidenceId),
+        desc(competencyEvidenceReviews.createdAt),
+        desc(competencyEvidenceReviews.id),
+      )
+      .as("latest_competency_review");
+    return this.db
+      .select({
+        userId: competencyEvidence.userId,
+        competencyId: competencyEvidence.competencyId,
+        level: competencyEvidence.level,
+        expiresAt: competencyEvidence.expiresAt,
+        status: sql<
+          "pending" | "approved" | "rejected"
+        >`COALESCE(${latest.status}, ${competencyEvidence.status})`,
+      })
+      .from(competencyEvidence)
+      .leftJoin(latest, eq(latest.evidenceId, competencyEvidence.id))
+      .where(inArray(competencyEvidence.userId, userIds));
+  }
+  async actorNames(ids: UUIDType[]) {
+    if (!ids.length) return [];
+    return this.db
+      .select({
+        id: users.id,
+        name: sql<string>`concat_ws(' ', ${users.firstName}, ${users.lastName})`,
+      })
+      .from(users)
+      .where(inArray(users.id, [...new Set(ids)]));
   }
   async assessments(userIds: UUIDType[]) {
     if (!userIds.length) return [];

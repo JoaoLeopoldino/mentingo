@@ -228,6 +228,24 @@ try {
     "Employee reports activity completion and submits evidence; proficiency is not automatically awarded",
   );
   await profile(supervisor.page, employee.id);
+  await supervisor.page.getByRole("tab", { name: "Evidências pendentes", exact: true }).click();
+  const filtersForm = supervisor.page.getByTestId("competency-filters");
+  await filtersForm
+    .getByLabel("Apenas colaboradores com evidências por rever", { exact: true })
+    .check();
+  const [filtered] = await Promise.all([
+    supervisor.page.waitForResponse(
+      (r: any) =>
+        r.url().includes("/api/competencies/workspace?") &&
+        r.url().includes("pendingEvidenceOnly=true"),
+    ),
+    filtersForm.getByRole("button", { name: "Aplicar filtros", exact: true }).click(),
+  ]);
+  expect((await filtered.json()).data.pagination.total).toBe(1);
+  const pendingQueue = supervisor.page.getByTestId("competency-pending-queue");
+  await expect(pendingQueue.getByTestId("competency-pending-evidence")).toHaveCount(1);
+  await pendingQueue.getByRole("button", { name: "Rever evidência", exact: true }).click();
+  await expect(supervisor.page.getByTestId("competency-evidence-form")).toBeVisible();
   const review = supervisor.page.getByTestId("competency-review-form");
   await review
     .getByLabel("Descrição e fundamentação da evidência", { exact: true })
@@ -276,6 +294,72 @@ try {
   await expect(learner.page.getByTestId("competency-matrix")).toContainText("Requisito cumprido");
   results.push(
     "Employee sees preserved six-decision history and demonstrated competency in the matrix",
+  );
+  const secondRole = (
+    await admin.api.api.competenciesControllerCreateCompetencyJobRole({
+      code: `SUP_${suffix}`,
+      name: `Supervisor de segurança ${suffix}`,
+    })
+  ).data.data;
+  await admin.api.api.competenciesControllerSetCompetencyRequirement({
+    jobRoleId: secondRole.id,
+    competencyId: competency.id,
+    minimumLevel: 3,
+    mandatory: true,
+    expectedVersion: 0,
+    effectiveFrom: "2026-01-01T00:00:00Z",
+    effectiveUntil: null,
+    courseId: null,
+    learningPathId: null,
+  });
+  const secondUnit = await groups.create({
+    name: `Apoio Huíla — fictício ${suffix}`,
+    language: "pt-AO",
+  });
+  await admin.api.api.groupControllerSetUserGroups([unit.id, secondUnit.id], {
+    userId: employee.id,
+  });
+  await profile(admin.page, employee.id);
+  const jobForm = admin.page.getByTestId("competency-job-assignment-form");
+  await jobForm.getByLabel("Função profissional", { exact: true }).selectOption(secondRole.id);
+  await jobForm.getByLabel("Unidade organizacional", { exact: true }).selectOption(secondUnit.id);
+  await jobForm.getByLabel("Gestor responsável", { exact: true }).selectOption(manager.id);
+  await jobForm
+    .getByLabel("Identificador externo da atribuição RH", { exact: true })
+    .fill(`DEMO-${suffix}-2`);
+  await save(
+    admin.page,
+    jobForm,
+    "/api/competencies/job-assignments",
+    "Acrescentar atribuição profissional",
+  );
+  await admin.page
+    .getByRole("tab", { name: "Matriz de competências da equipa", exact: true })
+    .click();
+  const combined = admin.page
+    .getByTestId("competency-matrix")
+    .getByRole("row")
+    .filter({ hasText: employee.lastName });
+  await expect(combined).toContainText("Proficiência insuficiente");
+  await expect(combined).toContainText("Apoio Huíla");
+  await admin.page.screenshot({ path: `${output}/16-enterprise-two-jobs.png`, fullPage: true });
+  await admin.page.getByRole("tab", { name: "Perfil do colaborador", exact: true }).click();
+  const secondaryJob = admin.page
+    .getByTestId("competency-job-assignment")
+    .filter({ hasText: `Supervisor de segurança ${suffix}` });
+  const currentJobs = (
+    await admin.api.api.competenciesControllerGetCompetencyWorkspace({ userId: employee.id })
+  ).data.data.jobAssignments;
+  const secondary = currentJobs.find((x) => x.jobRoleId === secondRole.id && x.state === "active")!;
+  await save(
+    admin.page,
+    secondaryJob,
+    `/api/competencies/job-assignments/${secondary.id}/end`,
+    "Terminar atribuição",
+  );
+  await expect(secondaryJob).toContainText("Terminada");
+  results.push(
+    "Two active jobs combine requirements and organizational units; ending the secondary job preserves its history",
   );
   const final = (await learner.api.api.competenciesControllerGetDevelopmentPlans()).data.data;
   expect(final.plans.find((x) => x.id === plan.id)).toMatchObject({

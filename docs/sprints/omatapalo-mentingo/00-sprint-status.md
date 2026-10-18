@@ -1,8 +1,8 @@
 # Sprint de validação técnica — Utu Lab / Omatapalo
 
-Estado actual: **22/32 critérios = 68,75%; CONDITIONAL GO para validação, sem GO para produção**. Relatório desta execução: [14](14-next-execution.md); [QA visual](15-next-visual-qa.md). Os checkpoints abaixo preservam a evolução histórica.
+Estado actual: **22/32 critérios = 68,75%; CONDITIONAL GO para validação, sem GO para produção**. Evolução empresarial: [16](16-enterprise-competencies.md); [paridade delimitada](17-competency-totara-parity.md). Relatório anterior: [14](14-next-execution.md); [QA anterior](15-next-visual-qa.md). Os checkpoints abaixo preservam a evolução histórica.
 
-Base: `7a23e967d88947238386c588663140c21a284294` (v4.23.0). Branch actual: `sprint/omatapalo-resume-20261017`. Worktree persistente: `/Users/joaoleopoldino/Development/CaniveteLab/mentingo/.local/worktrees/omatapalo-20261017`. Checkout original recuperado e verificado; implementação mantida no worktree separado.
+Base: `7a23e967d88947238386c588663140c21a284294` (v4.23.0). Branch actual: `feat/omatapalo-enterprise-competencies-20261018`, a partir de `4e187000`. Worktree persistente: `/Users/joaoleopoldino/Development/CaniveteLab/mentingo/.local/worktrees/omatapalo-20261017`. Checkout original recuperado e verificado; implementação mantida no worktree separado.
 
 Início: **2026-10-17 14:56:11 UTC**. Os intervalos incluem downloads, espera por permissões e limitações de disco; actividades sobrepostas não têm tempos exclusivos inventados.
 
@@ -64,3 +64,9 @@ O catálogo UI está estruturalmente completo: 6.099/6.099, com 6.042 valores di
 Catálogo pt-AO completo estruturalmente `b414f7ba`; SCORM real no Chrome e encaminhamento `906c9398`; Auto HLS `30ff88f2`. Total actual: **22/32 = 68,75%**, mantendo os 32 critérios. Não se fecham Android, canais linguísticos integrais, pacote SCORM independente, revogação pública ou operação apenas por este total. Passaram 28 checkpoints Chrome, 35 testes web, 10 de validação de catálogo, 8 de domínio, 6 API/RLS de competências, 9 API/RLS offline e 254 de renderização de emails. Não se somam repetições de testes para aumentar a pontuação.
 
 Checkpoint medido desta execução: **18-10-2026 10:23:10 UTC**; desde 03:46:27 UTC decorreram **6 h 36 min 43 s**, incluindo esperas, aprovações, builds, testes e documentação. API reiniciada para carregar os emails actualizados; competências repetidas com 5/5 checkpoints. Frontend 200 e API sem sessão 401. Checkout original em `main` sem alterações tracked/staged, mantendo `docs/audits/` não versionado. Não se trata de horas exclusivas por funcionalidade.
+
+## Competências empresariais — checkpoint de 18/10/2026
+
+Separação de evidência/avaliação/revogação; frameworks, escalas e requisitos versionados; planos individuais com aprovação e histórico; duas funções activas e paginação/filtros da equipa. 21 testes de domínio, 11 API/RLS e sete checkpoints Chrome para administrador, gestor e colaborador. Ensaio HTTP sequencial com 500 colaboradores: média 84,29 ms/página de 100; não é carga concorrente. Catálogo pt-AO: 6.201 chaves estruturais antes das verificações finais, 57 invariantes, sem revisão linguística humana integral. Ver resultado actual do validador e relatório 16.
+
+O total mantém-se **22/32 = 68,75%**, pois os critérios originais de competências já estavam contados. Competências têm agora evidência reforçada; ERP, Android físico e produção continuam abertos. Nenhum push, merge ou deployment.

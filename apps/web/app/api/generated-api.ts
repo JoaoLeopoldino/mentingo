@@ -37481,6 +37481,16 @@ export interface GetCompetencyWorkspaceResponse {
         name: string;
       }[];
     };
+    pagination: {
+      page: number;
+      perPage: number;
+      total: number;
+    };
+    actors: {
+      /** @format uuid */
+      id: string;
+      name: string;
+    }[];
     canManage: boolean;
     canAssess: boolean;
     catalog: {
@@ -37542,6 +37552,23 @@ export interface GetCompetencyWorkspaceResponse {
       name: string;
       /** @format uuid */
       id: string;
+    }[];
+    jobAssignments: {
+      /** @format uuid */
+      id: string;
+      /** @format uuid */
+      userId: string;
+      /** @format uuid */
+      jobRoleId: string;
+      /** @format uuid */
+      organizationalUnitId: string;
+      managerId: string | null;
+      startsAt: string | null;
+      endsAt: string | null;
+      externalHrId: string | null;
+      isPrimary: boolean;
+      state: "active" | "ended";
+      createdAt: string;
     }[];
     requirements: {
       /** @format uuid */
@@ -37607,6 +37634,7 @@ export interface GetCompetencyWorkspaceResponse {
       competencyId: string;
       requiredLevel: number;
       mandatory: boolean;
+      jobRoleIds: string[];
       assessmentId: string | null;
       currentLevel: number | null;
       status:
@@ -37965,6 +37993,11 @@ export interface RevokeCompetencyAssessmentResponse {
 
 export interface GetDevelopmentPlansResponse {
   data: {
+    people: {
+      /** @format uuid */
+      id: string;
+      name: string;
+    }[];
     plans: {
       /** @format uuid */
       id: string;
@@ -38109,6 +38142,11 @@ export interface DecideDevelopmentPlanResponse {
 
 export interface GetCompetencyFrameworkSetupResponse {
   data: {
+    assessors: {
+      /** @format uuid */
+      id: string;
+      name: string;
+    }[];
     frameworks: {
       /**
        * @minLength 1
@@ -38233,6 +38271,36 @@ export interface CreateCompetencyScaleBody {
 }
 
 export interface CreateCompetencyScaleResponse {
+  data: {
+    /** @format uuid */
+    id: string;
+  };
+}
+
+export interface CreateCompetencyJobAssignmentBody {
+  /** @format uuid */
+  id: string;
+  /** @format uuid */
+  userId: string;
+  /** @format uuid */
+  jobRoleId: string;
+  /** @format uuid */
+  organizationalUnitId: string;
+  managerId: string | null;
+  /** @format date-time */
+  startsAt: string;
+  endsAt: string | null;
+  externalHrId: string | null;
+}
+
+export interface CreateCompetencyJobAssignmentResponse {
+  data: {
+    /** @format uuid */
+    id: string;
+  };
+}
+
+export interface EndCompetencyJobAssignmentResponse {
   data: {
     /** @format uuid */
     id: string;
@@ -48691,6 +48759,33 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query?: {
         /** @format uuid */
         userId?: string;
+        /**
+         * @min 1
+         * @max 100000
+         */
+        page?: number;
+        /**
+         * @min 1
+         * @max 100
+         */
+        perPage?: number;
+        /** @maxLength 200 */
+        keyword?: string;
+        pendingEvidenceOnly?: boolean | "true" | "false";
+        /** @format uuid */
+        organizationalUnitId?: string;
+        /** @format uuid */
+        jobRoleId?: string;
+        status?:
+          | "met"
+          | "missing"
+          | "insufficient"
+          | "pending"
+          | "rejected"
+          | "expired"
+          | "evidence_rejected"
+          | "revoked"
+          | "suspended";
         /** @default "en" */
         language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
@@ -48984,6 +49079,39 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "POST",
         body: data,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name CompetenciesControllerCreateCompetencyJobAssignment
+     * @request POST:/api/competencies/job-assignments
+     */
+    competenciesControllerCreateCompetencyJobAssignment: (
+      data: CreateCompetencyJobAssignmentBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<CreateCompetencyJobAssignmentResponse, any>({
+        path: `/api/competencies/job-assignments`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name CompetenciesControllerEndCompetencyJobAssignment
+     * @request POST:/api/competencies/job-assignments/{id}/end
+     */
+    competenciesControllerEndCompetencyJobAssignment: (id: string, params: RequestParams = {}) =>
+      this.request<EndCompetencyJobAssignmentResponse, any>({
+        path: `/api/competencies/job-assignments/${id}/end`,
+        method: "POST",
         format: "json",
         ...params,
       }),

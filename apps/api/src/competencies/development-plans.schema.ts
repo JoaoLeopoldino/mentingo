@@ -46,6 +46,7 @@ export const developmentPlanCommandSchema = Type.Object(
   { additionalProperties: false },
 );
 export const developmentPlansWorkspaceSchema = Type.Object({
+  people: Type.Array(Type.Object({ id: UUIDSchema, name: Type.String() })),
   plans: Type.Array(
     Type.Object({
       ...Type.Omit(createDevelopmentPlanSchema, ["activities"]).properties,

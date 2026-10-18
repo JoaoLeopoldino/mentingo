@@ -7735,7 +7735,8 @@
       "planChanged": "O plano foi alterado. Actualize a página e reveja a decisão.",
       "activitiesIncomplete": "Declare a conclusão das actividades antes de solicitar a avaliação final.",
       "planAssessmentRequired": "É necessária uma avaliação profissional válida, suficiente e fundamentada numa evidência aceite deste plano.",
-      "requirementChanged": "O requisito foi alterado. Actualize a página e reveja a nova versão."
+      "requirementChanged": "O requisito foi alterado. Actualize a página e reveja a nova versão.",
+      "duplicateExternalId": "O identificador externo de RH já está associado a outra atribuição."
     },
     "enterprise": {
       "formalAssessments": "Avaliações profissionais formais",
@@ -7764,7 +7765,8 @@
         "document": "Referência documental",
         "training": "Registo de formação"
       },
-      "claimedLevel": "Nível proposto"
+      "claimedLevel": "Nível proposto",
+      "unknownActor": "Utilizador indisponível"
     },
     "plans": {
       "title": "Plano individual de desenvolvimento",
@@ -7813,6 +7815,38 @@
       "mandatory": "Obrigatório",
       "optional": "Opcional",
       "requirementHistory": "Histórico de versões dos requisitos"
+    },
+    "jobs": {
+      "title": "Atribuições profissionais",
+      "notice": "Os requisitos das funções activas são combinados. Prevalece o maior mínimo obrigatório; um objectivo opcional superior não aumenta esse mínimo. Os grupos continuam a representar unidades neste módulo.",
+      "primary": "Função principal",
+      "additional": "Atribuição adicional",
+      "manager": "Gestor responsável",
+      "unknownStart": "Início não registado (atribuição anterior)",
+      "externalId": "Identificador externo da atribuição RH",
+      "end": "Terminar atribuição",
+      "create": "Acrescentar atribuição profissional",
+      "startsAt": "Início (agora se vazio)",
+      "endsAt": "Fim previsto (opcional)",
+      "states": {
+        "active": "Activa (sujeita às datas)",
+        "ended": "Terminada"
+      },
+      "assessors": "Avaliadores com permissão no Mentingo",
+      "assessorPolicy": "As permissões existentes e o âmbito dos grupos ou atribuições profissionais determinam quem pode avaliar. A designação de gestor não concede novas permissões nem permite auto-avaliação. Não há ainda credenciação por especialidade.",
+      "manageAssessor": "Gerir perfil, função e âmbito"
+    },
+    "team": {
+      "search": "Pesquisar colaborador",
+      "pendingOnly": "Apenas colaboradores com evidências por rever",
+      "apply": "Aplicar filtros",
+      "pagination": "Paginação dos colaboradores",
+      "pageSummary": "Página {{page}} · {{count}} de {{total}} colaboradores",
+      "previous": "Anterior",
+      "next": "Seguinte",
+      "pending": "Evidências pendentes",
+      "pendingScope": "Evidências dos colaboradores desta página. Use o filtro de evidências por rever para localizar pendências em toda a equipa autorizada.",
+      "back": "Voltar à equipa"
     }
   },
   "offlineRecovery": {

@@ -37,8 +37,43 @@ export function buildCompetencyGaps(
     else if (row.status === "rejected") rejected.add(key);
   }
   const result: CompetencyWorkspace["matrix"] = [];
-  for (const employee of input.employees)
-    for (const requirement of requirementsByRole.get(employee.jobRoleId ?? "") ?? []) {
+  const rolesByUser = new Map<string, Set<string>>();
+  for (const assignment of input.jobAssignments ?? []) {
+    if (
+      assignment.state !== "active" ||
+      (assignment.startsAt && Date.parse(assignment.startsAt) > now) ||
+      (assignment.endsAt && Date.parse(assignment.endsAt) <= now)
+    )
+      continue;
+    const roles = rolesByUser.get(assignment.userId) ?? new Set<string>();
+    roles.add(assignment.jobRoleId);
+    rolesByUser.set(assignment.userId, roles);
+  }
+  for (const employee of input.employees) {
+    const roles =
+      input.jobAssignments === undefined
+        ? [employee.jobRoleId ?? ""]
+        : [...(rolesByUser.get(employee.id) ?? [])];
+    const required = new Map<
+      string,
+      { requirement: CompetencyGapInput["requirements"][number]; jobRoleIds: string[] }
+    >();
+    for (const roleId of roles)
+      for (const row of requirementsByRole.get(roleId) ?? []) {
+        const previous = required.get(row.competencyId);
+        if (!previous) required.set(row.competencyId, { requirement: row, jobRoleIds: [roleId] });
+        else {
+          previous.jobRoleIds.push(roleId);
+          // Optional higher targets never raise a mandatory minimum from another active role.
+          if (
+            (row.mandatory && !previous.requirement.mandatory) ||
+            (row.mandatory === previous.requirement.mandatory &&
+              row.minimumLevel > previous.requirement.minimumLevel)
+          )
+            previous.requirement = row;
+        }
+      }
+    for (const { requirement, jobRoleIds } of required.values()) {
       const key = `${employee.id}:${requirement.competencyId}`;
       const decision = decisions.get(key);
       let status: CompetencyWorkspace["matrix"][number]["status"] = "missing";
@@ -58,6 +93,7 @@ export function buildCompetencyGaps(
         competencyId: requirement.competencyId,
         requiredLevel: requirement.minimumLevel,
         mandatory: requirement.mandatory,
+        jobRoleIds,
         assessmentId: decision?.id ?? null,
         currentLevel,
         status,
@@ -65,5 +101,6 @@ export function buildCompetencyGaps(
         learningPathId: requirement.learningPathId,
       });
     }
+  }
   return result;
 }

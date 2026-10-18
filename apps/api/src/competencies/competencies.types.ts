@@ -1,6 +1,7 @@
 import type { CompetencyWorkspace } from "./competencies.schema";
 export type CompetencyGapInput = {
   employees: Pick<CompetencyWorkspace["employees"][number], "id" | "jobRoleId">[];
+  jobAssignments?: CompetencyWorkspace["jobAssignments"];
   catalog: Pick<CompetencyWorkspace["catalog"][number], "id" | "active">[];
   requirements: CompetencyWorkspace["requirements"];
   orderedAssessments: Pick<
@@ -16,4 +17,14 @@ export type CompetencyGapInput = {
     CompetencyWorkspace["evidence"][number],
     "userId" | "competencyId" | "status" | "level" | "expiresAt"
   >[];
+};
+
+export type CompetencyWorkspaceFilters = {
+  page?: number;
+  perPage?: number;
+  keyword?: string;
+  pendingEvidenceOnly?: boolean;
+  organizationalUnitId?: string;
+  jobRoleId?: string;
+  status?: CompetencyWorkspace["matrix"][number]["status"];
 };
