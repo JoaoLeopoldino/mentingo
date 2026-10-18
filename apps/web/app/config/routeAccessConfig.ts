@@ -111,6 +111,13 @@ export const routeAccessConfig = createRouteConfig({
   "news/add": NEWS_EDIT_ACCESS,
   "news/:newsId/edit": NEWS_EDIT_ACCESS,
   dashboard: DASHBOARD_READ_ACCESS,
+  competencies: {
+    anyOf: [
+      PERMISSIONS.COMPETENCY_READ_SELF,
+      PERMISSIONS.COMPETENCY_MANAGE,
+      PERMISSIONS.COMPETENCY_ASSESS_MANAGED,
+    ],
+  },
   reports: { anyOf: [PERMISSIONS.REPORT_READ, PERMISSIONS.MANAGED_GROUP_RESULTS_READ] },
   "ai-mentor/practice/:id": {
     allOf: [PERMISSIONS.AI_USE],

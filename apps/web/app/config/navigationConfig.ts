@@ -86,6 +86,12 @@ export const getNavigationConfig = (
             ] as NavigationItem[])
           : []),
         {
+          label: t("competencies.title"),
+          path: "competencies",
+          iconName: "Route",
+          accessRequirement: routeAccessConfig.competencies,
+        },
+        {
           label: t("navigationSideBar.reports"),
           path: "reports",
           iconName: "FileChartColumnIncreasing",

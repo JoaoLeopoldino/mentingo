@@ -15,7 +15,14 @@
       "completed": "Concluído",
       "archived": "Arquivado"
     },
-    "title": "Conversas com IA"
+    "title": "Conversas com IA",
+    "filters": "Filtros",
+    "details": "Detalhes",
+    "source": "Formação",
+    "loadMore": "Carregar mais",
+    "lastActivity": "Última actividade",
+    "errors": {},
+    "types": {}
   },
   "emailTemplates": {
     "ui": {
@@ -34,8 +41,15 @@
       "complete": "Concluir",
       "blocks": {
         "image": "Imagem"
-      }
-    }
+      },
+      "placeholdersHelp": {},
+      "actions": "Acções",
+      "system": "Sistema",
+      "baseLanguage": "Idioma de base"
+    },
+    "events": {},
+    "errors": {},
+    "warnings": {}
   },
   "dashboardHome": {
     "title": "O seu painel",
@@ -280,7 +294,20 @@
     "viewFeedback": "Ver feedback",
     "conversationTitle": "Prática com mentor de IA",
     "mentorName": "Mentor de IA",
-    "send": "Enviar"
+    "send": "Enviar",
+    "form": {
+      "suggestions": {
+        "delayedOrder": {},
+        "orderMistake": {},
+        "sensitiveData": {}
+      },
+      "steps": {
+        "setScene": {},
+        "rehearse": {},
+        "reflect": {}
+      }
+    },
+    "feedback": {}
   },
   "common": {
     "deletedUser": "Utilizador eliminado",
@@ -428,24 +455,155 @@
     "field": {
       "price": "Preço",
       "category": "Categoria",
-      "description": "Descrição"
+      "description": "Descrição",
+      "title": "Título da formação",
+      "thumbnail": "Carregar miniatura"
     },
     "other": {
       "status": "Estado",
-      "free": "Gratuito"
+      "free": "Gratuito",
+      "setUpCourse": "Configurar formação",
+      "provideDetails": "Indique os dados para configurar uma nova formação",
+      "uploadFileHeader": "Clique para carregar ou arraste e largue",
+      "uploadFileBody": "Ficheiro SCORM .zip (máx. 500 MB)",
+      "pricing": "Preço",
+      "setUpPricing": "Definir o preço da formação",
+      "setUpStatus": "Definir o estado da formação",
+      "noDescription": "Ainda sem descrição.",
+      "untitled": "Sem título",
+      "paidCourse": "Formação paga",
+      "freeCourseBody": "Os formandos podem inscrever-se e aceder aos conteúdos da formação sem pagar.",
+      "paidCourseBody": "Os formandos podem adquirir e aceder aos conteúdos da formação. Depois de seleccionar esta opção, pode definir a moeda e o preço.",
+      "draftBody": "Os formandos não podem adquirir nem inscrever-se nesta formação. Para quem já está inscrito, a formação não aparecerá na lista de formações do formando.",
+      "publishBody": "Os formandos podem adquirir, inscrever-se e aceder aos conteúdos da formação. Após a inscrição, a formação aparecerá no painel do formando.",
+      "charactersLeft": "caracteres restantes"
     },
     "button": {
       "back": "Voltar",
-      "status": "Estado"
+      "status": "Estado",
+      "creatingCourse": "A criar formação…",
+      "createCourse": "Criar formação"
     },
     "create": {
-      "metadataSection": "Detalhes da formação"
+      "metadataSection": "Detalhes da formação",
+      "eyebrow": "SCORM 1.2",
+      "title": "Criar formação SCORM",
+      "subtitle": "Adicione os metadados da formação e anexe o pacote SCORM que constituirá o seu conteúdo.",
+      "requirements": {
+        "title": "Requisitos do pacote",
+        "version": "Pacote SCORM 1.2",
+        "archive": "Arquivo .zip até 500 MB",
+        "metadata": "Os metadados da formação podem ser editados antes da importação"
+      },
+      "packageSection": "Pacote SCORM",
+      "packageSectionDescription": "Anexe o pacote SCORM 1.2 a importar como conteúdo desta formação.",
+      "importNotice": "A importação de pacotes SCORM grandes pode demorar alguns minutos. Mantenha esta página aberta até o carregamento terminar.",
+      "metadataSectionDescription": "Estes campos correspondem à configuração de uma formação normal e serão usados como metadados de base.",
+      "uploadPackage": "Carregar pacote SCORM",
+      "dropPackage": "Largue aqui o pacote SCORM",
+      "uploadPackageDescription": "Arraste e largue um ficheiro SCORM 1.2 .zip ou clique para o seleccionar no dispositivo.",
+      "packageReady": "pronto para importar",
+      "replacePackage": "Substituir pacote",
+      "removePackage": "Remover pacote",
+      "uploadThumbnail": "Carregar miniatura",
+      "uploadThumbnailDescription": "PNG, JPG ou JPEG até 20 MB",
+      "thumbnailPreviewAlt": "Pré-visualização da miniatura da formação",
+      "submit": "Criar formação SCORM",
+      "creating": "A criar formação SCORM…",
+      "toastDraftReady": "O formulário da formação SCORM está pronto para integração com a API"
+    },
+    "subHeader": "Carregue o seu ficheiro SCORM .zip.",
+    "placeholder": {
+      "price": "Montante",
+      "title": "Introduza o título…",
+      "category": "Seleccione a categoria",
+      "description": "Descreva a formação…"
+    },
+    "upload": {
+      "uploading": "A carregar o pacote SCORM…",
+      "uploadedProcessing": "O carregamento do pacote SCORM terminou. A importação foi iniciada."
+    },
+    "importFailure": {
+      "courseDescription": "A formação foi removida porque não foi possível importar o pacote SCORM.",
+      "lessonDescription": "A lição ou o pacote SCORM foi removido porque não foi possível importar o pacote."
+    },
+    "importProcessing": {
+      "description": "O pacote ainda está a ser importado. Pode continuar a trabalhar enquanto a operação termina."
+    },
+    "importSuccess": {
+      "description": "O pacote SCORM está pronto."
+    },
+    "errors": {
+      "packageRequired": "O pacote SCORM é obrigatório.",
+      "emptyPackage": "O pacote SCORM está vazio.",
+      "tooManyFiles": "O pacote SCORM contém demasiados ficheiros.",
+      "packageTooLarge": "O pacote SCORM é demasiado grande após a extracção.",
+      "manifestMissing": "O ficheiro manifest SCORM está em falta.",
+      "manifestInvalid": "O ficheiro manifest SCORM é inválido.",
+      "organizationMissing": "O manifest SCORM não contém uma organização.",
+      "scoMissing": "O manifest SCORM não contém SCOs que possam ser iniciados.",
+      "resourceIdentifierMissing": "O identificador do recurso SCORM está em falta.",
+      "itemIdentifierMissing": "O identificador do item SCORM está em falta.",
+      "launchFileMissing": "O ficheiro de arranque SCORM está em falta.",
+      "uploadIdMissing": "O identificador da sessão de carregamento SCORM está em falta.",
+      "uploadOffsetMissing": "O offset de carregamento SCORM está em falta.",
+      "unsupportedTusVersion": "Esta versão do protocolo de carregamento SCORM não é suportada.",
+      "uploadAlreadyCompleted": "O carregamento SCORM já foi concluído.",
+      "emptyUploadChunk": "O segmento de carregamento SCORM está vazio.",
+      "uploadExceedsDeclaredLength": "O carregamento SCORM excede o tamanho de ficheiro declarado.",
+      "uploadChunkTooSmall": "O segmento de carregamento SCORM é demasiado pequeno.",
+      "uploadIncomplete": "O carregamento SCORM está incompleto.",
+      "uploadSessionNotFound": "A sessão de carregamento SCORM não foi encontrada.",
+      "uploadForbidden": "Este carregamento SCORM não pertence ao utilizador actual.",
+      "packageAlreadyAttached": "Esta lição SCORM já tem um pacote para o idioma seleccionado.",
+      "invalidPackagePath": "O pacote SCORM contém um caminho de ficheiro inválido.",
+      "externalPackagePath": "O pacote SCORM contém um caminho de ficheiro externo.",
+      "importFailed": "A importação do pacote SCORM falhou.",
+      "unknownImportJob": "A tarefa de importação SCORM não é reconhecida.",
+      "unsupportedImportAction": "A acção de importação SCORM não é suportada.",
+      "runtime": {
+        "launchNotFound": "O conteúdo de arranque SCORM não foi encontrado.",
+        "unsupportedStandard": "Este padrão SCORM não é suportado.",
+        "invalidAttempt": "A tentativa SCORM é inválida.",
+        "invalidCmiValue": "Os dados de execução SCORM são inválidos.",
+        "contentNotFound": "O conteúdo SCORM não foi encontrado.",
+        "contentForbidden": "Não tem acesso a este conteúdo SCORM."
+      }
+    },
+    "coursePlaceholder": {
+      "back": "Voltar ao tipo de formação",
+      "status": "Importação de formação SCORM",
+      "title": "A criação de formações SCORM estará disponível em breve",
+      "description": "Este ponto de entrada está pronto, mas o fluxo de importação SCORM ao nível da formação ainda está em desenvolvimento. Crie uma formação normal ou volte à lista de formações.",
+      "createStandard": "Criar formação normal",
+      "viewCourses": "Consultar formações"
+    },
+    "lesson": {
+      "packageSection": "Pacote SCORM",
+      "packageAttached": "Pacote SCORM anexado",
+      "packageLocked": "Este pacote não pode ser substituído após a criação da lição.",
+      "importNotice": "A importação de pacotes SCORM grandes pode demorar alguns minutos. Mantenha esta página aberta até o carregamento terminar.",
+      "replacePackageTooltip": "Se pretender adicionar outro pacote SCORM, elimine esta lição e crie uma nova.",
+      "languagePackageTooltip": "Carregue um pacote SCORM para o idioma seleccionado. Os pacotes de idiomas existentes não podem ser substituídos.",
+      "validation": {
+        "titleRequired": "O título é obrigatório",
+        "packageRequired": "O pacote SCORM é obrigatório",
+        "packageTooLarge": "O pacote SCORM deve ter menos de 500 MB",
+        "packageInvalidType": "O pacote SCORM deve ser um ficheiro .zip"
+      }
     }
   },
   "adminCourseTypeSelector": {
     "back": "Voltar",
     "scorm": {
-      "title": "SCORM"
+      "title": "SCORM",
+      "features": {}
+    },
+    "standard": {
+      "features": {}
+    },
+    "mentingoPackage": {
+      "features": {}
     }
   },
   "navigationSideBar": {
@@ -499,7 +657,11 @@
       },
       "deliveryType": {
         "online": "Ligado"
-      }
+      },
+      "toast": {},
+      "placeholder": {},
+      "tooltip": {},
+      "validation": {}
     },
     "details": {
       "action": {
@@ -510,14 +672,16 @@
       },
       "field": {
         "location": "Local",
-        "group": "Grupo"
+        "group": "Grupo",
+        "course": "Formação"
       },
       "deliveryType": {
         "online": "Ligado"
       },
       "status": {
         "scheduled": "Agendada",
-        "ended": "Terminada"
+        "ended": "Terminada",
+        "expired": "Expirado"
       },
       "availability": {
         "free": "Gratuito"
@@ -527,14 +691,19 @@
         "author": "Autor",
         "trainer": "Formador"
       }
-    }
+    },
+    "legend": {},
+    "microsoft": {},
+    "view": {},
+    "errors": {}
   },
   "liveTrainingView": {
     "title": "Acção de formação",
     "status": {
       "scheduled": "Agendada",
       "active": "Activo",
-      "ended": "Terminada"
+      "ended": "Terminada",
+      "expired": "Expirado"
     },
     "deliveryType": {
       "online": "Ligado"
@@ -552,13 +721,16 @@
       "trainer": "Formador",
       "location": "Local",
       "addHost": "Adicionar",
-      "addTrainer": "Adicionar"
+      "addTrainer": "Adicionar",
+      "visibility": "Visibilidade",
+      "loadMoreUsers": "Carregar mais"
     },
     "tabs": {
       "settings": "Definições"
     },
     "files": {
-      "download": "Descarregar"
+      "download": "Descarregar",
+      "toast": {}
     },
     "meeting": {
       "activeTitle": "A sessão está activa.",
@@ -577,7 +749,8 @@
       "attendance": {
         "user": "Utilizador",
         "role": "Papel"
-      }
+      },
+      "toast": {}
     },
     "settings": {
       "title": "Definições"
@@ -587,7 +760,14 @@
       "no": "Não"
     },
     "edit": {
-      "saveChanges": "Guardar alterações"
+      "saveChanges": "Guardar alterações",
+      "toast": {}
+    },
+    "errors": {},
+    "visibility": {},
+    "attendance": {},
+    "deleteDialog": {
+      "toast": {}
     }
   },
   "newsView": {
@@ -611,6 +791,12 @@
     "preview": "Pré-visualizar",
     "language": {
       "label": "Idioma"
+    },
+    "prompt": {},
+    "placeholder": {},
+    "deleteModal": {},
+    "validation": {
+      "titleRequired": "O título é obrigatório"
     }
   },
   "globalSearch": {
@@ -650,7 +836,8 @@
     "title": "Informações do fornecedor",
     "breadcrumbs": {
       "providerInformation": "Informações do fornecedor"
-    }
+    },
+    "validation": {}
   },
   "changeUserLanguageView": {
     "header": "Alterar idioma",
@@ -672,25 +859,48 @@
   "changeUserEmailView": {
     "field": {
       "email": "Correio electrónico"
-    }
+    },
+    "validation": {}
   },
   "ssoEnforcementView": {
     "switch": {
       "enabled": "Activado",
       "disabled": "Desactivado"
-    }
+    },
+    "toast": {}
   },
   "userEmailTriggers": {
     "switch": {
       "enabled": "Activado",
       "disabled": "Desactivado"
+    },
+    "header": "Eventos de email do utilizador",
+    "subHeader": "Gerir notificações automáticas por email enviadas aos utilizadores",
+    "settings": {
+      "userFirstLogin": "Primeiro início de sessão",
+      "userFirstLoginDescription": "Enviar um email ao utilizador após o primeiro início de sessão no sistema.",
+      "userCourseAssignment": "Inscrição na formação",
+      "userCourseAssignmentDescription": "Enviar um email ao utilizador após a inscrição numa formação por um administrador.",
+      "userShortInactivity": "Inactividade curta (14 dias)",
+      "userShortInactivityDescription": "Enviar um email ao utilizador após 14 dias de inactividade.",
+      "userLongInactivity": "Inactividade prolongada (30 dias)",
+      "userLongInactivityDescription": "Enviar um email ao utilizador após 30 dias de inactividade.",
+      "userChapterFinished": "Capítulo concluído",
+      "userChapterFinishedDescription": "Enviar um email ao utilizador após a conclusão de um capítulo.",
+      "userCourseFinished": "Formação concluída",
+      "userCourseFinishedDescription": "Enviar um email ao utilizador após a conclusão de uma formação."
+    },
+    "toast": {
+      "userEmailTriggersUpdatedSuccessfully": "Os eventos de email foram actualizados com sucesso",
+      "userEmailTriggersUpdateFailed": "Não foi possível actualizar os eventos de email"
     }
   },
   "inviteOnlyRegistrationView": {
     "switch": {
       "enabled": "Activado",
       "disabled": "Desactivado"
-    }
+    },
+    "toast": {}
   },
   "environmentConfigurationView": {
     "button": {
@@ -705,7 +915,10 @@
           "enabled": "Activado",
           "disabled": "Desactivado"
         }
-      }
+      },
+      "dismissWarning": "Fechar",
+      "serviceNames": {},
+      "serviceDescriptions": {}
     }
   },
   "createPasswordView": {
@@ -779,7 +992,8 @@
       "about": "Sobre",
       "courses": "Formações",
       "title": "Título"
-    }
+    },
+    "toast": {}
   },
   "changeUserInformationView": {
     "header": "Alterar dados do colaborador",
@@ -825,27 +1039,47 @@
       "lessons": "Lições",
       "completed": "Concluído",
       "started": "Iniciado"
-    }
+    },
+    "header": "Bem-vindo de volta,"
   },
   "profileWithCalendarView": {
     "button": {
       "settings": "Definições"
-    }
+    },
+    "other": {}
   },
   "adminStatisticsView": {
+    "header": "Bem-vindo de volta,",
     "other": {
+      "courseCompletionPercentage": "Percentagem de conclusão das formações",
+      "conversionsAfterFreemiumLesson": "Conversões após a lição gratuita",
+      "avgQuizScore": "Nota média de todos os questionários",
+      "purchasedCourse": "Formação adquirida",
+      "remainedOnFreemium": "Permaneceu no acesso gratuito",
+      "correct": "Correctas",
+      "incorrect": "Incorrectas",
+      "enrolled": "Inscritos",
+      "downloadReport": "Descarregar relatório",
+      "downloadingReport": "A descarregar relatório…",
       "completed": "Concluído",
       "noData": "Sem dados"
+    },
+    "toast": {
+      "reportDownloadSuccess": "Relatório descarregado com sucesso",
+      "reportDownloadError": "Não foi possível descarregar o relatório. Volte a tentar."
     }
   },
   "adminPromotionCodesView": {
     "status": {
-      "active": "Activo"
+      "active": "Activo",
+      "expired": "Expirado"
     },
     "field": {
       "status": "Estado",
       "type": "Tipo",
-      "createdAt": "Data de criação"
+      "createdAt": "Data de criação",
+      "associateCourse": {},
+      "code": "Código"
     },
     "breadcrumbs": {
       "promotionCodes": "Códigos promocionais",
@@ -854,7 +1088,10 @@
     },
     "button": {
       "createNew": "Criar"
-    }
+    },
+    "notifications": {},
+    "headers": {},
+    "other": {}
   },
   "adminCoursesView": {
     "filters": {
@@ -970,7 +1207,9 @@
     "breadcrumbs": {
       "categories": "Categorias",
       "back": "Voltar"
-    }
+    },
+    "deleteModal": {},
+    "toast": {}
   },
   "adminCategoryView": {
     "field": {
@@ -983,7 +1222,11 @@
     "breadcrumbs": {
       "categories": "Categorias",
       "back": "Voltar"
-    }
+    },
+    "placeholder": {},
+    "button": {},
+    "toast": {},
+    "error": {}
   },
   "adminUsersView": {
     "filters": {
@@ -1312,11 +1555,47 @@
     "groups": {
       "liveTraining": {
         "title": "Acção de formação"
-      }
+      },
+      "googleSignIn": {},
+      "microsoftSignIn": {},
+      "slackSignIn": {},
+      "microsoftCalendar": {},
+      "payments": {},
+      "videoStreaming": {},
+      "artificialIntelligence": {},
+      "phishingSimulations": {}
     },
     "form": {
-      "save": "Guardar"
-    }
+      "save": "Guardar",
+      "MICROSOFT_CLIENT_ID": {},
+      "MICROSOFT_CLIENT_SECRET": {},
+      "MICROSOFT_CALENDAR_CLIENT_ID": {},
+      "MICROSOFT_CALENDAR_CLIENT_SECRET": {},
+      "MICROSOFT_OAUTH_ENABLED": {},
+      "VITE_MICROSOFT_OAUTH_ENABLED": {},
+      "OPENAI_API_KEY": {},
+      "BUNNY_STREAM_API_KEY": {},
+      "BUNNY_STREAM_READ_ONLY_API_KEY": {},
+      "BUNNY_STREAM_LIBRARY_ID": {},
+      "BUNNY_STREAM_TOKEN_SIGNING_KEY": {},
+      "BUNNY_STREAM_CDN_URL": {},
+      "GOOGLE_CLIENT_ID": {},
+      "GOOGLE_CLIENT_SECRET": {},
+      "GOOGLE_OAUTH_ENABLED": {},
+      "VITE_GOOGLE_OAUTH_ENABLED": {},
+      "STRIPE_WEBHOOK_SECRET": {},
+      "STRIPE_SECRET_KEY": {},
+      "VITE_STRIPE_PUBLISHABLE_KEY": {},
+      "SLACK_CLIENT_ID": {},
+      "SLACK_CLIENT_SECRET": {},
+      "SLACK_OAUTH_ENABLED": {},
+      "VITE_SLACK_OAUTH_ENABLED": {},
+      "LUMA_API_KEY": {},
+      "LIVEKIT_URL": {},
+      "LIVEKIT_API_KEY": {},
+      "LIVEKIT_API_SECRET": {}
+    },
+    "breadcrumbs": {}
   },
   "adminGroupsView": {
     "name": "Nome do grupo",
@@ -1382,7 +1661,8 @@
   "paymentView": {
     "other": {
       "enrollCourse": "Inscrever-se na formação"
-    }
+    },
+    "toast": {}
   },
   "adminCourseView": {
     "deadline": "Prazo",
@@ -1390,7 +1670,8 @@
     "common": {
       "settings": "Definições",
       "status": "Estado",
-      "preview": "Pré-visualizar"
+      "preview": "Pré-visualizar",
+      "pricing": "Preço"
     },
     "toast": {
       "courseNotFound": "Formação não encontrada."
@@ -1401,7 +1682,11 @@
       },
       "forbidden": {
         "archivedCourseEnrollment": "Não é possível inscrever colaboradores numa formação arquivada."
-      }
+      },
+      "featureUnavailable": {},
+      "media": {},
+      "create": {},
+      "lesson": {}
     },
     "settings": {
       "breadcrumbs": {
@@ -1411,11 +1696,18 @@
       "sideSection": {
         "button": {
           "enroll": "Inscrever"
+        },
+        "other": {
+          "noDescription": "Ainda sem descrição.",
+          "untitled": "Sem título"
         }
       },
       "field": {
         "category": "Categoria",
-        "description": "Descrição"
+        "description": "Descrição",
+        "title": "Título da formação",
+        "baseLanguage": "Idioma de base",
+        "validityValue": "Valor"
       },
       "other": {
         "enableCertificate": "Activar certificado",
@@ -1427,7 +1719,8 @@
           "users": "Colaboradores"
         },
         "certificatePreviewButton": "Pré-visualizar",
-        "certificatePreviewCourseName": "Nome da formação"
+        "certificatePreviewCourseName": "Nome da formação",
+        "certificatePreviewTitle": "Pré-visualização do certificado"
       },
       "validation": {
         "groupIdsRequired": "Seleccione pelo menos um grupo."
@@ -1437,6 +1730,12 @@
         "dialog": {
           "cancel": "Cancelar"
         }
+      },
+      "button": {},
+      "selectButton": {},
+      "placeholder": {
+        "category": "Seleccione a categoria",
+        "description": "Descreva a formação…"
       }
     },
     "curriculum": {
@@ -1452,7 +1751,10 @@
         },
         "other": {
           "public": "Público"
-        }
+        },
+        "button": {},
+        "toast": {},
+        "errors": {}
       },
       "lesson": {
         "button": {
@@ -1465,7 +1767,8 @@
           "title": "Definições"
         },
         "liveTraining": {
-          "createNewTab": "Criar"
+          "createNewTab": "Criar",
+          "validation": {}
         },
         "field": {
           "title": "Título",
@@ -1483,7 +1786,13 @@
           "stages": {
             "ready": "Pronto"
           },
-          "useCurrentDraft": "Continuar"
+          "useCurrentDraft": "Continuar",
+          "create": {},
+          "improve": {},
+          "review": {},
+          "status": {},
+          "statusDescription": {},
+          "quality": {}
         },
         "aiJudge": {
           "passingThreshold": "Limiar de aprovação",
@@ -1493,8 +1802,33 @@
             "stages": {
               "ready": "Pronto"
             },
-            "useCurrentDraft": "Continuar"
-          }
+            "useCurrentDraft": "Continuar",
+            "create": {},
+            "improve": {},
+            "artifacts": {},
+            "suggestions": {
+              "clearerCriteria": {},
+              "betterScoring": {},
+              "reduceOverlap": {},
+              "clarifyBlockingErrors": {}
+            },
+            "status": {},
+            "statusDescription": {},
+            "target": {},
+            "deterministicValidation": {
+              "guidance_score_out_of_range": {},
+              "duplicate_guidance_score": {},
+              "missing_guidance_scores": {},
+              "duplicate_criterion_ref": {},
+              "duplicate_blocking_error_ref": {},
+              "invalid_new_criterion_ref": {},
+              "invalid_new_blocking_error_ref": {}
+            },
+            "review": {}
+          },
+          "saveConfiguration": "Guardar configuração",
+          "configurationSavedSuccessfully": "Configuração guardada.",
+          "validation": {}
         },
         "other": {
           "content": "Conteúdo",
@@ -1510,21 +1844,91 @@
             "search": "Pesquisar",
             "loading": "A carregar…"
           },
-          "betaTooltip": "Esta funcionalidade está em versão de teste. Pode conter erros ou não funcionar totalmente como previsto. A utilização é da sua responsabilidade."
+          "betaTooltip": "Esta funcionalidade está em versão de teste. Pode conter erros ou não funcionar totalmente como previsto. A utilização é da sua responsabilidade.",
+          "charactersLeft": "caracteres restantes",
+          "aiMentorSuggestionExamples": {
+            "instructions": {},
+            "conditions": {},
+            "scoreGuidance": {},
+            "acceptedExamples": {
+              "scenarioSimulation": {},
+              "problemSolving": {},
+              "creativeTask": {},
+              "knowledgeSharing": {}
+            },
+            "blockingErrors": {}
+          },
+          "correct": "Correctas"
+        },
+        "tooltip": {},
+        "validation": {
+          "titleRequired": "O título é obrigatório"
+        },
+        "toast": {},
+        "aiMentorConfiguration": {
+          "saveConfiguration": "Guardar configuração",
+          "mode": {
+            "teacher": {},
+            "roleplay": {}
+          },
+          "scenarioTemplates": {
+            "scenarioSimulation": {},
+            "problemSolving": {},
+            "creativeTask": {},
+            "knowledgeSharing": {}
+          },
+          "taskGoal": {},
+          "expertise": {},
+          "contentScope": {},
+          "teachingStyle": {
+            "explain_and_practice": {},
+            "guided_discovery": {},
+            "socratic": {}
+          },
+          "feedbackGuidance": {},
+          "scenario": {},
+          "aiRole": {},
+          "learnerRole": {},
+          "characterGoal": {},
+          "difficulty": {
+            "cooperative": {},
+            "realistic": {},
+            "challenging": {}
+          },
+          "factsAndConstraints": {},
+          "openingInstruction": {},
+          "additionalInstructions": {},
+          "typeChange": {},
+          "validation": {}
+        },
+        "courseGenerationComposer": {
+          "placeholders": {}
         }
-      }
+      },
+      "emptyState": {}
     },
     "status": {
       "header": "Estado",
       "draftHeader": "Rascunho",
       "publishedHeader": "Publicado",
-      "privateHeader": "Privado"
+      "privateHeader": "Privado",
+      "draftBody": "Os formandos não podem adquirir nem inscrever-se nesta formação. Para quem já está inscrito, a formação não aparecerá na lista de formações do formando.",
+      "publishedBody": "Os formandos podem adquirir, inscrever-se e aceder aos conteúdos da formação. Após a inscrição, a formação aparecerá no painel do formando."
     },
     "pricing": {
       "freeCourseHeader": "Gratuito",
       "field": {
         "price": "Preço"
-      }
+      },
+      "header": "Preço",
+      "subHeader": "Definir o preço da formação",
+      "freeCourseBody": "Os formandos podem inscrever-se e aceder aos conteúdos da formação sem pagar.",
+      "paidCourseHeader": "Formação paga",
+      "paidCourseBody": "Os formandos podem adquirir e aceder aos conteúdos da formação. Depois de seleccionar esta opção, pode definir a moeda e o preço.",
+      "placeholder": {
+        "amount": "Montante"
+      },
+      "validation": {}
     },
     "enrolled": {
       "filters": {
@@ -1536,9 +1940,30 @@
       "enroll": "Inscrever",
       "table": {
         "name": "Nome",
-        "email": "Correio electrónico"
+        "email": "Correio electrónico",
+        "status": "Estado da inscrição",
+        "enrollmentDate": "Data de inscrição"
       },
-      "enrollGroups": "Inscrever grupos"
+      "enrollGroups": "Inscrever grupos",
+      "enrollSelected": "Inscrever seleccionados",
+      "unenrollSelected": "Anular inscrição dos seleccionados",
+      "unenrollGroups": "Anular inscrição dos grupos",
+      "statuses": {
+        "enrolled": "Inscrito",
+        "enrolledByGroup": "Inscrito através do grupo",
+        "individuallyEnrolled": "Inscrito individualmente",
+        "notEnrolled": "Não inscrito"
+      },
+      "confirmation": {
+        "title": "Confirmar inscrição"
+      },
+      "enrollGroupsModal": {},
+      "unenrollConfirmation": {
+        "title": "Confirmação da anulação de inscrição"
+      },
+      "toast": {
+        "alreadyEnrolledByGroup": {}
+      }
     },
     "breadcrumbs": {
       "courses": "Formações",
@@ -1555,8 +1980,12 @@
         "groups": "Grupos",
         "status": "Estado",
         "statuses": {
-          "active": "Activo"
-        }
+          "active": "Activo",
+          "not_earned": "Não obtido",
+          "expired": "Expirado",
+          "revoked": "Revogado"
+        },
+        "learner": "Formando"
       },
       "field": {
         "studentName": "Formando",
@@ -1564,15 +1993,40 @@
         "quizName": "Questionário",
         "quizScore": "Classificação",
         "lessonName": "Lição",
-        "score": "Classificação"
+        "score": "Classificação",
+        "lastActivity": "Última actividade"
       },
       "overview": {
-        "completionRate": "Taxa de conclusão"
+        "completionRate": "Taxa de conclusão",
+        "averageCompletionPercentage": "Progresso médio",
+        "averageQuizScore": "Nota média dos questionários"
+      },
+      "details": "Detalhes",
+      "empty": {},
+      "groupFilter": {
+        "placeholder": "Todos os grupos"
       }
     },
     "sharedCourse": {
       "badgeMaster": "Partilhado",
-      "badgeExported": "Partilhado"
+      "badgeExported": "Partilhado",
+      "exportsTitle": "Partilha",
+      "selectTenants": "Seleccionar organizações",
+      "selectedCount": "Seleccionadas:",
+      "exportButton": "Partilhar",
+      "exportingButton": "A partilhar…"
+    },
+    "thinking": {},
+    "generation": {
+      "syncDismiss": "Fechar"
+    },
+    "createLanguage": {},
+    "deleteLanguage": {},
+    "scormExport": {
+      "title": "Pacote SCORM",
+      "versionBadge": "SCORM 1.2",
+      "warning": {},
+      "error": {}
     }
   },
   "registerView": {
@@ -1678,7 +2132,8 @@
     },
     "button": {
       "backToLogin": "Voltar ao início de sessão"
-    }
+    },
+    "toast": {}
   },
   "studentCoursesView": {
     "courseUnavailable": {
@@ -2140,10 +2595,21 @@
   },
   "certificateBackgroundUpload": {
     "button": {
-      "preview": "Pré-visualizar"
+      "preview": "Pré-visualizar",
+      "removeCertificateBackgroundImage": "Eliminar fundo do certificado"
     },
     "other": {
-      "uploading": "A carregar…"
+      "uploading": "A carregar…",
+      "removing": "A remover…"
+    },
+    "title": "Carregar fundo do certificado",
+    "description": "Carregue uma imagem de fundo para o certificado.",
+    "field": {
+      "imageRequirements": "PNG, JPG ou JPEG (máx. 20 MB)"
+    },
+    "toast": {
+      "success": "A imagem de fundo do certificado foi alterada com sucesso",
+      "error": "Erro ao alterar a imagem de fundo do certificado"
     }
   },
   "adminPreferences": {
@@ -2207,7 +2673,9 @@
       "archivedBadge": "Arquivado",
       "archive": "Arquivar",
       "restore": "Restaurar"
-    }
+    },
+    "validation": {},
+    "toast": {}
   },
   "mfa": {
     "setup": {
@@ -2293,12 +2761,16 @@
   },
   "announcements": {
     "breadcrumbs": {
-      "announcements": "Comunicados"
+      "announcements": "Comunicados",
+      "createAnnouncement": "Criar comunicado"
     },
     "page": {
       "header": "Comunicados",
       "buttons": {
         "new": "Criar"
+      },
+      "tooltips": {
+        "markAsRead": "Marcar como lida"
       }
     },
     "createPage": {
@@ -2314,17 +2786,48 @@
       },
       "placeholders": {
         "group": "Seleccionar grupo"
+      },
+      "header": "Criar comunicado",
+      "descriptions": {},
+      "tooltips": {},
+      "validation": {
+        "title": {
+          "required": "O título é obrigatório"
+        },
+        "content": {},
+        "schedule": {}
       }
-    }
+    },
+    "buttons": {},
+    "other": {},
+    "toast": {}
   },
   "notifications": {
     "title": "Notificações",
     "tabs": {
-      "all": "Todos"
+      "all": "Todos",
+      "adminAnnouncements": "Comunicados da administração",
+      "system": "Sistema"
     },
     "status": {
       "scheduled": "Agendada",
-      "published": "Publicado"
+      "published": "Publicado",
+      "unread": "Por ler"
+    },
+    "actions": {
+      "refresh": "Actualizar",
+      "create": "Criar comunicado",
+      "delete": "Eliminar comunicado",
+      "markRead": "Marcar como lida",
+      "markAllRead": "Marcar todas como lidas",
+      "loadMore": "Carregar mais",
+      "loadingMore": "A carregar mais…",
+      "goToNotificationCenter": "Ir para o centro de notificações"
+    },
+    "empty": "Ainda não existem notificações",
+    "deleteDialog": {
+      "title": "Eliminar comunicado",
+      "description": "Este comunicado será removido para todos."
     }
   },
   "files": {
@@ -2362,6 +2865,10 @@
       "invalidFileType": "Tipo de ficheiro inválido. Carregue um ficheiro válido.",
       "successfullyUploadedFile": "Ficheiro carregado com sucesso.",
       "resourceNotFound": "Recurso não encontrado."
+    },
+    "deleteDialog": {},
+    "previewDialog": {
+      "loading": "A carregar pré-visualização…"
     }
   },
   "richTextEditor": {
@@ -2472,7 +2979,8 @@
       }
     },
     "presentation": {
-      "title": "Apresentação"
+      "title": "Apresentação",
+      "ariaLabel": {}
     },
     "pdfPreview": {
       "previous": "Anterior",
@@ -2489,7 +2997,8 @@
       "delete": "Eliminar",
       "visibility": {
         "public": "Público",
-        "private": "Privado"
+        "private": "Privado",
+        "selected": "{{count}} seleccionados"
       },
       "types": {
         "image": "Imagem",
@@ -2499,8 +3008,29 @@
       "entities": {
         "lesson": "Lição",
         "news": "Notícias"
+      },
+      "columns": {
+        "actions": "Acções"
+      },
+      "empty": {},
+      "deleteConfirmation": {}
+    },
+    "dropVisibilityDialog": {},
+    "video": {
+      "processing": {},
+      "processingFailed": {},
+      "tooltip": {},
+      "ariaLabel": {}
+    },
+    "image": {
+      "ariaLabel": {
+        "remove": "Remover imagem"
       }
-    }
+    },
+    "downloadableFile": {
+      "ariaLabel": {}
+    },
+    "loadingAiAsset": {}
   },
   "pages": {
     "dashboard": "Painel",
@@ -2558,11 +3088,18 @@
       "blocked": "Bloqueado"
     },
     "badges": {
-      "certificate": "Certificado de formação"
+      "certificate": "Certificado de formação",
+      "sequenceEnabled": "Sequencial",
+      "freeOrder": "Ordem flexível"
     },
     "courseState": {
       "inProgress": "Em curso",
-      "notStarted": "Por iniciar"
+      "notStarted": "Por iniciar",
+      "completed": "Terminado",
+      "inProgressDescription": "Já iniciou esta formação.",
+      "notStartedDescription": "Esta formação está disponível para iniciar.",
+      "locked": "Bloqueada",
+      "lockedDescription": "Conclua a formação anterior para a desbloquear."
     },
     "enrollment": {
       "manage": "Inscrever",
@@ -2577,11 +3114,77 @@
       "enroll": "Inscrever",
       "table": {
         "name": "Nome",
-        "email": "Correio electrónico"
-      }
+        "email": "Correio electrónico",
+        "selectAll": "Seleccionar todos os formandos",
+        "select": "Seleccionar formando",
+        "status": "Estado da inscrição",
+        "enrollmentDate": "Data de inscrição"
+      },
+      "title": "Inscrever formandos",
+      "description": "Gerir inscrições de formandos e grupos neste percurso de desenvolvimento.",
+      "students": "Formandos",
+      "selectStudents": "Seleccionar formandos",
+      "enrollSelected": "Inscrever seleccionados",
+      "unenrollSelected": "Anular inscrição dos seleccionados",
+      "unenrollGroups": "Anular inscrição dos grupos",
+      "enrolled": "Inscrito",
+      "studentsEnrolled": "Formandos inscritos",
+      "groupsEnrolled": "Grupos inscritos",
+      "studentsUnenrolled": "Inscrições dos formandos anuladas",
+      "groupsUnenrolled": "Inscrições dos grupos anuladas",
+      "enrolledSuccessfully": "Inscrição no percurso de desenvolvimento concluída",
+      "enrollGroupsDescription": "Seleccione grupos para inscrever neste percurso de desenvolvimento.",
+      "unenrollGroupsDescription": "Seleccione grupos para anular a inscrição neste percurso de desenvolvimento.",
+      "statuses": {
+        "enrolledByGroup": "Inscrito através do grupo",
+        "individuallyEnrolled": "Inscrito individualmente",
+        "notEnrolled": "Não inscrito"
+      },
+      "confirmation": {
+        "title": "Confirmar inscrição",
+        "description": "Tem a certeza de que pretende inscrever os formandos seleccionados neste percurso de desenvolvimento? Esta acção não pode ser anulada."
+      },
+      "unenrollConfirmation": {
+        "title": "Confirmação da anulação de inscrição",
+        "description": "Tem a certeza de que pretende anular a inscrição dos formandos seleccionados neste percurso de desenvolvimento? Esta acção não pode ser anulada."
+      },
+      "noGroups": "Não existem grupos disponíveis"
     },
     "breadcrumbs": {
-      "learningPaths": "Percursos de desenvolvimento"
+      "learningPaths": "Percursos de desenvolvimento",
+      "details": "Detalhes"
+    },
+    "description": "Consulte os percursos de desenvolvimento atribuídos e prossiga pelas respectivas sequências de formações.",
+    "searchPlaceholder": "Pesquisar percursos de desenvolvimento",
+    "summary": "Estão disponíveis {{count}} percursos de desenvolvimento.",
+    "detailsTitle": "Percurso de desenvolvimento",
+    "detailsDescription": "Consulte a sequência de formações, o progresso, os bloqueios e o estado do certificado.",
+    "detailsSummary": "Este percurso contém {{count}} formações. Progresso actual: {{progress}}.",
+    "emptyDescription": "Ainda não foi adicionada uma descrição.",
+    "card": {
+      "openPath": "Abrir percurso de desenvolvimento"
+    },
+    "empty": {
+      "title": "Não foram encontrados percursos de desenvolvimento",
+      "description": "Ajuste a pesquisa ou volte após a atribuição de percursos."
+    },
+    "progress": {
+      "title": "Progresso do percurso",
+      "summary": "{{completed}} de {{total}} formações concluídas"
+    },
+    "certificate": {
+      "available": "Certificado disponível",
+      "ready": "Certificado pronto",
+      "pathCompleted": "Percurso de desenvolvimento concluído. O seu certificado está pronto."
+    },
+    "detail": {
+      "courses": "Formações deste percurso",
+      "courseTitle": "Formação {{number}}",
+      "completedAt": "Concluída em {{date}}",
+      "emptyCourses": "Este percurso de desenvolvimento ainda não inclui formações."
+    },
+    "buttons": {
+      "openFirst": "Abrir primeiro percurso"
     }
   },
   "adminLearningPathsView": {
@@ -2593,32 +3196,113 @@
     },
     "buttons": {
       "edit": "Editar",
-      "save": "Guardar alterações"
+      "save": "Guardar alterações",
+      "create": "Criar percurso de desenvolvimento",
+      "removeImage": "Remover imagem"
     },
     "editor": {
       "courses": "Formações",
       "image": "Imagem",
-      "settings": "Definições"
+      "settings": "Definições",
+      "createTitle": "Criar percurso de desenvolvimento",
+      "editTitle": "Editar percurso de desenvolvimento",
+      "description": "Defina os detalhes, a sequência, as formações e o estado de publicação do percurso de desenvolvimento.",
+      "createSummary": "Comece pelos detalhes do percurso de desenvolvimento.",
+      "editSummary": "Este percurso de desenvolvimento tem actualmente {{coursesCount}} formações.",
+      "details": "Detalhes"
     },
     "table": {
       "title": "Título",
       "status": "Estado",
       "settings": "Definições",
       "language": "Idioma",
-      "certificate": "Certificado de formação"
+      "certificate": "Certificado de formação",
+      "createdAt": "Criado",
+      "actions": "Acções",
+      "untitled": "Percurso de desenvolvimento sem título",
+      "emptyDescription": "Sem descrição",
+      "sequential": "Sequencial",
+      "flexible": "Flexível",
+      "empty": "Ainda não foram criados percursos de desenvolvimento."
     },
     "form": {
       "language": "Idioma",
       "status": "Estado",
       "title": "Título",
       "description": "Descrição",
-      "includesCertificate": "Certificado de formação"
+      "includesCertificate": "Certificado de formação",
+      "statusDescription": "Define se este percurso está visível, apenas em rascunho ou privado.",
+      "titlePlaceholder": "Dê um nome ao percurso de desenvolvimento",
+      "descriptionPlaceholder": "Descreva o que os formandos irão concluir neste percurso",
+      "imageHint": "PNG, JPG ou JPEG (máx. 20 MB; recomenda-se 1200x1200 ou superior)",
+      "sequenceEnabled": "Aprendizagem sequencial",
+      "sequenceEnabledDescription": "Os formandos devem concluir as formações pela ordem apresentada.",
+      "includesCertificateDescription": "Os formandos podem receber um certificado após a conclusão do percurso.",
+      "certificateSignature": "Assinatura do certificado",
+      "certificateSignatureDescription": "Carregue a assinatura apresentada nos certificados deste percurso de desenvolvimento.",
+      "certificateFontColor": "Cor do texto do certificado",
+      "certificateFontColorDescription": "Utilize o selector de cores da pré-visualização para alterar a cor do texto e das linhas do certificado.",
+      "certificatePreview": "Pré-visualização do certificado",
+      "certificatePreviewDescription": "Pré-visualize o certificado e ajuste a cor do texto."
     },
     "courses": {
-      "delete": "Eliminar formação"
+      "delete": "Eliminar formação",
+      "select": "Seleccione uma formação",
+      "add": "Adicionar formação",
+      "drag": "Arraste para reordenar a formação",
+      "order": "Ordem",
+      "course": "Formação",
+      "chapter_one": "{{count}} capítulo",
+      "chapter_other": "{{count}} capítulos",
+      "empty": "Ainda não foram adicionadas formações a este percurso de desenvolvimento.",
+      "saveFirst": "Guarde o percurso de desenvolvimento antes de adicionar formações.",
+      "unknownCourse": "Detalhes da formação indisponíveis"
     },
     "sharedLearningPath": {
-      "badgeExported": "Partilhado"
+      "badgeExported": "Partilhado",
+      "exportButton": "Partilhar",
+      "exportSuccess": "O percurso de desenvolvimento foi exportado",
+      "exportsDescription": "Partilhe este percurso de desenvolvimento com as organizações seleccionadas.",
+      "exportsTitle": "Partilha",
+      "exportingButton": "A partilhar…",
+      "selectTenants": "Seleccionar organizações",
+      "selectedCount": "Seleccionadas:"
+    },
+    "importPackage": {
+      "title": "Importar percurso de desenvolvimento"
+    },
+    "description": "Gerir metadados, sequência, ordem das formações, inscrições, exportações e certificados do percurso.",
+    "summary": "Estão disponíveis {{count}} percursos de desenvolvimento neste espaço de trabalho.",
+    "detailsContent": {
+      "title": "Detalhes do percurso de desenvolvimento",
+      "description": "Defina o nome localizado e a descrição apresentada aos formandos."
+    },
+    "detailsImage": {
+      "title": "Imagem de capa",
+      "description": "Utilize uma imagem que ajude administradores e formandos a reconhecer este percurso."
+    },
+    "detailsSettings": {
+      "title": "Publicação e funcionamento",
+      "description": "Reúna a visibilidade dos grupos, a ordem das formações e o funcionamento dos certificados num único local."
+    },
+    "common": {
+      "baseLanguage": "Idioma de base"
+    },
+    "languageSelector": {
+      "tooltip": "O idioma de base deste percurso de desenvolvimento é {{baseLanguage}}."
+    },
+    "deleteModal": {
+      "title": "Eliminar percurso de desenvolvimento",
+      "description": "Esta acção irá eliminar o percurso de desenvolvimento e remover o acesso às formações concedido pelo percurso."
+    },
+    "toast": {
+      "created": "Percurso de desenvolvimento criado com sucesso",
+      "updated": "Percurso de desenvolvimento actualizado com sucesso",
+      "deleted": "Percurso de desenvolvimento eliminado com sucesso",
+      "languageCreated": "Idioma do percurso de desenvolvimento criado com sucesso",
+      "coursesAdded": "Formações adicionadas ao percurso de desenvolvimento com sucesso",
+      "courseRemoved": "Formação removida do percurso de desenvolvimento com sucesso",
+      "coursesReordered": "Formações do percurso de desenvolvimento reordenadas com sucesso"
     }
   },
   "lessonPreview": {
@@ -2670,7 +3354,11 @@
     },
     "fields": {
       "title": "Pergunta"
-    }
+    },
+    "toast": {},
+    "aria": {},
+    "create": {},
+    "delete": {}
   },
   "adminArticleView": {
     "toc": {
@@ -2687,11 +3375,13 @@
     "section": {
       "languageLabel": "Idioma",
       "fields": {
-        "title": "Título"
+        "title": "Título",
+        "titleError": "O título é obrigatório"
       },
       "language": {
         "label": "Idioma"
-      }
+      },
+      "delete": {}
     },
     "form": {
       "saveButton": "Guardar",
@@ -2699,14 +3389,17 @@
         "title": "Título",
         "content": "Conteúdo",
         "status": "Estado",
-        "isPublic": "Público"
+        "isPublic": "Público",
+        "cover": "Imagem de capa"
       },
       "status": {
         "draft": "Rascunho",
         "published": "Publicado"
       },
-      "preview": "Pré-visualizar"
-    }
+      "preview": "Pré-visualizar",
+      "placeholders": {}
+    },
+    "toast": {}
   },
   "superAdminTenantsView": {
     "title": "Organizações",
@@ -2719,7 +3412,11 @@
       "yes": "Sim",
       "no": "Não",
       "edit": "Editar",
-      "delete": "Eliminar"
+      "delete": "Eliminar",
+      "lastActivity": "Última actividade",
+      "actions": {
+        "title": "Acções"
+      }
     },
     "status": {
       "active": "Activo"
@@ -2730,7 +3427,16 @@
     },
     "form": {
       "status": "Estado"
-    }
+    },
+    "search": {},
+    "activityTrend": {},
+    "supportModePopover": {
+      "tabs": {}
+    },
+    "deleteDialog": {},
+    "edit": {},
+    "validation": {},
+    "toast": {}
   },
   "auth": {
     "error": {
@@ -2752,7 +3458,11 @@
   },
   "integrationApiKey": {
     "status": "Estado",
-    "active": "Activo"
+    "active": "Activo",
+    "generated": {},
+    "confirm": {},
+    "toast": {},
+    "errors": {}
   },
   "tenantSharing": {
     "columns": {
@@ -2762,7 +3472,9 @@
     "status": {
       "shared": "Partilhado",
       "inProgress": "Em curso"
-    }
+    },
+    "shareButton": "Partilhar",
+    "sharingButton": "A partilhar…"
   },
   "masterCourse": {
     "error": {
@@ -2774,7 +3486,9 @@
       "activityLogs": "Registos de actividade"
     },
     "actions": {
-      "start_course": "Iniciado"
+      "start_course": "Iniciado",
+      "create": "Criado",
+      "enroll_course": "Inscrito"
     },
     "entity": {
       "chapter": "Capítulo",
@@ -2788,11 +3502,22 @@
       "qa": "Perguntas e respostas",
       "live_training": "Acção de formação",
       "scorm": "SCORM",
-      "global_settings": "Definições"
+      "global_settings": "Definições",
+      "course": "Formação"
     },
     "table": {
-      "email": "Correio electrónico"
-    }
+      "email": "Correio electrónico",
+      "details": "Detalhes"
+    },
+    "filters": {
+      "placeholder": {},
+      "search": {},
+      "empty": {}
+    },
+    "emptyState": {},
+    "details": {},
+    "fallbacks": {},
+    "labels": {}
   },
   "modernCourseView": {
     "common": {
@@ -2940,10 +3665,27 @@
       "retry": "Tentar novamente",
       "lessonCount": "{{count}} lições",
       "lessonCount_one": "{{count}} lição",
-      "lessonCount_other": "{{count}} lições"
+      "lessonCount_other": "{{count}} lições",
+      "ready": {},
+      "outlineReady": {},
+      "outlineApproved": {},
+      "approvedNotApplied": {},
+      "applying": {},
+      "applied": {},
+      "failed": {},
+      "conflict": {},
+      "revising": {},
+      "generating": {},
+      "discarded": {}
     },
     "reviewMode": {
-      "courseDetails": "Detalhes da formação"
+      "courseDetails": "Detalhes da formação",
+      "detailView": {},
+      "courseTitle": "Título da formação",
+      "kind": {},
+      "decision": {},
+      "blockStatus": {},
+      "view": {}
     },
     "conversation": {
       "sessionStatus": {
@@ -2954,7 +3696,12 @@
       "collapse": "Recolher",
       "retry": "Tentar novamente",
       "questionPrevious": "Anterior",
-      "questionNext": "Seguinte"
+      "questionNext": "Seguinte",
+      "requestFailed": {},
+      "webSearchTool": {},
+      "webExtractTool": {},
+      "researchSynthesisTool": {},
+      "loadMoreSessions": "Carregar mais"
     },
     "composer": {
       "send": "Enviar"
@@ -2966,7 +3713,9 @@
       "required": "Obrigatório",
       "status": {
         "ready": "Pronto"
-      }
+      },
+      "citation": {},
+      "selected": "{{count}} seleccionados"
     },
     "options": {
       "label": "Opções"
@@ -2979,7 +3728,14 @@
       "yourAnswer": "A sua resposta",
       "send": "Enviar",
       "required": "Obrigatório",
-      "optional": "Opcional"
+      "optional": "Opcional",
+      "chapterStatus": {},
+      "taskKind": {},
+      "connection": {},
+      "taskStatus": {},
+      "assetDetails": "Detalhes",
+      "assetStatus": {},
+      "applicationStatus": {}
     },
     "review": {
       "question": "Pergunta",
@@ -2990,17 +3746,38 @@
       "selectGroupForApply": "Seleccionar grupo",
       "cancelFeedback": "Cancelar",
       "sendFeedback": "Enviar",
-      "addFeedbackButtonLabel": "Adicionar"
+      "addFeedbackButtonLabel": "Adicionar",
+      "mentorModes": {},
+      "impacts": {},
+      "decision": {},
+      "operationTypes": {},
+      "selected": "{{count}} seleccionados",
+      "licenseStatus": {},
+      "applyState": {},
+      "applyProposal": "Aplicar",
+      "decisionSummary": {}
     },
     "editors": {
       "removeLearningOutcome": "Remover resultado de aprendizagem",
       "title": "Título",
       "true": "Verdadeiro",
-      "false": "Falso"
+      "false": "Falso",
+      "learningOutcomes": "Resultados de aprendizagem",
+      "certificateFontColor": "Cor do texto do certificado"
     },
     "errors": {
       "unsupportedLanguage": "A criação por IA ainda não suporta este idioma da formação. Utilize o editor nativo."
-    }
+    },
+    "reasoning": {},
+    "scope": {
+      "selected": "{{count}} seleccionados"
+    },
+    "livePreview": {},
+    "sourceRefresh": {
+      "status": {},
+      "sectionKind": {}
+    },
+    "outline": {}
   },
   "phishing": {
     "retry": "Tentar novamente",
@@ -3016,55 +3793,250 @@
     "courseStatuses": {
       "not_started": "Por iniciar",
       "in_progress": "Em curso",
-      "completed": "Concluído"
-    }
+      "completed": "Concluído",
+      "not_enrolled": "Não inscrito"
+    },
+    "refresh": "Actualizar",
+    "metrics": {}
   },
   "reports": {
     "scope": {
-      "groupLabel": "Grupos"
+      "groupLabel": "Grupos",
+      "boundaryNote": "Os resultados e as exportações respeitam as suas permissões de consulta e os filtros actuais.",
+      "allGroups": "Todos os grupos",
+      "groupsCount": "{{count}} grupos"
     },
     "filters": {
-      "selectDate": "Seleccionar data"
+      "selectDate": "Seleccionar data",
+      "title": "Condições",
+      "description": "{{count}} de {{max}} condições",
+      "field": "Campo",
+      "operator": "Operador",
+      "value": "Valor",
+      "from": "De",
+      "to": "Até",
+      "noValue": "Não é necessário um valor",
+      "selectValue": "Seleccione um valor",
+      "matching": "Correspondência de condições",
+      "nestedGroup": "Grupo de condições aninhado",
+      "addCondition": "Adicionar condição",
+      "addGroup": "Adicionar grupo aninhado",
+      "removeCondition": "Remover condição",
+      "removeGroup": "Remover grupo de condições",
+      "resetAll": "Repor todos os filtros",
+      "apply": "Aplicar",
+      "discardChanges": "Descartar alterações pendentes",
+      "incompatible": "{{count}} condição(ões) não se aplicam a este relatório. Adapte-as ou remova-as antes de aplicar.",
+      "adaptedNotice": "{{count}} condição(ões) precisam de adaptação para este relatório.",
+      "toggle": "Filtros",
+      "emptyHint": "Ainda não existem condições. Adicione uma para restringir os formandos e a formação incluídos neste relatório.",
+      "selectedValues": "{{count}} seleccionados",
+      "matchPrefix": "Corresponder a",
+      "matchSuffix": "destas condições",
+      "join": {
+        "and": "todas",
+        "or": "qualquer"
+      }
     },
     "fields": {
       "groupId": "Grupo",
-      "certificate": "Certificado de formação"
+      "certificate": "Certificado de formação",
+      "learner": "Nome ou email do formando",
+      "courseId": "Formação",
+      "pathId": "Percurso de desenvolvimento",
+      "status": "Estado de conclusão",
+      "progress": "Progresso (%)",
+      "enrolledAt": "Data de inscrição",
+      "completedAt": "Data de conclusão",
+      "score": "Nota média dos questionários",
+      "attempts": "Total de tentativas de questionários",
+      "lastActivity": "Última actividade"
     },
     "values": {
       "notStarted": "Por iniciar",
       "inProgress": "Em curso",
       "completed": "Concluído",
-      "active": "Activo"
+      "active": "Activo",
+      "issued": "Emitido",
+      "available": "Disponível",
+      "unavailable": "Indisponível",
+      "expired": "Expirado",
+      "revoked": "Revogado",
+      "notEarned": "Não obtido"
     },
     "saved": {
-      "save": "Guardar"
+      "save": "Guardar",
+      "title": "Configurações guardadas",
+      "empty": "Ainda não existem configurações guardadas.",
+      "saveConfiguration": "Guardar configuração",
+      "name": "Nome da configuração",
+      "visibility": "Visibilidade",
+      "personal": "Pessoal",
+      "shared": "Partilhada com a organização",
+      "update": "Actualizar configuração",
+      "delete": "Eliminar {{name}}",
+      "inaccessibleSubject": "Objecto de análise indisponível — seleccione outro",
+      "toastCreated": "Configuração guardada.",
+      "toastUpdated": "Configuração actualizada.",
+      "toastDeleted": "Configuração eliminada.",
+      "toastError": "Não foi possível guardar a configuração.",
+      "inaccessibleConfiguration": "Esta configuração guardada referencia um objecto de relatório ou grupo a que já não tem acesso. Altere o objecto de análise ou o filtro de grupo antes de aplicar.",
+      "unavailable": "Indisponível",
+      "dialogDescription": "Guarde o relatório actual e os respectivos filtros para os poder reabrir mais tarde."
     },
     "results": {
-      "retry": "Tentar novamente"
+      "retry": "Tentar novamente",
+      "activeConditions": "{{count}} condições · {{groups}} grupos",
+      "tableTitle": "Registos de aprendizagem correspondentes",
+      "recordCount": "{{count}} registos",
+      "generatedAt": "Actualizado em {{date}}",
+      "page": "Página {{page}} de {{pages}}",
+      "emptyTitle": "Não existem registos de aprendizagem correspondentes",
+      "emptyDescription": "Altere os filtros e volte a aplicar.",
+      "errorTitle": "Não foi possível carregar os relatórios",
+      "errorDescription": "Volte a tentar. A configuração aplicada continua disponível.",
+      "chooseSubject": "Seleccione um objecto de relatório para consultar os resultados.",
+      "noBreakdown": "Sem resultados para esta análise.",
+      "invalidConfiguration": "A configuração do relatório no URL é inválida. Reponha todos os filtros para começar com uma configuração segura."
     },
     "metrics": {
       "learners": "Formandos",
       "activeCertificates": "Certificados válidos",
-      "platformCourses": "Formações"
+      "platformCourses": "Formações",
+      "title": "Indicadores de síntese",
+      "people": "Correspondentes aos filtros actuais",
+      "completionRate": "Taxa de conclusão das formações",
+      "ofMatchingEnrollments": "Inscrições concluídas / correspondentes",
+      "activeLearners": "Formandos activos · 30 dias",
+      "last30Days": "Com actividade nos últimos 30 dias",
+      "averageProgress": "Progresso médio",
+      "matchingLearning": "Em toda a aprendizagem correspondente",
+      "averageScore": "Nota média dos questionários",
+      "quizScores": "Apenas inscrições com nota",
+      "certificates": "Certificados emitidos",
+      "issued": "Certificados de formações e percursos",
+      "pathsCompleted": "Percursos de desenvolvimento concluídos",
+      "allActivePaths": "Nos percursos activos",
+      "activeCertificateContext": "Certificados actualmente válidos",
+      "outcomesTitle": "Resultados de aprendizagem",
+      "platformCoursesContext": "Na plataforma, excluindo rascunhos e formações arquivadas"
     },
     "breakdowns": {
       "title": "Taxa de conclusão",
       "tabs": {
         "courses": "Formações",
-        "groups": "Grupos"
-      }
+        "groups": "Grupos",
+        "paths": "Percursos"
+      },
+      "learnersAndEnrollments": "{{learners}} formandos · {{enrollments}} inscrições",
+      "subtitle": "Proporção concluída das inscrições correspondentes",
+      "showingTop": "Primeiros {{shown}} de {{count}}, por formandos",
+      "chartLabel": "Taxa de conclusão por {{breakdown}}"
     },
     "exports": {
-      "download": "Descarregar"
+      "download": "Descarregar",
+      "spreadsheet": "Folha de cálculo",
+      "pdf": "Relatório PDF",
+      "processing": "A preparar o relatório completo…",
+      "ready": "O relatório {{format}} está pronto.",
+      "failed": "Não foi possível gerar a exportação.",
+      "status": "Estado da exportação",
+      "exportSpreadsheet": "Exportar folha de cálculo",
+      "exportPdf": "Exportar PDF",
+      "moreOptions": "Mais opções de exportação",
+      "processingDescription": "Os relatórios grandes podem demorar algum tempo. A descarga começa automaticamente quando estiver pronta.",
+      "readyDescription": "A descarga começou. Não recebeu o ficheiro? Descarregue-o novamente.",
+      "failedDescription": "Volte a tentar exportar dentro de instantes.",
+      "dismiss": "Fechar"
     },
     "table": {
       "status": "Estado",
-      "progress": "Progresso"
+      "progress": "Progresso",
+      "learner": "Formando",
+      "course": "Formação",
+      "path": "Percurso de desenvolvimento",
+      "averageQuizScore": "Nota média dos questionários",
+      "attempts": "Total de tentativas de questionários",
+      "lastActivity": "Última actividade",
+      "pathCourseStatus": "Estado da formação no percurso"
     },
     "title": "Relatórios",
     "picker": {
-      "search": "Pesquisar"
-    }
+      "search": "Pesquisar",
+      "empty": "Não foram encontradas correspondências"
+    },
+    "errors": {
+      "invalidQuery": "Os critérios do relatório são inválidos.",
+      "invalidConfigurationQuery": "A configuração guardada do relatório é inválida.",
+      "accessDenied": "Não tem permissão para consultar estes relatórios.",
+      "scopeDenied": "Não tem acesso ao âmbito de relatório seleccionado.",
+      "groupOutsideScope": "O grupo seleccionado está fora do seu âmbito de consulta de relatórios.",
+      "courseOutsideScope": "A formação seleccionada está fora do seu âmbito de consulta de relatórios.",
+      "pathOutsideScope": "O percurso de desenvolvimento seleccionado está fora do seu âmbito de consulta de relatórios.",
+      "learnerOutsideScope": "O formando seleccionado está fora do seu âmbito de consulta de relatórios.",
+      "subjectOutsideScope": "O objecto de relatório seleccionado está fora do seu âmbito de consulta de relatórios.",
+      "invalidTimezone": "Seleccione um fuso horário válido para este relatório.",
+      "unsupportedOperator": "Esta condição não suporta o operador seleccionado.",
+      "unexpectedValue": "Esta condição não aceita um valor.",
+      "requiredValue": "Introduza um valor para esta condição.",
+      "invalidRange": "Introduza um intervalo válido para esta condição.",
+      "expectedList": "Seleccione um ou mais valores para esta condição.",
+      "expectedSingleValue": "Seleccione um valor para esta condição.",
+      "invalidIdentifier": "O valor seleccionado é inválido. Volte a seleccioná-lo.",
+      "invalidDate": "Introduza uma data válida.",
+      "invalidStatus": "Seleccione um estado de conclusão válido.",
+      "invalidCertificateStatus": "Seleccione um estado de certificado válido.",
+      "numberOutOfRange": "Introduza um número dentro do intervalo permitido.",
+      "reversedRange": "O fim do intervalo deve ser posterior ao início.",
+      "unexpectedSubject": "Esta vista de relatório não aceita um objecto de análise.",
+      "subjectRequired": "Seleccione um objecto de análise para esta vista de relatório.",
+      "tooManyConditions": "Um relatório pode ter, no máximo, 30 condições.",
+      "configurationNotFound": "Não foi possível encontrar esta configuração guardada de relatório.",
+      "configurationSharedManagementForbidden": "Não tem permissão para gerir configurações de relatórios partilhadas.",
+      "configurationNameRequired": "Introduza um nome para a configuração do relatório.",
+      "exportStorageUnavailable": "As exportações de relatórios não estão disponíveis neste momento.",
+      "exportNotFound": "Não foi possível encontrar esta exportação de relatório.",
+      "exportUnavailable": "Esta exportação de relatório ainda não está pronta para descarregar.",
+      "exportExpired": "Esta exportação de relatório expirou. Crie uma nova exportação.",
+      "exportAccessChanged": "O seu acesso a este relatório mudou. Crie uma nova exportação.",
+      "exportActorUnavailable": "A conta que solicitou esta exportação já não está disponível.",
+      "exportQueueUnavailable": "Não foi possível colocar a exportação do relatório em fila. Tente novamente mais tarde.",
+      "exportGenerationFailed": "Não foi possível gerar a exportação do relatório. Volte a tentar.",
+      "exportScopeInvalid": "O âmbito da exportação do relatório já não é válido. Reveja o relatório e volte a tentar."
+    },
+    "views": {
+      "title": "Vistas de relatório",
+      "organisation": "Visão geral da organização",
+      "developmentPaths": "Percursos de desenvolvimento",
+      "course": "Desempenho da formação",
+      "learner": "Progresso do formando"
+    },
+    "subject": {
+      "course": "Formação",
+      "path": "Percurso de desenvolvimento",
+      "learner": "Formando",
+      "chooseCourse": "Seleccione uma formação",
+      "choosePath": "Seleccione um percurso de desenvolvimento",
+      "chooseLearner": "Seleccione um formando"
+    },
+    "operators": {
+      "eq": "É",
+      "neq": "Não é",
+      "in": "É um de",
+      "contains": "Contém",
+      "gte": "Pelo menos",
+      "lte": "No máximo",
+      "between": "Entre",
+      "isEmpty": "Sem valor",
+      "isNotEmpty": "Com valor"
+    },
+    "help": {
+      "title": "Sobre este relatório",
+      "scope": "A selecção de grupos limita a população de formandos. Os formandos correspondentes incluem a sua aprendizagem individual e a de outros grupos.",
+      "metrics": "Todos os indicadores, linhas da tabela e exportações usam as mesmas condições aplicadas. Taxas e médias sem dados aparecem como —.",
+      "timezone": "As datas usam {{timezone}}."
+    },
+    "description": "Compreenda o progresso da organização na aprendizagem, nos percursos de desenvolvimento, nas formações e nos formandos."
   },
   "automations": {
     "status": "Estado",
@@ -3078,7 +4050,12 @@
     },
     "executionStatuses": {
       "skipped": "Ignorados"
-    }
+    },
+    "success": {},
+    "errors": {},
+    "title": "Automações",
+    "enable": "Activar",
+    "disable": "Desactivar"
   },
   "automationView": {
     "filters": {
@@ -3094,7 +4071,8 @@
     "table": {
       "status": "Estado",
       "menu": "Menu",
-      "manage": "Gerir"
+      "manage": "Gerir",
+      "actions": "Acções"
     },
     "drawer": {
       "descriptionLabel": "Descrição",
@@ -3105,7 +4083,9 @@
       "archive": "Arquivar",
       "save": "Guardar alterações",
       "cancel": "Cancelar",
-      "delete": "Eliminar"
+      "delete": "Eliminar",
+      "pause": "Desactivar",
+      "activate": "Activar"
     },
     "deleteDialog": {
       "confirm": "Eliminar",
@@ -3114,8 +4094,16 @@
     "seedDefaults": {
       "dialog": {
         "cancel": "Cancelar"
-      }
-    }
+      },
+      "toasts": {}
+    },
+    "actionMenu": {
+      "disable": "Desactivar",
+      "enable": "Activar"
+    },
+    "newAutomation": {},
+    "toasts": {},
+    "title": "Automações"
   },
   "automationBuilder": {
     "mapping": {
@@ -3132,7 +4120,8 @@
       "deleteDialog": {
         "confirm": "Eliminar",
         "cancel": "Cancelar"
-      }
+      },
+      "automations": "Automações"
     },
     "blocks": {
       "courseDeadline": "Prazo da formação",
@@ -3145,26 +4134,48 @@
     "editPanel": {
       "changeTriggerDialogCancel": "Cancelar",
       "recipientAdmin": "Administrador",
-      "deleteNodeDialogCancel": "Cancelar"
+      "deleteNodeDialogCancel": "Cancelar",
+      "triggerValue": "Valor",
+      "operator": "Operador",
+      "operatorContains": "Contém"
     },
     "editAction": {
-      "language": "Idioma"
+      "language": "Idioma",
+      "templates": {
+        "userFirstLogin": "Primeiro início de sessão"
+      }
     },
     "variables": {
-      "userEmail": "Endereço de correio electrónico"
+      "userEmail": "Endereço de correio electrónico",
+      "finishedAt": "Data de conclusão"
     },
     "simulation": {
       "variableType": "Tipo",
       "preview": {
         "goToCourse": "Ir para a formação",
         "label": "Pré-visualizar"
-      }
+      },
+      "errors": {},
+      "sampleData": {}
     },
     "condition": {
       "yes": "Sim",
       "no": "Não",
-      "skipped": "Ignorados"
-    }
+      "skipped": "Ignorados",
+      "issues": {}
+    },
+    "recipients": {
+      "eventDescriptions": {}
+    },
+    "creation": {},
+    "sidebar": {
+      "actions": "Acções"
+    },
+    "config": {
+      "course": "Formação",
+      "coursePlaceholder": "Seleccione uma formação"
+    },
+    "branchVariables": {}
   },
   "automationLogs": {
     "status": {
@@ -3175,12 +4186,14 @@
       "skipped": "Ignorados"
     },
     "table": {
-      "status": "Estado"
+      "status": "Estado",
+      "details": "Detalhes"
     },
     "detail": {
       "status": "Estado",
       "language": "Idioma"
-    }
+    },
+    "reasons": {}
   },
   "offline": {
     "title": "Descargas offline",
@@ -3232,5 +4245,229 @@
       "attempt": "Não foi possível registar a tentativa de avaliação.",
       "receipt": "O recibo de sincronização é inválido."
     }
+  },
+  "competencies": {
+    "title": "Competências",
+    "scope": "A competência profissional exige avaliação explícita. A conclusão de formações e questionários não atribui competências automaticamente.",
+    "loading": "A carregar competências…",
+    "saved": "Alterações guardadas",
+    "save": "Guardar",
+    "matrix": "Matriz de competências da equipa",
+    "profile": "Perfil do colaborador",
+    "catalog": "Catálogo de competências",
+    "roles": "Funções e requisitos",
+    "employee": "Colaborador",
+    "unit": "Unidade organizacional",
+    "role": "Função profissional",
+    "competency": "Competência",
+    "required": "Nível exigido",
+    "demonstrated": "Nível demonstrado",
+    "status": "Estado",
+    "learning": "Formação recomendada",
+    "course": "Formação recomendada",
+    "path": "Percurso de aprendizagem recomendado",
+    "empty": "Não existem requisitos de função em vigor para os colaboradores seleccionados.",
+    "history": "Histórico de evidências e avaliações",
+    "assessor": "Avaliador",
+    "expiry": "Validade (opcional)",
+    "review": "Data de revisão (opcional)",
+    "recordEvidence": "Registar evidência",
+    "level": "Nível de proficiência",
+    "source": "Origem da evidência",
+    "evidence": "Evidência e fundamentação da avaliação",
+    "create": "Criar competência",
+    "code": "Código",
+    "name": "Nome",
+    "category": "Categoria",
+    "description": "Descrição",
+    "levelsHint": "Designações dos níveis, uma por linha, do menor para o maior",
+    "activate": "Activar",
+    "deactivate": "Desactivar",
+    "createRole": "Criar função profissional",
+    "requirements": "Requisitos da função",
+    "effectiveFrom": "Em vigor desde (opcional)",
+    "effectiveUntil": "Em vigor até (opcional)",
+    "assign": "Associar função e unidade ao colaborador",
+    "membershipHint": "O colaborador deve pertencer ao grupo seleccionado. Neste fluxo, os grupos representam unidades organizacionais.",
+    "states": {
+      "met": "Requisito cumprido",
+      "missing": "Competência em falta",
+      "insufficient": "Proficiência insuficiente",
+      "pending": "Evidência por avaliar",
+      "rejected": "Avaliação recusada",
+      "expired": "Avaliação expirada",
+      "approved": "Avaliação aprovada"
+    },
+    "errors": {
+      "forbidden": "Não pode consultar ou avaliar este colaborador.",
+      "notFound": "Competência ou colaborador não encontrado.",
+      "invalidReference": "Seleccione uma competência activa e referências válidas desta organização. Verifique a inscrição no grupo.",
+      "invalidLevel": "Seleccione um nível de proficiência definido, sem duplicados.",
+      "invalidDates": "A data final, de revisão ou de validade deve ser posterior à data inicial.",
+      "duplicateCode": "Este código já existe.",
+      "failed": "Não foi possível concluir a operação. Os registos existentes foram preservados."
+    }
+  },
+  "offlineRecovery": {
+    "title": "Recuperar tentativa offline",
+    "authRequired": "A sessão expirou. As respostas foram preservadas. Inicie sessão na mesma conta e volte a tentar.",
+    "forbidden": "O servidor recusou o acesso. As respostas foram preservadas; solicite ao administrador da formação a revisão do acesso.",
+    "changed": "A avaliação ou o ciclo de formação mudou, ou a descarga expirou. As respostas foram preservadas. Arquive esta tentativa antes de descarregar e responder à avaliação actual.",
+    "archived": "Arquivada neste dispositivo para revisão. Este registo não será sincronizado automaticamente.",
+    "answers": "Consultar identificadores das respostas originais",
+    "exportWarning": "A exportação contém respostas de formação privadas. Guarde-a em segurança. Serve para revisão, não comprova a conclusão.",
+    "export": "Exportar respostas originais",
+    "retry": "Repetir sincronização",
+    "login": "Iniciar sessão novamente",
+    "archiveWarning": "Preservar as respostas originais num arquivo local e permitir nova tentativa? Exporte primeiro uma cópia. Terá de descarregar novamente a avaliação actual; as respostas não serão transferidas automaticamente.",
+    "archive": "Arquivar para revisão",
+    "course": "Abrir formação para descarregar a versão actual",
+    "downloadCurrent": "A tentativa original foi arquivada. Descarregue novamente a formação para responder à avaliação actual. As respostas antigas continuam disponíveis para exportação."
+  },
+  "automationWorkspace": {},
+  "nativeArchive": {
+    "replaceFile": "Substituir pacote",
+    "removeFile": "Remover pacote",
+    "exportDescription": {},
+    "errors": {}
+  },
+  "todoTasks": {},
+  "deleteFile": {
+    "toast": {}
+  },
+  "resourceLibrary": {
+    "toast": {},
+    "error": {}
+  },
+  "adminCourseDuplication": {},
+  "studentChapterCardView": {
+    "other": {}
+  },
+  "microsoftCalendar": {
+    "status": {
+      "connected": "Com ligação à Internet"
+    },
+    "action": {},
+    "errors": {},
+    "stale": {},
+    "adminApproval": {},
+    "disconnect": {},
+    "replace": {},
+    "outbound": {},
+    "toast": {},
+    "oauth": {}
+  },
+  "resetOnboarding": {
+    "button": {},
+    "toast": {}
+  },
+  "mostPopularCoursesView": {
+    "other": {
+      "students": "Formandos"
+    }
+  },
+  "enrollmentChartView": {
+    "other": {}
+  },
+  "magicLink": {
+    "error": {}
+  },
+  "user": {
+    "error": {}
+  },
+  "platformLogo": {
+    "field": {},
+    "button": {},
+    "toast": {}
+  },
+  "platformSimpleLogo": {
+    "field": {},
+    "button": {},
+    "toast": {}
+  },
+  "organizationTheme": {},
+  "organizationLoginBackgroundImageUpload": {
+    "field": {
+      "imageRequirements": "PNG, JPG ou JPEG (máx. 20 MB)"
+    },
+    "button": {},
+    "toast": {}
+  },
+  "ingestion": {
+    "error": {}
+  },
+  "defaultCourseCurrencyView": {
+    "toast": {},
+    "select": {
+      "pln": {},
+      "eur": {},
+      "usd": {},
+      "gbp": {}
+    }
+  },
+  "ageLimitView": {
+    "select": {
+      "null": {}
+    }
+  },
+  "QA": {},
+  "qaPreferences": {
+    "settings": {
+      "qaEnabled": {},
+      "qaPublic": {}
+    },
+    "toast": {},
+    "tooltip": {}
+  },
+  "newsPreferences": {
+    "settings": {
+      "newsEnabled": {},
+      "newsPublic": {}
+    },
+    "toast": {},
+    "tooltip": {}
+  },
+  "articlesPreferences": {
+    "settings": {
+      "articlesEnabled": {},
+      "articlesPublic": {}
+    },
+    "toast": {},
+    "tooltip": {}
+  },
+  "learningPathsPreferences": {
+    "settings": {
+      "learningPathsEnabled": {}
+    }
+  },
+  "articlesView": {
+    "deleteModal": {}
+  },
+  "supportMode": {
+    "banner": {},
+    "errors": {}
+  },
+  "superAdminTenants": {
+    "error": {}
+  },
+  "courseDuplication": {
+    "error": {}
+  },
+  "learningPathExport": {
+    "error": {}
+  },
+  "learningPathCertificate": {
+    "error": {
+      "disabled": "Os certificados de percursos de desenvolvimento estão desactivados"
+    }
+  },
+  "luma": {
+    "errors": {}
+  },
+  "liveTraining": {
+    "errors": {}
+  },
+  "automationSteps": {
+    "toast": {}
   }
 }
