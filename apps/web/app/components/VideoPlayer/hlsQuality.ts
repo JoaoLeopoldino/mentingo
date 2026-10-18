@@ -1,9 +1,6 @@
 export const HLS_AUTO_HD_VALUE = "auto-hd";
 export const HLS_AUTO_HD_LABEL = "Auto";
 
-const MIN_HLS_RENDITION_HEIGHT = 720;
-const MAX_HLS_RENDITION_HEIGHT = 1080;
-
 export type HlsQualitySelection = typeof HLS_AUTO_HD_VALUE | `fixed:${number}`;
 
 export type HlsQualityLevel = {
@@ -62,14 +59,6 @@ export const getHlsQualityOptions = (qualityLevels: HlsQualityLevel[]): HlsQuali
   ];
 };
 
-const getAutoHdFallback = (qualityLevels: HlsQualityLevel[]) =>
-  qualityLevels
-    .filter((qualityLevel) => {
-      const height = getQualityLevelHeight(qualityLevel);
-      return height !== null && height < MIN_HLS_RENDITION_HEIGHT;
-    })
-    .sort((a, b) => (getQualityLevelHeight(b) ?? 0) - (getQualityLevelHeight(a) ?? 0))[0];
-
 export const applyHlsQualitySelection = (
   qualityLevels: HlsQualityLevel[],
   selection: HlsQualitySelection,
@@ -77,29 +66,10 @@ export const applyHlsQualitySelection = (
   if (!qualityLevels.length) return;
 
   if (selection === HLS_AUTO_HD_VALUE) {
-    const hasTargetRangeQuality = qualityLevels.some((qualityLevel) => {
-      const height = getQualityLevelHeight(qualityLevel);
-      return (
-        height !== null && height >= MIN_HLS_RENDITION_HEIGHT && height <= MAX_HLS_RENDITION_HEIGHT
-      );
-    });
-    const fallbackQuality = getAutoHdFallback(qualityLevels);
-
-    if (!hasTargetRangeQuality && !fallbackQuality) {
-      qualityLevels.forEach((qualityLevel) => {
-        qualityLevel.enabled = true;
-      });
-      return;
-    }
-
+    // Keep the persisted selection token, but let the player's ABR choose any rendition.
+    // A 720p floor prevents adaptation on weak connections even when lower variants exist.
     qualityLevels.forEach((qualityLevel) => {
-      const height = getQualityLevelHeight(qualityLevel);
-      const isInTargetRange =
-        height !== null && height >= MIN_HLS_RENDITION_HEIGHT && height <= MAX_HLS_RENDITION_HEIGHT;
-
-      qualityLevel.enabled = hasTargetRangeQuality
-        ? isInTargetRange
-        : qualityLevel === fallbackQuality;
+      qualityLevel.enabled = true;
     });
     return;
   }
