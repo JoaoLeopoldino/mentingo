@@ -18,7 +18,8 @@ const record = (message: string) => {
   results.push(message);
   console.log(message);
 };
-await mkdir(`${root}.local/sprint/screenshots`, { recursive: true });
+const output = process.env.SPRINT_QA_OUTPUT ?? `${root}.local/sprint/screenshots`;
+await mkdir(output, { recursive: true });
 const launch = () =>
   chromium.launchPersistentContext(profile, {
     channel: "chrome",
@@ -177,9 +178,21 @@ try {
     "Closed/reopened offline: shell, text and PDF canvas restored; no authenticated API/private storage/PDF CDN calls",
   );
   await page.screenshot({
-    path: `${root}.local/sprint/screenshots/05-offline-text-pdf.png`,
+    path: `${output}/05-offline-text-pdf.png`,
     fullPage: true,
   });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator("canvas")).toBeVisible();
+  await page.screenshot({ path: `${output}/05-offline-pdf-mobile.png`, fullPage: true });
+  const mobileWidth = await page.evaluate(() => ({
+    document: document.documentElement.scrollWidth,
+    viewport: window.innerWidth,
+  }));
+  expect(mobileWidth.document).toBeLessThanOrEqual(mobileWidth.viewport + 1);
+  record(
+    `Offline PDF mobile horizontal overflow: ${Math.max(0, mobileWidth.document - mobileWidth.viewport)}px`,
+  );
+  await page.setViewportSize({ width: 1200, height: 1000 });
   await page.getByTestId("offline-remove").click();
   await expect(page.getByTestId("offline-reader")).toContainText(
     "Não existem formações descarregadas",
@@ -190,9 +203,7 @@ try {
   );
   record("Explicit removal persists after offline reload");
 } catch (error) {
-  await page
-    .screenshot({ path: `${root}.local/sprint/screenshots/offline-failure.png`, fullPage: true })
-    .catch(() => {});
+  await page.screenshot({ path: `${output}/offline-failure.png`, fullPage: true }).catch(() => {});
   await writeFile(
     `${root}.local/sprint/offline-failure-dom.txt`,
     await page

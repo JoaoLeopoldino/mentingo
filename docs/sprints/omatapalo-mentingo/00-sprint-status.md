@@ -2,7 +2,7 @@
 
 Estado: **em execução, com funcionalidades e testes reais; sem aprovação para produção**.
 
-Base: `7a23e967d88947238386c588663140c21a284294` (v4.23.0). Branch actual: `sprint/omatapalo-resume-20261017`. Worktree persistente: `/Users/joaoleopoldino/Development/CaniveteLab/mentingo/.local/worktrees/omatapalo-20261017`. Checkout original preservado.
+Base: `7a23e967d88947238386c588663140c21a284294` (v4.23.0). Branch actual: `sprint/omatapalo-resume-20261017`. Worktree persistente: `/Users/joaoleopoldino/Development/CaniveteLab/mentingo/.local/worktrees/omatapalo-20261017`. Checkout original recuperado e verificado; implementação mantida no worktree separado.
 
 Início: **2026-10-17 14:56:11 UTC**. Os intervalos incluem downloads, espera por permissões e limitações de disco; actividades sobrepostas não têm tempos exclusivos inventados.
 
@@ -42,3 +42,11 @@ Avaliação offline demonstrada em Chrome: descarregar, responder sem rede, fech
 API de avaliações em **`38683c60`**, fila/UI e demonstração em **`276827c8`**. O build exclusivo do sprint passou com heap máximo 4 GB, sem source maps de cliente: 1m17s cliente + 22,90s SSR. Os nove checkpoints Chrome (cinco conteúdos + quatro avaliações) passaram novamente sobre esse build. Upgrade IndexedDB v1→v2 preserva conteúdos; 33 casos web distintos validados (32 do conjunto e uma nova regressão de upgrade). Os typechecks finais API/web e lint passaram. Usar os comandos reproduzíveis do relatório 05. A próxima etapa de produto continua a ser competências; as etapas 5–7 não estão concluídas.
 
 Checkpoint de fecho desta retoma: **18-10-2026 00:35:13 UTC**. Desde o primeiro relógio registado nesta retoma (23:52:44), decorreram **42 min 29 s**, com execução, builds, testes e esperas incluídos. Último commit funcional/validação: `ba3290a3`, após `276827c8` e `38683c60`. Working tree do sprint confirmado limpo antes deste registo; checkout original continua em `main`, com as mesmas 5.191 eliminações staged preservadas. Verificação HTTP final: frontend `/auth/login` **200**; API `/api/auth/current-user` sem autenticação **401**, conforme esperado. Espaço disponível observado: cerca de **5,3 GB**. Não houve push ou deployment.
+
+## Recuperação e QA visual — 18-10-2026
+
+O checkout original foi recuperado: **zero eliminações staged e zero alterações tracked**, com sete relatórios da auditoria preservados. Foram repostos 3.194 ficheiros ausentes e reparados 21 snapshots vazios. [Relatório de recuperação](10-checkout-recovery.md). O estado de 5.191 eliminações referido nos checkpoints anteriores é histórico e já foi resolvido.
+
+Progresso verificável: **16/32 critérios = 50%**, conforme [checklist completo](11-sprint-progress.md); não significa 50% de prontidão para produção. Localização: 34,01% das chaves. Novos ensaios Chrome: **18 checkpoints passaram** (7 navegação/idioma, 6 conteúdos offline, 5 avaliações offline), mais verificação interactiva pelo Chrome DevTools MCP. [QA visual e galeria](12-visual-qa.md).
+
+A aplicação está acessível neste computador em http://localhost:5173. Competências e integrações continuam por implementar. Decisão: CONDITIONAL GO para continuar a validação, sem GO para produção.

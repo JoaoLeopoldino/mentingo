@@ -1,0 +1,82 @@
+{
+  "recordedAtUtc": "2026-10-18T01:23:33.565100+00:00",
+  "codeCheckpoint": "3a6dc5e832edf57c2297b32e143ec4202db32370",
+  "scope": "Local synthetic data only; QA scripts modified after checkpoint",
+  "automatedCheckpoints": {
+    "smoke": 7,
+    "offlineContent": 6,
+    "offlineAssessment": 5
+  },
+  "devtools": {
+    "observed": "Login, dashboard, catalogue, html lang and console",
+    "userAgent": "Chrome/155.0.0.0",
+    "screenshot": "07-devtools-catalog.png"
+  },
+  "screenshots": [
+    {
+      "file": "01-login-pt-AO.png",
+      "bytes": 39604,
+      "sha256": "d691603b9a5438fda504d38c32a6a2a83813c815b0e3a86082814731e742e412"
+    },
+    {
+      "file": "02-dashboard-desktop.png",
+      "bytes": 78165,
+      "sha256": "b275b2e2d3db3002d2b2ad690feffe25d851981fbc32941181a02a004cfbda78"
+    },
+    {
+      "file": "02-settings-pt-AO.png",
+      "bytes": 84648,
+      "sha256": "2405140ddc5b96dc3e741f43bef734ff3377d8b976b1b58d2ac8af2fc88e1c3b"
+    },
+    {
+      "file": "03-catalog-mobile.png",
+      "bytes": 55279,
+      "sha256": "a0338df15a8ccb9ce6162dbed27a6e73e8e2c7bbd32772d9acbef9e3e9a7ca0a"
+    },
+    {
+      "file": "03-catalog-pt-AO.png",
+      "bytes": 107103,
+      "sha256": "b813704297fff11b11c624b962c3ea2da181aa1267667f0e99457dcb8fec969b"
+    },
+    {
+      "file": "04-lesson-pt-AO.png",
+      "bytes": 163691,
+      "sha256": "b4e2a1b319606fd30d9c804c1f8b58083f3481b1d1d7e51cf3c547acb9b8b078"
+    },
+    {
+      "file": "05-offline-pdf-mobile.png",
+      "bytes": 76541,
+      "sha256": "0d94d3b15ec5b5d9f1dd736bb3e56789d4ea7ca9227bd5295cbab91f4163ef6c"
+    },
+    {
+      "file": "05-offline-text-pdf.png",
+      "bytes": 92700,
+      "sha256": "e3c986875c0d753dfe854ea24fd8081a0f937e86d560ca9baf3db77c97942421"
+    },
+    {
+      "file": "06-offline-assessment-pending.png",
+      "bytes": 65910,
+      "sha256": "6950428b0efee604e2c24e2bd272752a999a98bce24bf10c93b9a0879608bb48"
+    },
+    {
+      "file": "06-offline-assessment-synced.png",
+      "bytes": 68308,
+      "sha256": "6c516393465bd852c041d690194d47bf65a40b24e5b5f9850ba290512e356c04"
+    },
+    {
+      "file": "06-offline-quiz-desktop.png",
+      "bytes": 74622,
+      "sha256": "defe54e7f2f74b417c850f0a1c979700b7f67286467316579991d4811554507b"
+    },
+    {
+      "file": "06-offline-quiz-mobile.png",
+      "bytes": 68293,
+      "sha256": "026932c92e1655ac0318d3850df3e95c03d8a26f39d4e430fb8262cc9618115d"
+    },
+    {
+      "file": "07-devtools-catalog.png",
+      "bytes": 2850415,
+      "sha256": "d71006b9f1c0c60f2708a66e369740e519750655b06a77263bbd7fd7e1f42770"
+    }
+  ]
+}

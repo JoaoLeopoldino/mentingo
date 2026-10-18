@@ -17,7 +17,8 @@ const record = (message: string) => {
   results.push(message);
   console.log(message);
 };
-await mkdir(`${root}.local/sprint/screenshots`, { recursive: true });
+const output = process.env.SPRINT_QA_OUTPUT ?? `${root}.local/sprint/screenshots`;
+await mkdir(output, { recursive: true });
 const launch = () =>
   chromium.launchPersistentContext(profile, {
     channel: "chrome",
@@ -50,7 +51,10 @@ try {
     language: "pt-AO",
   });
   courseId = course.id;
-  await writeFile(`${root}.local/sprint/offline-assessment-created.json`, JSON.stringify({ courseId, categoryId }));
+  await writeFile(
+    `${root}.local/sprint/offline-assessment-created.json`,
+    JSON.stringify({ courseId, categoryId }),
+  );
   const chapter = await curriculum.createChapter({ courseId, title: "Operações em Huíla" });
   const quiz = await curriculum.createQuizLesson(courseId, {
     chapterId: chapter.id,
@@ -93,6 +97,18 @@ try {
   record("Real signed assessment downloaded without answer keys");
   await context.setOffline(true);
   await page.getByRole("radio", { name: "Capacete de protecção" }).check();
+  await page.screenshot({ path: `${output}/06-offline-quiz-desktop.png`, fullPage: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.screenshot({ path: `${output}/06-offline-quiz-mobile.png`, fullPage: true });
+  const mobileWidth = await page.evaluate(() => ({
+    document: document.documentElement.scrollWidth,
+    viewport: window.innerWidth,
+  }));
+  expect(mobileWidth.document).toBeLessThanOrEqual(mobileWidth.viewport + 1);
+  record(
+    `Offline quiz mobile horizontal overflow: ${Math.max(0, mobileWidth.document - mobileWidth.viewport)}px`,
+  );
+  await page.setViewportSize({ width: 1200, height: 1000 });
   await page.getByTestId("offline-quiz-submit").click();
   await expect(page.getByTestId("offline-attempt-status")).toContainText("sincronização pendente");
   await context.close();
@@ -103,6 +119,7 @@ try {
   await page.goto(`${baseURL}/offline-learning`);
   await expect(page.getByTestId("offline-attempt-status")).toContainText("sincronização pendente");
   record("Offline answers survive closing and reopening Chrome");
+  await page.screenshot({ path: `${output}/06-offline-assessment-pending.png`, fullPage: true });
   const syncResponse = page.waitForResponse(
     (response: { url(): string; status(): number }) =>
       response.url().endsWith("/api/offline-assessments/sync") && response.status() === 200,
@@ -140,13 +157,13 @@ try {
   expect(native.data.data.lessonCompleted).toBe(true);
   record("Native lesson progress reports completion after synchronization");
   await page.screenshot({
-    path: `${root}.local/sprint/screenshots/06-offline-assessment-synced.png`,
+    path: `${output}/06-offline-assessment-synced.png`,
     fullPage: true,
   });
 } catch (error) {
   await page
     .screenshot({
-      path: `${root}.local/sprint/screenshots/offline-assessment-failure.png`,
+      path: `${output}/offline-assessment-failure.png`,
       fullPage: true,
     })
     .catch(() => {});
