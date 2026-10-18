@@ -16,7 +16,7 @@ A interface e os conteúdos multilingues permitem servir formandos, formadores, 
 
 `pt-AO` integra o registo partilhado de idiomas. Os códigos BCP 47 são normalizados na resolução das preferências; `pt`, `pt-AO`, `pt-PT`, `pt-BR` e variantes com sublinhado resolvem para a única tradução portuguesa actualmente disponibilizada, `pt-AO`. Esta correspondência serve a preferência da interface e não altera a língua de dados importados.
 
-O selector apresenta «Português (Angola)». O estado da interface actualiza `html[lang]`. O catálogo pt-AO é parcial, com tradução dos percursos principais de autenticação, dashboard, formações, lições, avaliações e certificados. As chaves por traduzir usam inglês através do i18next. O catálogo não contém cópias inglesas para simular cobertura completa.
+O selector apresenta «Português (Angola)». O estado da interface actualiza `html[lang]`. O catálogo pt-AO cobre explicitamente as 6.099 chaves da referência actual, incluindo administração e competências. Há 6.042 valores distintos do inglês e 57 invariantes identificados (marcas, símbolos, termos válidos em português e identificadores). Novas omissões continuam a usar o fallback inglês do i18next, mas o gate automático de entrega rejeita chaves em falta ou valores ingleses não previstos na lista de invariantes. A cobertura estrutural não é revisão linguística humana.
 
 A apresentação de timestamps através de `formatLocalizedDate` usa `Africa/Luanda` nos formatos correntes da plataforma quando a interface está em pt-AO. Outros padrões date-fns usam a localização portuguesa. Existem funções partilhadas Intl para números, percentagens e valores AOA; os pagamentos continuam a respeitar a moeda efectiva da transacção. As datas armazenadas não são reinterpretadas nem convertidas na base de dados.
 
@@ -24,7 +24,7 @@ Os certificados gerados pelo construtor partilhado incluem texto pt-AO. O servi�
 
 ## Canais e limites
 
-Os dicionários operacionais de emails, notificações, automações e relatórios dispõem de fallback explícito para inglês quando falta pt-AO. Isto evita valores indefinidos e erros de execução; não constitui tradução desses canais. Os modelos de email personalizados já publicados necessitam de validação e tradução próprias.
+Nove corpos de emails transaccionais essenciais e 19 assuntos têm pt-AO explícito. Os documentos nativos e as variantes de inscrição/conclusão/renovação usam rodapé pt-AO. A renderização é testada; a entrega SMTP destas novas traduções não foi demonstrada. Outros corpos, notificações, automações e relatórios operacionais mantêm fallback onde não existe tradução. Modelos personalizados já publicados não são substituídos e exigem tradução própria.
 
 A preferência é individual e partilhada entre os papéis da mesma conta. Não foi introduzida uma preferência diferente por papel. Conteúdos continuam a usar `baseLanguage`, `availableLocales` e os mecanismos de fallback do domínio. Não se introduziu um segundo frontend ou um motor de tradução de conteúdos.
 

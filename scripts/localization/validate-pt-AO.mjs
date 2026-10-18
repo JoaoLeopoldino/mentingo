@@ -1,4 +1,4 @@
-import { parseUniqueJson, translationTokens } from "./translation-validation.mjs";
+import { parseUniqueJson, translationTokens, markupSequence } from "./translation-validation.mjs";
 import { readFileSync } from "node:fs";
 const load = (language) =>
   parseUniqueJson(readFileSync(`apps/web/app/locales/${language}/translation.json`, "utf8"));
@@ -14,6 +14,9 @@ const en = flat(load("en")),
   ao = flat(load("pt-AO"));
 const tokens = translationTokens;
 const missing = Object.keys(en).filter((key) => !(key in ao));
+const invariants = parseUniqueJson(
+  readFileSync("scripts/localization/pt-AO-invariants.json", "utf8"),
+);
 const identical = [];
 const errors = [];
 for (const [key, value] of Object.entries(ao)) {
@@ -27,7 +30,12 @@ for (const [key, value] of Object.entries(ao)) {
   }
   if (JSON.stringify(tokens(value)) !== JSON.stringify(tokens(en[key])))
     errors.push(`Placeholder/markup mismatch ${key}`);
-  if (value === en[key]) identical.push(key);
+  if (JSON.stringify(markupSequence(value)) !== JSON.stringify(markupSequence(en[key])))
+    errors.push(`Markup order mismatch ${key}`);
+  if (value === en[key]) {
+    identical.push(key);
+    if (invariants[key] !== value) errors.push(`Unreviewed English-identical value ${key}`);
+  }
   if (key.endsWith("_one") && !(key.replace(/_one$/, "_other") in ao))
     errors.push(`Missing plural pair ${key}`);
 }
@@ -50,6 +58,7 @@ console.log(
       structuralPercent: (100 * Object.keys(ao).length) / Object.keys(en).length,
       missingKeys: missing.length,
       identicalToEnglish: identical.length,
+      untranslatedUnexpected: errors.filter((x) => x.startsWith("Unreviewed")).length,
       nonIdenticalKeys: Object.keys(ao).length - identical.length,
       humanReviewedLinguisticPercent: null,
       criticalMissing,

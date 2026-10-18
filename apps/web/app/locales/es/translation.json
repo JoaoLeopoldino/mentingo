@@ -5160,7 +5160,8 @@
     "tenants": "Organizaciones",
     "learningPaths": "Rutas de desarrollo",
     "adminLearningPaths": "Rutas de desarrollo",
-    "adminLearningPathEditor": "Editor de ruta de desarrollo"
+    "adminLearningPathEditor": "Editor de ruta de desarrollo",
+    "competencies": "Competencies"
   },
   "learningPathsView": {
     "title": "Rutas de desarrollo",
@@ -8093,7 +8094,8 @@
       "invalidLevel": "Select a defined proficiency level without duplicates.",
       "invalidDates": "The end, review or expiry date must follow the start date.",
       "duplicateCode": "This code already exists.",
-      "failed": "The competency operation failed. Your existing records were preserved."
+      "failed": "The competency operation failed. Your existing records were preserved.",
+      "invalidForm": "Review the required fields and use valid values."
     }
   },
   "offlineRecovery": {

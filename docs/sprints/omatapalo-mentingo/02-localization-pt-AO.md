@@ -1,6 +1,8 @@
 # Etapa 1 — português de Angola
 
-Estado: **MVP funcional implementado e testado; localização integral incompleta**.
+Estado actual: **catálogo UI completo estruturalmente; revisão linguística e canais complementares incompletos**. Os números dos checkpoints abaixo são históricos.
+
+Branch actual: `sprint/omatapalo-resume-20261017`. Consulte a actualização final neste relatório.
 
 Base: `7a23e967`; branch `sprint/omatapalo-validation-20261017`. Ambiente isolado no commit `c6c53fc7`. O commit de localização será registado no estado global.
 
@@ -67,3 +69,27 @@ A localização foi intercalada com a recuperação do ambiente. Há checkpoints
 ## Cobertura após conteúdos e avaliações offline
 
 No checkpoint de 18-10-2026, o catálogo tem **2.050/6.027 chaves traduzidas (34,01%)**, com **3.977 em fallback inglês**. Os dez testes Node passaram novamente, incluindo placeholders e formatação. A nova página offline foi demonstrada em pt-AO no Chrome com estados de submissão e nota confirmada pelo servidor. Não interpretar a cobertura adicional como localização integral dos canais API, emails, PDFs ou AI.
+
+## Actualização — catálogo integral e emails essenciais
+
+O catálogo foi ampliado por lotes gerados pelo modelo disponível, sem credenciais externas pagas, dependências novas ou cópia de textos de terceiros. O aplicador preenche apenas chaves em falta e reutiliza traduções repetidas. Código em `scripts/localization/`.
+
+- **Cobertura estrutural: 6.099/6.099 = 100%**; zero chaves em falta, vazias ou desconhecidas.
+- **Tradução automática:** 6.042 valores distintos do inglês; 57 invariantes explicitamente listados (marcas, códigos, unidades, símbolos e palavras válidas em português). Zero valores iguais ao inglês fora da lista. Não se usa a diferença textual como prova de qualidade.
+- **Revisão linguística humana: não medida e sem aprovação de revisor angolano.**
+- Preservação de placeholders, printf, nomes de variáveis ICU, ordem de markup e pares de plurais; JSON com chaves duplicadas, incluindo nomes escapados, é recusado.
+- **10 testes Node passaram** e **6 testes Vitest de idioma passaram**. O fallback é ensaiado com uma chave exclusiva da fixture inglesa; todas as chaves reais continuam traduzidas.
+- Nove corpos essenciais de email (boas-vindas, convite, criação/reposição de palavra-passe, ligação de acesso, inscrição, conclusão e aviso/expiração de certificado) e 19 assuntos traduzidos. Rodapé pt-AO nos documentos nativos e variantes. **254 testes de renderização passaram em 32,167 s**, incluindo os novos casos e regressões existentes em todos os idiomas. Build do pacote e typecheck API passaram. Não foi feita prova SMTP destas traduções novas.
+- A validação nativa dos novos formulários de competências apresenta mensagem pt-AO, confirmada no Chrome.
+
+Continuam por localizar/verificar: corpos transaccionais restantes, emails personalizados já publicados, datas introduzidas por serviços externos, todas as notificações/relatórios operacionais, metadados HTML de PDFs, prompts/conteúdo gerado por IA, pacotes SCORM e textos fixos fora do catálogo. No QA DevTools persistem etiquetas de acessibilidade inglesas da navegação/avatar e o título do separador pode conservar inglês na primeira navegação; não são chaves em falta. Os campos NIP/KRS e as moedas de cobrança existentes também precisam de decisão funcional própria; traduzir etiquetas não os converte em fiscalidade angolana ou suporte de cobrança AOA.
+
+```sh
+node scripts/localization/validate-pt-AO.mjs --require-complete
+node --test scripts/localization/translation-validation.test.mjs packages/shared/test/pt-ao-catalog.test.mjs
+source scripts/sprints/omatapalo/environment.sh
+sprint_pnpm --filter web exec vitest run app/utils/language-localization.test.ts
+NODE_OPTIONS=--max-old-space-size=4096 sprint_pnpm --filter api exec jest --runInBand src/email-templates/services/email-template-pt-ao.spec.ts src/email-templates/services/email-template-rendering.service.spec.ts
+```
+
+Tempo de tradução/revisão automatizada não isolado num cronómetro exclusivo: faz parte do intervalo global da execução, com builds, testes e esperas. Não converter as durações dos testes em esforço de tradução.

@@ -12,6 +12,14 @@ export const getCreatePasswordReminderEmailTranslations = (language: SupportedLa
       ],
       buttonText: "CREATE PASSWORD",
     },
+    "pt-AO": {
+      heading: "Lembrete",
+      paragraphs: [
+        "A configuração da sua conta ainda não está concluída. 🔒",
+        "Para concluir a configuração, crie a sua palavra-passe através do botão abaixo. Se já a criou, ignore este lembrete.",
+      ],
+      buttonText: "CRIAR PALAVRA-PASSE",
+    },
     pl: {
       heading: "Przypomnienie",
       paragraphs: [

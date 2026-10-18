@@ -16,6 +16,14 @@ export const getCertificateExpirationWarningEmailTranslations = (
       ],
       buttonText: "OPEN COURSE",
     },
+    "pt-AO": {
+      heading: "Certificado a expirar em breve",
+      paragraphs: [
+        `O seu certificado de formação do curso ${courseName} expira em ${expiresAt}.`,
+        "Após a expiração, o progresso do curso será reiniciado e terá de concluir novamente o curso para receber um novo certificado de formação.",
+      ],
+      buttonText: "ABRIR CURSO",
+    },
     pl: {
       heading: "Certyfikat wkrótce wygaśnie",
       paragraphs: [

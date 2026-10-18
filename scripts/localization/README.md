@@ -15,3 +15,5 @@ A aplicação de um lote não substitui traduções existentes. O validador sepa
 Glossário: formação; formando; formador; colaborador; acção de formação; inscrição; ficheiro; palavra-passe; equipa; telemóvel; competências; certificado de formação; descarregar; guardar. Preservar SCORM, xAPI, H5P, UUID, marcas, identificadores, nomes de ficheiros técnicos e placeholders.
 
 Os lotes exigem revisão linguística contextual antes de publicação comercial. Chaves presentes não demonstram tradução de emails/PDFs/conteúdo de cursos, nem acessibilidade de todos os ecrãs.
+
+Estado de 18-10-2026: 6.099/6.099 chaves estruturais, 6.042 valores distintos do inglês, 57 invariantes em `pt-AO-invariants.json`. A lista contém marcas, identificadores, unidades, símbolos e palavras também válidas em português; não representa revisão humana. O gate recusa novos valores iguais ao inglês não presentes nessa lista e verifica a ordem do markup. Revisão humana: não medida. Os testes de fallback usam uma chave de teste exclusiva do recurso inglês, sem remover traduções reais.

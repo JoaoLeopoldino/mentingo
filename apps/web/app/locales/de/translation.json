@@ -5203,7 +5203,8 @@
     "activityLogs": "Aktivitätsprotokoll",
     "learningPaths": "Entwicklungspfade",
     "adminLearningPaths": "Entwicklungspfade",
-    "adminLearningPathEditor": "Entwicklungspfad Editor"
+    "adminLearningPathEditor": "Entwicklungspfad Editor",
+    "competencies": "Competencies"
   },
   "courseDuplication": {
     "error": {
@@ -8141,7 +8142,8 @@
       "invalidLevel": "Select a defined proficiency level without duplicates.",
       "invalidDates": "The end, review or expiry date must follow the start date.",
       "duplicateCode": "This code already exists.",
-      "failed": "The competency operation failed. Your existing records were preserved."
+      "failed": "The competency operation failed. Your existing records were preserved.",
+      "invalidForm": "Review the required fields and use valid values."
     }
   },
   "offlineRecovery": {

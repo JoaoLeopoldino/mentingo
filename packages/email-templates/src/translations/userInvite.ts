@@ -15,6 +15,14 @@ export const getUserInviteEmailTranslations = (
       ],
       buttonText: "JOIN NOW",
     },
+    "pt-AO": {
+      heading: "Convite para a plataforma",
+      paragraphs: [
+        "Olá 👋",
+        `Foi convidado para a plataforma de formação por ${invitedByUserName}. Clique no botão abaixo para começar a desenvolver as suas competências.`,
+      ],
+      buttonText: "ACEITAR CONVITE",
+    },
     pl: {
       heading: "Zaproszenie",
       paragraphs: [

@@ -6,6 +6,7 @@ import type { EmailSubjectKey } from "./email-subjects.types";
 export const EMAIL_SUBJECTS_TRANSLATIONS = {
   welcomeEmail: withEnglishLanguageFallback({
     en: "Welcome to our platform!",
+    "pt-AO": "Boas-vindas à nossa plataforma!",
     pl: "Witamy na naszej platformie!",
     de: "Willkommen auf unserer Plattform!",
     lt: "Sveiki atvykę į mūsų platformą!",
@@ -15,6 +16,7 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
   }),
   passwordRecoveryEmail: withEnglishLanguageFallback({
     en: "Password recovery",
+    "pt-AO": "Recuperação de palavra-passe",
     pl: "Odzyskiwanie hasła",
     de: "Passwort-Wiederherstellung",
     lt: "Slaptažodžio atkūrimas",
@@ -24,6 +26,7 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
   }),
   passwordReminderEmail: withEnglishLanguageFallback({
     en: "Account creation reminder",
+    "pt-AO": "Lembrete de criação da conta",
     pl: "Przypomnienie o utworzeniu konta",
     de: "Erinnerung zur Erstellung deines Kontos",
     lt: "Paskyros sukūrimo priminimas",
@@ -33,6 +36,7 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
   }),
   userInviteEmail: withEnglishLanguageFallback({
     en: "You're invited to the platform!",
+    "pt-AO": "Convite para a plataforma!",
     pl: "Zapraszamy na platformę!",
     de: "Du bist auf die Plattform eingeladen!",
     lt: "Esi pakviestas į platformą!",
@@ -42,6 +46,7 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
   }),
   userFirstLoginEmail: withEnglishLanguageFallback({
     en: "First login!",
+    "pt-AO": "Primeiro início de sessão!",
     pl: "Pierwsze logowanie!",
     de: "Erste Anmeldung!",
     lt: "Pirmasis prisijungimas!",
@@ -51,6 +56,7 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
   }),
   userCourseAssignmentEmail: withEnglishLanguageFallback({
     en: "New course - {{courseName}}",
+    "pt-AO": "Novo curso - {{courseName}}",
     pl: "Nowy kurs - {{courseName}}",
     de: "Neuer Kurs - {{courseName}}",
     lt: "Naujas kursas - {{courseName}}",
@@ -60,6 +66,7 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
   }),
   userShortInactivityEmail: withEnglishLanguageFallback({
     en: "Continue your course - {{courseName}}",
+    "pt-AO": "Continue o curso - {{courseName}}",
     pl: "Kontynuuj kurs - {{courseName}}",
     de: "Setze deinen Kurs fort - {{courseName}}",
     lt: "Tęsk savo kursą - {{courseName}}",
@@ -69,6 +76,7 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
   }),
   userShortInactivityPlatformEmail: withEnglishLanguageFallback({
     en: "Continue your journey on the platform",
+    "pt-AO": "Continue a sua formação na plataforma",
     pl: "Kontynuuj naukę na platformie",
     de: "Setze deine Lernreise auf der Plattform fort",
     lt: "Tęskite mokymosi kelionę platformoje",
@@ -78,6 +86,7 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
   }),
   userLongInactivityEmail: withEnglishLanguageFallback({
     en: "Come back to your courses",
+    "pt-AO": "Regresse aos seus cursos",
     pl: "Wróć do swoich kursów",
     de: "Kehre zu deinen Kursen zurück",
     lt: "Sugrįžk prie savo kursų",
@@ -87,6 +96,7 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
   }),
   userChapterFinishedEmail: withEnglishLanguageFallback({
     en: "Module completed - {{chapterName}}",
+    "pt-AO": "Módulo concluído - {{chapterName}}",
     pl: "Ukończono moduł - {{chapterName}}",
     de: "Modul abgeschlossen - {{chapterName}}",
     lt: "Modulis baigtas - {{chapterName}}",
@@ -96,6 +106,7 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
   }),
   userCourseFinishedEmail: withEnglishLanguageFallback({
     en: "Course completed - {{courseName}}",
+    "pt-AO": "Curso concluído - {{courseName}}",
     pl: "Ukończono kurs - {{courseName}}",
     de: "Kurs abgeschlossen - {{courseName}}",
     lt: "Kursas baigtas - {{courseName}}",
@@ -105,6 +116,7 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
   }),
   certificateExpirationWarningEmail: withEnglishLanguageFallback({
     en: "Certificate expires soon - {{courseName}}",
+    "pt-AO": "Certificado a expirar em breve - {{courseName}}",
     pl: "Certyfikat wkrótce wygaśnie - {{courseName}}",
     de: "Zertifikat läuft bald ab - {{courseName}}",
     lt: "Pažymėjimas netrukus baigs galioti - {{courseName}}",
@@ -114,6 +126,7 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
   }),
   certificateExpiredEmail: withEnglishLanguageFallback({
     en: "Certificate reset - {{courseName}}",
+    "pt-AO": "Certificado reiniciado - {{courseName}}",
     pl: "Certyfikat zresetowany - {{courseName}}",
     de: "Zertifikat zurückgesetzt - {{courseName}}",
     lt: "Pažymėjimas nustatytas iš naujo - {{courseName}}",
@@ -123,6 +136,7 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
   }),
   adminNewUserEmail: withEnglishLanguageFallback({
     en: "A new user has registered on your platform",
+    "pt-AO": "Um novo utilizador registou-se na plataforma",
     pl: "Nowy użytkownik zarejestrował się na Twojej platformie",
     de: "Ein Benutzer hat sich auf deiner Plattform registriert",
     lt: "Naujas naudotojas užsiregistravo tavo platformoje",
@@ -132,6 +146,7 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
   }),
   adminCourseFinishedEmail: withEnglishLanguageFallback({
     en: "A user has completed a course on your platform",
+    "pt-AO": "Um utilizador concluiu um curso na plataforma",
     pl: "Użytkownik ukończył kurs na Twojej platformie",
     de: "Ein Benutzer hat einen Kurs auf deiner Plattform abgeschlossen",
     lt: "Naudotojas baigė kursą tavo platformoje",
@@ -141,6 +156,7 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
   }),
   adminOverdueCoursesEmail: withEnglishLanguageFallback({
     en: "Overdue courses notification",
+    "pt-AO": "Notificação de cursos em atraso",
     pl: "Powiadomienie o zaległych kursach",
     de: "Benachrichtigung über überfällige Kurse",
     lt: "Pranešimas apie vėluojančius kursus",
@@ -150,6 +166,7 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
   }),
   courseDueDateReminderEmail: withEnglishLanguageFallback({
     en: "Course deadline approaching - {{courseName}}",
+    "pt-AO": "Prazo do curso a terminar - {{courseName}}",
     pl: "Zbliża się termin kursu - {{courseName}}",
     de: "Kursfrist naht - {{courseName}}",
     lt: "Artėja kurso terminas - {{courseName}}",
@@ -159,6 +176,7 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
   }),
   magicLinkEmail: withEnglishLanguageFallback({
     en: "Login link",
+    "pt-AO": "Ligação de início de sessão",
     pl: "Link do logowania",
     de: "Anmeldelink",
     lt: "Prisijungimo nuoroda",
@@ -168,6 +186,7 @@ export const EMAIL_SUBJECTS_TRANSLATIONS = {
   }),
   courseChatMentionEmail: withEnglishLanguageFallback({
     en: "You were mentioned in {{courseName}}",
+    "pt-AO": "Foi mencionado no curso {{courseName}}",
     pl: "Oznaczono Cię w kursie {{courseName}}",
     de: "Du wurdest in {{courseName}} erwähnt",
     lt: "Buvote paminėti kurse {{courseName}}",

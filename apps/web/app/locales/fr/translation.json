@@ -4945,7 +4945,8 @@
     "tenants": "Organisations",
     "learningPaths": "Parcours de développement",
     "adminLearningPaths": "Parcours de développement",
-    "adminLearningPathEditor": "Éditeur de parcours de développement"
+    "adminLearningPathEditor": "Éditeur de parcours de développement",
+    "competencies": "Competencies"
   },
   "learningPathsView": {
     "title": "Parcours de développement",
@@ -7667,7 +7668,8 @@
       "invalidLevel": "Select a defined proficiency level without duplicates.",
       "invalidDates": "The end, review or expiry date must follow the start date.",
       "duplicateCode": "This code already exists.",
-      "failed": "The competency operation failed. Your existing records were preserved."
+      "failed": "The competency operation failed. Your existing records were preserved.",
+      "invalidForm": "Review the required fields and use valid values."
     }
   },
   "offlineRecovery": {

@@ -12,6 +12,14 @@ export const getWelcomeEmailTranslations = (language: SupportedLanguages) => {
       ],
       buttonText: "VIEW COURSES",
     },
+    "pt-AO": {
+      heading: "Boas-vindas",
+      paragraphs: [
+        "É um prazer recebê-lo 🙂",
+        "A sua conta foi criada com sucesso. Consulte os cursos disponíveis.",
+      ],
+      buttonText: "VER CURSOS",
+    },
     pl: {
       heading: "Witamy",
       paragraphs: [

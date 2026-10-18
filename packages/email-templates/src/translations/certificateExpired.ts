@@ -22,6 +22,16 @@ export const getCertificateExpiredEmailTranslations = (
       ],
       buttonText: "OPEN COURSE",
     },
+    "pt-AO": {
+      heading: isManualReset ? "Certificado reiniciado" : "Certificado expirado",
+      paragraphs: [
+        isManualReset
+          ? `O seu certificado de formação do curso ${courseName} foi reiniciado por um administrador.`
+          : `O seu certificado de formação do curso ${courseName} expirou.`,
+        "O certificado foi arquivado e o progresso do curso foi reiniciado. Conclua novamente o curso para receber um novo certificado de formação.",
+      ],
+      buttonText: "ABRIR CURSO",
+    },
     pl: {
       heading: isManualReset ? "Certyfikat zresetowany" : "Certyfikat wygasł",
       paragraphs: [

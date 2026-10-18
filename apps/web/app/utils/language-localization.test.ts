@@ -54,24 +54,12 @@ describe("Angola interface language", () => {
       lng: "pt-AO",
       fallbackLng: "en",
       resources: {
-        en: { translation: enTranslations },
+        en: { translation: { ...enTranslations, fallbackProbe: "English fallback" } },
         "pt-AO": { translation: ptAOTranslations },
       },
     });
     expect(instance.t("common.languages.pt-AO")).toBe("Português (Angola)");
-    const flatten = (node: Record<string, unknown>, prefix = ""): Record<string, string> =>
-      Object.fromEntries(
-        Object.entries(node).flatMap(([key, value]) => {
-          const path = prefix ? `${prefix}.${key}` : key;
-          return typeof value === "object" && value !== null
-            ? Object.entries(flatten(value as Record<string, unknown>, path))
-            : [[path, value as string]];
-        }),
-      );
-    const english = flatten(enTranslations);
-    const angola = flatten(ptAOTranslations);
-    const fallbackKey = Object.keys(english).find((key) => !(key in angola))!;
-    expect(instance.t(fallbackKey)).toBe(instance.t(fallbackKey, { lng: "en" }));
+    expect(instance.t("fallbackProbe")).toBe("English fallback");
     expect(instance.t("dashboardHome.edit.drag", { title: "Luanda" })).toBe("Mover Luanda");
     expect(instance.t("studentCoursesView.modernView.lessonsCount", { count: 1 })).toBe("1 lição");
     expect(instance.t("studentCoursesView.modernView.lessonsCount", { count: 2 })).toBe("2 lições");

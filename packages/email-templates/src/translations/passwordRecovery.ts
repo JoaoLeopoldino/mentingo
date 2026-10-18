@@ -15,6 +15,14 @@ export const getPasswordRecoveryEmailTranslations = (
       ],
       buttonText: "RESET PASSWORD",
     },
+    "pt-AO": {
+      heading: "Recuperação de palavra-passe",
+      paragraphs: [
+        `Olá ${name}, solicitou a reposição da palavra-passe 🔑`,
+        "Pode repor a palavra-passe através do botão abaixo.",
+      ],
+      buttonText: "REPOR PALAVRA-PASSE",
+    },
     pl: {
       heading: "Odzyskiwanie hasła",
       paragraphs: [

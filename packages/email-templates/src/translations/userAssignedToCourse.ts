@@ -39,6 +39,17 @@ export const getUserAssignedToCourseEmailTranslations = (
       ].filter(Boolean) as string[],
       buttonText: "MY COURSES",
     },
+    "pt-AO": {
+      heading: "Novo curso",
+      paragraphs: [
+        "A sua inscrição foi efectuada 🎓",
+        `Já tem acesso ao curso ${courseName}. Está disponível na sua conta.`,
+        ...(formatedCourseDueDate
+          ? [`Este curso é obrigatório e deve ser concluído até ${formatedCourseDueDate}.`]
+          : []),
+      ],
+      buttonText: "OS MEUS CURSOS",
+    },
     pl: {
       heading: "Nowy kurs dostępny",
       paragraphs: [

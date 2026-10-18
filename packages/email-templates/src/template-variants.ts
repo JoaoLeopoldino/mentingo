@@ -24,6 +24,7 @@ import type { PublishedEmailTemplate, EmailTemplateVariant } from "./publication
 const suffixes = {
   withDeadline: withEnglishLanguageFallback({
     en: "with deadline",
+    "pt-AO": "com prazo",
     pl: "z terminem",
     de: "mit Frist",
     fr: "avec échéance",
@@ -33,6 +34,7 @@ const suffixes = {
   }),
   withoutDeadline: withEnglishLanguageFallback({
     en: "without deadline",
+    "pt-AO": "sem prazo",
     pl: "bez terminu",
     de: "ohne Frist",
     fr: "sans échéance",
@@ -42,6 +44,7 @@ const suffixes = {
   }),
   withCertificate: withEnglishLanguageFallback({
     en: "with certificate",
+    "pt-AO": "com certificado",
     pl: "z certyfikatem",
     de: "mit Zertifikat",
     fr: "avec certificat",
@@ -51,6 +54,7 @@ const suffixes = {
   }),
   withoutCertificate: withEnglishLanguageFallback({
     en: "without certificate",
+    "pt-AO": "sem certificado",
     pl: "bez certyfikatu",
     de: "ohne Zertifikat",
     fr: "sans certificat",
@@ -60,6 +64,7 @@ const suffixes = {
   }),
   reset: withEnglishLanguageFallback({
     en: "reset by administrator",
+    "pt-AO": "reiniciado",
     pl: "reset przez administratora",
     de: "vom Administrator zurückgesetzt",
     fr: "réinitialisé par un administrateur",
@@ -69,6 +74,7 @@ const suffixes = {
   }),
   expired: withEnglishLanguageFallback({
     en: "validity ended",
+    "pt-AO": "expirado",
     pl: "koniec ważności",
     de: "Gültigkeit abgelaufen",
     fr: "validité expirée",
@@ -78,6 +84,7 @@ const suffixes = {
   }),
   course: withEnglishLanguageFallback({
     en: "course",
+    "pt-AO": "curso",
     pl: "kurs",
     de: "Kurs",
     fr: "cours",
@@ -87,6 +94,7 @@ const suffixes = {
   }),
   platform: withEnglishLanguageFallback({
     en: "platform",
+    "pt-AO": "plataforma",
     pl: "platforma",
     de: "Plattform",
     fr: "plateforme",
@@ -96,6 +104,7 @@ const suffixes = {
   }),
   today: withEnglishLanguageFallback({
     en: "due today",
+    "pt-AO": "prazo termina hoje",
     pl: "termin dzisiaj",
     de: "heute fällig",
     fr: "échéance aujourd’hui",
@@ -105,6 +114,7 @@ const suffixes = {
   }),
   tomorrow: withEnglishLanguageFallback({
     en: "due tomorrow",
+    "pt-AO": "prazo termina amanhã",
     pl: "termin jutro",
     de: "morgen fällig",
     fr: "échéance demain",
@@ -114,6 +124,7 @@ const suffixes = {
   }),
   upcoming: withEnglishLanguageFallback({
     en: "upcoming deadline",
+    "pt-AO": "prazo a aproximar-se",
     pl: "nadchodzący termin",
     de: "bevorstehende Frist",
     fr: "échéance à venir",
@@ -264,6 +275,7 @@ export function getEmailTemplateVariantPublication(
     publication.content[language] = createDocumentFromEmailContent(
       variant.content(language),
       `{{ ${variant.button} }}`,
+      language,
     );
   }
   const keys = new Set(

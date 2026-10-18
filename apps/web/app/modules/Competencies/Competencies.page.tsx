@@ -16,6 +16,9 @@ import { Input } from "~/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
 import { useCurrentUserStore } from "~/modules/common/store/useCurrentUserStore";
+import { setPageTitle } from "~/utils/setPageTitle";
+
+import type { MetaFunction } from "@remix-run/react";
 
 function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
@@ -64,14 +67,32 @@ function BusyForm({
   children,
   ...props
 }: FormHTMLAttributes<HTMLFormElement> & { busy: boolean }) {
+  const { t } = useTranslation();
+  const control = (target: EventTarget | null) =>
+    target instanceof HTMLInputElement ||
+    target instanceof HTMLSelectElement ||
+    target instanceof HTMLTextAreaElement;
   return (
-    <form {...props}>
+    <form
+      {...props}
+      onInvalidCapture={(event) => {
+        if (control(event.target))
+          (event.target as HTMLInputElement).setCustomValidity(
+            t("competencies.errors.invalidForm"),
+          );
+      }}
+      onInputCapture={(event) => {
+        if (control(event.target)) (event.target as HTMLInputElement).setCustomValidity("");
+      }}
+    >
       <fieldset disabled={busy} className="contents">
         {children}
       </fieldset>
     </form>
   );
 }
+export const meta: MetaFunction = ({ matches }) => setPageTitle(matches, "pages.competencies");
+
 export default function CompetenciesPage() {
   const { t } = useTranslation();
   const { data, isPending, error } = useCompetencyWorkspace();

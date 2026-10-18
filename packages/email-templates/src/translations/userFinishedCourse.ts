@@ -16,6 +16,14 @@ export const getUserFinishedCourseEmailTranslations = (
       ],
       buttonText: hasCertificate ? "DOWNLOAD CERTIFICATE" : "CONTINUE LEARNING",
     },
+    "pt-AO": {
+      heading: "Curso concluído",
+      paragraphs: [
+        "Parabéns! 🏁",
+        `Concluiu o curso ${courseName}. ${hasCertificate ? "O seu certificado de formação está pronto para descarga; consulte os próximos passos recomendados." : ""}`,
+      ],
+      buttonText: hasCertificate ? "DESCARREGAR CERTIFICADO" : "CONTINUAR A FORMAÇÃO",
+    },
     pl: {
       heading: "Kurs ukończony",
       paragraphs: [

@@ -22,6 +22,7 @@ const api = new FixtureApiClient("http://localhost:3000");
 const groups = new GroupFactory(api);
 const users = new UserFactory(api);
 const results: string[] = [];
+const startedAt = Date.now();
 try {
   await page.goto("http://localhost:5173/auth/login");
   await page.getByTestId(LOGIN_PAGE_HANDLES.EMAIL).fill("admin+localhost@example.com");
@@ -85,6 +86,14 @@ try {
   results.push("Catalog and defined levels created through the real UI");
   let role = workspace.roles.find((x) => x.code === "UTU_OPERATOR");
   await page.getByRole("tab", { name: "Funções e requisitos" }).click();
+  const roleForm = page.getByTestId("competency-role-form");
+  await roleForm.getByRole("button", { name: "Guardar", exact: true }).click();
+  expect(
+    await roleForm
+      .getByLabel("Código", { exact: true })
+      .evaluate((element: HTMLInputElement) => element.validationMessage),
+  ).toBe("Reveja os campos obrigatórios e introduza valores válidos.");
+  results.push("Native form validation is localized in pt-AO");
   if (!role) {
     const form = page.getByTestId("competency-role-form");
     await form.getByLabel("Código", { exact: true }).fill("UTU_OPERATOR");
@@ -179,7 +188,9 @@ try {
       2,
     ),
   );
-  console.log(JSON.stringify({ passed: results.length, results }, null, 2));
+  console.log(
+    JSON.stringify({ passed: results.length, results, elapsedMs: Date.now() - startedAt }, null, 2),
+  );
 } catch (error) {
   await page
     .screenshot({ path: `${output}/08-competency-failure.png`, fullPage: true })

@@ -53,6 +53,7 @@ const createParagraphNode = (text: string) => ({
 export const createDocumentFromEmailContent = (
   content: EmailContent,
   buttonUrl: string,
+  language: SupportedLanguages = SUPPORTED_LANGUAGES.EN,
 ): EmailTemplateDocument => ({
   type: "doc",
   version: EMAIL_TEMPLATE_DOCUMENT_VERSION,
@@ -75,7 +76,12 @@ export const createDocumentFromEmailContent = (
     },
     {
       type: EMAIL_TEMPLATE_BLOCK_TYPES.FOOTER,
-      attrs: { text: "Powered by {{ company_name }}" },
+      attrs: {
+        text:
+          language === SUPPORTED_LANGUAGES.PT_AO
+            ? "Disponibilizado por {{ company_name }}"
+            : "Powered by {{ company_name }}",
+      },
     },
   ],
 });
@@ -98,6 +104,6 @@ export const createEmailTemplateDefinition = ({
   subjects: subject,
   variables,
   defaultDocuments: buildLocalizedValuesForSupportedLanguages((language) =>
-    createDocumentFromEmailContent(getContent(language), buttonUrl),
+    createDocumentFromEmailContent(getContent(language), buttonUrl, language),
   ),
 });

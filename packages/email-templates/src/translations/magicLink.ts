@@ -11,6 +11,13 @@ export const getMagicLinkEmailTranslations = (language: SupportedLanguages) => {
       ],
       buttonText: "OPEN LOGIN LINK",
     },
+    "pt-AO": {
+      heading: "Ligação de início de sessão",
+      paragraphs: [
+        "Recebeu uma ligação de acesso à sua conta. Clique no botão abaixo para a abrir.",
+      ],
+      buttonText: "INICIAR SESSÃO",
+    },
     pl: {
       heading: "Link do logowania",
       paragraphs: [

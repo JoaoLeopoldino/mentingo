@@ -33,3 +33,5 @@ export function parseUniqueJson(source) {
 }
 export const translationTokens = (value) =>
   [...value.matchAll(/{{.*?}}|<\/?[\w]+[^>]*>|%[sd]|\{[\w]+(?=\s*[,}])/g)].map((x) => x[0]).sort();
+
+export const markupSequence = (value) => [...value.matchAll(/<\/?[\w]+[^>]*>/g)].map((x) => x[0]);
