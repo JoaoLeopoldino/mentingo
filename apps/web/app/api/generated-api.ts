@@ -37577,8 +37577,18 @@ export interface GetCompetencyWorkspaceResponse {
       /** @format uuid */
       competencyId: string;
       requiredLevel: number;
+      assessmentId: string | null;
       currentLevel: number | null;
-      status: "met" | "missing" | "insufficient" | "pending" | "rejected" | "expired";
+      status:
+        | "met"
+        | "missing"
+        | "insufficient"
+        | "pending"
+        | "rejected"
+        | "expired"
+        | "evidence_rejected"
+        | "revoked"
+        | "suspended";
       courseId: string | null;
       learningPathId: string | null;
     }[];
@@ -37593,6 +37603,7 @@ export interface GetCompetencyWorkspaceResponse {
        */
       level: number;
       status: "pending" | "approved" | "rejected";
+      evidenceType: string;
       /**
        * @minLength 1
        * @maxLength 200
@@ -37613,6 +37624,73 @@ export interface GetCompetencyWorkspaceResponse {
       recordedBy: string;
       assessorId: string | null;
       assessedAt: string | null;
+      /** @format date-time */
+      createdAt: string;
+    }[];
+    assessments: {
+      /** @format uuid */
+      id: string;
+      /** @format uuid */
+      userId: string;
+      /** @format uuid */
+      competencyId: string;
+      /**
+       * @min 1
+       * @max 20
+       */
+      level: number;
+      sourceEvidenceId: string | null;
+      /**
+       * @minLength 1
+       * @maxLength 4000
+       * @pattern [^ ]
+       */
+      rationale: string;
+      expiresAt: string | null;
+      reviewAt: string | null;
+      supersedesAssessmentId: string | null;
+      /** @format uuid */
+      assessorId: string;
+      revision: number;
+      /** @format date-time */
+      assessedAt: string;
+      /** @format date-time */
+      createdAt: string;
+    }[];
+    revocations: {
+      /** @format uuid */
+      id: string;
+      /** @format uuid */
+      assessmentId: string;
+      kind: "revoked" | "suspended";
+      /**
+       * @minLength 1
+       * @maxLength 4000
+       * @pattern [^ ]
+       */
+      reason: string;
+      /** @format date-time */
+      effectiveAt: string;
+      endsAt: string | null;
+      /** @format uuid */
+      responsibleId: string;
+      /** @format date-time */
+      createdAt: string;
+    }[];
+    evidenceReviews: {
+      /** @format uuid */
+      evidenceId: string;
+      status: "approved" | "rejected";
+      /**
+       * @minLength 1
+       * @maxLength 4000
+       * @pattern [^ ]
+       */
+      rationale: string;
+      /** @format uuid */
+      id: string;
+      /** @format uuid */
+      reviewerId: string;
       /** @format date-time */
       createdAt: string;
     }[];
@@ -37750,6 +37828,7 @@ export interface RecordCompetencyEvidenceBody {
    */
   level: number;
   status: "pending" | "approved" | "rejected";
+  evidenceType?: "observation" | "document" | "training" | "self_report";
   /**
    * @minLength 1
    * @maxLength 200
@@ -37767,6 +37846,80 @@ export interface RecordCompetencyEvidenceBody {
 }
 
 export interface RecordCompetencyEvidenceResponse {
+  data: {
+    /** @format uuid */
+    id: string;
+  };
+}
+
+export interface ReviewCompetencyEvidenceBody {
+  /** @format uuid */
+  evidenceId: string;
+  status: "approved" | "rejected";
+  /**
+   * @minLength 1
+   * @maxLength 4000
+   * @pattern [^ ]
+   */
+  rationale: string;
+}
+
+export interface ReviewCompetencyEvidenceResponse {
+  data: {
+    /** @format uuid */
+    id: string;
+  };
+}
+
+export interface AssessCompetencyBody {
+  /** @format uuid */
+  id: string;
+  /** @format uuid */
+  userId: string;
+  /** @format uuid */
+  competencyId: string;
+  /**
+   * @min 1
+   * @max 20
+   */
+  level: number;
+  expectedAssessmentId: string | null;
+  sourceEvidenceId: string | null;
+  /**
+   * @minLength 1
+   * @maxLength 4000
+   * @pattern [^ ]
+   */
+  rationale: string;
+  expiresAt: string | null;
+  reviewAt: string | null;
+}
+
+export interface AssessCompetencyResponse {
+  data: {
+    /** @format uuid */
+    id: string;
+  };
+}
+
+export interface RevokeCompetencyAssessmentBody {
+  /** @format uuid */
+  id: string;
+  /** @format uuid */
+  assessmentId: string;
+  kind: "revoked" | "suspended";
+  /**
+   * @minLength 1
+   * @maxLength 4000
+   * @pattern [^ ]
+   */
+  reason: string;
+  /** @format date-time */
+  effectiveAt: string;
+  endsAt: string | null;
+}
+
+export interface RevokeCompetencyAssessmentResponse {
   data: {
     /** @format uuid */
     id: string;
@@ -48346,6 +48499,63 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<RecordCompetencyEvidenceResponse, any>({
         path: `/api/competencies/evidence`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name CompetenciesControllerReviewCompetencyEvidence
+     * @request POST:/api/competencies/evidence-reviews
+     */
+    competenciesControllerReviewCompetencyEvidence: (
+      data: ReviewCompetencyEvidenceBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<ReviewCompetencyEvidenceResponse, any>({
+        path: `/api/competencies/evidence-reviews`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name CompetenciesControllerAssessCompetency
+     * @request POST:/api/competencies/assessments
+     */
+    competenciesControllerAssessCompetency: (
+      data: AssessCompetencyBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<AssessCompetencyResponse, any>({
+        path: `/api/competencies/assessments`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name CompetenciesControllerRevokeCompetencyAssessment
+     * @request POST:/api/competencies/revocations
+     */
+    competenciesControllerRevokeCompetencyAssessment: (
+      data: RevokeCompetencyAssessmentBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<RevokeCompetencyAssessmentResponse, any>({
+        path: `/api/competencies/revocations`,
         method: "POST",
         body: data,
         type: ContentType.Json,

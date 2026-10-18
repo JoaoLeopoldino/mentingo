@@ -3676,6 +3676,7 @@ export const competencyEvidence = pgTable(
     level: integer("level").notNull(),
     status: text("status").$type<"pending" | "approved" | "rejected">().notNull(),
     source: text("source").notNull(),
+    evidenceType: text("evidence_type").notNull().default("legacy"),
     evidence: text("evidence").notNull(),
     recordedBy: uuid("recorded_by")
       .notNull()
@@ -3699,6 +3700,104 @@ export const competencyEvidence = pgTable(
       t.tenantId,
       t.userId,
       t.competencyId,
+    ),
+  })),
+);
+
+// Evidence review is separate from formal professional assessment and revocation.
+export const competencyEvidenceReviews = pgTable(
+  "competency_evidence_reviews",
+  {
+    ...id,
+    ...timestamps,
+    tenantId,
+    evidenceId: uuid("evidence_id")
+      .notNull()
+      .references(() => competencyEvidence.id, { onDelete: "restrict" }),
+    status: text("status").$type<"approved" | "rejected">().notNull(),
+    rationale: text("rationale").notNull(),
+    reviewerId: uuid("reviewer_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "restrict" }),
+  },
+  withTenantIdIndex("competency_evidence_reviews", (t) => ({
+    evidenceIndex: index("competency_evidence_reviews_evidence_idx").on(
+      t.tenantId,
+      t.evidenceId,
+      t.createdAt,
+    ),
+  })),
+);
+
+export const competencyAssessments = pgTable(
+  "competency_assessments",
+  {
+    ...id,
+    ...timestamps,
+    tenantId,
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "restrict" }),
+    competencyId: uuid("competency_id")
+      .notNull()
+      .references(() => competencies.id, { onDelete: "restrict" }),
+    level: integer("level").notNull(),
+    revision: integer("revision").notNull(),
+    sourceEvidenceId: uuid("source_evidence_id").references(() => competencyEvidence.id, {
+      onDelete: "restrict",
+    }),
+    supersedesAssessmentId: uuid("supersedes_assessment_id").references(
+      (): AnyPgColumn => competencyAssessments.id,
+      { onDelete: "restrict" },
+    ),
+    rationale: text("rationale").notNull(),
+    assessorId: uuid("assessor_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "restrict" }),
+    assessedAt: timestampWithTimezone({ name: "assessed_at" })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    expiresAt: timestampWithTimezone({ name: "expires_at" }),
+    reviewAt: timestampWithTimezone({ name: "review_at" }),
+    commandHash: text("command_hash").notNull(),
+  },
+  withTenantIdIndex("competency_assessments", (t) => ({
+    revisionUnique: unique().on(t.tenantId, t.userId, t.competencyId, t.revision),
+    levelReference: foreignKey({
+      columns: [t.tenantId, t.competencyId, t.level],
+      foreignColumns: [
+        competencyLevels.tenantId,
+        competencyLevels.competencyId,
+        competencyLevels.rank,
+      ],
+      name: "competency_assessments_level_fk",
+    }),
+  })),
+);
+
+export const competencyRevocations = pgTable(
+  "competency_revocations",
+  {
+    ...id,
+    ...timestamps,
+    tenantId,
+    assessmentId: uuid("assessment_id")
+      .notNull()
+      .references(() => competencyAssessments.id, { onDelete: "restrict" }),
+    kind: text("kind").$type<"revoked" | "suspended">().notNull(),
+    reason: text("reason").notNull(),
+    responsibleId: uuid("responsible_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "restrict" }),
+    effectiveAt: timestampWithTimezone({ name: "effective_at" }).notNull(),
+    endsAt: timestampWithTimezone({ name: "ends_at" }),
+    commandHash: text("command_hash").notNull(),
+  },
+  withTenantIdIndex("competency_revocations", (t) => ({
+    assessmentIndex: index("competency_revocations_assessment_idx").on(
+      t.tenantId,
+      t.assessmentId,
+      t.effectiveAt,
     ),
   })),
 );

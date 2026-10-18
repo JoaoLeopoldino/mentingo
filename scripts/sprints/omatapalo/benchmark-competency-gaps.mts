@@ -8,6 +8,8 @@ const input: CompetencyGapInput = {
   catalog: [],
   requirements: [],
   orderedEvidence: [],
+  orderedAssessments: [],
+  revocations: [],
 };
 for (let j = 0; j < 20; j++) {
   const competencyId = `competency-${j}`;
@@ -26,7 +28,14 @@ for (let j = 0; j < 20; j++) {
 for (let i = 0; i < 500; i++) {
   const userId = `fictional-employee-${i}`;
   input.employees.push({ id: userId, jobRoleId: "operator" });
-  for (const competency of input.catalog)
+  for (const competency of input.catalog) {
+    input.orderedAssessments.push({
+      id: `${userId}:${competency.id}`,
+      userId,
+      competencyId: competency.id,
+      level: 2,
+      expiresAt: null,
+    });
     for (const status of ["pending", "approved", "approved"] as const)
       input.orderedEvidence.push({
         userId,
@@ -35,6 +44,7 @@ for (let i = 0; i < 500; i++) {
         level: 2,
         expiresAt: null,
       });
+  }
 }
 const runs = [];
 for (let i = 0; i < 13; i++) {

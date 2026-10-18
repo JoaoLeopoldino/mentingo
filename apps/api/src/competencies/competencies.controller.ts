@@ -10,6 +10,12 @@ import { supportedLanguagesSchema } from "src/courses/schemas/course.schema";
 
 import {
   assignmentSchema,
+  evidenceReviewSchema,
+  formalAssessmentSchema,
+  revocationSchema,
+  EvidenceReview,
+  FormalAssessment,
+  CompetencyRevocation,
   competencyActiveSchema,
   competencyIdResponseSchema,
   competencyWorkspaceSchema,
@@ -123,5 +129,41 @@ export class CompetenciesController {
     @CurrentUser() actor: CurrentUserType,
   ): Promise<BaseResponse<CompetencyIdResponse>> {
     return new BaseResponse(await this.competenciesService.evidence(actor, body));
+  }
+  @Post("evidence-reviews")
+  @RequirePermission(PERMISSIONS.COMPETENCY_MANAGE, PERMISSIONS.COMPETENCY_ASSESS_MANAGED)
+  @Validate({
+    request: [{ type: "body", schema: evidenceReviewSchema }],
+    response: baseResponse(competencyIdResponseSchema),
+  })
+  async reviewCompetencyEvidence(
+    @Body() body: EvidenceReview,
+    @CurrentUser() actor: CurrentUserType,
+  ): Promise<BaseResponse<CompetencyIdResponse>> {
+    return new BaseResponse(await this.competenciesService.review(actor, body));
+  }
+  @Post("assessments")
+  @RequirePermission(PERMISSIONS.COMPETENCY_MANAGE, PERMISSIONS.COMPETENCY_ASSESS_MANAGED)
+  @Validate({
+    request: [{ type: "body", schema: formalAssessmentSchema }],
+    response: baseResponse(competencyIdResponseSchema),
+  })
+  async assessCompetency(
+    @Body() body: FormalAssessment,
+    @CurrentUser() actor: CurrentUserType,
+  ): Promise<BaseResponse<CompetencyIdResponse>> {
+    return new BaseResponse(await this.competenciesService.assess(actor, body));
+  }
+  @Post("revocations")
+  @RequirePermission(PERMISSIONS.COMPETENCY_MANAGE, PERMISSIONS.COMPETENCY_ASSESS_MANAGED)
+  @Validate({
+    request: [{ type: "body", schema: revocationSchema }],
+    response: baseResponse(competencyIdResponseSchema),
+  })
+  async revokeCompetencyAssessment(
+    @Body() body: CompetencyRevocation,
+    @CurrentUser() actor: CurrentUserType,
+  ): Promise<BaseResponse<CompetencyIdResponse>> {
+    return new BaseResponse(await this.competenciesService.revoke(actor, body));
   }
 }

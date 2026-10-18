@@ -1,5 +1,5 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { and, asc, desc, eq, inArray, isNull } from "drizzle-orm";
+import { ConflictException, Inject, Injectable } from "@nestjs/common";
+import { and, asc, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 
 import { DatabasePg } from "src/common";
 import { LocalizationService } from "src/localization/localization.service";
@@ -11,6 +11,9 @@ import {
   competencyRequirements,
   competencyAssignments,
   competencyEvidence,
+  competencyEvidenceReviews,
+  competencyAssessments,
+  competencyRevocations,
   users,
   groups,
   groupUsers,
@@ -19,12 +22,17 @@ import {
   learningPaths,
 } from "src/storage/schema";
 
+import { hashCompetencyCommand } from "./competency-command";
+
 import type {
   CreateCompetency,
   CreateJobRole,
   CompetencyRequirement,
   CompetencyAssignment,
   CompetencyEvidence,
+  FormalAssessment,
+  CompetencyRevocation,
+  EvidenceReview,
 } from "./competencies.schema";
 import type { SupportedLanguages } from "@repo/shared";
 import type { UUIDType } from "src/common";
@@ -178,11 +186,139 @@ export class CompetenciesRepository {
       .insert(competencyEvidence)
       .values({
         ...body,
+        evidenceType: body.evidenceType ?? "self_report",
         recordedBy: actorId,
         assessorId: assessed ? actorId : null,
         assessedAt: assessed ? new Date().toISOString() : null,
       })
       .returning({ id: competencyEvidence.id });
     return row;
+  }
+  async assessments(userIds: UUIDType[]) {
+    if (!userIds.length) return [];
+    return this.db
+      .select()
+      .from(competencyAssessments)
+      .where(inArray(competencyAssessments.userId, userIds))
+      .orderBy(desc(competencyAssessments.revision));
+  }
+  async revocations(assessmentIds: UUIDType[]) {
+    if (!assessmentIds.length) return [];
+    return this.db
+      .select()
+      .from(competencyRevocations)
+      .where(inArray(competencyRevocations.assessmentId, assessmentIds))
+      .orderBy(desc(competencyRevocations.createdAt));
+  }
+  async evidenceReviews(evidenceIds: UUIDType[]) {
+    if (!evidenceIds.length) return [];
+    return this.db
+      .select()
+      .from(competencyEvidenceReviews)
+      .where(inArray(competencyEvidenceReviews.evidenceId, evidenceIds))
+      .orderBy(desc(competencyEvidenceReviews.createdAt), desc(competencyEvidenceReviews.id));
+  }
+  async findEvidence(id: UUIDType) {
+    const [row] = await this.db
+      .select()
+      .from(competencyEvidence)
+      .where(eq(competencyEvidence.id, id));
+    return row;
+  }
+  async findAssessment(id: UUIDType) {
+    const [row] = await this.db
+      .select()
+      .from(competencyAssessments)
+      .where(eq(competencyAssessments.id, id));
+    return row;
+  }
+  async reviewEvidence(body: EvidenceReview, actorId: UUIDType) {
+    const [row] = await this.db
+      .insert(competencyEvidenceReviews)
+      .values({ ...body, reviewerId: actorId })
+      .returning({ id: competencyEvidenceReviews.id });
+    return row;
+  }
+  async assess(body: FormalAssessment, actorId: UUIDType) {
+    const commandHash = hashCompetencyCommand(body, actorId);
+    return this.db.transaction(async (trx) => {
+      await trx.execute(
+        sql`SELECT pg_advisory_xact_lock(hashtextextended(${`competency:${body.userId}:${body.competencyId}`}, 0))`,
+      );
+      const [retry] = await trx
+        .select()
+        .from(competencyAssessments)
+        .where(eq(competencyAssessments.id, body.id));
+      if (retry) {
+        if (retry.commandHash !== commandHash)
+          throw new ConflictException("competencies.errors.commandConflict");
+        return { id: retry.id };
+      }
+      const [current] = await trx
+        .select()
+        .from(competencyAssessments)
+        .where(
+          and(
+            eq(competencyAssessments.userId, body.userId),
+            eq(competencyAssessments.competencyId, body.competencyId),
+          ),
+        )
+        .orderBy(desc(competencyAssessments.revision))
+        .limit(1);
+      if ((current?.id ?? null) !== body.expectedAssessmentId)
+        throw new ConflictException("competencies.errors.assessmentChanged");
+      const { expectedAssessmentId, ...data } = body;
+      const [row] = await trx
+        .insert(competencyAssessments)
+        .values({
+          ...data,
+          supersedesAssessmentId: expectedAssessmentId,
+          revision: (current?.revision ?? 0) + 1,
+          commandHash,
+          assessorId: actorId,
+        })
+        .returning({ id: competencyAssessments.id });
+      return row;
+    });
+  }
+  async revoke(
+    body: CompetencyRevocation,
+    actorId: UUIDType,
+    userId: UUIDType,
+    competencyId: UUIDType,
+  ) {
+    const commandHash = hashCompetencyCommand(body, actorId);
+    return this.db.transaction(async (trx) => {
+      await trx.execute(
+        sql`SELECT pg_advisory_xact_lock(hashtextextended(${`competency:${userId}:${competencyId}`}, 0))`,
+      );
+      const [retry] = await trx
+        .select()
+        .from(competencyRevocations)
+        .where(eq(competencyRevocations.id, body.id));
+      if (retry) {
+        if (retry.commandHash !== commandHash)
+          throw new ConflictException("competencies.errors.commandConflict");
+        return { id: retry.id };
+      }
+      const [current] = await trx
+        .select()
+        .from(competencyAssessments)
+        .where(
+          and(
+            eq(competencyAssessments.userId, userId),
+            eq(competencyAssessments.competencyId, competencyId),
+          ),
+        )
+        .orderBy(desc(competencyAssessments.revision))
+        .limit(1);
+      if (current?.id !== body.assessmentId)
+        throw new ConflictException("competencies.errors.assessmentChanged");
+      const [row] = await trx
+        .insert(competencyRevocations)
+        .values({ ...body, responsibleId: actorId, commandHash })
+        .returning({ id: competencyRevocations.id });
+      return row;
+    });
   }
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "competency_evidence" ADD COLUMN "evidence_type" text DEFAULT 'legacy' NOT NULL;

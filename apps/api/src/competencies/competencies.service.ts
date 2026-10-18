@@ -17,6 +17,9 @@ import type {
   CompetencyAssignment,
   CompetencyEvidence,
   CompetencyWorkspace,
+  FormalAssessment,
+  CompetencyRevocation,
+  EvidenceReview,
 } from "./competencies.schema";
 import type { UUIDType } from "src/common";
 import type { CurrentUserType } from "src/common/types/current-user.type";
@@ -77,11 +80,24 @@ export class CompetenciesService {
       this.competenciesRepository.employees(scope),
     ]);
     const evidence = await this.competenciesRepository.evidence(employees.map((x) => x.id));
+    const assessments = await this.competenciesRepository.assessments(employees.map((x) => x.id));
+    const revocations = await this.competenciesRepository.revocations(assessments.map((x) => x.id));
+    const evidenceReviews = await this.competenciesRepository.evidenceReviews(
+      evidence.map((x) => x.id),
+    );
+    const reviewsByEvidence = new Map<string, (typeof evidenceReviews)[number]>();
+    for (const row of evidenceReviews)
+      if (!reviewsByEvidence.has(row.evidenceId)) reviewsByEvidence.set(row.evidenceId, row);
     const matrix = buildCompetencyGaps({
       employees,
       catalog,
       requirements,
-      orderedEvidence: evidence,
+      orderedEvidence: evidence.map((row) => ({
+        ...row,
+        status: reviewsByEvidence.get(row.id)?.status ?? row.status,
+      })),
+      orderedAssessments: assessments,
+      revocations,
     });
     return {
       canManage: hasPermission(actor.permissions, PERMISSIONS.COMPETENCY_MANAGE),
@@ -108,6 +124,9 @@ export class CompetenciesService {
       })),
       matrix,
       evidence,
+      assessments,
+      revocations,
+      evidenceReviews,
     };
   }
   async create(actor: CurrentUserType, body: CreateCompetency) {
@@ -171,5 +190,45 @@ export class CompetenciesService {
     this.dates(now, body.expiresAt);
     this.dates(now, body.reviewAt);
     return this.competenciesRepository.appendEvidence(body, actor.userId);
+  }
+  private async assessor(actor: CurrentUserType, userId: UUIDType) {
+    await this.employee(actor, userId);
+    const admin = hasPermission(actor.permissions, PERMISSIONS.COMPETENCY_MANAGE);
+    if (
+      !admin &&
+      (!hasPermission(actor.permissions, PERMISSIONS.COMPETENCY_ASSESS_MANAGED) ||
+        actor.userId === userId)
+    )
+      throw new ForbiddenException("competencies.errors.forbidden");
+  }
+  async review(actor: CurrentUserType, body: EvidenceReview) {
+    const row = await this.competenciesRepository.findEvidence(body.evidenceId);
+    if (!row) throw new NotFoundException("competencies.errors.notFound");
+    await this.assessor(actor, row.userId);
+    return this.competenciesRepository.reviewEvidence(body, actor.userId);
+  }
+  async assess(actor: CurrentUserType, body: FormalAssessment) {
+    await this.assessor(actor, body.userId);
+    await this.level(body.competencyId, body.level);
+    this.dates(new Date().toISOString(), body.expiresAt);
+    this.dates(new Date().toISOString(), body.reviewAt);
+    if (body.sourceEvidenceId) {
+      const row = await this.competenciesRepository.findEvidence(body.sourceEvidenceId);
+      if (!row || row.userId !== body.userId || row.competencyId !== body.competencyId)
+        throw new BadRequestException("competencies.errors.invalidReference");
+      const [review] = await this.competenciesRepository.evidenceReviews([row.id]);
+      if ((review?.status ?? row.status) !== "approved")
+        throw new BadRequestException("competencies.errors.evidenceNotApproved");
+    }
+    return this.competenciesRepository.assess(body, actor.userId);
+  }
+  async revoke(actor: CurrentUserType, body: CompetencyRevocation) {
+    const row = await this.competenciesRepository.findAssessment(body.assessmentId);
+    if (!row) throw new NotFoundException("competencies.errors.notFound");
+    await this.assessor(actor, row.userId);
+    if (body.kind === "revoked" && body.endsAt)
+      throw new BadRequestException("competencies.errors.invalidDates");
+    this.dates(body.effectiveAt, body.endsAt);
+    return this.competenciesRepository.revoke(body, actor.userId, row.userId, row.competencyId);
   }
 }

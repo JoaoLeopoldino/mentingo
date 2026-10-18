@@ -17,12 +17,24 @@ export function buildCompetencyGaps(
     rows.push(row);
     requirementsByRole.set(row.jobRoleId, rows);
   }
-  const decisions = new Map<string, CompetencyGapInput["orderedEvidence"][number]>();
+  const decisions = new Map<string, CompetencyGapInput["orderedAssessments"][number]>();
+  for (const row of input.orderedAssessments) {
+    const key = `${row.userId}:${row.competencyId}`;
+    if (!decisions.has(key)) decisions.set(key, row);
+  }
+  const restrictions = new Map<string, "revoked" | "suspended">();
+  for (const row of input.revocations) {
+    if (Date.parse(row.effectiveAt) > now || (row.endsAt && Date.parse(row.endsAt) <= now))
+      continue;
+    if (restrictions.get(row.assessmentId) !== "revoked")
+      restrictions.set(row.assessmentId, row.kind);
+  }
   const pending = new Set<string>();
+  const rejected = new Set<string>();
   for (const row of input.orderedEvidence) {
     const key = `${row.userId}:${row.competencyId}`;
     if (row.status === "pending") pending.add(key);
-    else if (!decisions.has(key)) decisions.set(key, row);
+    else if (row.status === "rejected") rejected.add(key);
   }
   const result: CompetencyWorkspace["matrix"] = [];
   for (const employee of input.employees)
@@ -32,17 +44,20 @@ export function buildCompetencyGaps(
       let status: CompetencyWorkspace["matrix"][number]["status"] = "missing";
       let currentLevel: number | null = null;
       if (decision) {
-        if (decision.status === "rejected") status = "rejected";
+        const restriction = restrictions.get(decision.id);
+        if (restriction) status = restriction;
         else if (decision.expiresAt && Date.parse(decision.expiresAt) <= now) status = "expired";
         else {
           currentLevel = decision.level;
           status = currentLevel >= requirement.minimumLevel ? "met" : "insufficient";
         }
       } else if (pending.has(key)) status = "pending";
+      else if (rejected.has(key)) status = "evidence_rejected";
       result.push({
         userId: employee.id,
         competencyId: requirement.competencyId,
         requiredLevel: requirement.minimumLevel,
+        assessmentId: decision?.id ?? null,
         currentLevel,
         status,
         courseId: requirement.courseId,

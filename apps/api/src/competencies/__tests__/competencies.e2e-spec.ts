@@ -5,7 +5,15 @@ import { eq } from "drizzle-orm";
 import request from "supertest";
 
 import { TenantDbRunnerService } from "src/storage/db/tenant-db-runner.service";
-import { competencyEvidence, groupManagerGroups, tenants, competencies } from "src/storage/schema";
+import {
+  competencyAssessments,
+  competencyEvidenceReviews,
+  competencyRevocations,
+  competencyEvidence,
+  groupManagerGroups,
+  tenants,
+  competencies,
+} from "src/storage/schema";
 
 import { createE2ETest } from "../../../test/create-e2e-test";
 import { createGroupFactory } from "../../../test/factory/group.factory";
@@ -142,10 +150,25 @@ describe("Enterprise competencies with real tenant RLS", () => {
       .set("Cookie", employeeCookie)
       .send(evidence(competencyId, "pending"))
       .expect(201);
-    await request(app.getHttpServer())
+    const firstEvidence = await request(app.getHttpServer())
       .post("/api/competencies/evidence")
       .set("Cookie", managerCookie)
       .send(evidence(competencyId))
+      .expect(201);
+    const firstAssessment = await request(app.getHttpServer())
+      .post("/api/competencies/assessments")
+      .set("Cookie", managerCookie)
+      .send({
+        id: randomUUID(),
+        userId: employeeId,
+        competencyId,
+        level: 1,
+        expectedAssessmentId: null,
+        sourceEvidenceId: firstEvidence.body.data.id,
+        rationale: "Avaliação profissional explícita",
+        expiresAt: null,
+        reviewAt: null,
+      })
       .expect(201);
     result = await workspace(employeeCookie).expect(200);
     expect(
@@ -153,10 +176,25 @@ describe("Enterprise competencies with real tenant RLS", () => {
         (x: { competencyId: string }) => x.competencyId === competencyId,
       ),
     ).toMatchObject({ status: "insufficient", currentLevel: 1 });
-    await request(app.getHttpServer())
+    const secondEvidence = await request(app.getHttpServer())
       .post("/api/competencies/evidence")
       .set("Cookie", managerCookie)
       .send(evidence(competencyId, "approved", employeeId, 2))
+      .expect(201);
+    await request(app.getHttpServer())
+      .post("/api/competencies/assessments")
+      .set("Cookie", managerCookie)
+      .send({
+        id: randomUUID(),
+        userId: employeeId,
+        competencyId,
+        level: 2,
+        expectedAssessmentId: firstAssessment.body.data.id,
+        sourceEvidenceId: secondEvidence.body.data.id,
+        rationale: "Reavaliação formal",
+        expiresAt: null,
+        reviewAt: null,
+      })
       .expect(201);
     result = await workspace(employeeCookie).expect(200);
     expect(
@@ -289,6 +327,105 @@ describe("Enterprise competencies with real tenant RLS", () => {
       .set("Cookie", managerCookie)
       .send(evidence(competencyId))
       .expect(201);
+    const assessment = await request(app.getHttpServer())
+      .post("/api/competencies/assessments")
+      .set("Cookie", managerCookie)
+      .send({
+        id: randomUUID(),
+        userId: employeeId,
+        competencyId,
+        level: 1,
+        expectedAssessmentId: null,
+        sourceEvidenceId: inserted.body.data.id,
+        rationale: "Avaliação RLS fictícia",
+        expiresAt: null,
+        reviewAt: null,
+      })
+      .expect(201);
+    const review = await request(app.getHttpServer())
+      .post("/api/competencies/evidence-reviews")
+      .set("Cookie", managerCookie)
+      .send({
+        evidenceId: inserted.body.data.id,
+        status: "approved",
+        rationale: "Revisão RLS fictícia",
+      })
+      .expect(201);
+    const restriction = await request(app.getHttpServer())
+      .post("/api/competencies/revocations")
+      .set("Cookie", managerCookie)
+      .send({
+        id: randomUUID(),
+        assessmentId: assessment.body.data.id,
+        kind: "suspended",
+        reason: "Suspensão RLS fictícia",
+        effectiveAt: new Date().toISOString(),
+        endsAt: null,
+      })
+      .expect(201);
+    await runner.runWithTenant(tenant.id, async () => {
+      const tenantDb = app.get<DatabasePg>("DB");
+      expect(
+        await tenantDb
+          .select()
+          .from(competencyAssessments)
+          .where(eq(competencyAssessments.id, assessment.body.data.id)),
+      ).toHaveLength(0);
+      expect(
+        await tenantDb
+          .select()
+          .from(competencyEvidenceReviews)
+          .where(eq(competencyEvidenceReviews.id, review.body.data.id)),
+      ).toHaveLength(0);
+      expect(
+        await tenantDb
+          .select()
+          .from(competencyRevocations)
+          .where(eq(competencyRevocations.id, restriction.body.data.id)),
+      ).toHaveLength(0);
+    });
+    await runner.runWithTenant(actorTenant, async () => {
+      const tenantDb = app.get<DatabasePg>("DB");
+      expect(
+        await tenantDb
+          .delete(competencyAssessments)
+          .where(eq(competencyAssessments.id, assessment.body.data.id))
+          .returning(),
+      ).toHaveLength(0);
+      expect(
+        await tenantDb
+          .update(competencyAssessments)
+          .set({ level: 2 })
+          .where(eq(competencyAssessments.id, assessment.body.data.id))
+          .returning(),
+      ).toHaveLength(0);
+      expect(
+        await tenantDb
+          .delete(competencyEvidenceReviews)
+          .where(eq(competencyEvidenceReviews.id, review.body.data.id))
+          .returning(),
+      ).toHaveLength(0);
+      expect(
+        await tenantDb
+          .update(competencyEvidenceReviews)
+          .set({ status: "rejected" })
+          .where(eq(competencyEvidenceReviews.id, review.body.data.id))
+          .returning(),
+      ).toHaveLength(0);
+      expect(
+        await tenantDb
+          .delete(competencyRevocations)
+          .where(eq(competencyRevocations.id, restriction.body.data.id))
+          .returning(),
+      ).toHaveLength(0);
+      expect(
+        await tenantDb
+          .update(competencyRevocations)
+          .set({ reason: "tampered" })
+          .where(eq(competencyRevocations.id, restriction.body.data.id))
+          .returning(),
+      ).toHaveLength(0);
+    });
     await runner.runWithTenant(actorTenant, async () => {
       const tenantDb = app.get<DatabasePg>("DB");
       expect(
@@ -305,5 +442,115 @@ describe("Enterprise competencies with real tenant RLS", () => {
           .returning(),
       ).toHaveLength(0);
     });
+  });
+  it("retains formal approval after evidence rejection and serializes concurrent reassessments", async () => {
+    const competencyId = await create();
+    const role = await request(app.getHttpServer())
+      .post("/api/competencies/roles")
+      .set("Cookie", adminCookie)
+      .send({ code: randomUUID().toUpperCase(), name: "Operador avaliado" })
+      .expect(201);
+    await request(app.getHttpServer())
+      .put("/api/competencies/requirements")
+      .set("Cookie", adminCookie)
+      .send({
+        jobRoleId: role.body.data.id,
+        competencyId,
+        minimumLevel: 2,
+        effectiveFrom: "2026-01-01T00:00:00Z",
+        effectiveUntil: null,
+        courseId: null,
+        learningPathId: null,
+      })
+      .expect(200);
+    await request(app.getHttpServer())
+      .put("/api/competencies/assignments")
+      .set("Cookie", adminCookie)
+      .send({ userId: employeeId, jobRoleId: role.body.data.id, organizationalUnitId: unitId })
+      .expect(200);
+    const command = {
+      id: randomUUID(),
+      userId: employeeId,
+      competencyId,
+      level: 2,
+      expectedAssessmentId: null,
+      sourceEvidenceId: null,
+      rationale: "Observação profissional fundamentada",
+      expiresAt: null,
+      reviewAt: null,
+    };
+    const submit = (body: object, cookie = managerCookie) =>
+      request(app.getHttpServer())
+        .post("/api/competencies/assessments")
+        .set("Cookie", cookie)
+        .send(body);
+    await submit(command).expect(201);
+    const proof = await request(app.getHttpServer())
+      .post("/api/competencies/evidence")
+      .set("Cookie", employeeCookie)
+      .send(evidence(competencyId, "pending"))
+      .expect(201);
+    await request(app.getHttpServer())
+      .post("/api/competencies/evidence-reviews")
+      .set("Cookie", managerCookie)
+      .send({
+        evidenceId: proof.body.data.id,
+        status: "rejected",
+        rationale: "Ficheiro sem fundamentação suficiente",
+      })
+      .expect(201);
+    let data = (await workspace(employeeCookie).expect(200)).body.data;
+    expect(data.assessments.find((x: { id: string }) => x.id === command.id)).toMatchObject({
+      level: 2,
+    });
+    expect(
+      data.evidenceReviews.find((x: { evidenceId: string }) => x.evidenceId === proof.body.data.id)
+        .status,
+    ).toBe("rejected");
+    expect(
+      data.matrix.find((x: { competencyId: string }) => x.competencyId === competencyId),
+    ).toMatchObject({ status: "met", currentLevel: 2 });
+    const replacements = [1, 2].map((level) => ({
+      ...command,
+      id: randomUUID(),
+      level,
+      expectedAssessmentId: command.id,
+    }));
+    const results = await Promise.all(replacements.map((body) => submit(body)));
+    expect(results.map((r) => r.status).sort()).toEqual([201, 409]);
+    const winner = replacements[results.findIndex((r) => r.status === 201)];
+    await submit(winner).expect(201); // durable idempotency even after the head changed
+    await submit({ ...winner, rationale: "Conflicting retry" }).expect(409);
+    data = (await workspace(employeeCookie).expect(200)).body.data;
+    expect(
+      data.assessments.filter((x: { competencyId: string }) => x.competencyId === competencyId),
+    ).toHaveLength(2);
+    expect(
+      data.assessments.find((x: { id: string }) => x.id === winner.id).supersedesAssessmentId,
+    ).toBe(command.id);
+    await submit({ ...command, id: randomUUID(), userId: outsiderId }).expect(403);
+    await submit({ ...command, id: randomUUID() }, employeeCookie).expect(403);
+    await request(app.getHttpServer())
+      .post("/api/competencies/revocations")
+      .set("Cookie", managerCookie)
+      .send({
+        id: randomUUID(),
+        assessmentId: winner.id,
+        kind: "revoked",
+        reason: "Revogação profissional explícita e fictícia",
+        effectiveAt: new Date().toISOString(),
+        endsAt: null,
+      })
+      .expect(201);
+    expect(
+      (await workspace(employeeCookie).expect(200)).body.data.matrix.find(
+        (x: { competencyId: string }) => x.competencyId === competencyId,
+      ).status,
+    ).toBe("revoked");
+    expect((await workspace(employeeCookie).expect(200)).body.data.revocations).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ assessmentId: winner.id, kind: "revoked" }),
+      ]),
+    );
   });
 });

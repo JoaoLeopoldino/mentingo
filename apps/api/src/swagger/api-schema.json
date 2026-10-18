@@ -23302,6 +23302,87 @@
           }
         }
       }
+    },
+    "/api/competencies/evidence-reviews": {
+      "post": {
+        "operationId": "CompetenciesController_reviewCompetencyEvidence",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewCompetencyEvidenceBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewCompetencyEvidenceResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/competencies/assessments": {
+      "post": {
+        "operationId": "CompetenciesController_assessCompetency",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssessCompetencyBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssessCompetencyResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/competencies/revocations": {
+      "post": {
+        "operationId": "CompetenciesController_revokeCompetencyAssessment",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevokeCompetencyAssessmentBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevokeCompetencyAssessmentResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "info": {
@@ -190840,6 +190921,17 @@
                     "requiredLevel": {
                       "type": "integer"
                     },
+                    "assessmentId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
                     "currentLevel": {
                       "anyOf": [
                         {
@@ -190875,6 +190967,18 @@
                         {
                           "const": "expired",
                           "type": "string"
+                        },
+                        {
+                          "const": "evidence_rejected",
+                          "type": "string"
+                        },
+                        {
+                          "const": "revoked",
+                          "type": "string"
+                        },
+                        {
+                          "const": "suspended",
+                          "type": "string"
                         }
                       ]
                     },
@@ -190905,6 +191009,7 @@
                     "userId",
                     "competencyId",
                     "requiredLevel",
+                    "assessmentId",
                     "currentLevel",
                     "status",
                     "courseId",
@@ -190945,6 +191050,9 @@
                           "type": "string"
                         }
                       ]
+                    },
+                    "evidenceType": {
+                      "type": "string"
                     },
                     "source": {
                       "minLength": 1,
@@ -191020,6 +191128,7 @@
                     "competencyId",
                     "level",
                     "status",
+                    "evidenceType",
                     "source",
                     "evidence",
                     "expiresAt",
@@ -191028,6 +191137,228 @@
                     "recordedBy",
                     "assessorId",
                     "assessedAt",
+                    "createdAt"
+                  ]
+                }
+              },
+              "assessments": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "userId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "competencyId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "level": {
+                      "minimum": 1,
+                      "maximum": 20,
+                      "type": "integer"
+                    },
+                    "sourceEvidenceId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "rationale": {
+                      "minLength": 1,
+                      "maxLength": 4000,
+                      "pattern": "[^ ]",
+                      "type": "string"
+                    },
+                    "expiresAt": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "reviewAt": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "supersedesAssessmentId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "assessorId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "revision": {
+                      "type": "integer"
+                    },
+                    "assessedAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "userId",
+                    "competencyId",
+                    "level",
+                    "sourceEvidenceId",
+                    "rationale",
+                    "expiresAt",
+                    "reviewAt",
+                    "supersedesAssessmentId",
+                    "assessorId",
+                    "revision",
+                    "assessedAt",
+                    "createdAt"
+                  ]
+                }
+              },
+              "revocations": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "assessmentId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "kind": {
+                      "anyOf": [
+                        {
+                          "const": "revoked",
+                          "type": "string"
+                        },
+                        {
+                          "const": "suspended",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "reason": {
+                      "minLength": 1,
+                      "maxLength": 4000,
+                      "pattern": "[^ ]",
+                      "type": "string"
+                    },
+                    "effectiveAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "endsAt": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "responsibleId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "assessmentId",
+                    "kind",
+                    "reason",
+                    "effectiveAt",
+                    "endsAt",
+                    "responsibleId",
+                    "createdAt"
+                  ]
+                }
+              },
+              "evidenceReviews": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "evidenceId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "status": {
+                      "anyOf": [
+                        {
+                          "const": "approved",
+                          "type": "string"
+                        },
+                        {
+                          "const": "rejected",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "rationale": {
+                      "minLength": 1,
+                      "maxLength": 4000,
+                      "pattern": "[^ ]",
+                      "type": "string"
+                    },
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "reviewerId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "evidenceId",
+                    "status",
+                    "rationale",
+                    "id",
+                    "reviewerId",
                     "createdAt"
                   ]
                 }
@@ -191043,7 +191374,10 @@
               "units",
               "employees",
               "matrix",
-              "evidence"
+              "evidence",
+              "assessments",
+              "revocations",
+              "evidenceReviews"
             ]
           }
         },
@@ -191366,6 +191700,26 @@
               }
             ]
           },
+          "evidenceType": {
+            "anyOf": [
+              {
+                "const": "observation",
+                "type": "string"
+              },
+              {
+                "const": "document",
+                "type": "string"
+              },
+              {
+                "const": "training",
+                "type": "string"
+              },
+              {
+                "const": "self_report",
+                "type": "string"
+              }
+            ]
+          },
           "source": {
             "minLength": 1,
             "maxLength": 200,
@@ -191413,6 +191767,238 @@
         ]
       },
       "RecordCompetencyEvidenceResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "ReviewCompetencyEvidenceBody": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "evidenceId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "const": "approved",
+                "type": "string"
+              },
+              {
+                "const": "rejected",
+                "type": "string"
+              }
+            ]
+          },
+          "rationale": {
+            "minLength": 1,
+            "maxLength": 4000,
+            "pattern": "[^ ]",
+            "type": "string"
+          }
+        },
+        "required": [
+          "evidenceId",
+          "status",
+          "rationale"
+        ]
+      },
+      "ReviewCompetencyEvidenceResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "AssessCompetencyBody": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "userId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "competencyId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "level": {
+            "minimum": 1,
+            "maximum": 20,
+            "type": "integer"
+          },
+          "expectedAssessmentId": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sourceEvidenceId": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rationale": {
+            "minLength": 1,
+            "maxLength": 4000,
+            "pattern": "[^ ]",
+            "type": "string"
+          },
+          "expiresAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reviewAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "userId",
+          "competencyId",
+          "level",
+          "expectedAssessmentId",
+          "sourceEvidenceId",
+          "rationale",
+          "expiresAt",
+          "reviewAt"
+        ]
+      },
+      "AssessCompetencyResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "RevokeCompetencyAssessmentBody": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "assessmentId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "kind": {
+            "anyOf": [
+              {
+                "const": "revoked",
+                "type": "string"
+              },
+              {
+                "const": "suspended",
+                "type": "string"
+              }
+            ]
+          },
+          "reason": {
+            "minLength": 1,
+            "maxLength": 4000,
+            "pattern": "[^ ]",
+            "type": "string"
+          },
+          "effectiveAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endsAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "assessmentId",
+          "kind",
+          "reason",
+          "effectiveAt",
+          "endsAt"
+        ]
+      },
+      "RevokeCompetencyAssessmentResponse": {
         "type": "object",
         "properties": {
           "data": {

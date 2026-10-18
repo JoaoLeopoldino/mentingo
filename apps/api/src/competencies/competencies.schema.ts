@@ -50,6 +50,14 @@ export const evidenceSchema = Type.Object(
       Type.Literal("approved"),
       Type.Literal("rejected"),
     ]),
+    evidenceType: Type.Optional(
+      Type.Union([
+        Type.Literal("observation"),
+        Type.Literal("document"),
+        Type.Literal("training"),
+        Type.Literal("self_report"),
+      ]),
+    ),
     source: name,
     evidence: Type.String({ minLength: 1, maxLength: 4000, pattern: "[^ ]" }),
     expiresAt: nullableDate,
@@ -57,6 +65,60 @@ export const evidenceSchema = Type.Object(
   },
   { additionalProperties: false },
 );
+
+export const evidenceReviewSchema = Type.Object(
+  {
+    evidenceId: UUIDSchema,
+    status: Type.Union([Type.Literal("approved"), Type.Literal("rejected")]),
+    rationale: Type.String({ minLength: 1, maxLength: 4000, pattern: "[^ ]" }),
+  },
+  { additionalProperties: false },
+);
+export const formalAssessmentSchema = Type.Object(
+  {
+    id: UUIDSchema,
+    userId: UUIDSchema,
+    competencyId: UUIDSchema,
+    level: Type.Integer({ minimum: 1, maximum: 20 }),
+    expectedAssessmentId: nullableId,
+    sourceEvidenceId: nullableId,
+    rationale: Type.String({ minLength: 1, maxLength: 4000, pattern: "[^ ]" }),
+    expiresAt: nullableDate,
+    reviewAt: nullableDate,
+  },
+  { additionalProperties: false },
+);
+export const revocationSchema = Type.Object(
+  {
+    id: UUIDSchema,
+    assessmentId: UUIDSchema,
+    kind: Type.Union([Type.Literal("revoked"), Type.Literal("suspended")]),
+    reason: Type.String({ minLength: 1, maxLength: 4000, pattern: "[^ ]" }),
+    effectiveAt: date,
+    endsAt: nullableDate,
+  },
+  { additionalProperties: false },
+);
+const assessment = Type.Object({
+  ...Type.Omit(formalAssessmentSchema, ["expectedAssessmentId"]).properties,
+  supersedesAssessmentId: nullableId,
+  assessorId: UUIDSchema,
+  revision: Type.Integer(),
+  assessedAt: date,
+  createdAt: date,
+});
+const revocation = Type.Object({
+  ...revocationSchema.properties,
+  responsibleId: UUIDSchema,
+  createdAt: date,
+});
+const evidenceReview = Type.Object({
+  ...evidenceReviewSchema.properties,
+  id: UUIDSchema,
+  reviewerId: UUIDSchema,
+  createdAt: date,
+});
+
 export const competencyIdResponseSchema = Type.Object({ id: UUIDSchema });
 const competency = Type.Object({
   ...createCompetencySchema.properties,
@@ -67,6 +129,7 @@ const role = Type.Object({ ...createJobRoleSchema.properties, id: UUIDSchema });
 const requirement = Type.Object({ ...requirementSchema.properties, id: UUIDSchema });
 const evidence = Type.Object({
   ...evidenceSchema.properties,
+  evidenceType: Type.String(),
   id: UUIDSchema,
   recordedBy: UUIDSchema,
   assessorId: nullableId,
@@ -97,6 +160,7 @@ export const competencyWorkspaceSchema = Type.Object({
       userId: UUIDSchema,
       competencyId: UUIDSchema,
       requiredLevel: Type.Integer(),
+      assessmentId: nullableId,
       currentLevel: Type.Union([Type.Integer(), Type.Null()]),
       status: Type.Union([
         Type.Literal("met"),
@@ -105,12 +169,18 @@ export const competencyWorkspaceSchema = Type.Object({
         Type.Literal("pending"),
         Type.Literal("rejected"),
         Type.Literal("expired"),
+        Type.Literal("evidence_rejected"),
+        Type.Literal("revoked"),
+        Type.Literal("suspended"),
       ]),
       courseId: nullableId,
       learningPathId: nullableId,
     }),
   ),
   evidence: Type.Array(evidence),
+  assessments: Type.Array(assessment),
+  revocations: Type.Array(revocation),
+  evidenceReviews: Type.Array(evidenceReview),
 });
 export type CreateCompetency = Static<typeof createCompetencySchema>;
 export type CreateJobRole = Static<typeof createJobRoleSchema>;
@@ -119,3 +189,7 @@ export type CompetencyAssignment = Static<typeof assignmentSchema>;
 export type CompetencyEvidence = Static<typeof evidenceSchema>;
 export type CompetencyWorkspace = Static<typeof competencyWorkspaceSchema>;
 export type CompetencyIdResponse = Static<typeof competencyIdResponseSchema>;
+
+export type FormalAssessment = Static<typeof formalAssessmentSchema>;
+export type CompetencyRevocation = Static<typeof revocationSchema>;
+export type EvidenceReview = Static<typeof evidenceReviewSchema>;
