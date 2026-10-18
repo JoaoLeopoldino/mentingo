@@ -123,8 +123,41 @@ try {
   await expect(page.getByRole("status").filter({ hasText: "A descarga falhou" })).toBeVisible();
   await context.unroute("**/api/lesson/lesson-resource/**");
   record("Interrupted transfer rejected; retry uses real resource response");
+  // Chromium storage enforcement, not a mocked successful download or a fake estimate.
+  const storageSession = await context.newCDPSession(page);
+  await storageSession.send("Storage.overrideQuotaForOrigin", { origin: baseURL, quotaSize: 1 });
+  const estimatedQuota = await page.evaluate(() => navigator.storage.estimate());
+  const protocolQuota = await storageSession.send("Storage.getUsageAndQuota", { origin: baseURL });
+  console.log("QUOTA_PROBE", JSON.stringify({ estimatedQuota, protocolQuota }));
+  try {
+    if (estimatedQuota.quota === 1) {
+      await page.getByTestId("offline-download").click();
+      await expect(
+        page.getByRole("status").filter({ hasText: /A descarga falhou|espaço/i }),
+      ).toBeVisible();
+      await expect(page.getByRole("status").filter({ hasText: "Disponível offline" })).toHaveCount(
+        0,
+      );
+      record("Chromium low-quota download rejection observed");
+    } else {
+      record(
+        "BLOCKED quota probe: CDP reports quota=1 but navigator.storage.estimate exposes a different quota; physical storage-full validation remains open",
+      );
+    }
+  } finally {
+    await storageSession.send("Storage.overrideQuotaForOrigin", { origin: baseURL });
+    await storageSession.detach();
+  }
   await page.getByTestId("offline-download").click();
   await expect(page.getByRole("status").filter({ hasText: "Disponível offline" })).toBeVisible();
+  await context.route(
+    "**/api/lesson/lesson-resource/**",
+    (route: { abort(reason: string): Promise<void> }) => route.abort("internetdisconnected"),
+  );
+  await page.getByTestId("offline-download").click();
+  await expect(page.getByRole("status").filter({ hasText: "A descarga falhou" })).toBeVisible();
+  await context.unroute("**/api/lesson/lesson-resource/**");
+  record("Interrupted refresh keeps the previous complete download available");
   await page.getByRole("link", { name: "Descargas offline" }).click();
   await expect(page.getByTestId("offline-reader")).toContainText(
     "Segurança em todas as províncias",
@@ -211,7 +244,7 @@ try {
       .innerText()
       .catch(() => "Unavailable"),
   );
-  throw error;
+  throw new Error(error instanceof Error ? error.message : String(error));
 } finally {
   await context.close();
   if (courseId)

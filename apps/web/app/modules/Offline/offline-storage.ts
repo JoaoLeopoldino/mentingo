@@ -55,8 +55,13 @@ export class OfflineStorage extends Dexie {
       expiresAt: now + OFFLINE_TTL,
       bytes: 0,
     };
-    await this.courses.put(base);
     try {
+      await this.transaction("rw", this.courses, async () => {
+        const previous = await this.courses.get(key);
+        // Keep the last complete snapshot available during refresh, including after a crash.
+        const claimed = previous?.state === "ready" ? { ...previous, token } : base;
+        await this.courses.put(claimed);
+      });
       const payload = await load();
       const bytes =
         new TextEncoder().encode(
@@ -87,10 +92,17 @@ export class OfflineStorage extends Dexie {
         await this.courses.put({ ...base, state: "ready", bytes, payload });
       });
     } catch (error) {
-      await this.transaction("rw", this.courses, async () => {
-        const current = await this.courses.get(key);
-        if (current?.token === token) await this.courses.put({ ...base, state: "failed" });
-      });
+      try {
+        await this.transaction("rw", this.courses, async () => {
+          const current = await this.courses.get(key);
+          if (current?.token === token && current.state === "downloading")
+            await this.courses.put({ ...base, state: "failed" });
+        });
+      } catch {
+        // Storage may also reject the failure marker. Never mask the original error or publish partial data.
+      }
+      if (error instanceof Error && error.name === "QuotaExceededError")
+        throw new Error("offline.error.quota");
       throw error;
     }
   }

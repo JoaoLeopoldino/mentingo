@@ -1,6 +1,6 @@
 # Etapa 3 — Conteúdos offline
 
-Estado actual: **fatia de leitura funcional, novamente validada após reinício**. Commit da funcionalidade: `7054413a`; recuperação: `b6bf4bb9`. Branch: `sprint/omatapalo-resume-20261017`.
+Estado actual: **leitura funcional e actualização interrompida sem perder a cópia anterior; Android/quota real pendentes**. Commit inicial `7054413a`; branch actual `feat/omatapalo-enterprise-competencies-20261018`. [Validação actual](18-enterprise-validation.md). As secções seguintes preservam os checkpoints históricos.
 
 ## Alterações efectuadas
 
@@ -63,3 +63,11 @@ Primeira implementação: aproximadamente 17:41–18:08 UTC, incluindo testes, d
 Build e typecheck web passaram. O worker final inclui 510 recursos / 14.430,29 KiB; os 63 recursos referidos pelo HTML foram confirmados no cache. **Os cinco checkpoints Chrome passaram novamente**, incluindo PDF efectivamente renderizado em canvas, fecho/reabertura sem rede, «Página 1 de 1», tamanho com vírgula decimal, HTML lang pt-AO e remoção persistente. A captura foi revista visualmente. Não houve resposta de sucesso simulada. Logs: `.local/sprint/browser-offline-recovery.log`, `build-web-recovery.log`, `verify-offline-build.log`, `web-tests-recovery.log` e `api-tests-recovery.log`.
 
 A retoma durou aproximadamente 43 minutos decorridos, incluindo reconstrução, instalação e esperas; não corresponde a uma segunda implementação independente. As limitações Android, dependências globais e ausência de avaliações mantêm-se.
+
+## Robustez empresarial — execução de 18/10/2026
+
+A actualização conserva a última cópia completa, incluindo metadados e datas, enquanto reclama a transferência com outro token. Só substitui o conteúdo após sucesso. Erros de rede, excesso de tamanho e `QuotaExceededError` conservam a cópia anterior. Quatro regressões falharam antes e passaram depois; o conjunto offline actual tem 25 testes. O conjunto web final com idioma e as duas suites HLS passou 40/40 em 10,34 s.
+
+Chrome exerceu sete checkpoints positivos e um probe bloqueado, incluindo actualização com falha real de rede, leitura PDF/texto após reabertura offline e remoção persistente. CDP declarou quota 1, mas `navigator.storage.estimate()` continuou a expor outra quota e a descarga coube: **não foi validado armazenamento efectivamente cheio**. Não se força uma asserção de sucesso nem se substitui o teste Android físico. [Guião físico](13-android-physical-validation.md).
+
+Há também avaliações nativas com sincronização desde a etapa 4; a frase histórica «ausência de avaliações» acima deixou de descrever o estado actual. SCORM e vídeo permanecem fora do offline entregue. Tempos exclusivos desta correcção não medidos; intervalo e evidências no relatório 18.

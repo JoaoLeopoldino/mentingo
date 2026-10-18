@@ -1,7 +1,7 @@
 import "fake-indexeddb/auto";
 import { SUPPORTED_LANGUAGES } from "@repo/shared";
 import Dexie from "dexie";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { OfflineStorage, OFFLINE_MAX_BYTES } from "./offline-storage";
 
@@ -99,4 +99,72 @@ it("upgrades existing version-one private downloads without losing their content
   legacy.close();
   expect((await storage.list("alice"))[0].payload).toEqual(payload);
   expect(await storage.operations.count()).toBe(0);
+});
+
+describe("atomic refresh of an existing download", () => {
+  it("keeps the last valid snapshot after an interrupted refresh", async () => {
+    await storage.download("alice", "course", language, async () => payload);
+    const before = (await storage.list("alice"))[0];
+    await expect(
+      storage.download("alice", "course", language, async () => {
+        throw new TypeError("Network interrupted");
+      }),
+    ).rejects.toThrow("Network interrupted");
+    expect((await storage.list("alice"))[0]).toMatchObject({
+      state: "ready",
+      payload,
+      downloadedAt: before.downloadedAt,
+      expiresAt: before.expiresAt,
+    });
+  });
+  it("keeps a previous snapshot readable by a reopened connection during a refresh", async () => {
+    await storage.download("alice", "course", language, async () => payload);
+    let finish!: (value: OfflinePayload) => void;
+    let signal!: () => void;
+    const started = new Promise<void>((resolve) => {
+      signal = resolve;
+    });
+    const refreshing = storage.download("alice", "course", language, () => {
+      signal();
+      return new Promise((resolve) => {
+        finish = resolve;
+      });
+    });
+    await started;
+    const reopened = new OfflineStorage(storage.name);
+    try {
+      expect((await reopened.list("alice"))[0]).toMatchObject({ state: "ready", payload });
+    } finally {
+      reopened.close();
+      finish({ ...payload, title: "Versão nova" });
+      await refreshing;
+    }
+    expect((await storage.list("alice"))[0].payload?.title).toBe("Versão nova");
+  });
+  it("preserves the previous snapshot when the replacement exceeds its size limit", async () => {
+    await storage.download("alice", "course", language, async () => payload);
+    const large = {
+      ...payload,
+      lessons: [
+        {
+          ...payload.lessons[0],
+          pdfs: [{ id: "large", title: "PDF", bytes: new Uint8Array(OFFLINE_MAX_BYTES + 1) }],
+        },
+      ],
+    };
+    await expect(storage.download("alice", "course", language, async () => large)).rejects.toThrow(
+      "offline.error.quota",
+    );
+    expect((await storage.list("alice"))[0]).toMatchObject({ state: "ready", payload });
+  });
+  it("reports a native quota exception without destroying an existing download", async () => {
+    await storage.download("alice", "course", language, async () => payload);
+    vi.spyOn(storage.courses, "put").mockRejectedValueOnce(
+      new DOMException("Storage full", "QuotaExceededError"),
+    );
+    await expect(
+      storage.download("alice", "course", language, async () => payload),
+    ).rejects.toThrow("offline.error.quota");
+    expect((await storage.list("alice"))[0]).toMatchObject({ state: "ready", payload });
+  });
 });

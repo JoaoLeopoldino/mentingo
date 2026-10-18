@@ -18,6 +18,11 @@ O colaborador prepara a formação com Internet, consulta texto e PDFs sem rede 
 - Reenviar a mesma tentativa após falha de rede, sem duplicar uma avaliação já aceite pelo servidor.
 - Apresentar a nota confirmada pelo servidor e conservar um conflito para revisão.
 - Remover conteúdos e separar as cópias e tentativas por conta e origem.
+- Conservar a última cópia completa durante uma actualização; uma interrupção ou falta de espaço não substitui essa cópia por uma descarga incompleta.
+
+## Validação adicional — 18/10/2026
+
+Uma actualização reclama a descarga sem retirar o estado utilizável da cópia anterior; só a transferência completa substitui conteúdos e datas. Quatro regressões falharam antes da correcção e passaram depois: actualização interrompida, reabertura durante transferência, substituição acima do limite e erro de quota. A quota foi injectada no teste unitário; a tentativa CDP de limitar armazenamento não produziu uma quota observável em `navigator.storage.estimate()`, pelo que o ensaio de quota real permanece bloqueado. Chrome confirmou a preservação de texto/PDF durante uma falha real de rede. Android físico e SCORM offline não foram validados.
 
 ## End-User Value
 

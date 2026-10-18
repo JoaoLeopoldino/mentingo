@@ -73,3 +73,7 @@ adb -s SERIAL exec-out screencap -p > .local/sprint/android/screenshot.png
 ```
 
 Não versionar HARs brutos, cookies, palavras-passe, links de convite ou tokens de snapshots. Publicar apenas métricas e imagens revistas sem dados sensíveis. Concluir cada caso com PASS/FAIL/BLOCKED e observação; assinar o gate apenas após execução física. Um único modelo Android não demonstra compatibilidade com todo o parque de telemóveis.
+
+## Gate de armazenamento — actualização de 18/10/2026
+
+Estado continua **BLOCKED: não executado num dispositivo físico**. O ambiente não disponibilizou dispositivo Android/adb. O probe Chrome CDP `Storage.overrideQuotaForOrigin` declarou quota 1, mas o valor observado em `navigator.storage.estimate()` não acompanhou o override; a descarga continuou a caber. Esse probe não fecha a aceitação de pouco espaço. Repetir fisicamente sem apagar dados de outras aplicações: limite de curso, falha de nova descarga e falha de actualização preservando a cópia completa anterior e todas as respostas pendentes. Guardar estimativas antes/depois, versão de Chrome, espaço livre e resultado PASS/FAIL/BLOCKED. O teste unitário injecta `QuotaExceededError`; não equivale a armazenamento Android cheio.
