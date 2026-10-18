@@ -1,17 +1,38 @@
-# Decisão provisória do sprint
+# Decisão da sprint — checkpoint de 18-10-2026
 
-Estado: **sprint incompleto; CONDITIONAL GO para continuar a validação técnica, sem autorização de adopção em produção**.
+**CONDITIONAL GO para continuar a validação; sem GO para substituir Totara em produção.** O Mentingo já sustenta uma demonstração técnica local com competências, catálogo pt-AO completo estruturalmente, avaliações offline recuperáveis e SCORM 1.2 no Chrome. Faltam provas críticas em dispositivo, interoperabilidade independente, integração empresarial e operação.
 
-Base funcional API `38683c60`, UI `276827c8`; recuperação `b6bf4bb9`; branch `sprint/omatapalo-resume-20261017`. Este memorando será actualizado depois das etapas restantes.
+Estado: **22/32 critérios = 68,75%**, preservando os 32 critérios do [checklist](11-sprint-progress.md). Esta percentagem não mede conclusão do contrato, esforço restante ou prontidão para produção. Código desta entrega: `ca797c72`, `067407d1`, `848677e0`, `94f14739`, `b414f7ba`, `906c9398`, `30ff88f2`. O [relatório de execução](14-next-execution.md) contém testes, falhas corrigidas, tempos observados, estimativas e dependências. A [galeria de QA](15-next-visual-qa.md) contém capturas reais revistas.
 
-Os commits preservados demonstram pt-AO parcial, correcção de autorização de metadados de certificados, ciclos de renovação e preservação de tentativas, com testes de integração executados antes do reinício. O conteúdo offline reconstruído passou novamente testes unitários, sete testes API, builds/typecheck e cinco checkpoints Chrome, incluindo fecho/reabertura sem rede e PDF. A API de avaliações offline passou nove testes com PostgreSQL/RLS, concorrência e rollback. A fila local passou seis testes; o percurso Chrome completo das avaliações passou com API real e conclusão nativa confirmada.
+## O que mudou na decisão
 
-Cinco gates por fechar: offline no Android físico e recuperação assistida de conflitos; competências RH; integrações reais e extração analítica autorizada; interoperabilidade SCORM no navegador/Android e requisitos xAPI; operação em rede fraca e validação operacional/de segurança completa. Localização não está completa: a cobertura actual testada é 2.050/6.027 chaves, com fallback inglês explícito.
+A gestão de competências deixou de ser uma lacuna sem implementação: há catálogo, níveis, requisitos por função/unidade, evidência profissional explícita, perfil e matriz. Seis testes API/RLS, oito de domínio e cinco checkpoints Chrome passaram. A recuperação de avaliações conserva respostas em 401/409 e permite retry/arquivo/nova tentativa; dois percursos Chrome de seis checkpoints passaram no build final. A tradução chegou a 6.099 chaves, com zero omissões e revisão linguística humana ainda por fazer.
 
-Não foram executados benchmark com 20/50/100 sessões, instalação Moodle/IOMAD, comparação funcional por execução, teste de recuperação de backups, carga de vídeo/IA ou TCO empírico. Não se apresenta uma pontuação ponderada que oculte estes gates nem cotações de fornecedores inventadas.
+O QA descobriu problemas de encaminhamento que a execução API não mostrava. Depois das correcções TUS/conteúdo na mesma origem, o Chrome importou e executou o pacote SCORM, retomou o progresso e confirmou a conclusão nativa. O modo Auto HLS passou a permitir variantes abaixo de 720p, coberto por regressões. Nenhuma destas provas valida SCORM de todos os fornecedores, vídeo em rede móvel ou uma operação de produção.
 
-A recuperação após reinício expôs um risco de processo: o worktree temporário não preservou ficheiros ainda não consolidados. O trabalho passa a residir numa directoria persistente e a ser consolidado em checkpoints Git. Os serviços e os dados sintéticos sobreviveram; nenhuma produção foi alterada.
+## Gates de adopção
 
-Próxima acção: implementar a fatia de competências com requisitos por função, evidências e lacunas, mantendo tenant/RBAC; ensaiar também o offline num Android físico antes de aceitar esse gate. O sucesso de uma interface ou de testes unitários não fecha o gate de formação offline completa.
+| Gate                  | Decisão actual                                                                                        |
+| --------------------- | ----------------------------------------------------------------------------------------------------- |
+| Offline fiável        | Chrome demonstrado; Android físico, quotas e política de dispositivos pendentes                       |
+| Competências          | MVP funcional; hardening, paginação e gestor na UI pendentes                                          |
+| SCORM/xAPI            | SCORM 1.2 sintético API/Chrome; pacote independente, Android, 2004/xAPI não demonstrados              |
+| Certificações         | Histórico/ciclos preservados nos testes anteriores; matriz pública/revogação e histórico UI pendentes |
+| Isolamento de tenants | RLS/âmbitos nas novas fatias testados; segurança global e exportações por validar                     |
+| pt-AO                 | 100% estrutural; revisão humana, textos fixos e canais complementares incompletos                     |
+| ERP/Microsoft/BI      | Sem integração real; adapter sintético e dataset autorizado ainda por entregar                        |
+| Operação              | Sem ensaios 20/50/100, restore, RPO/RTO ou SLA comprovado                                             |
 
-O comando de build local foi revisto para caber no computador de 8 GB: configuração separada do sprint, sem alterar a configuração principal. Cliente/SSR passaram em 1m17s/22,90s; as duas demonstrações Chrome foram repetidas com sucesso sobre esse build. Este resultado reduz o risco técnico da primeira fatia offline, mantendo por validar Android físico, reconciliação assistida, operações em rede fraca e restantes módulos empresariais.
+## Viabilidade económica e manutenção
+
+Há evidência de que a Utu Lab consegue acrescentar fatias úteis mantendo Nest/React/Drizzle, o RBAC e o motor LMS existentes. Não foi criado outro backend nem acrescentada dependência. A comparação de custos ainda não é empírica: não há preços de ERP/infra-estrutura/licenças/serviço equivalentes, nem medições recorrentes de operação. Não se promete poupança ou paridade Totara a partir da velocidade deste MVP.
+
+O intervalo e a estimativa revista constam do relatório 14: 21/49/103 dias-pessoa para as fatias restantes delimitadas, com incerteza explícita e exclusões. Não são custos cotados, não usam multiplicador de IA e não incluem toda a migração, produção de cursos, Teams real ou LRS/xAPI. A consulta de competências sem paginação e a responsabilidade por actualizar o fork são riscos concretos.
+
+Moodle/IOMAD foram comparados por documentação primária, sem instalação ou execução nesta máquina. Totara continua a ser referência de funcionalidades publicadas; desconhece-se a configuração anterior do cliente. Não se atribuem falhas do fornecedor/configuração ao produto Totara sem validação.
+
+## Próxima acção
+
+Executar o [guião Android físico](13-android-physical-validation.md), validar gestor/formando na interface e fechar o pacote SCORM independente/matriz de certificados. Em paralelo ao trabalho que não depende do dispositivo, construir o adapter Primavera explicitamente sintético e o dataset analítico com autorização. Só preparar uma proposta de produção depois de ensaios de carga, restore e aceitação dos gates pelo cliente.
+
+Aplicação local: http://localhost:5173 ; competências: http://localhost:5173/competencies . Trabalho anterior preservado e novos módulos consolidados no branch isolado; sem deployment ou dados reais.

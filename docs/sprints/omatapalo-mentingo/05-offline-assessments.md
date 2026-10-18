@@ -101,3 +101,7 @@ SPRINT_TEST_ASSESSMENT_CHANGE=1 sprint_pnpm --filter api exec tsx --tsconfig ../
 O guião Android físico está no [relatório 13](13-android-physical-validation.md), **sem execução física**. Mantêm-se pendentes multi-dispositivo, SCORM offline, sincronização com a aplicação fechada e validação de operação em dispositivos reais. A recuperação administrativa é revisão manual dos dados exportados; não existe reconciliação automática nem certificação de conclusões a partir desse ficheiro.
 
 A suite de regressão API/RLS foi repetida integralmente: **9/9 passaram em 149,41 s**, incluindo preparação/limpeza de dados de ensaio. O caso de correcção confirma explicitamente que a nota do questionário não cria evidência de competência profissional. Não interpretar os tempos Jest por caso como latência HTTP.
+
+## Repetição no build final
+
+Os dois percursos Chrome de recuperação voltaram a passar, **6+6 checkpoints**, após a localização integral e as correcções SCORM/HLS. O percurso 409 mais recente registou **10.662 ms**. Exportação, arquivo confirmado, bloqueio da cópia antiga, nova descarga, recibo idempotente e conclusão nativa foram novamente observados. Capturas e limites do ensaio 401 por remoção de cookies na [galeria final](15-next-visual-qa.md). Android físico continua **não executado**. Commits de código: `94f14739` e localização `b414f7ba`; tempo global em [14](14-next-execution.md).

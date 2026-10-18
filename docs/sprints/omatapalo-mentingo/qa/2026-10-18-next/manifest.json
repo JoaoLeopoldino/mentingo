@@ -1,0 +1,81 @@
+{
+  "sourceCommits": [
+    "ca797c72",
+    "067407d1",
+    "848677e0",
+    "94f14739",
+    "b414f7ba",
+    "906c9398",
+    "30ff88f2"
+  ],
+  "environment": "local isolated API/PostgreSQL/Redis/private storage; fictional records only",
+  "browser": "Chrome desktop and emulated viewport; no physical Android",
+  "images": [
+    {
+      "file": "08-competency-matrix.png",
+      "sha256": "f4f04693889505c16645d99e2bc1b7149028b5d9d8fd072e887b995d15d5ec9a",
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "file": "08-competency-evidence.png",
+      "sha256": "4b7fb94271509c588a213acb2315458c6815678217de7d18db73ed755da04860",
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "file": "08-competency-mobile.png",
+      "sha256": "1d1aaa0e3e5c780911329f71005e23c3f76ea47462f36a44a846dcccfb815486",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "file": "09-offline-session-recovery.png",
+      "sha256": "3a7e8707c17b4d945683b87bc54deab72047bf55cdbfa56243d7ca7f6f900d30",
+      "width": 1200,
+      "height": 1000
+    },
+    {
+      "file": "09-offline-changed-assessment.png",
+      "sha256": "a385b19e69c92d321756608204cfab35656dd6582c4db856936c0c005ffdf263",
+      "width": 1200,
+      "height": 1000
+    },
+    {
+      "file": "10-scorm-player.png",
+      "sha256": "3f5c8da1df24217536addac318d2fac9e3695ab615f3b505966fa11f90a67b64",
+      "width": 1440,
+      "height": 1000
+    }
+  ],
+  "checks": {
+    "competencies": 5,
+    "navigationLanguage": 7,
+    "scormSyntheticUpstream": 4,
+    "offlineAuthRecovery": 6,
+    "offlineAssessmentChanged": 6
+  },
+  "locale": {
+    "referenceKeys": 6099,
+    "presentKeys": 6099,
+    "structuralPercent": 100,
+    "missingKeys": 0,
+    "identicalToEnglish": 57,
+    "untranslatedUnexpected": 0,
+    "nonIdenticalKeys": 6042,
+    "humanReviewedLinguisticPercent": null,
+    "criticalMissing": [],
+    "errors": []
+  },
+  "scorm": {
+    "results": [
+      "ZIP imported through real UI and published through native API; synthetic upstream MIT package",
+      "Actual iframe initialized, persisted a checkpoint and resumed after reload",
+      "Learner player fullscreen navigation works",
+      "Real LMSFinish persisted native learner completion; admin using supported student mode"
+    ],
+    "elapsedMs": 11194,
+    "package": "upstream synthetic MIT, not independent conformance",
+    "actor": "admin in supported student mode"
+  }
+}

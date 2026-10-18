@@ -45,3 +45,7 @@ Tempo: primeiro relógio desta execução **03:46:27 UTC**. Os registos de build
 O cálculo de lacunas foi extraído para um módulo puro e passou **8 testes**: seis estados, precedência de decisões/evidências pendentes e vigência/desactivação. A suite API/RLS voltou a passar **6/6 em 35,089 s**, incluindo inicialização/compilação do processo.
 
 Um microbenchmark sintético de CPU com 500 colaboradores, 20 competências e 30.000 registos de evidência produziu 10.000 linhas: 10 execuções após 3 aquecimentos, mediana **9,90 ms**, mínimo **8,24 ms**, máximo **18,66 ms** nesta máquina. Não mede HTTP, PostgreSQL, concorrência, payloads completos ou capacidade para 500 sessões. A consulta de histórico ainda não tem paginação empresarial; esse limite mantém-se aberto. Script: `benchmark-competency-gaps.mts`.
+
+## Checkpoint final desta execução
+
+Commits `ca797c72`, `067407d1`, `848677e0`, com catálogo integral/validação de formulários em `b414f7ba`. No build actualizado passaram **5/5 checkpoints Chrome em 9.146 ms**, incluindo validação nativa pt-AO. A captura da matriz e os pormenores do histórico estão na [galeria final](15-next-visual-qa.md). Os seis testes API/RLS e oito de domínio mantêm os resultados acima. O gestor foi exercitado pela API; não se declara demonstração visual dedicada do gestor/formando. Tempo global e trabalho restante: [relatório 14](14-next-execution.md).
