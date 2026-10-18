@@ -2,6 +2,7 @@ import { Link } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { useOfflineAttempts } from "~/api/queries/useOfflineAttempts";
 import { useOfflineCourses } from "~/api/queries/useOfflineCourses";
 import { queryClient } from "~/api/queryClient";
 import { PdfPreviewViewer } from "~/components/RichText/extensions/pdfPreview/PdfPreviewViewer";
@@ -12,6 +13,7 @@ import { useCurrentUserStore } from "~/modules/common/store/useCurrentUserStore"
 
 import { getOfflineOwner } from "./offline-session";
 import { offlineStorage } from "./offline-storage";
+import { OfflineQuiz } from "./OfflineQuiz";
 
 import type { OfflinePdf } from "./offline.types";
 
@@ -35,6 +37,7 @@ export default function OfflinePage() {
   const user = useCurrentUserStore((state) => state.currentUser);
   const owner = isLoggedIn && user && !user.isSupportMode ? getOfflineOwner() : undefined;
   const { data: courses = [], isError, isPending } = useOfflineCourses(owner);
+  const { data: operations = [], isError: attemptsError } = useOfflineAttempts(owner);
   const [online, setOnline] = useState(true);
   const [failure, setFailure] = useState(false);
   useEffect(() => {
@@ -57,7 +60,7 @@ export default function OfflinePage() {
       </Link>
       {!owner && <p role="alert">{t("offline.error.session")}</p>}
       {owner && isPending && <p role="status">{t("offline.loading")}</p>}
-      {(isError || failure) && <p role="alert">{t("offline.error.storage")}</p>}
+      {(isError || attemptsError || failure) && <p role="alert">{t("offline.error.storage")}</p>}
       {owner && !isPending && courses.length === 0 && <p>{t("offline.empty")}</p>}
       {owner &&
         courses.map((course) => (
@@ -98,14 +101,23 @@ export default function OfflinePage() {
                   ))}
                 </section>
               ))}
+            {course.state === "ready" &&
+              course.payload?.quizzes?.map((quiz) => (
+                <OfflineQuiz
+                  key={quiz.lessonId}
+                  quiz={quiz}
+                  operation={operations.find(
+                    (item) =>
+                      item.lessonId === quiz.lessonId && item.learningCycle === quiz.learningCycle,
+                  )}
+                />
+              ))}
             {!!course.payload?.unavailable.length && (
               <details>
                 <summary>{t("offline.unsupported")}</summary>
                 <ul>
                   {course.payload.unavailable.map((item, index) => (
-                    <li key={index}>
-                      {item.title} ({item.type})
-                    </li>
+                    <li key={index}>{item.title}</li>
                   ))}
                 </ul>
               </details>

@@ -1,6 +1,6 @@
 # Etapa 4 — Avaliações e sincronização offline
 
-Estado: **implementação funcional em validação; não pronta para produção**. Base `7054413a`, branch `sprint/omatapalo-resume-20261017`. As alterações desta etapa ainda aguardam consolidação; consultar o commit no relatório de estado.
+Estado: **implementação funcional demonstrada no ambiente local; não pronta para produção**. API consolidada em `38683c60`; base `7054413a`, branch `sprint/omatapalo-resume-20261017`. Consultar os commits de UI e evidências no relatório de estado.
 
 ## Alterações efectuadas
 
@@ -23,9 +23,9 @@ O formando descarrega previamente um questionário nativo compatível e guarda u
 | Suite offline separada com RLS | **9 passaram em 312,853 s**, incluindo recusa de outro tenant com papel RLS e rollback; fixtures com settings explícitos por tenant |
 | IndexedDB real da biblioteca com fake-indexeddb | **6 passaram**, incluindo reabertura, confirmação perdida, lease interrompido, conflito, logout e recibo incorrecto |
 | Catálogos/Intl/fallback | **10 passaram**, 900,623 ms; pt-AO 2.050/6.027 chaves, 34,01%, 3.977 em fallback inglês |
-| Typecheck web | Passou após corrigir o contrato Swagger; repetir se houver novas alterações |
+| Typecheck web | **Passou na versão final**, incluindo o contrato gerado e as alterações de UI |
 | Build API | Passou; migration aplicada apenas às duas bases locais do sprint |
-| Navegador com rede desligada | Script criado; ainda sem resultado de execução nesta etapa |
+| Navegador com rede desligada | **4 checkpoints Chrome passaram, código zero**: descarga real, respostas/reabertura sem rede, reconexão/correcção e progresso nativo |
 
 A execução inicial bloqueou porque o harness legado substituía a ligação tenant-aware por uma ligação directa: o bloqueio exterior e a avaliação nativa usavam ligações distintas. A suite específica utiliza `createE2ETest({ useDbProxy: true })`, com papel PostgreSQL sem bypass RLS. O teste de rollback força apenas a falha de persistência do recibo; os cenários de sucesso usam o motor e a base reais. A suite antiga mantém o seu harness e partilha a fixture nativa extraída para `test/helpers/native-quiz-fixture.ts`.
 
@@ -40,10 +40,10 @@ source scripts/sprints/omatapalo/environment.sh
 bash scripts/sprints/omatapalo/test-api-e2e.sh src/lesson/__tests__/offline-assessment.e2e-spec.ts
 sprint_pnpm --filter web test app/modules/Offline
 sprint_pnpm --filter web exec tsc --noEmit
-NODE_OPTIONS=--max-old-space-size=8192 sprint_pnpm --filter web build
+NODE_OPTIONS=--max-old-space-size=4096 sprint_pnpm --filter web exec remix vite:build --config ../../scripts/sprints/omatapalo/vite-low-memory.config.mts
 node scripts/sprints/omatapalo/verify-offline-build.mjs
 # Após o build terminar com código zero, com API :3000 e preview :5173:
-sprint_pnpm --filter web exec tsx ../../scripts/sprints/omatapalo/browser-offline-assessment.mts
+sprint_pnpm --filter api exec tsx --tsconfig ../web/tsconfig.json ../../scripts/sprints/omatapalo/browser-offline-assessment.mts
 ```
 
 Logs e capturas ficam em `.local/sprint/`, ignorada. Nenhum dado de cliente ou serviço de produção é usado. O script de E2E recusa bases, Redis e storage fora do ambiente local conhecido.
@@ -57,3 +57,17 @@ O armazenamento é privado ao perfil/origem e ao utilizador, mas não é um cofr
 Tempo: desenvolvimento iniciado no checkpoint de **17-10-2026 23:03 UTC**, com interrupção de contexto. Nesta retoma, o primeiro relógio registado é **23:52:44 UTC**. Medir o próximo checkpoint final; não atribuir a totalidade deste intervalo a programação exclusiva. As esperas por disco/Docker, builds e correcções do harness são custo real desta experiência, sem multiplicador de produtividade de IA.
 
 Checkpoint de API: a suite separada terminou com código zero. O build web inicial falhou por heap Node de cerca de 2 GB; repete-se com limite de 8 GB apenas no comando local. Lint dos ficheiros API e web passou. O typecheck web passou antes das últimas alterações de invalidação/formatação; a prova Chrome ainda não correu.
+
+## Checkpoint funcional — 18-10-2026 00:26 UTC
+
+Passaram **32 testes web em 65,79 s**, os **10 testes Node**, **9 testes API em 312,853 s**, lint dos ficheiros alterados e typecheck final API/web. Os quatro testes de assinatura passaram em 6,082 s. Os tempos maiores incluem pressão de RAM/swap e I/O; não medem latência da aplicação.
+
+O build cliente + SSR terminou com código zero, com **511 entradas de precache (14.448,84 KiB)**. O verificador confirmou **65 recursos de arranque**, documento SPA revisionado, worker PDF local e ausência de respostas API no precache. A tentativa de desactivar source maps via CLI interpretou `false` como texto e manteve 455 mapas; estes flags não devem ser usados como prova de desactivação. A configuração separada `scripts/sprints/omatapalo/vite-low-memory.config.mts` reutiliza integralmente a configuração da aplicação e fixa booleans falsos para mapas/cálculo de gzip; resolução Vite confirmada, build específico ainda em validação neste checkpoint.
+
+O Chrome descarregou uma avaliação real em pt-AO, respondeu sem Internet, fechou e reabriu o mesmo perfil ainda desligado, recuperou a tentativa pendente, restabeleceu a ligação e recebeu nota 100% do servidor. Reenviar exactamente o mesmo payload devolveu o mesmo `attemptId` e `receivedAt`; a consulta nativa da lição confirmou `lessonCompleted=true`. Captura revista visualmente: `.local/sprint/screenshots/06-offline-assessment-synced.png`. Logs: `browser-offline-assessment-final.log` e `browser-offline-assessment.json`.
+
+A primeira execução funcional passou os quatro checkpoints, mas terminou com erro no cleanup (`remove` em vez de `delete` na factory). Foi corrigida e repetida até código zero; o curso/categoria fictícios pendentes da primeira execução também foram removidos, após conferir identificadores no respectivo perfil e nomes fictícios na API. Nenhum sucesso HTTP foi simulado.
+
+Tempo decorrido observado nesta retoma: **23:52:44–00:26:21 UTC, cerca de 33 min 37 s**, incluindo builds, esperas e correcções. A etapa começou antes, às 23:03; o intervalo total inclui interrupção de contexto e não representa tempo exclusivo de programação. O computador tem 8 GB de RAM: executar build, typechecks e E2E pesados em paralelo elevou swap a 8,5 GB e reduziu temporariamente o disco a cerca de 400 MB. A estratégia revista é executar verificações pesadas em sequência e limitar o heap do build a 4 GB. Não houve limpeza de dados/caches existentes.
+
+Esta prova demonstra uma fatia vertical de avaliação nativa offline. Não certifica o produto para produção, Android físico, recertificação offline ou SCORM offline.

@@ -22,6 +22,7 @@ import { Providers } from "./modules/Global/Providers";
 import { ThemeWrapper } from "./modules/Global/ThemeWrapper";
 import { OfflineProviders } from "./modules/Offline/OfflineProviders";
 import { useOfflineSessionObserver } from "./modules/Offline/useOfflineSessionObserver";
+import { useOfflineSynchronization } from "./modules/Offline/useOfflineSynchronization";
 
 import type { LinksFunction } from "@remix-run/node";
 
@@ -58,6 +59,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function Root() {
   useNavigationTracker();
   useOfflineSessionObserver();
+  useOfflineSynchronization();
   const { pathname } = useLocation();
   if (pathname === "/offline-learning") {
     return (

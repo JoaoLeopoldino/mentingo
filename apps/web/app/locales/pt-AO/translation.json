@@ -3192,7 +3192,7 @@
     "remove": "Remover descarga",
     "online": "Com ligação à Internet",
     "disconnected": "Sem ligação à Internet",
-    "scope": "A leitura de texto e PDF é válida durante 7 dias. Avaliações, SCORM, vídeos e conclusão não estão disponíveis offline. Utilize um dispositivo privado. As descargas são removidas ao terminar sessão.",
+    "scope": "Texto, PDFs e avaliações de escolha única compatíveis ficam disponíveis neste dispositivo durante sete dias. Vídeos e SCORM exigem ligação. As avaliações só contam após validação pelo servidor.",
     "back": "Voltar às formações",
     "loading": "A carregar descargas…",
     "empty": "Não existem formações descarregadas neste dispositivo.",
@@ -3206,6 +3206,31 @@
       "empty": "Esta formação não tem texto ou PDFs disponíveis para descarga.",
       "download": "A descarga falhou. Verifique a ligação e tente novamente com Internet.",
       "storage": "Não foi possível aceder ao armazenamento do dispositivo. Verifique as permissões e o espaço disponível."
+    }
+  },
+  "offlineQuiz": {
+    "scope": "As respostas ficam guardadas neste dispositivo. A avaliação só é validada pelo servidor após a sincronização.",
+    "submit": "Guardar avaliação neste dispositivo",
+    "pending": "Guardada no dispositivo — sincronização pendente",
+    "synced": "Validada pelo servidor",
+    "failed": "A sincronização requer revisão",
+    "score": "Nota atribuída pelo servidor: {{score}}%",
+    "retry": "A ligação foi interrompida. A mesma tentativa será reenviada automaticamente enquanto a aplicação estiver aberta.",
+    "conflict": "O servidor recusou esta tentativa. Conserve-a para revisão; restabeleça a ligação e descarregue o curso actualizado antes de um novo ciclo de formação.",
+    "error": {
+      "expired": "A avaliação descarregada expirou. Restabeleça a ligação e descarregue novamente o curso.",
+      "signingKey": "A avaliação offline está indisponível.",
+      "subject": "Esta avaliação pertence a outra sessão.",
+      "language": "Esta avaliação não está disponível no idioma seleccionado.",
+      "unsupported": "Esta avaliação não permite realização offline.",
+      "completed": "Esta avaliação já foi concluída.",
+      "idempotency": "O identificador desta tentativa já foi utilizado com respostas diferentes.",
+      "snapshot": "A avaliação descarregada é inválida.",
+      "cycle": "O ciclo de formação mudou. Descarregue novamente o curso.",
+      "changed": "A avaliação foi alterada. Descarregue novamente o curso.",
+      "answers": "As respostas submetidas são inválidas.",
+      "attempt": "Não foi possível registar a tentativa de avaliação.",
+      "receipt": "O recibo de sincronização é inválido."
     }
   }
 }

@@ -1,6 +1,11 @@
 import Dexie from "dexie";
 
-import type { OfflineCourse, OfflineCourseKey, OfflinePayload } from "./offline.types";
+import type {
+  OfflineCourse,
+  OfflineCourseKey,
+  OfflinePayload,
+  OfflineOperation,
+} from "./offline.types";
 import type { SupportedLanguages } from "@repo/shared";
 import type { Table } from "dexie";
 
@@ -9,9 +14,14 @@ export const OFFLINE_TTL = 7 * 24 * 60 * 60 * 1000;
 
 export class OfflineStorage extends Dexie {
   courses!: Table<OfflineCourse, OfflineCourseKey>;
+  operations!: Table<OfflineOperation, [string, string]>;
   constructor(name = "mentingo-private-learning") {
     super(name);
     this.version(1).stores({ courses: "[owner+courseId+language],owner,expiresAt" });
+    this.version(2).stores({
+      courses: "[owner+courseId+language],owner,expiresAt",
+      operations: "[owner+id],owner,[owner+lessonId+learningCycle]",
+    });
   }
   async list(owner: string, now = Date.now()) {
     await this.courses.where("expiresAt").belowOrEqual(now).delete();
@@ -21,7 +31,10 @@ export class OfflineStorage extends Dexie {
     await this.courses.delete([owner, courseId, language]);
   }
   async purgeOwner(owner: string) {
-    await this.courses.where("owner").equals(owner).delete();
+    await this.transaction("rw", this.courses, this.operations, async () => {
+      await this.courses.where("owner").equals(owner).delete();
+      await this.operations.where("owner").equals(owner).delete();
+    });
   }
   async download(
     owner: string,

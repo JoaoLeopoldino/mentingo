@@ -53,7 +53,7 @@ cd /private/tmp/mentingo-omatapalo-sprint-20261017
 source scripts/sprints/omatapalo/environment.sh
 node --version
 sprint_pnpm --version
-sprint_pnpm install --frozen-lockfile --ignore-scripts --package-import-method=hardlink --store-dir "$PWD/.pnpm-store"
+sprint_pnpm install --frozen-lockfile --ignore-scripts --package-import-method=hardlink --store-dir "$PWD/../../pnpm-store"
 sprint_pnpm packages:build
 docker compose -f "$SPRINT_COMPOSE_FILE" up -d
 sprint_pnpm db:migrate
@@ -70,3 +70,9 @@ Num novo worktree é necessário instalar primeiro Node >=22.15 e disponibilizar
 ## Tempo efectivo
 
 Início global: **2026-10-17 14:56:11 UTC**. Aplicação compilada e carga fictícia confirmadas por volta das **16:13 UTC**: cerca de **77 minutos de tempo decorrido**, incluindo espera por permissões, falta de disco, downloads e implementação de localização em paralelo. Não foi medido CPU/esforço humano exclusivo por actividade; não se atribuem estes 77 minutos apenas à configuração nem se extrapola um multiplicador de produtividade.
+
+## Retoma persistente e consumo de memória — 18-10-2026
+
+Utilizar agora o worktree persistente `/Users/joaoleopoldino/Development/CaniveteLab/mentingo/.local/worktrees/omatapalo-20261017`, branch `sprint/omatapalo-resume-20261017`. O caminho anterior em `/private/tmp` desapareceu após reinício. O toolchain Node 22.15 foi recuperado neste worktree; as dependências estão instaladas com hardlinks para o store persistente `../../pnpm-store`, relativo a esta raiz. Não repetir a instalação no store antigo sem necessidade: o espaço em disco é limitado.
+
+As migrations locais incluem agora a 0222; API e preview frontend foram reiniciados. Os typechecks finais API/web passaram após a sincronização offline. Em 8 GB de RAM, executar as verificações pesadas em sequência. O build default com heap Node de cerca de 2 GB falhou por memória; cliente/SSR passaram com `NODE_OPTIONS=--max-old-space-size=4096`. A configuração `scripts/sprints/omatapalo/vite-low-memory.config.mts` é exclusiva da validação local, reutiliza os plugins da aplicação e desactiva mapas/cálculo de gzip; consultar o resultado final no relatório 05. O limite de heap não corresponde a RAM efectivamente consumida pela API.

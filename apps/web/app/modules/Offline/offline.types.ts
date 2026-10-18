@@ -1,3 +1,8 @@
+import type {
+  GetOfflineAssessmentSnapshotResponse,
+  SubmitOfflineAssessmentBody,
+  SubmitOfflineAssessmentResponse,
+} from "~/api/generated-api";
 import type { SupportedLanguages } from "@repo/shared";
 
 export type OfflinePdf = { id: string; title: string; bytes: Uint8Array };
@@ -5,6 +10,7 @@ export type OfflineLesson = { id: string; title: string; html: string; pdfs: Off
 export type OfflinePayload = {
   title: string;
   lessons: OfflineLesson[];
+  quizzes?: OfflineQuizSnapshot[];
   unavailable: { title: string; type: string }[];
 };
 export type OfflineCourse = {
@@ -19,3 +25,23 @@ export type OfflineCourse = {
   payload?: OfflinePayload;
 };
 export type OfflineCourseKey = [string, string, SupportedLanguages];
+
+// The generated API remains the authority for wire contracts.
+export type OfflineQuizSnapshot = GetOfflineAssessmentSnapshotResponse["data"];
+export type OfflineSubmission = SubmitOfflineAssessmentBody;
+export type OfflineSyncResult = SubmitOfflineAssessmentResponse["data"];
+export type OfflineOperation = {
+  owner: string;
+  id: string;
+  courseId: string;
+  lessonId: string;
+  learningCycle: number;
+  body: OfflineSubmission;
+  state: "pending" | "synced" | "failed";
+  tries: number;
+  nextRetryAt: number;
+  leaseId?: string;
+  leaseUntil?: number;
+  error?: string;
+  result?: OfflineSyncResult;
+};

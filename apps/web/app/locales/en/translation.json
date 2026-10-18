@@ -8091,7 +8091,7 @@
     "remove": "Remove download",
     "online": "Connected",
     "disconnected": "No Internet connection",
-    "scope": "Read-only text and PDF downloads expire after 7 days. Quizzes, SCORM, videos and completion are not available offline. Use a private device. Downloads are removed when you sign out.",
+    "scope": "Text, PDFs and supported single-choice assessments are available on this device for seven days. Video and SCORM require a connection. Assessments count only after server validation.",
     "back": "Back to courses",
     "loading": "Loading downloads…",
     "empty": "No downloaded courses on this device.",
@@ -8105,6 +8105,31 @@
       "empty": "This course has no available text or PDFs to download.",
       "download": "Download failed. Check your connection and try again online.",
       "storage": "Could not access device storage. Check permissions and available space."
+    }
+  },
+  "offlineQuiz": {
+    "scope": "Answers are saved on this device. Only the server validates the assessment after synchronization.",
+    "submit": "Save assessment on this device",
+    "pending": "Saved locally — awaiting synchronization",
+    "synced": "Validated by the server",
+    "failed": "Synchronization requires review",
+    "score": "Server score: {{score}}%",
+    "retry": "Connection interrupted. The same attempt will be retried automatically while the application is open.",
+    "conflict": "The server rejected this attempt. Keep it for review; reconnect and download the current course before a new training cycle.",
+    "error": {
+      "expired": "The downloaded assessment has expired. Reconnect and download the course again.",
+      "signingKey": "Offline assessment is unavailable.",
+      "subject": "This assessment belongs to another session.",
+      "language": "This assessment is unavailable in the selected language.",
+      "unsupported": "This assessment does not support offline completion.",
+      "completed": "This assessment has already been completed.",
+      "idempotency": "This attempt identifier has already been used with different answers.",
+      "snapshot": "The downloaded assessment is invalid.",
+      "cycle": "The training cycle has changed. Download the course again.",
+      "changed": "The assessment has changed. Download the course again.",
+      "answers": "The submitted answers are invalid.",
+      "attempt": "The assessment attempt could not be recorded.",
+      "receipt": "The synchronization receipt is invalid."
     }
   }
 }

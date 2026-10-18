@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+import { isAxiosError } from "axios";
 
 import { getOfflineOwner } from "~/modules/Offline/offline-session";
 import { OFFLINE_MAX_BYTES, offlineStorage } from "~/modules/Offline/offline-storage";
@@ -28,11 +29,28 @@ export function useDownloadOfflineCourse() {
           data: { data: course },
         } = await ApiClient.api.courseControllerGetCourse({ id: courseId, language });
         if (!course.availableLocales.includes(language)) throw new Error("offline.error.language");
-        const payload: OfflinePayload = { title: course.title, lessons: [], unavailable: [] };
+        const payload: OfflinePayload = {
+          title: course.title,
+          lessons: [],
+          quizzes: [],
+          unavailable: [],
+        };
         let totalBytes = 0;
         for (const chapter of course.chapters)
           for (const item of chapter.lessons) {
             if (getOfflineOwner() !== owner) throw new Error("offline.error.cancelled");
+            if (item.type === "quiz" && item.status !== "blocked") {
+              try {
+                const response = await ApiClient.api.offlineAssessmentControllerGetOfflineAssessmentSnapshot(item.id, {
+                  language,
+                });
+                payload.quizzes!.push(response.data.data);
+              } catch (error) {
+                if (!isAxiosError(error) || error.response?.status !== 409) throw error;
+                payload.unavailable.push({ title: item.title, type: item.type });
+              }
+              continue;
+            }
             if (item.type !== "content" || item.status === "blocked") {
               payload.unavailable.push({ title: item.title, type: item.type });
               continue;
@@ -76,7 +94,8 @@ export function useDownloadOfflineCourse() {
             }
             if (entry.html.trim() || entry.pdfs.length) payload.lessons.push(entry);
           }
-        if (!payload.lessons.length) throw new Error("offline.error.empty");
+        if (!payload.lessons.length && !payload.quizzes?.length)
+          throw new Error("offline.error.empty");
         if (getOfflineOwner() !== owner) throw new Error("offline.error.cancelled");
         return payload;
       });
