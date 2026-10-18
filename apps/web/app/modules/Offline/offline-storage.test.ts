@@ -1,5 +1,6 @@
 import "fake-indexeddb/auto";
 import { SUPPORTED_LANGUAGES } from "@repo/shared";
+import Dexie from "dexie";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { OfflineStorage, OFFLINE_MAX_BYTES } from "./offline-storage";
@@ -79,4 +80,23 @@ describe("private offline downloads", () => {
     await storage.remove("alice", "course", language);
     expect(await storage.list("alice")).toEqual([]);
   });
+});
+
+it("upgrades existing version-one private downloads without losing their contents", async () => {
+  const legacy = new Dexie(storage.name);
+  legacy.version(1).stores({ courses: "[owner+courseId+language],owner,expiresAt" });
+  await legacy.table("courses").put({
+    owner: "alice",
+    courseId: "course",
+    language,
+    token: "legacy-token",
+    state: "ready",
+    downloadedAt: Date.now(),
+    expiresAt: Date.now() + 3600000,
+    bytes: 100,
+    payload,
+  });
+  legacy.close();
+  expect((await storage.list("alice"))[0].payload).toEqual(payload);
+  expect(await storage.operations.count()).toBe(0);
 });

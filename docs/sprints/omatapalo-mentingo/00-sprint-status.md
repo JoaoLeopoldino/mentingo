@@ -36,3 +36,7 @@ API consolidada em `38683c60`; nove testes de integração passaram, incluindo R
 ## Prova funcional — 18-10-2026 00:26 UTC
 
 Avaliação offline demonstrada em Chrome: descarregar, responder sem rede, fechar/reabrir, sincronizar, receber nota do servidor, repetir sem duplicar recibo e confirmar conclusão nativa. Script terminou com código zero e limpeza dos dados fictícios. Passaram 32 testes web, 10 Node, 9 API/RLS, 4 unitários de assinatura, lint, typechecks finais e build cliente/SSR. Cobertura pt-AO 34,01%. Tempo desta retoma observado: 33 min 37 s, com builds/esperas incluídos. Continua por implementar a etapa 5 (competências) e a etapa 6 (integrações/vídeo); a etapa 7 mantém decisão provisória.
+
+## Consolidação — 18-10-2026
+
+API de avaliações em **`38683c60`**, fila/UI e demonstração em **`276827c8`**. O build exclusivo do sprint passou com heap máximo 4 GB, sem source maps de cliente: 1m17s cliente + 22,90s SSR. Os nove checkpoints Chrome (cinco conteúdos + quatro avaliações) passaram novamente sobre esse build. Upgrade IndexedDB v1→v2 preserva conteúdos; 33 casos web distintos validados (32 do conjunto e uma nova regressão de upgrade). Os typechecks finais API/web e lint passaram. Usar os comandos reproduzíveis do relatório 05. A próxima etapa de produto continua a ser competências; as etapas 5–7 não estão concluídas.

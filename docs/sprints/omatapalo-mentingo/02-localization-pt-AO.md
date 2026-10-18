@@ -63,3 +63,7 @@ Verificar Android real, acrescentar idiomas aos canais em falta por lotes, rever
 ## Tempo efectivo
 
 A localização foi intercalada com a recuperação do ambiente. Há checkpoints medidos desde **14:56:11 UTC**; os primeiros testes verdes surgiram durante a instalação e a persistência API/navegador foi demonstrada por volta de **16:19 UTC**. São cerca de **83 minutos de tempo decorrido global até esse checkpoint**, com configuração e esperas incluídas. O refinamento e a validação prosseguiram depois. Não existe cronómetro exclusivo fiável por actividade; não se apresenta este intervalo como 83 minutos de tradução ou desenvolvimento puro, nem como estimativa de localização integral.
+
+## Cobertura após conteúdos e avaliações offline
+
+No checkpoint de 18-10-2026, o catálogo tem **2.050/6.027 chaves traduzidas (34,01%)**, com **3.977 em fallback inglês**. Os dez testes Node passaram novamente, incluindo placeholders e formatação. A nova página offline foi demonstrada em pt-AO no Chrome com estados de submissão e nota confirmada pelo servidor. Não interpretar a cobertura adicional como localização integral dos canais API, emails, PDFs ou AI.
