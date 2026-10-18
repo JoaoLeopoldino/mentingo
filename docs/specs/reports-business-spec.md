@@ -24,6 +24,16 @@ Users select an organisation or group population, combine conditions, and review
 - Export every matching result and headline metrics, together with scope, conditions, generation time, and date meaning, as PDF or spreadsheets.
 - Respect reporting access throughout selectors, search, results, metrics, configurations, and exports.
 
+## Exportação analítica para Power BI — validação local de 18/10/2026
+
+O responsável autorizado pode executar um guião manual para obter seis ficheiros CSV relacionados: colaboradores, inscrições, conclusões, progresso, ciclos de certificados e competências. A exportação usa as APIs nativas autenticadas e os seus âmbitos, em vez de ler directamente tabelas de outros tenants. Requer conjuntamente acesso a relatórios, administração de colaboradores e competências; esse pré-requisito no cliente complementa a autorização de cada API e não a substitui.
+
+O dataset rejeita duplicações e correspondências inconsistentes, conserva IDs e ciclos históricos e neutraliza fórmulas em campos textuais. Não exporta emails nem a fundamentação livre de revogações. No Power BI, importar identificadores como texto, datas com fuso explícito e números na cultura técnica do CSV. O estado de certificado exportado é o estado persistido; o relatório deve também considerar a data de validade, sem confundir uma linha histórica com credencial actualmente válida.
+
+Dois ensaios reais, com páginas de 100 e de um registo, produziram os mesmos seis CSV byte a byte: 23 colaboradores, 16 inscrições, quatro conclusões, dois certificados e oito linhas de competências, no momento da recolha. Cinco testes do construtor e três testes de autorização de relatórios passaram. Ficheiros de referência: `apps/api/src/report/analytics-dataset.ts` e `scripts/sprints/omatapalo/export-power-bi.mts`.
+
+Não existe ligação ao serviço Power BI, actualização agendada, CDC, warehouse ou snapshot transaccional conjunto. O guião aborta alterações nas contagens, mas não detecta todas as alterações simultâneas aos valores; uma extracção consistente em produção precisa de evolução própria.
+
 ## End-User Value
 
 HR and L&D gain a consistent view of learning progress across the organisation and its groups. Reusable configurations reduce repeated setup, and clearly defined metrics make comparisons easier to interpret. Managers can inspect the learning population they are responsible for and share interpretable exports with stakeholders.

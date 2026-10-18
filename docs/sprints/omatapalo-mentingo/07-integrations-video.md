@@ -1,6 +1,6 @@
 # Etapa 6 — Integrações e rede fraca
 
-Estado em 18-10-2026: **Auto HLS corrigido e testado em unidade; integrações e medições de rede por entregar**. Branch `sprint/omatapalo-resume-20261017`; commit: consultar o commit deste relatório.
+Estado actual em 18-10-2026: **adapter Primavera sintético/reconciliação e dataset BI manual entregues; Auto HLS testado; API ERP real e medições de rede pendentes**. Branch `feat/omatapalo-enterprise-competencies-20261018`; commits no histórico desta entrega. Os parágrafos iniciais abaixo preservam o checkpoint anterior.
 
 ## Alteração efectuada
 
@@ -26,3 +26,11 @@ sprint_pnpm --filter web exec vitest run app/components/VideoPlayer/hlsQuality.t
 Preparar uma distribuição HLS de teste com 144/240/360/720p, licença explícita e conteúdo fictício. No leitor nativo, comparar ligação normal e 150/500/1.500 kbit/s, latências 100/400 ms, interrupção/retoma e regresso de resolução fixa a Auto. Recolher segmentos, bytes, resolução, tempo até reprodução e eventos de espera; separar tráfego de arranque da aplicação. `ffmpeg` está disponível localmente, mas esse ensaio ainda não foi preparado/executado. Não atribuir zero a rebuffering ou consumo por ausência de medição.
 
 Tempo por esta correcção não foi isolado em cronómetro próprio; integra o intervalo global documentado. Custos externos reais e esforço de conectores continuam sem medição empírica.
+
+## Entrega empresarial seguinte
+
+- `apps/api/src/integration/primavera/`: adapter explicitamente sintético, três províncias fictícias, identidades/atribuições, reconciliação `dry-run`, duplicações, datas, chefias, incremental inclusivo e retries limitados. Sete testes passaram. O guião devolveu duas propostas, um registo inalterado e zero erros em 1 ms, **sem aplicar alterações ao LMS**. Faltam API real e pipeline persistente BullMQ/outbox. [Especificação](../../specs/primavera-reconciliation-business-spec.md).
+- `apps/api/src/report/analytics-dataset.ts`: seis CSV relacionados, permissões conjuntas e APIs nativas autorizadas, validação de mapeamentos e protecção contra fórmulas textuais. Cinco testes passaram; três de autorização de relatórios passaram. Exportações reais em 8,018 s e 4,869 s, com páginas de 100 e um registo, produziram os mesmos bytes: 23 colaboradores, 16 inscrições, quatro conclusões, 16 progressos, dois certificados e oito competências. Dados são os existentes no momento do ensaio; a demonstração comercial posterior acrescentou registos. **Não existe ligação ao serviço Power BI nem refresh automático**.
+- Nove testes HLS passaram no conjunto final: quatro da correcção e cinco da suite anterior. Dois testes antigos ainda exigiam a regra HD anterior; foram mantidos e actualizados para a adaptação completa. Não se alterou o leitor nesta execução nem se mediu tráfego/rebuffering; gate aberto.
+
+O conjunto de integração puro terminou **12/12 em 18,815 s**. Detalhes, comandos, estimativas, limites e métricas no [relatório 18](18-enterprise-validation.md). Tempo exclusivo por funcionalidade não medido; não confundir milissegundos da simulação com esforço de integração real.
