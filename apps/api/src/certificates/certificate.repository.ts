@@ -94,6 +94,9 @@ export class CertificateRepository {
             issuedAt: certificates.issuedAt,
             expiresAt: certificates.expiresAt,
             archivedAt: certificates.archivedAt,
+            archiveReason: certificates.archiveReason,
+            revocationReason: certificates.revocationReason,
+            revokedBy: certificates.revokedBy,
           })
           .from(certificates)
           .where(
@@ -637,11 +640,59 @@ export class CertificateRepository {
         and(
           eq(certificates.id, certificateId),
           eq(certificates.status, CERTIFICATE_STATUSES.ACTIVE),
+          or(isNull(certificates.expiresAt), gt(certificates.expiresAt, sql`now()`)),
           isNull(users.deletedAt),
         ),
       );
 
     return certificate;
+  }
+
+  async revokeCertificate(
+    certificateId: UUIDType,
+    tenantId: UUIDType,
+    actorId: UUIDType,
+    reason: string,
+    trx: DatabasePg,
+  ) {
+    const [revoked] = await trx
+      .update(certificates)
+      .set({
+        status: CERTIFICATE_STATUSES.ARCHIVED,
+        archiveReason: CERTIFICATE_ARCHIVE_REASONS.REVOKED,
+        archivedAt: sql`now()`,
+        revocationReason: reason,
+        revokedBy: actorId,
+      })
+      .where(
+        and(
+          eq(certificates.id, certificateId),
+          eq(certificates.tenantId, tenantId),
+          eq(certificates.status, CERTIFICATE_STATUSES.ACTIVE),
+        ),
+      )
+      .returning({ id: certificates.id, revokedAt: certificates.archivedAt });
+    return revoked;
+  }
+
+  async findRevokedCertificateInCycle(
+    userId: UUIDType,
+    courseId: UUIDType,
+    learningCycle: number,
+    trx: DatabasePg,
+  ) {
+    const [revoked] = await trx
+      .select({ id: certificates.id })
+      .from(certificates)
+      .where(
+        and(
+          eq(certificates.userId, userId),
+          eq(certificates.courseId, courseId),
+          eq(certificates.learningCycle, learningCycle),
+          eq(certificates.archiveReason, CERTIFICATE_ARCHIVE_REASONS.REVOKED),
+        ),
+      );
+    return revoked;
   }
 
   async findExistingCertificate(userId: string, courseId: string, trx?: DatabasePg) {

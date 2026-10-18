@@ -1987,6 +1987,8 @@ export const certificates = pgTable(
     expiresAt: timestampWithTimezone({ name: "expires_at" }),
     archivedAt: timestampWithTimezone({ name: "archived_at" }),
     archiveReason: text("archive_reason").$type<CertificateArchiveReason>(),
+    revocationReason: text("revocation_reason"),
+    revokedBy: uuid("revoked_by").references(() => users.id, { onDelete: "set null" }),
     expirationWarningSentAt: timestampWithTimezone({ name: "expiration_warning_sent_at" }),
     tenantId,
   },

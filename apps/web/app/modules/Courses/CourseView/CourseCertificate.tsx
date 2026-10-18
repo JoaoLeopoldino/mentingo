@@ -1,3 +1,5 @@
+import { Link } from "@remix-run/react";
+import { useTranslation } from "react-i18next";
 import { PERMISSIONS } from "@repo/shared";
 import { useMemo, useState } from "react";
 
@@ -18,6 +20,7 @@ type CourseCertificateProps = {
 
 const CourseCertificate = ({ courseId }: CourseCertificateProps) => {
   const { language } = useLanguageStore();
+  const { t } = useTranslation();
 
   const { data: course } = useCourse(courseId, language);
   const { data: currentUser } = useCurrentUser();
@@ -67,13 +70,23 @@ const CourseCertificate = ({ courseId }: CourseCertificateProps) => {
 
   return (
     <>
-      <CertificateStatCard
-        availableLabel={isCertificateAvailable ? formattedDate : undefined}
-        hasCertificate
-        isAdminExperience={false}
-        isCertificateAvailable={isCertificateAvailable}
-        onOpen={handleOpenCertificatePreview}
-      />
+      <div className="flex flex-col gap-2">
+        <CertificateStatCard
+          availableLabel={isCertificateAvailable ? formattedDate : undefined}
+          hasCertificate
+          isAdminExperience={false}
+          isCertificateAvailable={isCertificateAvailable}
+          onOpen={handleOpenCertificatePreview}
+        />
+        {canReadCertificate && currentUser?.id && (
+          <Link
+            className="text-sm text-primary underline"
+            to={`/learning-history/${courseId}/${currentUser.id}`}
+          >
+            {t("certificateHistory.open")}
+          </Link>
+        )}
+      </div>
 
       <CertificatePreviewModal
         open={isCertificatePreviewOpen}

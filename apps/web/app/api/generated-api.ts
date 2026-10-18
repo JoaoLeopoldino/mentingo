@@ -7397,6 +7397,9 @@ export interface GetLearningHistoryResponse {
       issuedAt: string;
       expiresAt: string | null;
       archivedAt: string | null;
+      archiveReason: string | null;
+      revocationReason: string | null;
+      revokedBy: string | null;
     }[];
     assessmentAttempts: {
       /** @format uuid */
@@ -7503,6 +7506,23 @@ export interface DownloadCertificateBody {
   /** @format uuid */
   certificateId: string;
   language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+}
+
+export interface RevokeCertificateBody {
+  /**
+   * @minLength 10
+   * @maxLength 2000
+   * @pattern \S
+   */
+  reason: string;
+}
+
+export interface RevokeCertificateResponse {
+  data: {
+    /** @format uuid */
+    id: string;
+    revokedAt: string;
+  };
 }
 
 export interface CreateCertificateShareLinkBody {
@@ -42819,6 +42839,26 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @name CertificatesControllerRevokeCertificate
+     * @request POST:/api/certificates/{certificateId}/revoke
+     */
+    certificatesControllerRevokeCertificate: (
+      certificateId: string,
+      data: RevokeCertificateBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<RevokeCertificateResponse, any>({
+        path: `/api/certificates/${certificateId}/revoke`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @name CertificatesControllerCreateCertificateShareLink
      * @request POST:/api/certificates/share-link
      */
@@ -42931,9 +42971,11 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/certificates/share
      */
     certificatesControllerGetCertificateSharePage: (
-      query: {
-        certificateId: string;
-        lang: string;
+      query?: {
+        /** @format uuid */
+        certificateId?: string;
+        /** @default "en" */
+        lang?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -42951,9 +42993,11 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/certificates/share-image
      */
     certificatesControllerGetCertificateShareImage: (
-      query: {
-        certificateId: string;
-        lang: string;
+      query?: {
+        /** @format uuid */
+        certificateId?: string;
+        /** @default "en" */
+        lang?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>

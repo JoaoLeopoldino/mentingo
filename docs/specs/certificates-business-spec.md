@@ -68,6 +68,14 @@ Os endpoints de metadados de certificados de formações recebem o actor autenti
 
 A renovação abre um novo ciclo de formação e conserva as avaliações, respostas e resultados anteriores. O formando volta a realizar a formação sem que a evidência antiga satisfaça o ciclo actual. Um administrador pode renovar a formação; pedidos concorrentes não devem criar certificados ou ciclos duplicados.
 
-A API autenticada de histórico permite consultar certificados e tentativas por ciclo, com o mesmo âmbito de acesso aplicado aos metadados de certificados. Ainda não existe um ecrã próprio. O histórico conserva resultados e estados, mas não arquiva uma versão imutável de cada pergunta ou conteúdo.
+A API autenticada de histórico permite consultar certificados e tentativas por ciclo, com o mesmo âmbito de acesso aplicado aos metadados de certificados. O ecrã protegido de histórico apresenta os ciclos e resultados em `/learning-history/:courseId/:userId`. O histórico conserva resultados e estados, mas não arquiva uma versão imutável de cada pergunta ou conteúdo.
 
 Evidência: `certificates.controller.e2e-spec.ts` passou 41 testes com PostgreSQL real, incluindo renovação, preservação de respostas, concorrência e recusas de acesso entre utilizadores/tenants. A integração SCORM demonstrou dois ciclos completos, com um certificado por ciclo. A revogação e os certificados de percursos de aprendizagem continuam fora desta validação.
+
+## Revogação explícita e verificação pública — validação empresarial
+
+O administrador com autorização para gerir a formação pode revogar um certificado, indicando uma fundamentação e confirmando a decisão no histórico. A revogação conserva o certificado, responsável, motivo, datas, resultados e ciclo. Não apaga respostas, não repõe progresso e não representa uma renovação. A emissão no mesmo ciclo revogado é recusada; o fluxo administrativo para abrir um novo ciclo após revogação ainda requer implementação específica.
+
+A verificação pública de certificados de formações recusa imediatamente certificados expirados, arquivados, revogados e identificadores inexistentes. As respostas deixam de permitir cache pública. Uma cópia já descarregada ou uma cache externa anterior não pode ser retirada por esta alteração. Os motivos da revogação são consultáveis apenas no histórico autenticado.
+
+Foram executados 51 testes de certificados com PostgreSQL, incluindo autorização negativa, concorrência, histórico, expiração e partilha pública. O percurso Chrome com pacote independente da Rustici demonstrou dois ciclos SCORM, emissão automática, histórico, partilha anónima e revogação pela UI, preservando as duas tentativas. O ensaio usou um administrador fictício no modo de formando; não comprova o navegador para todos os papéis. A revisão dos certificados de percursos de aprendizagem está em curso e não está abrangida por esta conclusão.

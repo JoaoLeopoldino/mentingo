@@ -256,6 +256,16 @@ export class CertificatesService implements OnModuleDestroy {
             transactionInstance,
           );
 
+        if (
+          await this.certificateRepository.findRevokedCertificateInCycle(
+            userId,
+            courseId,
+            learningCycle,
+            transactionInstance,
+          )
+        ) {
+          throw new ConflictException("studentCertificateView.informations.certificateRevoked");
+        }
         const issuedAt = new Date(completionDate);
 
         const existingCertificate = await this.certificateRepository.findExistingCertificate(
@@ -495,6 +505,41 @@ export class CertificatesService implements OnModuleDestroy {
       undefined,
       CERTIFICATE_ARCHIVE_REASONS.EXPIRED,
     );
+  }
+
+  async revokeCertificate(certificateId: UUIDType, reason: string, currentUser: CurrentUserType) {
+    return this.db.transaction(async (trx) => {
+      const [certificate] = await trx
+        .select()
+        .from(certificates)
+        .where(
+          and(eq(certificates.id, certificateId), eq(certificates.tenantId, currentUser.tenantId)),
+        );
+      if (!certificate)
+        throw new NotFoundException("studentCertificateView.informations.certificateNotFound");
+      await this.assertCanManageCourseCertificates(certificate.courseId, currentUser);
+      if (reason.trim().length < 10)
+        throw new BadRequestException(
+          "studentCertificateView.informations.revocationReasonRequired",
+        );
+      // Same lock order as issuance: enrollment before credential. Prevent reissue/revocation races.
+      await this.certificateRepository.findCourseCompletion(
+        certificate.userId,
+        certificate.courseId,
+        trx,
+      );
+      const revoked = await this.certificateRepository.revokeCertificate(
+        certificateId,
+        currentUser.tenantId,
+        currentUser.userId,
+        reason.trim(),
+        trx,
+      );
+      if (!revoked?.revokedAt)
+        throw new ConflictException("studentCertificateView.informations.certificateNotActive");
+      // The committed row is the durable decision. Revocation does not reset learning or destroy evidence.
+      return { id: revoked.id, revokedAt: revoked.revokedAt };
+    });
   }
 
   async createCertificateShareLink(
@@ -1357,9 +1402,8 @@ export class CertificatesService implements OnModuleDestroy {
   }
 
   private async buildSystemActorEmail(tenantId: UUIDType): Promise<string> {
-    const { companyShortName } = await this.settingsService.getCompanyInformationByTenantId(
-      tenantId,
-    );
+    const { companyShortName } =
+      await this.settingsService.getCompanyInformationByTenantId(tenantId);
 
     const domain = this.normalizeCompanyShortNameForSystemActorEmail(companyShortName);
 

@@ -122,6 +122,232 @@ describe("CertificatesController (e2e)", () => {
     await truncateAllTables(baseDb, db);
   });
 
+  describe("public certificate validation", () => {
+    async function fixture(expiresAt?: string) {
+      const owner = await userFactory.withCredentials({ password }).withUserSettings(db).create();
+      const category = await categoryFactory.create();
+      const course = await courseFactory.create({
+        title: "Segurança no Trabalho",
+        authorId: owner.id,
+        categoryId: category.id,
+        thumbnailS3Key: null,
+        hasCertificate: true,
+      });
+      const [certificate] = await db
+        .insert(certificates)
+        .values({
+          userId: owner.id,
+          courseId: course.id,
+          expiresAt,
+        })
+        .returning();
+      return { owner, course, certificate };
+    }
+
+    it("serves an active credential without authentication and prevents stale public caching", async () => {
+      const { owner, certificate } = await fixture();
+      const page = await request(app.getHttpServer())
+        .get("/api/certificates/share")
+        .query({ certificateId: certificate.id, lang: "pt-AO" })
+        .expect(200);
+      expect(page.headers["cache-control"]).toContain("no-store");
+      expect(page.text).toContain("Segurança no Trabalho");
+      expect(page.text).not.toContain(owner.email);
+      const image = await request(app.getHttpServer())
+        .get("/api/certificates/share-image")
+        .query({ certificateId: certificate.id, lang: "pt-AO" })
+        .expect(200);
+      expect(image.headers["content-type"]).toContain("image/png");
+      expect(image.headers["cache-control"]).toContain("no-store");
+    });
+
+    it.each(["share", "share-image"])(
+      "validates public IDs and language through %s",
+      async (endpoint) => {
+        for (const query of [
+          { certificateId: "invalid" },
+          { certificateId: randomUUID(), lang: "invalid" },
+          {},
+        ]) {
+          const response = await request(app.getHttpServer())
+            .get(`/api/certificates/${endpoint}`)
+            .query(query);
+          expect(response.status).toBe(400);
+        }
+      },
+    );
+
+    it.each(["share", "share-image"])(
+      "rejects an expired credential immediately through %s before the cron runs",
+      async (endpoint) => {
+        const { certificate } = await fixture(new Date(Date.now() - 1000).toISOString());
+        await request(app.getHttpServer())
+          .get(`/api/certificates/${endpoint}`)
+          .query({ certificateId: certificate.id, lang: "pt-AO" })
+          .expect(404);
+      },
+    );
+
+    it.each(["share", "share-image"])(
+      "rejects archived credentials and unknown IDs through %s",
+      async (endpoint) => {
+        const { certificate } = await fixture();
+        await db
+          .update(certificates)
+          .set({
+            status: CERTIFICATE_STATUSES.ARCHIVED,
+            archivedAt: new Date().toISOString(),
+            archiveReason: CERTIFICATE_ARCHIVE_REASONS.MANUAL_RESET,
+          })
+          .where(eq(certificates.id, certificate.id));
+        for (const id of [certificate.id, randomUUID()]) {
+          await request(app.getHttpServer())
+            .get(`/api/certificates/${endpoint}`)
+            .query({ certificateId: id, lang: "pt-AO" })
+            .expect(404);
+        }
+      },
+    );
+  });
+
+  describe("explicit certificate revocation", () => {
+    async function fixture() {
+      const admin = await userFactory.withCredentials({ password }).withAdminSettings(db).create();
+      const learner = await userFactory.withCredentials({ password }).withUserSettings(db).create();
+      const category = await categoryFactory.create();
+      const course = await courseFactory.create({
+        title: "Segurança",
+        authorId: admin.id,
+        categoryId: category.id,
+        thumbnailS3Key: null,
+        hasCertificate: true,
+      });
+      await db
+        .insert(studentCourses)
+        .values({
+          studentId: learner.id,
+          courseId: course.id,
+          completedAt: new Date().toISOString(),
+          learningCycle: 1,
+        });
+      const certificate = await inTenant(() =>
+        certificatesService.createCertificate(learner.id, course.id),
+      );
+      return { admin, learner, course, certificate };
+    }
+
+    it("records one concurrent revocation, preserves completion/history and prevents reissue in the same cycle", async () => {
+      const { admin, learner, course, certificate } = await fixture();
+      const cookie = await cookieFor(admin, app);
+      const responses = await Promise.all(
+        [1, 2].map(() =>
+          request(app.getHttpServer())
+            .post(`/api/certificates/${certificate.id}/revoke`)
+            .set("Cookie", cookie)
+            .send({ reason: "Evidência de emissão considerada inválida após revisão." }),
+        ),
+      );
+      expect(responses.map((r) => r.status).sort()).toEqual([201, 409]);
+      const [saved] = await db
+        .select()
+        .from(certificates)
+        .where(eq(certificates.id, certificate.id));
+      expect(saved).toMatchObject({
+        status: CERTIFICATE_STATUSES.ARCHIVED,
+        archiveReason: CERTIFICATE_ARCHIVE_REASONS.REVOKED,
+        revokedBy: admin.id,
+        learningCycle: 1,
+      });
+      expect(saved.revocationReason).toContain("Evidência");
+      const [enrollment] = await db
+        .select()
+        .from(studentCourses)
+        .where(eq(studentCourses.courseId, course.id));
+      expect(enrollment.completedAt).not.toBeNull();
+      expect(enrollment.learningCycle).toBe(1);
+      await expect(
+        inTenant(() => certificatesService.createCertificate(learner.id, course.id)),
+      ).rejects.toThrow("studentCertificateView.informations.certificateRevoked");
+      const history = await request(app.getHttpServer())
+        .get("/api/certificates/history")
+        .set("Cookie", await cookieFor(learner, app))
+        .query({ userId: learner.id, courseId: course.id })
+        .expect(200);
+      expect(history.body.data.certificates).toHaveLength(1);
+      expect(history.body.data.certificates[0].revokedBy).toBe(admin.id);
+      for (const endpoint of ["share", "share-image"])
+        await request(app.getHttpServer())
+          .get(`/api/certificates/${endpoint}`)
+          .query({ certificateId: certificate.id, lang: "pt-AO" })
+          .expect(404);
+    });
+
+    it("refuses anonymous, learner and insufficient reasons without changing the credential", async () => {
+      const { admin, learner, certificate } = await fixture();
+      const endpoint = `/api/certificates/${certificate.id}/revoke`;
+      await request(app.getHttpServer())
+        .post(endpoint)
+        .send({ reason: "Motivo suficientemente explícito." })
+        .expect(401);
+      await request(app.getHttpServer())
+        .post(endpoint)
+        .set("Cookie", await cookieFor(learner, app))
+        .send({ reason: "Motivo suficientemente explícito." })
+        .expect(403);
+      await request(app.getHttpServer())
+        .post(endpoint)
+        .set("Cookie", await cookieFor(admin, app))
+        .send({ reason: "             x" })
+        .expect(400);
+      const [saved] = await db
+        .select()
+        .from(certificates)
+        .where(eq(certificates.id, certificate.id));
+      expect(saved.status).toBe(CERTIFICATE_STATUSES.ACTIVE);
+    });
+
+    it("refuses an administrator from another tenant", async () => {
+      const { admin, certificate } = await fixture();
+      const [otherTenant] = await baseDb
+        .insert(tenants)
+        .values({
+          name: "Outro tenant fictício",
+          host: `https://revocation-${randomUUID()}.sprint.invalid`,
+        })
+        .returning();
+      const foreignUser = await userFactory
+        .withCredentials({ password })
+        .create({ tenantId: otherTenant.id });
+      const [foreignCategory] = await baseDb
+        .insert(categories)
+        .values({ title: { en: "Foreign" }, tenantId: otherTenant.id })
+        .returning();
+      const [foreignCourse] = await baseDb
+        .insert(courses)
+        .values({
+          title: { en: "Foreign" },
+          authorId: foreignUser.id,
+          categoryId: foreignCategory.id,
+          tenantId: otherTenant.id,
+        })
+        .returning();
+      const [foreignCertificate] = await baseDb
+        .insert(certificates)
+        .values({ userId: foreignUser.id, courseId: foreignCourse.id, tenantId: otherTenant.id })
+        .returning();
+      await request(app.getHttpServer())
+        .post(`/api/certificates/${foreignCertificate.id}/revoke`)
+        .set("Cookie", await cookieFor(admin, app))
+        .send({ reason: "Tentativa de revogação entre tenants." })
+        .expect(404);
+      const [saved] = await db
+        .select()
+        .from(certificates)
+        .where(eq(certificates.id, certificate.id));
+      expect(saved.status).toBe(CERTIFICATE_STATUSES.ACTIVE);
+    });
+  });
+
   describe("certificate metadata authorization", () => {
     it.each(["all", "certificate", "history"])(
       "denies another learner's metadata through %s",
@@ -857,14 +1083,12 @@ describe("CertificatesController (e2e)", () => {
         hasCertificate: true,
         thumbnailS3Key: null,
       });
-      await db
-        .insert(studentCourses)
-        .values({
-          studentId: student.id,
-          courseId: course.id,
-          progress: "completed",
-          completedAt: new Date().toISOString(),
-        });
+      await db.insert(studentCourses).values({
+        studentId: student.id,
+        courseId: course.id,
+        progress: "completed",
+        completedAt: new Date().toISOString(),
+      });
       const issued = await inTenant(() =>
         Promise.all([
           certificatesService.createCertificate(student.id, course.id),

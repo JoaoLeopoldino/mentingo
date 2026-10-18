@@ -1,4 +1,6 @@
 import type {
+  revokeCertificateSchema,
+  revokeCertificateResponseSchema,
   certificateLearningHistorySchema,
   allCertificatesSchema,
   certificateShareLinkResponseSchema,
@@ -104,3 +106,6 @@ export type CertificateActivityOperation =
 export type CertificateActivityReason = CertificateArchiveReason;
 
 export type CertificateLearningHistory = Static<typeof certificateLearningHistorySchema>;
+
+export type RevokeCertificateBody = Static<typeof revokeCertificateSchema>;
+export type RevokeCertificateResponse = Static<typeof revokeCertificateResponseSchema>;

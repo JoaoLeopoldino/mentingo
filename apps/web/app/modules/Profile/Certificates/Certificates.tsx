@@ -1,4 +1,4 @@
-import { useParams } from "@remix-run/react";
+import { Link, useParams } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
 
 import { useCertificates } from "~/api/queries/useCertificates";
@@ -85,6 +85,14 @@ const Certificates = ({ onOpenCertificatePreview }: CertificatesProps) => {
                 onOpenCertificatePreview={onOpenCertificatePreview}
                 platformLogo={globalSettings?.platformLogoS3Key}
               />
+              {certificate.courseId && (
+                <Link
+                  className="mt-2 block text-sm text-primary underline"
+                  to={`/learning-history/${certificate.courseId}/${certificate.userId}`}
+                >
+                  {t("certificateHistory.open")}
+                </Link>
+              )}
             </div>
           );
         })}

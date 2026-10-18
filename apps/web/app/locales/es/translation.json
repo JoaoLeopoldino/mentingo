@@ -4625,7 +4625,10 @@
       "userNotFound": "Usuario no encontrado.",
       "courseNotFound": "Curso no encontrado.",
       "courseCertificateDisabled": "Los certificados están deshabilitados para este curso.",
-      "courseCompletionRequired": "Debes completar el curso antes de generar un certificado."
+      "courseCompletionRequired": "Debes completar el curso antes de generar un certificado.",
+      "certificateRevoked": "This certificate has been revoked. It cannot be reissued in the same learning cycle.",
+      "certificateNotActive": "This certificate is no longer active.",
+      "revocationReasonRequired": "Provide a meaningful revocation reason with at least 10 characters."
     },
     "button": {
       "download": "Descargar",
@@ -8236,5 +8239,30 @@
     "archive": "Archive for review",
     "course": "Open course to download current version",
     "downloadCurrent": "The original attempt was archived. Download the course again before answering the current assessment. Original answers remain available for export."
+  },
+  "certificateHistory": {
+    "title": "Learning and certificate history",
+    "open": "View learning history",
+    "cycle": "Learning cycle {{cycle}}",
+    "empty": "No recorded evidence for this cycle.",
+    "assessments": "Assessments",
+    "scorm": "SCORM attempts",
+    "active": "Active",
+    "archived": "Archived",
+    "expired": "Expired",
+    "issued": "Issued on",
+    "expires": "Valid until",
+    "revocation": "Revoke certificate",
+    "reason": "Reason for revocation",
+    "confirm": "I confirm this credential must be revoked. Learning history will be preserved.",
+    "revoked": "Certificate revoked. Previous evidence has been preserved.",
+    "failed": "Could not load or update the learning history.",
+    "back": "Return to course",
+    "revokedBy": "Revocation recorded on",
+    "reasons": {
+      "revoked": "Revoked",
+      "manual_reset": "Renewed",
+      "expired": "Expired"
+    }
   }
 }

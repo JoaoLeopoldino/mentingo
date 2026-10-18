@@ -71,3 +71,19 @@ sprint_pnpm --filter api exec tsx --tsconfig ../web/tsconfig.json ../../scripts/
 ```
 
 O gate de interoperabilidade permanece aberto: falta pacote independente e Android. A matriz completa de verificação pública/revogação e o ecrã de histórico de certificados não foram entregues nesta execução. Os 41 testes anteriores de certificados são evidência histórica; não se declara nova validação de revogação sem a executar. A preservação de tentativas continua coberta pelas regressões registadas.
+
+## Validação empresarial — execução iniciada em 18/10/2026 16:02:49 UTC
+
+Base preservada: `656f4a9c`. A suite de baseline passou 41/41 (163,972 s). Novos testes reproduziram certificados expirados ainda publicamente acessíveis e cache pública prolongada. A correcção impõe validade imediata na consulta pública e `Cache-Control: no-store`. A revogação formal passa a conservar motivo, responsável e data, sem eliminar resultados nem reiniciar o ciclo; uma reemissão no mesmo ciclo é recusada. A migração aditiva Drizzle `0234_certificate_revocation_decision.sql` foi gerada pelo projecto e ensaiada nas bases locais.
+
+A regressão final de certificados passou **51/51, 278,927 s**. A primeira versão do endpoint de revogação falhou um teste entre tenants; foi acrescentado o filtro explícito de tenant, confirmado pela repetição. Os parâmetros públicos passaram a ter validação Nest anterior aos diagnósticos TypeBox, após a suite de teste devolver 500 para entradas inválidas. A aplicação local devolveu 400 na verificação HTTP directa. Não se ocultaram os testes intermédios falhados.
+
+Pacote independente, original e sem alterações: [Rustici Golf / Basic Runtime SCORM 1.2](https://scorm.com/scorm-explained/technical-scorm/golf-examples/), ficheiro `RuntimeBasicCalls_SCORM12.zip`, SHA-256 `b778566f79d56e48fab58f3a4e1fe8c1d05f372be9db3385aa1a1896063fe02a`, 360.842 bytes. O código identifica CC BY 3.0 US; as atribuições e ligações de conteúdo por página permanecem intactas. O ZIP não é redistribuído no Git. `prepare-independent-scorm.mjs` fixa o hash e recusa alterações da origem até revisão.
+
+Chrome: importação pela UI/TUS, publicação nativa, navegação, saída/retoma na página 3, avaliação 100, score persistido e certificado emitido automaticamente: **4 checkpoints, 9,331 s**. Segundo percurso: renovação nativa, novo ciclo completo pelo player, dois certificados/tentativas, página pública anónima no URL canónico, histórico pt-AO e revogação pela interface com 404 público imediato: **4 checkpoints, 9,976 s**. Os dois cursos/ciclos são dados fictícios; o pacote original está em inglês. O primeiro guião falhou uma expectativa do título do pacote, corrigida sem alterar o pacote. O QA detectou e corrigiu a ordem dos argumentos do formatador de datas no novo ecrã.
+
+Reprodução: executar `prepare-independent-scorm.mjs`, depois `browser-independent-scorm.mts` e `browser-certificate-history.mts` com o mesmo comando tsx usado nos restantes guiões. Os scripts conservam a demonstração para revisão; `SPRINT_QA_CLEANUP=true` limpa apenas os recursos que o primeiro script acabou de criar. Sem esta opção, cada repetição cria recursos novos, sem sobrescrever os anteriores.
+
+Capturas: `.local/sprint/screenshots/18-independent-scorm-resume.png`, `18-independent-scorm-complete.png`, `18-public-certificate.png`, `18-certificate-history.png`, `18-revoked-certificate-history.png`. Logs ignorados: `certificates-enterprise-final.log`, `independent-scorm-browser-final.log`, `certificate-history-browser.log`.
+
+Limites: Android físico, SCORM 2004, xAPI/LRS e SCORM offline não demonstrados. O histórico ainda não pagina tentativas. A revogação de certificados de percursos de aprendizagem e a renovação após revogação explícita não são declaradas concluídas. O checklist permanece provisoriamente em 22/32 até fechar os critérios integrais.

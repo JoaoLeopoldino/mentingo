@@ -105,6 +105,9 @@ export const routeAccessConfig = createRouteConfig({
     allOf: [PERMISSIONS.ANNOUNCEMENT_READ],
   },
   settings: PUBLIC,
+  "learning-history/:courseId/:userId": {
+    anyOf: [PERMISSIONS.CERTIFICATE_READ, PERMISSIONS.MANAGED_GROUP_RESULTS_READ],
+  },
   "profile/:id": PUBLIC,
   "course/:courseId/lesson/:lessonId": PUBLIC,
   "articles/:articleId/edit": ARTICLE_EDIT_ACCESS,

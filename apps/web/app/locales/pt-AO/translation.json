@@ -4509,7 +4509,10 @@
       "userNotFound": "Utilizador não encontrado.",
       "courseNotFound": "Formação não encontrada.",
       "courseCertificateDisabled": "Os certificados estão desactivados para esta formação.",
-      "courseCompletionRequired": "Tem de concluir a formação antes de gerar um certificado."
+      "courseCompletionRequired": "Tem de concluir a formação antes de gerar um certificado.",
+      "certificateRevoked": "Este certificado foi revogado. Não pode ser emitido novamente no mesmo ciclo de formação.",
+      "certificateNotActive": "Este certificado já não está activo.",
+      "revocationReasonRequired": "Indique um motivo fundamentado para a revogação, com pelo menos 10 caracteres."
     },
     "button": {
       "download": "Descarregar",
@@ -8325,6 +8328,31 @@
       "wrongNumberOfRoots": "A automação só pode ter uma raiz",
       "treeNotConnected": "Nem todos os passos fornecidos estão ligados entre si",
       "bulkInsertFailed": "Não foi possível actualizar os passos da automação"
+    }
+  },
+  "certificateHistory": {
+    "title": "Histórico de formação e certificados",
+    "open": "Ver histórico da formação",
+    "cycle": "Ciclo de formação {{cycle}}",
+    "empty": "Sem evidências registadas neste ciclo.",
+    "assessments": "Avaliações",
+    "scorm": "Tentativas SCORM",
+    "active": "Válido",
+    "archived": "Arquivado",
+    "expired": "Expirado",
+    "issued": "Emitido em",
+    "expires": "Válido até",
+    "revocation": "Revogar certificado",
+    "reason": "Motivo da revogação",
+    "confirm": "Confirmo a revogação deste certificado. O histórico de formação será preservado.",
+    "revoked": "Certificado revogado. As evidências anteriores foram preservadas.",
+    "failed": "Não foi possível consultar ou actualizar o histórico da formação.",
+    "back": "Voltar à formação",
+    "revokedBy": "Revogação registada em",
+    "reasons": {
+      "revoked": "Revogado",
+      "manual_reset": "Renovado",
+      "expired": "Expirado"
     }
   }
 }

@@ -1639,6 +1639,13 @@
       "when": 1792332905815,
       "tag": "0233_multiple_competency_job_assignments",
       "breakpoints": true
+    },
+    {
+      "idx": 234,
+      "version": "7",
+      "when": 1792339893235,
+      "tag": "0234_certificate_revocation_decision",
+      "breakpoints": true
     }
   ]
 }

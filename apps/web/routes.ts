@@ -63,6 +63,10 @@ export const routes: (
           route("articles/:articleId/edit", "modules/Articles/ArticleForm.page.tsx", {
             id: "edit-article",
           });
+          route(
+            "learning-history/:courseId/:userId",
+            "modules/Profile/Certificates/LearningHistory.page.tsx",
+          );
           route("profile/:id", "modules/Profile/Profile.page.tsx");
         });
         route("course/:courseId/lesson", "modules/Courses/Lesson/Lesson.layout.tsx", () => {

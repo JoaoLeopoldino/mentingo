@@ -128,6 +128,9 @@ export const certificateLearningHistorySchema = Type.Object({
       issuedAt: Type.String(),
       expiresAt: Type.Union([Type.String(), Type.Null()]),
       archivedAt: Type.Union([Type.String(), Type.Null()]),
+      archiveReason: Type.Union([Type.String(), Type.Null()]),
+      revocationReason: Type.Union([Type.String(), Type.Null()]),
+      revokedBy: Type.Union([UUIDSchema, Type.Null()]),
     }),
   ),
   assessmentAttempts: Type.Array(
@@ -150,4 +153,12 @@ export const certificateLearningHistorySchema = Type.Object({
       completionStatus: Type.Union([Type.String(), Type.Null()]),
     }),
   ),
+});
+
+export const revokeCertificateSchema = Type.Object({
+  reason: Type.String({ minLength: 10, maxLength: 2000, pattern: "\\S" }),
+});
+export const revokeCertificateResponseSchema = Type.Object({
+  id: UUIDSchema,
+  revokedAt: Type.String(),
 });

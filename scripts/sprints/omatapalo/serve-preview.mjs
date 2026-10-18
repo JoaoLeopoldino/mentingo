@@ -10,8 +10,8 @@ await access(`${client}index.html`);
 const app = express();
 app.disable("x-powered-by");
 // SCORM 1.2 packages discover window.parent.API and must remain same-origin.
-// Match the development proxy for content only; no generic/open proxy or private caching.
-app.use("/api/scorm/content", (req, res) => {
+// Explicit local routes only: SCORM content and public credentials, never a generic/open proxy.
+const proxyLocalApi = (req, res) => {
   if (!["GET", "HEAD"].includes(req.method)) return res.sendStatus(405);
   const upstream = httpRequest(
     {
@@ -35,7 +35,9 @@ app.use("/api/scorm/content", (req, res) => {
   });
   req.on("aborted", () => upstream.destroy());
   upstream.end();
-});
+};
+app.use("/api/scorm/content", proxyLocalApi);
+app.get(["/api/certificates/share", "/api/certificates/share-image"], proxyLocalApi);
 app.use(express.static(client, { etag: true, maxAge: 0 }));
 app.get("*", (_req, res) => res.sendFile(`${client}index.html`));
 app.listen(5173, "127.0.0.1", () => console.log("Isolated SPA preview: http://localhost:5173"));

@@ -9245,6 +9245,43 @@
         }
       }
     },
+    "/api/certificates/{certificateId}/revoke": {
+      "post": {
+        "operationId": "CertificatesController_revokeCertificate",
+        "parameters": [
+          {
+            "name": "certificateId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevokeCertificateBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevokeCertificateResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/certificates/share-link": {
       "post": {
         "operationId": "CertificatesController_createCertificateShareLink",
@@ -9516,18 +9553,53 @@
         "parameters": [
           {
             "name": "certificateId",
-            "required": true,
+            "required": false,
             "in": "query",
             "schema": {
+              "format": "uuid",
               "type": "string"
             }
           },
           {
             "name": "lang",
-            "required": true,
+            "required": false,
             "in": "query",
             "schema": {
-              "type": "string"
+              "default": "en",
+              "anyOf": [
+                {
+                  "const": "en",
+                  "type": "string"
+                },
+                {
+                  "const": "pl",
+                  "type": "string"
+                },
+                {
+                  "const": "de",
+                  "type": "string"
+                },
+                {
+                  "const": "lt",
+                  "type": "string"
+                },
+                {
+                  "const": "cs",
+                  "type": "string"
+                },
+                {
+                  "const": "es",
+                  "type": "string"
+                },
+                {
+                  "const": "fr",
+                  "type": "string"
+                },
+                {
+                  "const": "pt-AO",
+                  "type": "string"
+                }
+              ]
             }
           }
         ],
@@ -9544,18 +9616,53 @@
         "parameters": [
           {
             "name": "certificateId",
-            "required": true,
+            "required": false,
             "in": "query",
             "schema": {
+              "format": "uuid",
               "type": "string"
             }
           },
           {
             "name": "lang",
-            "required": true,
+            "required": false,
             "in": "query",
             "schema": {
-              "type": "string"
+              "default": "en",
+              "anyOf": [
+                {
+                  "const": "en",
+                  "type": "string"
+                },
+                {
+                  "const": "pl",
+                  "type": "string"
+                },
+                {
+                  "const": "de",
+                  "type": "string"
+                },
+                {
+                  "const": "lt",
+                  "type": "string"
+                },
+                {
+                  "const": "cs",
+                  "type": "string"
+                },
+                {
+                  "const": "es",
+                  "type": "string"
+                },
+                {
+                  "const": "fr",
+                  "type": "string"
+                },
+                {
+                  "const": "pt-AO",
+                  "type": "string"
+                }
+              ]
             }
           }
         ],
@@ -59301,6 +59408,37 @@
                           "type": "null"
                         }
                       ]
+                    },
+                    "archiveReason": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "revocationReason": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "revokedBy": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
                     }
                   },
                   "required": [
@@ -59309,7 +59447,10 @@
                     "status",
                     "issuedAt",
                     "expiresAt",
-                    "archivedAt"
+                    "archivedAt",
+                    "archiveReason",
+                    "revocationReason",
+                    "revokedBy"
                   ]
                 }
               },
@@ -59864,6 +60005,44 @@
         "required": [
           "certificateId",
           "language"
+        ]
+      },
+      "RevokeCertificateBody": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "minLength": 10,
+            "maxLength": 2000,
+            "pattern": "\\S",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reason"
+        ]
+      },
+      "RevokeCertificateResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "revokedAt": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "revokedAt"
+            ]
+          }
+        },
+        "required": [
+          "data"
         ]
       },
       "CreateCertificateShareLinkBody": {
