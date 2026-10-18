@@ -52,3 +52,22 @@ O wrapper recusa destinos diferentes de PostgreSQL 127.0.0.1:55432/guidebook_tes
 ## Tempo efectivo
 
 Checkpoint: 17-10-2026 17:40 UTC; início global 14:56:11 UTC. Cerca de 164 minutos decorridos no sprint, incluindo ambiente, tradução, autorizações, execução e esperas. Não existe medição exclusiva fiável de engenharia por módulo. As durações finais das três suites somam 240,873 s; as repetições intermédias consumiram tempo adicional e não são contabilizadas como novos testes.
+
+## Actualização — player Chrome e encaminhamento SCORM
+
+Em 18-10-2026, **4/4 checkpoints Chrome passaram**, duração do percurso **11.194 ms** (inclui preparação após criação do browser; não é tempo de implementação). Importação ZIP pela UI com TUS real 201/204 e processamento nativo, publicação pela API, iframe SCORM, gravação de checkpoint, recarregamento com `entry=resume`, ecrã inteiro e `LMSFinish` com conclusão nativa persistida. O script terminou com código zero e limpou o curso/categoria fictícios.
+
+Pacote: `apps/web/e2e/data/scorm/files/single-scorm.zip`, sintético do upstream sob MIT. **Não é um pacote de fornecedor independente**. Actor: administrador no modo de formando nativo. Score/suspend_data e restrições de outros papéis mantêm a evidência dos testes API anteriores; não foram todos novamente demonstrados visualmente. Não há prova de SCORM 2004/xAPI/offline SCORM ou Android físico.
+
+Foram encontrados e corrigidos dois problemas de integração do ambiente/browser: upload TUS relativo chegava ao frontend estático (404); conteúdo SCORM relativo recebia o HTML da SPA em vez do pacote. O upload resolve o endereço configurado da API e configura credenciais pelo `onBeforeRequest` do tus-js-client 4.1. O preview encaminha só GET/HEAD do conteúdo SCORM para a API, mantendo a mesma origem necessária a `window.parent.API`. Conteúdo sem autenticação devolveu **401**. Quatro testes de encaminhamento verificam API separada, instalação na mesma origem, CDN sem cookies e rejeição de protocolos não HTTP.
+
+Falhas do guião corrigidas: expectativa 200 em commit/finish, quando o contrato actual devolve 201. A primeira proposta de opção `withCredentials` foi recusada pelo typecheck do tus-js-client 4.1; foi substituída pela configuração XHR suportada e o typecheck final passou. Não se alteraram respostas da API para satisfazer o teste.
+
+```sh
+source scripts/sprints/omatapalo/environment.sh
+node scripts/sprints/omatapalo/serve-preview.mjs
+# Noutro terminal, com API local activa:
+sprint_pnpm --filter api exec tsx --tsconfig ../web/tsconfig.json ../../scripts/sprints/omatapalo/browser-scorm.mts
+```
+
+O gate de interoperabilidade permanece aberto: falta pacote independente e Android. A matriz completa de verificação pública/revogação e o ecrã de histórico de certificados não foram entregues nesta execução. Os 41 testes anteriores de certificados são evidência histórica; não se declara nova validação de revogação sem a executar. A preservação de tentativas continua coberta pelas regressões registadas.

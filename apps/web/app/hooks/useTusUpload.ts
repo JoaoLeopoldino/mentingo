@@ -3,7 +3,10 @@ import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import * as tus from "tus-js-client";
 
+import { ApiClient } from "~/api/api-client";
 import { useToast } from "~/components/ui/use-toast";
+
+import { resolveTusEndpoint } from "./tus-endpoint";
 
 import type { StoredTusUpload, TusUploadArgs, TusUploadSession } from "./useTusUpload.types";
 
@@ -37,6 +40,11 @@ export const useTusUpload = () => {
         throw new Error(t("common.toast.somethingWentWrong"));
       }
 
+      const connection = resolveTusEndpoint(
+        session.tusEndpoint,
+        ApiClient.instance.defaults.baseURL,
+        window.location.origin,
+      );
       const existingUpload = resumeAdapter?.getUploadForFile(file);
       const tusHeaders = normalizeTusHeaders(session.tusHeaders ?? {});
       const tusFingerprint = `${fingerprintNamespace}:${session.uploadId}:${buildFileFingerprint(file)}`;
@@ -45,7 +53,7 @@ export const useTusUpload = () => {
         resumeAdapter?.saveUpload({
           ...session,
           uploadId: session.uploadId,
-          tusEndpoint: session.tusEndpoint,
+          tusEndpoint: connection.endpoint,
           tusHeaders,
           expiresAt: session.expiresAt,
           filename: file.name,
@@ -69,7 +77,12 @@ export const useTusUpload = () => {
           onUploadingStart?.();
 
           const upload = new tus.Upload(file, {
-            endpoint: session.tusEndpoint,
+            endpoint: connection.endpoint,
+            onBeforeRequest: (request) => {
+              // tus-js-client 4 configures browser credentials on its underlying XHR.
+              (request.getUnderlyingObject() as XMLHttpRequest).withCredentials =
+                connection.withCredentials;
+            },
             headers: tusHeaders,
             chunkSize: session.partSize ?? DEFAULT_TUS_CHUNK_SIZE,
             metadata: {

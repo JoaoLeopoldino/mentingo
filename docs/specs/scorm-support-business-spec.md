@@ -56,4 +56,8 @@ O percurso SCORM 1.2 foi validado pela API com ZIP sintético e armazenamento S3
 
 Um teste independente exporta um curso nativo para SCORM 1.2, inspecciona o manifest e reimporta o ZIP. Exportação e importação foram verificadas separadamente. O perfil final passou nove testes e excluiu um caso específico do armazenamento em memória. O detector MIME permanece determinístico nesta suite.
 
-Esta evidência não demonstra o player no navegador, Android, pacotes SCORM 2004, xAPI ou execução offline. Os relatórios do sprint identificam os comandos e limites da validação.
+A validação API acima é distinta do ensaio Chrome seguinte. Não demonstra Android, SCORM 2004, xAPI ou execução offline.
+
+Em 18-10-2026, `browser-scorm.mts` passou quatro checkpoints sobre a aplicação compilada: importação ZIP pela UI/publicação API, execução real do iframe e retoma, ecrã inteiro e conclusão nativa. Foi usado o pacote sintético MIT do upstream e o modo de formando suportado para um administrador. Não representa conformidade com um pacote de fornecedor independente nem teste de todos os papéis no navegador.
+
+O QA revelou uma dependência de encaminhamento: os conteúdos SCORM têm de manter a mesma origem para descobrir `window.parent.API`. O preview local passou a encaminhar apenas GET/HEAD de `/api/scorm/content` para a API, sem cache privado público; uma consulta não autenticada devolveu 401. Os uploads TUS resolvem agora o endereço configurado da API e incluem credenciais apenas nessa origem; endpoints CDN independentes mantêm o comportamento sem cookies. Os relatórios do sprint registam testes e limites.
