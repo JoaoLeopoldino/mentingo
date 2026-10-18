@@ -8413,5 +8413,13 @@
   "accessibility": {
     "home": "Go to homepage",
     "profilePhoto": "Profile picture"
+  },
+
+  "videoPlayback": {
+    "interrupted": "Odtwarzanie zostało przerwane. Sprawdź połączenie i spróbuj ponownie.",
+    "retry": "Ponów odtwarzanie",
+    "retrying": "Wznawianie filmu…",
+    "player": "Odtwarzacz wideo",
+    "quality": "Jakość wideo"
   }
 }

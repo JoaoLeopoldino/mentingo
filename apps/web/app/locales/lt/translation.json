@@ -8327,5 +8327,13 @@
   "accessibility": {
     "home": "Go to homepage",
     "profilePhoto": "Profile picture"
+  },
+
+  "videoPlayback": {
+    "interrupted": "Atkūrimas nutrūko. Patikrinkite ryšį ir bandykite dar kartą.",
+    "retry": "Bandyti atkurti dar kartą",
+    "retrying": "Vaizdo įrašas tęsiamas…",
+    "player": "Vaizdo įrašų leistuvas",
+    "quality": "Vaizdo kokybė"
   }
 }

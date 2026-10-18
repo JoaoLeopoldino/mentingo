@@ -8316,5 +8316,13 @@
   "accessibility": {
     "home": "Go to homepage",
     "profilePhoto": "Profile picture"
+  },
+
+  "videoPlayback": {
+    "interrupted": "Die Wiedergabe wurde unterbrochen. Prüfen Sie die Verbindung und versuchen Sie es erneut.",
+    "retry": "Wiedergabe erneut versuchen",
+    "retrying": "Video wird fortgesetzt…",
+    "player": "Videoplayer",
+    "quality": "Videoqualität"
   }
 }

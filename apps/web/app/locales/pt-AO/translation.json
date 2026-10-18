@@ -8358,5 +8358,13 @@
   "accessibility": {
     "home": "Ir para a página inicial",
     "profilePhoto": "Fotografia de perfil"
+  },
+
+  "videoPlayback": {
+    "interrupted": "A reprodução foi interrompida. Verifique a ligação e volte a tentar.",
+    "retry": "Voltar a tentar reproduzir",
+    "retrying": "A retomar o vídeo…",
+    "player": "Leitor de vídeo",
+    "quality": "Qualidade do vídeo"
   }
 }

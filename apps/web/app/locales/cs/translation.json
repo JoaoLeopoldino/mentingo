@@ -8329,5 +8329,13 @@
   "accessibility": {
     "home": "Go to homepage",
     "profilePhoto": "Profile picture"
+  },
+
+  "videoPlayback": {
+    "interrupted": "Přehrávání bylo přerušeno. Zkontrolujte připojení a zkuste to znovu.",
+    "retry": "Zkusit přehrávání znovu",
+    "retrying": "Obnovování videa…",
+    "player": "Přehrávač videa",
+    "quality": "Kvalita videa"
   }
 }

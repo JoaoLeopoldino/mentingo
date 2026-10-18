@@ -8,11 +8,13 @@ import {
 import { clamp } from "lodash-es";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { useTranslation } from "react-i18next";
 import { match } from "ts-pattern";
 import videojs from "video.js";
 
 import "video.js/dist/video-js.css";
 import "videojs-youtube";
+import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 
 import { getVideoAspectRatio } from "./aspectRatio";
@@ -30,6 +32,7 @@ import { HlsQualitySelector } from "./HlsQualitySelector";
 import "./videojs-vimeo-tech";
 import "./videoPlayer.css";
 import { useVideoCoverageTracker } from "./useVideoCoverageTracker";
+import { useVideoPlaybackRecovery } from "./useVideoPlaybackRecovery";
 
 import type { VideoAspectRatio } from "./aspectRatio";
 import type { VideoCoverageTrackingOptions } from "./videoCoverage.types";
@@ -183,6 +186,7 @@ export const VideoPlayer = ({
   pauseRequestId,
   resumeRequestId,
 }: VideoPlayerProps) => {
+  const { t } = useTranslation();
   const [controlsVisible, setControlsVisible] = useState(true);
   const [player, setPlayer] = useState<VideoJSType | null>(null);
   const [qualityControlHost, setQualityControlHost] = useState<HTMLDivElement | null>(null);
@@ -439,6 +443,13 @@ export const VideoPlayer = ({
   );
 
   const type = useMemo(() => getTypeByProvider(resolvedProvider), [resolvedProvider]);
+  const { needsRecovery, isRetrying, retry } = useVideoPlaybackRecovery(
+    player,
+    `${url}::${coverageTracking?.resourceEntityId ?? ""}`,
+    resolvedProvider === VIDEO_EMBED_PROVIDERS.SELF ||
+      resolvedProvider === VIDEO_EMBED_PROVIDERS.BUNNY ||
+      resolvedProvider === VIDEO_EMBED_PROVIDERS.UNKNOWN,
+  );
 
   const options = useMemo(
     () => ({
@@ -513,7 +524,9 @@ export const VideoPlayer = ({
     if (!player || !url) return;
 
     const sourceTypes = getSourceTypes(url, type, resolvedProvider);
-    const sourceKey = `${url}::${coverageTracking?.resourceEntityId ?? ""}::${sourceTypes.join("|")}`;
+    const sourceKey = `${url}::${coverageTracking?.resourceEntityId ?? ""}::${sourceTypes.join(
+      "|",
+    )}`;
 
     if (lastSourceRef.current === sourceKey) {
       return;
@@ -806,7 +819,7 @@ export const VideoPlayer = ({
       data-vjs-player
       data-video-player-shortcuts
       role="button"
-      aria-label="Video player"
+      aria-label={t("videoPlayback.player")}
       tabIndex={0}
       onKeyDown={handleKeyDown}
       className={cn(
@@ -817,6 +830,27 @@ export const VideoPlayer = ({
       )}
     >
       <div ref={videoRef} className="size-full" />
+      {needsRecovery &&
+        player &&
+        !player.isDisposed() &&
+        createPortal(
+          <div
+            role="status"
+            className="absolute inset-x-3 bottom-14 z-20 flex flex-wrap items-center gap-3 rounded-lg border border-neutral-200 bg-white p-3 text-neutral-950 shadow-sm"
+          >
+            <p className="body-sm flex-1">{t("videoPlayback.interrupted")}</p>
+            <Button
+              size="sm"
+              variant="outline"
+              className="!min-h-11 !rounded-md !border !border-neutral-300 !bg-white !px-3 !py-2 !text-sm !font-medium !text-neutral-950"
+              disabled={isRetrying}
+              onClick={retry}
+            >
+              {isRetrying ? t("videoPlayback.retrying") : t("videoPlayback.retry")}
+            </Button>
+          </div>,
+          player.el(),
+        )}
       {qualityControlHost &&
         createPortal(
           <HlsQualitySelector

@@ -7842,5 +7842,13 @@
   "accessibility": {
     "home": "Go to homepage",
     "profilePhoto": "Profile picture"
+  },
+
+  "videoPlayback": {
+    "interrupted": "La lecture a été interrompue. Vérifiez votre connexion et réessayez.",
+    "retry": "Relancer la lecture",
+    "retrying": "Reprise de la vidéo…",
+    "player": "Lecteur vidéo",
+    "quality": "Qualité vidéo"
   }
 }

@@ -8268,5 +8268,13 @@
   "accessibility": {
     "home": "Go to homepage",
     "profilePhoto": "Profile picture"
+  },
+
+  "videoPlayback": {
+    "interrupted": "La reproducción se ha interrumpido. Compruebe la conexión e inténtelo de nuevo.",
+    "retry": "Reintentar la reproducción",
+    "retrying": "Reanudando el vídeo…",
+    "player": "Reproductor de vídeo",
+    "quality": "Calidad del vídeo"
   }
 }
