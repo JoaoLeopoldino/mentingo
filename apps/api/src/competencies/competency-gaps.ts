@@ -57,6 +57,7 @@ export function buildCompetencyGaps(
         userId: employee.id,
         competencyId: requirement.competencyId,
         requiredLevel: requirement.minimumLevel,
+        mandatory: requirement.mandatory,
         assessmentId: decision?.id ?? null,
         currentLevel,
         status,

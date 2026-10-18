@@ -8063,7 +8063,7 @@
     "recordEvidence": "Record evidence",
     "level": "Proficiency level",
     "source": "Evidence source",
-    "evidence": "Evidence and assessment rationale",
+    "evidence": "Evidence description and rationale",
     "create": "Create competency",
     "code": "Code",
     "name": "Name",
@@ -8085,7 +8085,10 @@
       "pending": "Evidence pending assessment",
       "rejected": "Assessment rejected",
       "expired": "Assessment expired",
-      "approved": "Assessment approved"
+      "approved": "Assessment approved",
+      "revoked": "Assessment revoked",
+      "suspended": "Assessment suspended",
+      "evidence_rejected": "Evidence rejected; formal assessment required"
     },
     "errors": {
       "forbidden": "You cannot access or assess this employee.",
@@ -8095,7 +8098,92 @@
       "invalidDates": "The end, review or expiry date must follow the start date.",
       "duplicateCode": "This code already exists.",
       "failed": "The competency operation failed. Your existing records were preserved.",
-      "invalidForm": "Review the required fields and use valid values."
+      "invalidForm": "Review the required fields and use valid values.",
+      "commandConflict": "This operation identifier was already used with different content.",
+      "assessmentChanged": "The assessment changed. Refresh and review the current decision before submitting.",
+      "evidenceNotApproved": "The selected source evidence has not been accepted.",
+      "invalidPlanTransition": "This decision is not allowed in the current plan state.",
+      "planChanged": "The plan has changed. Refresh and review the decision.",
+      "activitiesIncomplete": "Report activity completion before requesting final assessment.",
+      "planAssessmentRequired": "A valid sufficient professional assessment supported by accepted evidence from this plan is required.",
+      "requirementChanged": "The requirement has changed. Refresh and review the new version."
+    },
+    "enterprise": {
+      "formalAssessments": "Formal professional assessments",
+      "separationNotice": "Reviewing evidence does not award or revoke proficiency. Record a formal assessment or an explicit restriction.",
+      "evidenceHistory": "Evidence and reviews",
+      "recordedBy": "Recorded by",
+      "evidenceType": "Evidence type",
+      "reviewEvidence": "Review evidence",
+      "rationale": "Assessment rationale",
+      "revision": "Revision",
+      "recordAssessment": "Record formal assessment",
+      "acceptedEvidence": "Accepted source evidence (optional)",
+      "restrictAssessment": "Revoke or suspend assessment",
+      "currentAssessment": "Current formal assessment",
+      "reason": "Reason",
+      "effectiveAt": "Effective date (now if empty)",
+      "suspensionUntil": "Suspension end (optional)",
+      "reviewStates": {
+        "pending": "Evidence awaiting review",
+        "approved": "Evidence accepted",
+        "rejected": "Evidence rejected"
+      },
+      "types": {
+        "self_report": "Employee submission",
+        "observation": "Professional observation",
+        "document": "Document reference",
+        "training": "Training record"
+      },
+      "claimedLevel": "Claimed level"
+    },
+    "plans": {
+      "title": "Individual development plan",
+      "notice": "Activity completion is reported and subject to review. Only a valid professional assessment establishes competency.",
+      "create": "Create development plan",
+      "target": "Target proficiency level",
+      "deadline": "Deadline",
+      "activities": "Activities (one per line; course/path applies to the first)",
+      "activity": "Activity (when reporting completion)",
+      "empty": "No development plans for this employee.",
+      "responsible": "Approving manager",
+      "reported": "Completion reported",
+      "awaitingActivity": "To be completed",
+      "action": "Plan decision",
+      "history": "Plan history",
+      "linkEvidence": "Related development plan (optional)",
+      "states": {
+        "draft": "Draft",
+        "pending_approval": "Awaiting approval",
+        "active": "In progress",
+        "submitted": "Awaiting final assessment",
+        "completed": "Completed with assessment",
+        "cancelled": "Cancelled"
+      },
+      "actions": {
+        "create": "Plan created",
+        "request_approval": "Request approval",
+        "approve": "Approve plan",
+        "report_activity": "Report activity completion",
+        "submit": "Request final assessment",
+        "return": "Return for revision",
+        "complete": "Complete with professional assessment",
+        "cancel": "Cancel plan"
+      }
+    },
+    "learningPath": "Recommended learning path",
+    "frameworks": {
+      "title": "Competency frameworks and scales",
+      "notice": "Flat categories per framework. Reusable scales provide immutable level snapshots for each competency; existing records remain valid.",
+      "create": "Create framework",
+      "categories": "Categories (one per line)",
+      "createScale": "Create reusable scale",
+      "framework": "Competency framework (optional)",
+      "scale": "Reusable scale (optional)",
+      "requirementType": "Requirement type",
+      "mandatory": "Mandatory",
+      "optional": "Optional",
+      "requirementHistory": "Requirement version history"
     }
   },
   "offlineRecovery": {

@@ -12,6 +12,8 @@ export const createCompetencySchema = Type.Object(
     name,
     description: text,
     category: name,
+    frameworkId: Type.Optional(nullableId),
+    scaleId: Type.Optional(nullableId),
     levels: Type.Array(
       Type.Object({ rank: Type.Integer({ minimum: 1, maximum: 20 }), label: name }),
       { minItems: 1, maxItems: 20 },
@@ -29,6 +31,8 @@ export const requirementSchema = Type.Object(
     jobRoleId: UUIDSchema,
     competencyId: UUIDSchema,
     minimumLevel: Type.Integer({ minimum: 1, maximum: 20 }),
+    mandatory: Type.Optional(Type.Boolean()),
+    expectedVersion: Type.Optional(Type.Integer({ minimum: 0 })),
     effectiveFrom: date,
     effectiveUntil: nullableDate,
     courseId: nullableId,
@@ -50,6 +54,7 @@ export const evidenceSchema = Type.Object(
       Type.Literal("approved"),
       Type.Literal("rejected"),
     ]),
+    developmentPlanId: Type.Optional(nullableId),
     evidenceType: Type.Optional(
       Type.Union([
         Type.Literal("observation"),
@@ -126,7 +131,18 @@ const competency = Type.Object({
   active: Type.Boolean(),
 });
 const role = Type.Object({ ...createJobRoleSchema.properties, id: UUIDSchema });
-const requirement = Type.Object({ ...requirementSchema.properties, id: UUIDSchema });
+const requirement = Type.Object({
+  ...Type.Omit(requirementSchema, ["expectedVersion"]).properties,
+  id: UUIDSchema,
+  mandatory: Type.Boolean(),
+  version: Type.Integer(),
+});
+const requirementVersion = Type.Object({
+  ...requirement.properties,
+  requirementId: UUIDSchema,
+  recordedBy: nullableId,
+  createdAt: date,
+});
 const evidence = Type.Object({
   ...evidenceSchema.properties,
   evidenceType: Type.String(),
@@ -146,6 +162,7 @@ export const competencyWorkspaceSchema = Type.Object({
   catalog: Type.Array(competency),
   roles: Type.Array(role),
   requirements: Type.Array(requirement),
+  requirementHistory: Type.Array(requirementVersion),
   units: Type.Array(Type.Object({ id: UUIDSchema, name: Type.String() })),
   employees: Type.Array(
     Type.Object({
@@ -160,6 +177,7 @@ export const competencyWorkspaceSchema = Type.Object({
       userId: UUIDSchema,
       competencyId: UUIDSchema,
       requiredLevel: Type.Integer(),
+      mandatory: Type.Boolean(),
       assessmentId: nullableId,
       currentLevel: Type.Union([Type.Integer(), Type.Null()]),
       status: Type.Union([

@@ -19,6 +19,8 @@ for (let j = 0; j < 20; j++) {
     jobRoleId: "operator",
     competencyId,
     minimumLevel: 2,
+    mandatory: true,
+    version: 1,
     effectiveFrom: "2026-01-01T00:00:00Z",
     effectiveUntil: null,
     courseId: null,

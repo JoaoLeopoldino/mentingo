@@ -1,4 +1,4 @@
-import { ConflictException, Inject, Injectable } from "@nestjs/common";
+import { BadRequestException, ConflictException, Inject, Injectable } from "@nestjs/common";
 import { and, asc, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 
 import { DatabasePg } from "src/common";
@@ -9,6 +9,7 @@ import {
   competencyLevels,
   competencyJobRoles,
   competencyRequirements,
+  competencyRequirementVersions,
   competencyAssignments,
   competencyEvidence,
   competencyEvidenceReviews,
@@ -154,20 +155,63 @@ export class CompetenciesRepository {
       .returning({ id: competencyJobRoles.id });
     return row;
   }
-  async setRequirement(body: CompetencyRequirement) {
-    const [row] = await this.db
-      .insert(competencyRequirements)
-      .values(body)
-      .onConflictDoUpdate({
-        target: [
-          competencyRequirements.tenantId,
-          competencyRequirements.jobRoleId,
-          competencyRequirements.competencyId,
-        ],
-        set: body,
-      })
-      .returning({ id: competencyRequirements.id });
-    return row;
+  async requirementHistory() {
+    return this.db
+      .select()
+      .from(competencyRequirementVersions)
+      .orderBy(desc(competencyRequirementVersions.version));
+  }
+  async setRequirement(body: CompetencyRequirement, actorId: UUIDType) {
+    return this.db.transaction(async (trx) => {
+      await trx.execute(
+        sql`SELECT pg_advisory_xact_lock(hashtextextended(${`competency-requirement:${body.jobRoleId}:${body.competencyId}`}, 0))`,
+      );
+      const [current] = await trx
+        .select()
+        .from(competencyRequirements)
+        .where(
+          and(
+            eq(competencyRequirements.jobRoleId, body.jobRoleId),
+            eq(competencyRequirements.competencyId, body.competencyId),
+          ),
+        );
+      if ((current?.version ?? 0) !== (body.expectedVersion ?? 0))
+        throw new ConflictException("competencies.errors.requirementChanged");
+      const { expectedVersion: _expected, ...values } = body;
+      const data = {
+        ...values,
+        mandatory: body.mandatory ?? true,
+        version: (current?.version ?? 0) + 1,
+      };
+      const [row] = await trx
+        .insert(competencyRequirements)
+        .values(data)
+        .onConflictDoUpdate({
+          target: [
+            competencyRequirements.tenantId,
+            competencyRequirements.jobRoleId,
+            competencyRequirements.competencyId,
+          ],
+          set: data,
+        })
+        .returning();
+      await trx
+        .insert(competencyRequirementVersions)
+        .values({
+          requirementId: row.id,
+          jobRoleId: row.jobRoleId,
+          competencyId: row.competencyId,
+          minimumLevel: row.minimumLevel,
+          mandatory: row.mandatory,
+          version: row.version,
+          effectiveFrom: row.effectiveFrom,
+          effectiveUntil: row.effectiveUntil,
+          courseId: row.courseId,
+          learningPathId: row.learningPathId,
+          recordedBy: actorId,
+        });
+      return { id: row.id };
+    });
   }
   async assign(body: CompetencyAssignment) {
     const [row] = await this.db
@@ -233,11 +277,21 @@ export class CompetenciesRepository {
     return row;
   }
   async reviewEvidence(body: EvidenceReview, actorId: UUIDType) {
-    const [row] = await this.db
-      .insert(competencyEvidenceReviews)
-      .values({ ...body, reviewerId: actorId })
-      .returning({ id: competencyEvidenceReviews.id });
-    return row;
+    return this.db.transaction(async (trx) => {
+      const [proof] = await trx
+        .select()
+        .from(competencyEvidence)
+        .where(eq(competencyEvidence.id, body.evidenceId));
+      if (!proof) throw new BadRequestException("competencies.errors.invalidReference");
+      await trx.execute(
+        sql`SELECT pg_advisory_xact_lock(hashtextextended(${`competency:${proof.userId}:${proof.competencyId}`}, 0))`,
+      );
+      const [row] = await trx
+        .insert(competencyEvidenceReviews)
+        .values({ ...body, reviewerId: actorId })
+        .returning({ id: competencyEvidenceReviews.id });
+      return row;
+    });
   }
   async assess(body: FormalAssessment, actorId: UUIDType) {
     const commandHash = hashCompetencyCommand(body, actorId);
@@ -267,6 +321,25 @@ export class CompetenciesRepository {
         .limit(1);
       if ((current?.id ?? null) !== body.expectedAssessmentId)
         throw new ConflictException("competencies.errors.assessmentChanged");
+      if (body.sourceEvidenceId) {
+        const [proof] = await trx
+          .select()
+          .from(competencyEvidence)
+          .where(eq(competencyEvidence.id, body.sourceEvidenceId));
+        const [review] = await trx
+          .select()
+          .from(competencyEvidenceReviews)
+          .where(eq(competencyEvidenceReviews.evidenceId, body.sourceEvidenceId))
+          .orderBy(desc(competencyEvidenceReviews.createdAt), desc(competencyEvidenceReviews.id))
+          .limit(1);
+        if (
+          !proof ||
+          proof.userId !== body.userId ||
+          proof.competencyId !== body.competencyId ||
+          (review?.status ?? proof.status) !== "approved"
+        )
+          throw new BadRequestException("competencies.errors.evidenceNotApproved");
+      }
       const { expectedAssessmentId, ...data } = body;
       const [row] = await trx
         .insert(competencyAssessments)

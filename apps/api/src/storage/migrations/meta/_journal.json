@@ -1604,6 +1604,34 @@
       "when": 1792322796715,
       "tag": "0228_competency_decisions_backfill",
       "breakpoints": true
+    },
+    {
+      "idx": 229,
+      "version": "7",
+      "when": 1792324673070,
+      "tag": "0229_enterprise_development_plans",
+      "breakpoints": true
+    },
+    {
+      "idx": 230,
+      "version": "7",
+      "when": 1792324675899,
+      "tag": "0230_development_plans_rls",
+      "breakpoints": true
+    },
+    {
+      "idx": 231,
+      "version": "7",
+      "when": 1792325188070,
+      "tag": "0231_competency_frameworks_and_requirement_versions",
+      "breakpoints": true
+    },
+    {
+      "idx": 232,
+      "version": "7",
+      "when": 1792325191827,
+      "tag": "0232_competency_frameworks_rls_backfill",
+      "breakpoints": true
     }
   ]
 }

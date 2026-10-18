@@ -7692,7 +7692,7 @@
     "recordEvidence": "Registar evidência",
     "level": "Nível de proficiência",
     "source": "Origem da evidência",
-    "evidence": "Evidência e fundamentação da avaliação",
+    "evidence": "Descrição e fundamentação da evidência",
     "create": "Criar competência",
     "code": "Código",
     "name": "Nome",
@@ -7714,7 +7714,10 @@
       "pending": "Evidência por avaliar",
       "rejected": "Avaliação recusada",
       "expired": "Avaliação expirada",
-      "approved": "Avaliação aprovada"
+      "approved": "Avaliação aprovada",
+      "revoked": "Avaliação revogada",
+      "suspended": "Avaliação suspensa",
+      "evidence_rejected": "Evidência recusada; avaliação formal necessária"
     },
     "errors": {
       "forbidden": "Não pode consultar ou avaliar este colaborador.",
@@ -7724,7 +7727,92 @@
       "invalidDates": "A data final, de revisão ou de validade deve ser posterior à data inicial.",
       "duplicateCode": "Este código já existe.",
       "failed": "Não foi possível concluir a operação. Os registos existentes foram preservados.",
-      "invalidForm": "Reveja os campos obrigatórios e introduza valores válidos."
+      "invalidForm": "Reveja os campos obrigatórios e introduza valores válidos.",
+      "commandConflict": "Este identificador de operação já foi utilizado com conteúdo diferente.",
+      "assessmentChanged": "A avaliação mudou. Actualize e reveja a decisão corrente antes de submeter.",
+      "evidenceNotApproved": "A evidência de suporte seleccionada não foi aceite.",
+      "invalidPlanTransition": "Esta decisão não é permitida no estado actual do plano.",
+      "planChanged": "O plano foi alterado. Actualize a página e reveja a decisão.",
+      "activitiesIncomplete": "Declare a conclusão das actividades antes de solicitar a avaliação final.",
+      "planAssessmentRequired": "É necessária uma avaliação profissional válida, suficiente e fundamentada numa evidência aceite deste plano.",
+      "requirementChanged": "O requisito foi alterado. Actualize a página e reveja a nova versão."
+    },
+    "enterprise": {
+      "formalAssessments": "Avaliações profissionais formais",
+      "separationNotice": "A revisão de evidências não atribui nem revoga proficiência. Registe uma avaliação formal ou uma restrição explícita.",
+      "evidenceHistory": "Evidências e revisões",
+      "recordedBy": "Registado por",
+      "evidenceType": "Tipo de evidência",
+      "reviewEvidence": "Rever evidência",
+      "rationale": "Fundamentação da decisão",
+      "revision": "Revisão",
+      "recordAssessment": "Registar avaliação formal",
+      "acceptedEvidence": "Evidência de suporte aceite (opcional)",
+      "restrictAssessment": "Revogar ou suspender avaliação",
+      "currentAssessment": "Avaliação formal corrente",
+      "reason": "Motivo",
+      "effectiveAt": "Data efectiva (agora se vazia)",
+      "suspensionUntil": "Fim da suspensão (opcional)",
+      "reviewStates": {
+        "pending": "Evidência por rever",
+        "approved": "Evidência aceite",
+        "rejected": "Evidência recusada"
+      },
+      "types": {
+        "self_report": "Apresentação do colaborador",
+        "observation": "Observação profissional",
+        "document": "Referência documental",
+        "training": "Registo de formação"
+      },
+      "claimedLevel": "Nível proposto"
+    },
+    "plans": {
+      "title": "Plano individual de desenvolvimento",
+      "notice": "A conclusão de actividades é declarada e fica sujeita a revisão. Só uma avaliação profissional válida demonstra a competência.",
+      "create": "Criar plano de desenvolvimento",
+      "target": "Nível pretendido",
+      "deadline": "Prazo",
+      "activities": "Actividades (uma por linha; formação/percurso associado à primeira)",
+      "activity": "Actividade (para declarar conclusão)",
+      "empty": "Não existem planos para este colaborador.",
+      "responsible": "Responsável pela aprovação",
+      "reported": "Conclusão declarada",
+      "awaitingActivity": "Por realizar",
+      "action": "Decisão sobre o plano",
+      "history": "Histórico do plano",
+      "linkEvidence": "Plano de desenvolvimento associado (opcional)",
+      "states": {
+        "draft": "Rascunho",
+        "pending_approval": "Aguarda aprovação",
+        "active": "Em curso",
+        "submitted": "Aguarda avaliação final",
+        "completed": "Concluído com avaliação",
+        "cancelled": "Cancelado"
+      },
+      "actions": {
+        "create": "Plano criado",
+        "request_approval": "Solicitar aprovação",
+        "approve": "Aprovar plano",
+        "report_activity": "Declarar actividade concluída",
+        "submit": "Solicitar avaliação final",
+        "return": "Devolver para revisão",
+        "complete": "Concluir com avaliação profissional",
+        "cancel": "Cancelar plano"
+      }
+    },
+    "learningPath": "Percurso de aprendizagem recomendado",
+    "frameworks": {
+      "title": "Frameworks e escalas de competências",
+      "notice": "Categorias simples por framework. As escalas são reutilizadas como cópias imutáveis dos níveis de cada competência; os registos existentes mantêm-se válidos.",
+      "create": "Criar framework",
+      "categories": "Categorias (uma por linha)",
+      "createScale": "Criar escala reutilizável",
+      "framework": "Framework de competências (opcional)",
+      "scale": "Escala reutilizável (opcional)",
+      "requirementType": "Tipo de requisito",
+      "mandatory": "Obrigatório",
+      "optional": "Opcional",
+      "requirementHistory": "Histórico de versões dos requisitos"
     }
   },
   "offlineRecovery": {

@@ -6,6 +6,10 @@ import request from "supertest";
 
 import { TenantDbRunnerService } from "src/storage/db/tenant-db-runner.service";
 import {
+  competencyFrameworks,
+  competencyRequirementVersions,
+  competencyDevelopmentPlans,
+  competencyPlanHistory,
   competencyAssessments,
   competencyEvidenceReviews,
   competencyRevocations,
@@ -553,4 +557,182 @@ describe("Enterprise competencies with real tenant RLS", () => {
       ]),
     );
   });
+  it("completes a development plan only after a separate evidence-backed professional assessment", async () => {
+    const competencyId = await create();
+    const planId = randomUUID();
+    const createBody = {
+      id: planId,
+      userId: employeeId,
+      competencyId,
+      title: "Desenvolver utilização segura de EPI",
+      targetLevel: 2,
+      deadline: "2030-12-31T00:00:00Z",
+      activities: [
+        { title: "Formação e observação presencial", courseId: null, learningPathId: null },
+      ],
+    };
+    const createPlan = (body = createBody, cookie = employeeCookie) =>
+      request(app.getHttpServer())
+        .post("/api/competencies/development-plans")
+        .set("Cookie", cookie)
+        .send(body);
+    const list = (cookie = employeeCookie) =>
+      request(app.getHttpServer()).get("/api/competencies/development-plans").set("Cookie", cookie);
+    await createPlan().expect(201);
+    await createPlan().expect(201);
+    await createPlan({ ...createBody, title: "Conflicting retry" }).expect(409);
+    await createPlan({ ...createBody, id: randomUUID(), userId: outsiderId }).expect(403);
+    const command = (
+      action: string,
+      expectedVersion: number,
+      cookie = employeeCookie,
+      activityId: string | null = null,
+      id = randomUUID(),
+    ) =>
+      request(app.getHttpServer())
+        .post(`/api/competencies/development-plans/${planId}/decisions`)
+        .set("Cookie", cookie)
+        .send({
+          id,
+          action,
+          expectedVersion,
+          rationale: "Decisão fundamentada fictícia",
+          activityId,
+        });
+    await command("request_approval", 1).expect(201);
+    await command("approve", 2).expect(403);
+    const approvalId = randomUUID();
+    const concurrent = await Promise.all([
+      command("approve", 2, managerCookie, null, approvalId),
+      command("approve", 2, managerCookie),
+    ]);
+    expect(concurrent.map((x) => x.status).sort()).toEqual([201, 409]);
+    await command("report_activity", 2).expect(409);
+    let data = (await list().expect(200)).body.data;
+    const activity = data.activities.find((x: { planId: string }) => x.planId === planId);
+    await command("submit", 3).expect(400);
+    await command("report_activity", 3, employeeCookie, activity.id).expect(201);
+    expect(
+      (await list().expect(200)).body.data.plans.find((x: { id: string }) => x.id === planId),
+    ).toMatchObject({ state: "active", version: 4, responsibleId: managerId });
+    await command("submit", 4).expect(201);
+    await command("complete", 5, managerCookie).expect(400); // training/activity alone is not professional proficiency
+    const proof = await request(app.getHttpServer())
+      .post("/api/competencies/evidence")
+      .set("Cookie", employeeCookie)
+      .send({ ...evidence(competencyId, "pending", employeeId, 2), developmentPlanId: planId })
+      .expect(201);
+    await request(app.getHttpServer())
+      .post("/api/competencies/evidence-reviews")
+      .set("Cookie", managerCookie)
+      .send({
+        evidenceId: proof.body.data.id,
+        status: "approved",
+        rationale: "Observação presencial confirmada",
+      })
+      .expect(201);
+    const assessmentId = randomUUID();
+    await request(app.getHttpServer())
+      .post("/api/competencies/assessments")
+      .set("Cookie", managerCookie)
+      .send({
+        id: assessmentId,
+        userId: employeeId,
+        competencyId,
+        level: 2,
+        expectedAssessmentId: null,
+        sourceEvidenceId: proof.body.data.id,
+        rationale: "Avaliação profissional independente do curso",
+        expiresAt: null,
+        reviewAt: null,
+      })
+      .expect(201);
+    const completionId = randomUUID();
+    await command("complete", 5, managerCookie, null, completionId).expect(201);
+    await command("complete", 5, managerCookie, null, completionId).expect(201);
+    data = (await list().expect(200)).body.data;
+    expect(data.plans.find((x: { id: string }) => x.id === planId)).toMatchObject({
+      state: "completed",
+      version: 6,
+      completedAssessmentId: assessmentId,
+    });
+    expect(data.history.filter((x: { planId: string }) => x.planId === planId)).toHaveLength(6);
+    await command("cancel", 6).expect(400);
+    await request(app.getHttpServer())
+      .get("/api/competencies/development-plans")
+      .query({ userId: outsiderId })
+      .set("Cookie", managerCookie)
+      .expect(403);
+    const runner = app.get(TenantDbRunnerService);
+    const [row] = await db
+      .select()
+      .from(competencyDevelopmentPlans)
+      .where(eq(competencyDevelopmentPlans.id, planId));
+    await runner.runWithTenant(row.tenantId, async () => {
+      const scoped = app.get<DatabasePg>("DB");
+      expect(
+        await scoped
+          .delete(competencyPlanHistory)
+          .where(eq(competencyPlanHistory.planId, planId))
+          .returning(),
+      ).toHaveLength(0);
+    });
+    const [otherTenant] = await dbAdmin
+      .insert(tenants)
+      .values({ name: "Other plan tenant", host: `https://${randomUUID()}.local` })
+      .returning();
+    await runner.runWithTenant(otherTenant.id, async () => {
+      const scoped = app.get<DatabasePg>("DB");
+      expect(
+        await scoped
+          .select()
+          .from(competencyDevelopmentPlans)
+          .where(eq(competencyDevelopmentPlans.id, planId)),
+      ).toHaveLength(0);
+      expect(
+        await scoped
+          .select()
+          .from(competencyPlanHistory)
+          .where(eq(competencyPlanHistory.planId, planId)),
+      ).toHaveLength(0);
+    });
+  });
+  it("reuses immutable scales in frameworks and versions mandatory or optional professional requirements", async () => {
+    const framework = await request(app.getHttpServer()).post("/api/competencies/frameworks").set("Cookie", adminCookie).send({ code: randomUUID().toUpperCase(), name: "Operações Angola", description: "Luanda, Huíla e Benguela", categories: ["Segurança", "Operação"] }).expect(201);
+    const levels = [{ rank: 1, label: "Iniciado" }, { rank: 2, label: "Autónomo" }];
+    const scale = await request(app.getHttpServer()).post("/api/competencies/scales").set("Cookie", adminCookie).send({ code: randomUUID().toUpperCase(), name: "Proficiência operacional", levels }).expect(201);
+    const body = { code: randomUUID().toUpperCase(), name: "EPI com escala", description: "Avaliação profissional", category: "Segurança", levels, frameworkId: framework.body.data.id, scaleId: scale.body.data.id };
+    const catalog = await request(app.getHttpServer()).post("/api/competencies/catalog").set("Cookie", adminCookie).send(body).expect(201);
+    const competencyId = catalog.body.data.id;
+    await request(app.getHttpServer()).post("/api/competencies/catalog").set("Cookie", adminCookie).send({ ...body, code: randomUUID().toUpperCase(), category: "Unknown category" }).expect(400);
+    await request(app.getHttpServer()).post("/api/competencies/catalog").set("Cookie", adminCookie).send({ ...body, code: randomUUID().toUpperCase(), levels: [{ rank: 1, label: "Different scale" }] }).expect(400);
+    await request(app.getHttpServer()).get("/api/competencies/framework-setup").set("Cookie", employeeCookie).expect(403);
+    const role = await request(app.getHttpServer()).post("/api/competencies/roles").set("Cookie", adminCookie).send({ code: randomUUID().toUpperCase(), name: "Técnico de segurança" }).expect(201);
+    const rule = { jobRoleId: role.body.data.id, competencyId, minimumLevel: 1, mandatory: true, effectiveFrom: "2026-01-01T00:00:00Z", effectiveUntil: null, courseId: null, learningPathId: null };
+    const set = (payload: object) => request(app.getHttpServer()).put("/api/competencies/requirements").set("Cookie", adminCookie).send(payload);
+    const requirement = await set(rule).expect(200);
+    const concurrent = await Promise.all([set({ ...rule, minimumLevel: 2, mandatory: false, expectedVersion: 1 }), set({ ...rule, minimumLevel: 2, mandatory: false, expectedVersion: 1 })]);
+    expect(concurrent.map(x => x.status).sort()).toEqual([200, 409]);
+    await set(rule).expect(409);
+    await request(app.getHttpServer()).put("/api/competencies/assignments").set("Cookie", adminCookie).send({ userId: employeeId, jobRoleId: role.body.data.id, organizationalUnitId: unitId }).expect(200);
+    let data = (await workspace(employeeCookie).expect(200)).body.data;
+    expect(data.requirementHistory.filter((x: { requirementId: string }) => x.requirementId === requirement.body.data.id)).toHaveLength(2);
+    expect(data.matrix.find((x: { competencyId: string }) => x.competencyId === competencyId)).toMatchObject({ requiredLevel: 2, mandatory: false });
+    await set({ ...rule, minimumLevel: 1, expectedVersion: 2, effectiveFrom: "2030-01-01T00:00:00Z" }).expect(200);
+    data = (await workspace(employeeCookie).expect(200)).body.data;
+    expect(data.matrix.find((x: { competencyId: string }) => x.competencyId === competencyId)).toMatchObject({ requiredLevel: 2, mandatory: false });
+    const runner = app.get(TenantDbRunnerService);
+    const [row] = await db.select().from(competencyFrameworks).where(eq(competencyFrameworks.id, framework.body.data.id));
+    await runner.runWithTenant(row.tenantId, async () => {
+      const scoped = app.get<DatabasePg>("DB");
+      expect(await scoped.update(competencyRequirementVersions).set({ minimumLevel: 1 }).where(eq(competencyRequirementVersions.requirementId, requirement.body.data.id)).returning()).toHaveLength(0);
+    });
+    const [otherTenant] = await dbAdmin.insert(tenants).values({ name: "Other framework tenant", host: `https://${randomUUID()}.local` }).returning();
+    await runner.runWithTenant(otherTenant.id, async () => {
+      const scoped = app.get<DatabasePg>("DB");
+      expect(await scoped.select().from(competencyFrameworks).where(eq(competencyFrameworks.id, framework.body.data.id))).toHaveLength(0);
+      expect(await scoped.select().from(competencyRequirementVersions).where(eq(competencyRequirementVersions.requirementId, requirement.body.data.id))).toHaveLength(0);
+    });
+  });
+
 });

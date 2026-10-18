@@ -23383,6 +23383,166 @@
           }
         }
       }
+    },
+    "/api/competencies/development-plans": {
+      "get": {
+        "operationId": "CompetenciesController_getDevelopmentPlans",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDevelopmentPlansResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "CompetenciesController_createDevelopmentPlan",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDevelopmentPlanBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateDevelopmentPlanResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/competencies/development-plans/{id}/decisions": {
+      "post": {
+        "operationId": "CompetenciesController_decideDevelopmentPlan",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecideDevelopmentPlanBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecideDevelopmentPlanResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/competencies/framework-setup": {
+      "get": {
+        "operationId": "CompetenciesController_getCompetencyFrameworkSetup",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCompetencyFrameworkSetupResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/competencies/frameworks": {
+      "post": {
+        "operationId": "CompetenciesController_createCompetencyFramework",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCompetencyFrameworkBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCompetencyFrameworkResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/competencies/scales": {
+      "post": {
+        "operationId": "CompetenciesController_createCompetencyScale",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCompetencyScaleBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCompetencyScaleResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "info": {
@@ -190698,6 +190858,28 @@
                       "pattern": "[^ ]",
                       "type": "string"
                     },
+                    "frameworkId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "scaleId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
                     "levels": {
                       "minItems": 1,
                       "maxItems": 20,
@@ -190789,6 +190971,9 @@
                       "maximum": 20,
                       "type": "integer"
                     },
+                    "mandatory": {
+                      "type": "boolean"
+                    },
                     "effectiveFrom": {
                       "format": "date-time",
                       "type": "string"
@@ -190829,17 +191014,124 @@
                     "id": {
                       "format": "uuid",
                       "type": "string"
+                    },
+                    "version": {
+                      "type": "integer"
                     }
                   },
                   "required": [
                     "jobRoleId",
                     "competencyId",
                     "minimumLevel",
+                    "mandatory",
                     "effectiveFrom",
                     "effectiveUntil",
                     "courseId",
                     "learningPathId",
-                    "id"
+                    "id",
+                    "version"
+                  ]
+                }
+              },
+              "requirementHistory": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "jobRoleId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "competencyId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "minimumLevel": {
+                      "minimum": 1,
+                      "maximum": 20,
+                      "type": "integer"
+                    },
+                    "mandatory": {
+                      "type": "boolean"
+                    },
+                    "effectiveFrom": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "effectiveUntil": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "courseId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "learningPathId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": "integer"
+                    },
+                    "requirementId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "recordedBy": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "createdAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "jobRoleId",
+                    "competencyId",
+                    "minimumLevel",
+                    "mandatory",
+                    "effectiveFrom",
+                    "effectiveUntil",
+                    "courseId",
+                    "learningPathId",
+                    "id",
+                    "version",
+                    "requirementId",
+                    "recordedBy",
+                    "createdAt"
                   ]
                 }
               },
@@ -190920,6 +191212,9 @@
                     },
                     "requiredLevel": {
                       "type": "integer"
+                    },
+                    "mandatory": {
+                      "type": "boolean"
                     },
                     "assessmentId": {
                       "anyOf": [
@@ -191009,6 +191304,7 @@
                     "userId",
                     "competencyId",
                     "requiredLevel",
+                    "mandatory",
                     "assessmentId",
                     "currentLevel",
                     "status",
@@ -191048,6 +191344,17 @@
                         {
                           "const": "rejected",
                           "type": "string"
+                        }
+                      ]
+                    },
+                    "developmentPlanId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
                         }
                       ]
                     },
@@ -191371,6 +191678,7 @@
               "catalog",
               "roles",
               "requirements",
+              "requirementHistory",
               "units",
               "employees",
               "matrix",
@@ -191410,6 +191718,28 @@
             "maxLength": 200,
             "pattern": "[^ ]",
             "type": "string"
+          },
+          "frameworkId": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "scaleId": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "levels": {
             "minItems": 1,
@@ -191556,6 +191886,13 @@
             "maximum": 20,
             "type": "integer"
           },
+          "mandatory": {
+            "type": "boolean"
+          },
+          "expectedVersion": {
+            "minimum": 0,
+            "type": "integer"
+          },
           "effectiveFrom": {
             "format": "date-time",
             "type": "string"
@@ -191697,6 +192034,17 @@
               {
                 "const": "rejected",
                 "type": "string"
+              }
+            ]
+          },
+          "developmentPlanId": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -191999,6 +192347,786 @@
         ]
       },
       "RevokeCompetencyAssessmentResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "GetDevelopmentPlansResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "plans": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "userId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "competencyId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "targetLevel": {
+                      "minimum": 1,
+                      "maximum": 20,
+                      "type": "integer"
+                    },
+                    "title": {
+                      "minLength": 1,
+                      "maxLength": 200,
+                      "pattern": "[^ ]",
+                      "type": "string"
+                    },
+                    "deadline": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "state": {
+                      "anyOf": [
+                        {
+                          "const": "draft",
+                          "type": "string"
+                        },
+                        {
+                          "const": "pending_approval",
+                          "type": "string"
+                        },
+                        {
+                          "const": "active",
+                          "type": "string"
+                        },
+                        {
+                          "const": "submitted",
+                          "type": "string"
+                        },
+                        {
+                          "const": "completed",
+                          "type": "string"
+                        },
+                        {
+                          "const": "cancelled",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "version": {
+                      "type": "integer"
+                    },
+                    "responsibleId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "createdBy": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "completedAssessmentId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "userId",
+                    "competencyId",
+                    "targetLevel",
+                    "title",
+                    "deadline",
+                    "state",
+                    "version",
+                    "responsibleId",
+                    "createdBy",
+                    "completedAssessmentId",
+                    "createdAt"
+                  ]
+                }
+              },
+              "activities": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "planId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "title": {
+                      "minLength": 1,
+                      "maxLength": 4000,
+                      "pattern": "[^ ]",
+                      "type": "string"
+                    },
+                    "courseId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "learningPathId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "reportedAt": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "reportedBy": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "planId",
+                    "title",
+                    "courseId",
+                    "learningPathId",
+                    "reportedAt",
+                    "reportedBy"
+                  ]
+                }
+              },
+              "history": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "planId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "actorId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "action": {
+                      "type": "string"
+                    },
+                    "rationale": {
+                      "minLength": 1,
+                      "maxLength": 4000,
+                      "pattern": "[^ ]",
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": "integer"
+                    },
+                    "fromState": {
+                      "anyOf": [
+                        {
+                          "anyOf": [
+                            {
+                              "const": "draft",
+                              "type": "string"
+                            },
+                            {
+                              "const": "pending_approval",
+                              "type": "string"
+                            },
+                            {
+                              "const": "active",
+                              "type": "string"
+                            },
+                            {
+                              "const": "submitted",
+                              "type": "string"
+                            },
+                            {
+                              "const": "completed",
+                              "type": "string"
+                            },
+                            {
+                              "const": "cancelled",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "toState": {
+                      "anyOf": [
+                        {
+                          "const": "draft",
+                          "type": "string"
+                        },
+                        {
+                          "const": "pending_approval",
+                          "type": "string"
+                        },
+                        {
+                          "const": "active",
+                          "type": "string"
+                        },
+                        {
+                          "const": "submitted",
+                          "type": "string"
+                        },
+                        {
+                          "const": "completed",
+                          "type": "string"
+                        },
+                        {
+                          "const": "cancelled",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "activityId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "assessmentId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "planId",
+                    "actorId",
+                    "action",
+                    "rationale",
+                    "version",
+                    "fromState",
+                    "toState",
+                    "activityId",
+                    "assessmentId",
+                    "createdAt"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "plans",
+              "activities",
+              "history"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "CreateDevelopmentPlanBody": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "userId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "competencyId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "targetLevel": {
+            "minimum": 1,
+            "maximum": 20,
+            "type": "integer"
+          },
+          "title": {
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "[^ ]",
+            "type": "string"
+          },
+          "deadline": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "activities": {
+            "minItems": 1,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "minLength": 1,
+                  "maxLength": 4000,
+                  "pattern": "[^ ]",
+                  "type": "string"
+                },
+                "courseId": {
+                  "anyOf": [
+                    {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "learningPathId": {
+                  "anyOf": [
+                    {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "title",
+                "courseId",
+                "learningPathId"
+              ]
+            }
+          }
+        },
+        "required": [
+          "id",
+          "userId",
+          "competencyId",
+          "targetLevel",
+          "title",
+          "deadline",
+          "activities"
+        ]
+      },
+      "CreateDevelopmentPlanResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "DecideDevelopmentPlanBody": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "expectedVersion": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "action": {
+            "anyOf": [
+              {
+                "const": "request_approval",
+                "type": "string"
+              },
+              {
+                "const": "approve",
+                "type": "string"
+              },
+              {
+                "const": "report_activity",
+                "type": "string"
+              },
+              {
+                "const": "submit",
+                "type": "string"
+              },
+              {
+                "const": "return",
+                "type": "string"
+              },
+              {
+                "const": "complete",
+                "type": "string"
+              },
+              {
+                "const": "cancel",
+                "type": "string"
+              }
+            ]
+          },
+          "rationale": {
+            "minLength": 1,
+            "maxLength": 4000,
+            "pattern": "[^ ]",
+            "type": "string"
+          },
+          "activityId": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "expectedVersion",
+          "action",
+          "rationale",
+          "activityId"
+        ]
+      },
+      "DecideDevelopmentPlanResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "GetCompetencyFrameworkSetupResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "frameworks": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "minLength": 1,
+                      "maxLength": 60,
+                      "pattern": "^[A-Z0-9_-]+$",
+                      "type": "string"
+                    },
+                    "name": {
+                      "minLength": 1,
+                      "maxLength": 200,
+                      "pattern": "[^ ]",
+                      "type": "string"
+                    },
+                    "description": {
+                      "maxLength": 4000,
+                      "type": "string"
+                    },
+                    "categories": {
+                      "minItems": 1,
+                      "maxItems": 30,
+                      "uniqueItems": true,
+                      "type": "array",
+                      "items": {
+                        "minLength": 1,
+                        "maxLength": 200,
+                        "pattern": "[^ ]",
+                        "type": "string"
+                      }
+                    },
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "active": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "name",
+                    "description",
+                    "categories",
+                    "id",
+                    "active"
+                  ]
+                }
+              },
+              "scales": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "minLength": 1,
+                      "maxLength": 60,
+                      "pattern": "^[A-Z0-9_-]+$",
+                      "type": "string"
+                    },
+                    "name": {
+                      "minLength": 1,
+                      "maxLength": 200,
+                      "pattern": "[^ ]",
+                      "type": "string"
+                    },
+                    "levels": {
+                      "minItems": 1,
+                      "maxItems": 20,
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "rank": {
+                            "minimum": 1,
+                            "maximum": 20,
+                            "type": "integer"
+                          },
+                          "label": {
+                            "minLength": 1,
+                            "maxLength": 200,
+                            "pattern": "[^ ]",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "rank",
+                          "label"
+                        ]
+                      }
+                    },
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "name",
+                    "levels",
+                    "id"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "frameworks",
+              "scales"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "CreateCompetencyFrameworkBody": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "code": {
+            "minLength": 1,
+            "maxLength": 60,
+            "pattern": "^[A-Z0-9_-]+$",
+            "type": "string"
+          },
+          "name": {
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "[^ ]",
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 4000,
+            "type": "string"
+          },
+          "categories": {
+            "minItems": 1,
+            "maxItems": 30,
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "minLength": 1,
+              "maxLength": 200,
+              "pattern": "[^ ]",
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "code",
+          "name",
+          "description",
+          "categories"
+        ]
+      },
+      "CreateCompetencyFrameworkResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "CreateCompetencyScaleBody": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "code": {
+            "minLength": 1,
+            "maxLength": 60,
+            "pattern": "^[A-Z0-9_-]+$",
+            "type": "string"
+          },
+          "name": {
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "[^ ]",
+            "type": "string"
+          },
+          "levels": {
+            "minItems": 1,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rank": {
+                  "minimum": 1,
+                  "maximum": 20,
+                  "type": "integer"
+                },
+                "label": {
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "pattern": "[^ ]",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "rank",
+                "label"
+              ]
+            }
+          }
+        },
+        "required": [
+          "code",
+          "name",
+          "levels"
+        ]
+      },
+      "CreateCompetencyScaleResponse": {
         "type": "object",
         "properties": {
           "data": {

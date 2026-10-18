@@ -1,0 +1,32 @@
+import { useMutation } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
+
+import { useToast } from "~/components/ui/use-toast";
+
+import { ApiClient } from "../api-client";
+import { competencyWorkspaceKey } from "../queries/useCompetencyWorkspace";
+import { developmentPlansKey } from "../queries/useDevelopmentPlans";
+import { queryClient } from "../queryClient";
+import { getTranslatedApiErrorMessage } from "../utils/getTranslatedApiErrorMessage";
+export function useDecideDevelopmentPlan() {
+  const { t } = useTranslation();
+  const { toast } = useToast();
+  return useMutation({
+    mutationFn: async (input: {
+      id: string;
+      body: Parameters<typeof ApiClient.api.competenciesControllerDecideDevelopmentPlan>[1];
+    }) => ApiClient.api.competenciesControllerDecideDevelopmentPlan(input.id, input.body),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: competencyWorkspaceKey }),
+        queryClient.invalidateQueries({ queryKey: developmentPlansKey }),
+      ]);
+      toast({ title: t("competencies.saved") });
+    },
+    onError: (error) =>
+      toast({
+        variant: "destructive",
+        title: getTranslatedApiErrorMessage(error, t, t("competencies.errors.failed")),
+      }),
+  });
+}

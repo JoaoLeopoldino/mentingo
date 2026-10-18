@@ -8,7 +8,10 @@ import {
 import { type SupportedLanguages, PERMISSIONS, hasPermission } from "@repo/shared";
 
 import { CompetenciesRepository } from "./competencies.repository";
+import { CompetencyFrameworksRepository } from "./competency-frameworks.repository";
 import { buildCompetencyGaps } from "./competency-gaps";
+import { resolveCompetencyRequirements } from "./competency-requirement-versions";
+import { DevelopmentPlansRepository } from "./development-plans.repository";
 
 import type {
   CreateCompetency,
@@ -21,11 +24,20 @@ import type {
   CompetencyRevocation,
   EvidenceReview,
 } from "./competencies.schema";
+import type {
+  CreateCompetencyFramework,
+  CreateCompetencyScale,
+} from "./competency-frameworks.schema";
+import type { CreateDevelopmentPlan, DevelopmentPlanCommand } from "./development-plans.schema";
 import type { UUIDType } from "src/common";
 import type { CurrentUserType } from "src/common/types/current-user.type";
 @Injectable()
 export class CompetenciesService {
-  constructor(private readonly competenciesRepository: CompetenciesRepository) {}
+  constructor(
+    private readonly competenciesRepository: CompetenciesRepository,
+    private readonly developmentPlansRepository: DevelopmentPlansRepository,
+    private readonly competencyFrameworksRepository: CompetencyFrameworksRepository,
+  ) {}
   private manage(actor: CurrentUserType) {
     if (!hasPermission(actor.permissions, PERMISSIONS.COMPETENCY_MANAGE))
       throw new ForbiddenException("competencies.errors.forbidden");
@@ -88,10 +100,11 @@ export class CompetenciesService {
     const reviewsByEvidence = new Map<string, (typeof evidenceReviews)[number]>();
     for (const row of evidenceReviews)
       if (!reviewsByEvidence.has(row.evidenceId)) reviewsByEvidence.set(row.evidenceId, row);
+    const requirementHistory = await this.competenciesRepository.requirementHistory();
     const matrix = buildCompetencyGaps({
       employees,
       catalog,
-      requirements,
+      requirements: resolveCompetencyRequirements(requirementHistory),
       orderedEvidence: evidence.map((row) => ({
         ...row,
         status: reviewsByEvidence.get(row.id)?.status ?? row.status,
@@ -110,6 +123,7 @@ export class CompetenciesService {
       })),
       roles,
       requirements,
+      requirementHistory,
       learning: hasPermission(actor.permissions, PERMISSIONS.COMPETENCY_MANAGE)
         ? await this.competenciesRepository.learningOptions(language)
         : { courses: [], learningPaths: [] },
@@ -135,6 +149,18 @@ export class CompetenciesService {
       throw new BadRequestException("competencies.errors.invalidLevel");
     if ((await this.competenciesRepository.catalog()).some((x) => x.code === body.code))
       throw new ConflictException("competencies.errors.duplicateCode");
+    if (body.frameworkId) {
+      const framework = await this.competencyFrameworksRepository.framework(body.frameworkId);
+      if (!framework?.active || !framework.categories.includes(body.category))
+        throw new BadRequestException("competencies.errors.invalidReference");
+    }
+    if (body.scaleId) {
+      const scale = await this.competencyFrameworksRepository.scale(body.scaleId);
+      const normalize = (levels: CreateCompetency["levels"]) =>
+        JSON.stringify([...levels].sort((a, b) => a.rank - b.rank).map((x) => [x.rank, x.label]));
+      if (!scale || normalize(scale.levels) !== normalize(body.levels))
+        throw new BadRequestException("competencies.errors.invalidLevel");
+    }
     return this.competenciesRepository.create(body);
   }
   async activate(actor: CurrentUserType, id: UUIDType, active: boolean) {
@@ -165,7 +191,7 @@ export class CompetenciesService {
       !(await this.competenciesRepository.resourceExists("path", body.learningPathId))
     )
       throw new BadRequestException("competencies.errors.invalidReference");
-    return this.competenciesRepository.setRequirement(body);
+    return this.competenciesRepository.setRequirement(body, actor.userId);
   }
   async assign(actor: CurrentUserType, body: CompetencyAssignment) {
     this.manage(actor);
@@ -186,6 +212,16 @@ export class CompetenciesService {
       throw new ForbiddenException("competencies.errors.forbidden");
     if (body.status === "pending" && body.userId !== actor.userId && !manager && !assessor)
       throw new ForbiddenException("competencies.errors.forbidden");
+    if (body.developmentPlanId) {
+      const plan = await this.developmentPlansRepository.find(body.developmentPlanId);
+      if (
+        !plan ||
+        plan.userId !== body.userId ||
+        plan.competencyId !== body.competencyId ||
+        !["active", "submitted"].includes(plan.state)
+      )
+        throw new BadRequestException("competencies.errors.invalidReference");
+    }
     const now = new Date().toISOString();
     this.dates(now, body.expiresAt);
     this.dates(now, body.reviewAt);
@@ -230,5 +266,61 @@ export class CompetenciesService {
       throw new BadRequestException("competencies.errors.invalidDates");
     this.dates(body.effectiveAt, body.endsAt);
     return this.competenciesRepository.revoke(body, actor.userId, row.userId, row.competencyId);
+  }
+  async developmentPlans(actor: CurrentUserType, userId?: UUIDType) {
+    if (userId) await this.employee(actor, userId);
+    const employees = await this.competenciesRepository.employees(
+      userId ? [userId] : await this.scope(actor),
+    );
+    return this.developmentPlansRepository.workspace(employees.map((x) => x.id));
+  }
+  async createDevelopmentPlan(actor: CurrentUserType, body: CreateDevelopmentPlan) {
+    await this.employee(actor, body.userId);
+    await this.level(body.competencyId, body.targetLevel);
+    this.dates(new Date().toISOString(), body.deadline);
+    for (const item of body.activities) {
+      if (item.courseId && item.learningPathId)
+        throw new BadRequestException("competencies.errors.invalidReference");
+      if (
+        item.courseId &&
+        !(await this.competenciesRepository.resourceExists("course", item.courseId))
+      )
+        throw new BadRequestException("competencies.errors.invalidReference");
+      if (
+        item.learningPathId &&
+        !(await this.competenciesRepository.resourceExists("path", item.learningPathId))
+      )
+        throw new BadRequestException("competencies.errors.invalidReference");
+    }
+    return this.developmentPlansRepository.create(body, actor.userId);
+  }
+  async developmentPlanCommand(actor: CurrentUserType, id: UUIDType, body: DevelopmentPlanCommand) {
+    const plan = await this.developmentPlansRepository.find(id);
+    if (!plan) throw new NotFoundException("competencies.errors.notFound");
+    await this.employee(actor, plan.userId);
+    let canApprove = false;
+    if (["approve", "return", "complete"].includes(body.action)) {
+      await this.assessor(actor, plan.userId);
+      canApprove = true;
+    }
+    return this.developmentPlansRepository.command(id, body, actor.userId, canApprove);
+  }
+  async frameworkSetup(actor: CurrentUserType) {
+    this.manage(actor);
+    return this.competencyFrameworksRepository.setup();
+  }
+  async createFramework(actor: CurrentUserType, body: CreateCompetencyFramework) {
+    this.manage(actor);
+    const row = await this.competencyFrameworksRepository.createFramework(body);
+    if (!row) throw new ConflictException("competencies.errors.duplicateCode");
+    return row;
+  }
+  async createScale(actor: CurrentUserType, body: CreateCompetencyScale) {
+    this.manage(actor);
+    if (new Set(body.levels.map((x) => x.rank)).size !== body.levels.length)
+      throw new BadRequestException("competencies.errors.invalidLevel");
+    const row = await this.competencyFrameworksRepository.createScale(body);
+    if (!row) throw new ConflictException("competencies.errors.duplicateCode");
+    return row;
   }
 }

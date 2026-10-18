@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react";
-import { useState, type FormEvent, type FormHTMLAttributes, type ReactNode } from "react";
+import { useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useAssignCompetencyRole } from "~/api/mutations/useAssignCompetencyRole";
@@ -8,7 +8,9 @@ import { useCreateCompetencyJobRole } from "~/api/mutations/useCreateCompetencyJ
 import { useRecordCompetencyEvidence } from "~/api/mutations/useRecordCompetencyEvidence";
 import { useSetCompetencyActive } from "~/api/mutations/useSetCompetencyActive";
 import { useSetCompetencyRequirement } from "~/api/mutations/useSetCompetencyRequirement";
+import { useCompetencyFrameworkSetup } from "~/api/queries/useCompetencyFrameworkSetup";
 import { useCompetencyWorkspace } from "~/api/queries/useCompetencyWorkspace";
+import { useDevelopmentPlans } from "~/api/queries/useDevelopmentPlans";
 import { getTranslatedApiErrorMessage } from "~/api/utils/getTranslatedApiErrorMessage";
 import { PageWrapper } from "~/components/PageWrapper";
 import { Button } from "~/components/ui/button";
@@ -18,79 +20,13 @@ import { Textarea } from "~/components/ui/textarea";
 import { useCurrentUserStore } from "~/modules/common/store/useCurrentUserStore";
 import { setPageTitle } from "~/utils/setPageTitle";
 
+import { Field, Picker, BusyForm, value, optionalDate } from "./competency-controls";
+import { CompetencyAssessmentPanel } from "./CompetencyAssessmentPanel";
+import { CompetencyFrameworksPanel } from "./CompetencyFrameworksPanel";
+import { DevelopmentPlansPanel } from "./DevelopmentPlansPanel";
+
 import type { MetaFunction } from "@remix-run/react";
 
-function Field({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <label className="grid gap-1 text-sm">
-      {label}
-      {children}
-    </label>
-  );
-}
-function Picker({
-  name,
-  label,
-  options,
-  optional = false,
-}: {
-  name: string;
-  label: string;
-  options: { id: string; name: string }[];
-  optional?: boolean;
-}) {
-  return (
-    <Field label={label}>
-      <select
-        name={name}
-        aria-label={label}
-        required={!optional}
-        className="h-10 rounded border bg-background px-3"
-        defaultValue=""
-      >
-        <option value="">—</option>
-        {options.map((x) => (
-          <option key={x.id} value={x.id}>
-            {x.name}
-          </option>
-        ))}
-      </select>
-    </Field>
-  );
-}
-const value = (data: FormData, key: string) => String(data.get(key) ?? "").trim();
-const optionalDate = (data: FormData, key: string) =>
-  value(data, key) ? new Date(value(data, key)).toISOString() : null;
-
-function BusyForm({
-  busy,
-  children,
-  ...props
-}: FormHTMLAttributes<HTMLFormElement> & { busy: boolean }) {
-  const { t } = useTranslation();
-  const control = (target: EventTarget | null) =>
-    target instanceof HTMLInputElement ||
-    target instanceof HTMLSelectElement ||
-    target instanceof HTMLTextAreaElement;
-  return (
-    <form
-      {...props}
-      onInvalidCapture={(event) => {
-        if (control(event.target))
-          (event.target as HTMLInputElement).setCustomValidity(
-            t("competencies.errors.invalidForm"),
-          );
-      }}
-      onInputCapture={(event) => {
-        if (control(event.target)) (event.target as HTMLInputElement).setCustomValidity("");
-      }}
-    >
-      <fieldset disabled={busy} className="contents">
-        {children}
-      </fieldset>
-    </form>
-  );
-}
 export const meta: MetaFunction = ({ matches }) => setPageTitle(matches, "pages.competencies");
 
 export default function CompetenciesPage() {
@@ -98,6 +34,10 @@ export default function CompetenciesPage() {
   const { data, isPending, error } = useCompetencyWorkspace();
   const user = useCurrentUserStore((state) => state.currentUser);
   const [selected, setSelected] = useState("");
+  const [frameworkId, setFrameworkId] = useState("");
+  const [scaleId, setScaleId] = useState("");
+  const { data: setup } = useCompetencyFrameworkSetup(Boolean(data?.canManage));
+  const { data: plans, error: plansError } = useDevelopmentPlans(selected || user?.id);
   const { mutateAsync: create, isPending: creating } = useCreateCompetency();
   const { mutateAsync: createRole, isPending: creatingRole } = useCreateCompetencyJobRole();
   const { mutateAsync: setRequirement, isPending: savingRequirement } =
@@ -121,6 +61,8 @@ export default function CompetenciesPage() {
         </p>
       </PageWrapper>
     );
+  const selectedFramework = setup?.frameworks.find((x) => x.id === frameworkId);
+  const selectedScale = setup?.scales.find((x) => x.id === scaleId);
   const active = data.catalog.filter((x) => x.active);
   const catalogName = (id: string) => data.catalog.find((x) => x.id === id)?.name ?? id;
   const employeeName = (id: string) => data.employees.find((x) => x.id === id)?.name ?? id;
@@ -187,7 +129,14 @@ export default function CompetenciesPage() {
                           {data.roles.find((x) => x.id === employee?.jobRoleId)?.name}
                         </td>
                         <td className="p-2">{catalogName(row.competencyId)}</td>
-                        <td className="p-2">{row.requiredLevel}</td>
+                        <td className="p-2">
+                          {row.requiredLevel} ·{" "}
+                          {t(
+                            row.mandatory
+                              ? "competencies.frameworks.mandatory"
+                              : "competencies.frameworks.optional",
+                          )}
+                        </td>
                         <td className="p-2">{row.currentLevel ?? "—"}</td>
                         <td className="p-2">{t(`competencies.states.${row.status}`)}</td>
                         <td className="p-2">
@@ -229,7 +178,9 @@ export default function CompetenciesPage() {
                 ))}
               </select>
             </Field>
-            <h2 className="text-xl font-semibold">{t("competencies.history")}</h2>
+            <h2 className="text-xl font-semibold">
+              {t("competencies.enterprise.evidenceHistory")}
+            </h2>
             {data.evidence
               .filter((x) => x.userId === employeeId)
               .map((item) => (
@@ -240,14 +191,15 @@ export default function CompetenciesPage() {
                 >
                   <h3 className="font-semibold">
                     {catalogName(item.competencyId)} · {item.level} ·{" "}
-                    {t(`competencies.states.${item.status}`)}
+                    {t(
+                      `competencies.enterprise.reviewStates.${data.evidenceReviews.find((x) => x.evidenceId === item.id)?.status ?? item.status}`,
+                    )}
                   </h3>
                   <p>
                     {item.source}: {item.evidence}
                   </p>
                   <p>
-                    {t("competencies.assessor")}:{" "}
-                    {item.assessorId ? employeeName(item.assessorId) : "—"} ·{" "}
+                    {t("competencies.enterprise.recordedBy")}: {employeeName(item.recordedBy)} ·{" "}
                     {item.assessedAt
                       ? new Intl.DateTimeFormat("pt-AO", {
                           timeZone: "Africa/Luanda",
@@ -274,29 +226,47 @@ export default function CompetenciesPage() {
                   userId: employeeId!,
                   competencyId: value(d, "competencyId"),
                   level: Number(value(d, "level")),
-                  status: value(d, "status") as "pending" | "approved" | "rejected",
+                  status: "pending",
+                  developmentPlanId: value(d, "developmentPlanId") || null,
+                  evidenceType: value(d, "evidenceType") as
+                    | "observation"
+                    | "document"
+                    | "training"
+                    | "self_report",
                   source: value(d, "source"),
                   evidence: value(d, "evidence"),
-                  expiresAt: optionalDate(d, "expiresAt"),
-                  reviewAt: optionalDate(d, "reviewAt"),
+                  expiresAt: null,
+                  reviewAt: null,
                 }),
               )}
               data-testid="competency-evidence-form"
             >
               <h3 className="font-semibold">{t("competencies.recordEvidence")}</h3>
               <Picker name="competencyId" label={t("competencies.competency")} options={active} />
-              <Field label={t("competencies.level")}>
+              <Picker
+                name="developmentPlanId"
+                label={t("competencies.plans.linkEvidence")}
+                optional
+                options={(plans?.plans ?? [])
+                  .filter(
+                    (x) => x.userId === employeeId && ["active", "submitted"].includes(x.state),
+                  )
+                  .map((x) => ({ id: x.id, name: x.title }))}
+              />
+              <Field label={t("competencies.enterprise.claimedLevel")}>
                 <Input name="level" type="number" min={1} max={20} required />
               </Field>
-              <Field label={t("competencies.status")}>
-                <select name="status" className="h-10 rounded border bg-background px-3">
-                  <option value="pending">{t("competencies.states.pending")}</option>
-                  {(data.canManage || (data.canAssess && employeeId !== user?.id)) && (
-                    <>
-                      <option value="approved">{t("competencies.states.approved")}</option>
-                      <option value="rejected">{t("competencies.states.rejected")}</option>
-                    </>
-                  )}
+              <Field label={t("competencies.enterprise.evidenceType")}>
+                <select
+                  aria-label={t("competencies.enterprise.evidenceType")}
+                  name="evidenceType"
+                  className="h-10 rounded border bg-background px-3"
+                >
+                  {["self_report", "observation", "document", "training"].map((kind) => (
+                    <option key={kind} value={kind}>
+                      {t(`competencies.enterprise.types.${kind}`)}
+                    </option>
+                  ))}
                 </select>
               </Field>
               <Field label={t("competencies.source")}>
@@ -305,18 +275,29 @@ export default function CompetenciesPage() {
               <Field label={t("competencies.evidence")}>
                 <Textarea name="evidence" maxLength={4000} required />
               </Field>
-              <Field label={t("competencies.expiry")}>
-                <Input name="expiresAt" type="datetime-local" />
-              </Field>
-              <Field label={t("competencies.review")}>
-                <Input name="reviewAt" type="datetime-local" />
-              </Field>
               <Button disabled={recording}>{t("competencies.save")}</Button>
             </BusyForm>
+            {plansError && (
+              <p role="alert">
+                {getTranslatedApiErrorMessage(plansError, t, t("competencies.errors.failed"))}
+              </p>
+            )}
+            <DevelopmentPlansPanel
+              data={data}
+              plans={plans}
+              employeeId={employeeId!}
+              canApprove={data.canManage || (data.canAssess && employeeId !== user?.id)}
+            />
+            <CompetencyAssessmentPanel
+              data={data}
+              employeeId={employeeId!}
+              canAssess={data.canManage || (data.canAssess && employeeId !== user?.id)}
+            />
           </TabsContent>
           {data.canManage && (
             <>
               <TabsContent value="catalog" className="space-y-4">
+                <CompetencyFrameworksPanel setup={setup} />
                 <BusyForm
                   busy={busy}
                   className="grid max-w-2xl gap-3 rounded border p-4"
@@ -327,14 +308,18 @@ export default function CompetenciesPage() {
                       name: value(d, "name"),
                       description: value(d, "description"),
                       category: value(d, "category"),
-                      levels: value(d, "levels")
-                        .split("\n")
-                        .map((label, index) => ({ rank: index + 1, label: label.trim() })),
+                      frameworkId: frameworkId || null,
+                      scaleId: scaleId || null,
+                      levels:
+                        selectedScale?.levels ??
+                        value(d, "levels")
+                          .split("\n")
+                          .map((label, index) => ({ rank: index + 1, label: label.trim() })),
                     }),
                   )}
                 >
                   <h2 className="text-xl font-semibold">{t("competencies.create")}</h2>
-                  {["code", "name", "category"].map((key) => (
+                  {["code", "name"].map((key) => (
                     <Field key={key} label={t(`competencies.${key}`)}>
                       <Input
                         name={key}
@@ -344,12 +329,60 @@ export default function CompetenciesPage() {
                       />
                     </Field>
                   ))}
+                  <Field label={t("competencies.frameworks.framework")}>
+                    <select
+                      name="frameworkId"
+                      aria-label={t("competencies.frameworks.framework")}
+                      value={frameworkId}
+                      onChange={(e) => setFrameworkId(e.target.value)}
+                      className="h-10 w-full min-w-0 rounded border bg-background px-3"
+                    >
+                      <option value="">—</option>
+                      {setup?.frameworks.map((x) => (
+                        <option key={x.id} value={x.id}>
+                          {x.name}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
+                  {selectedFramework ? (
+                    <Picker
+                      key={frameworkId}
+                      name="category"
+                      label={t("competencies.category")}
+                      options={selectedFramework.categories.map((x) => ({ id: x, name: x }))}
+                    />
+                  ) : (
+                    <Field label={t("competencies.category")}>
+                      <Input name="category" required maxLength={200} />
+                    </Field>
+                  )}
+                  <Field label={t("competencies.frameworks.scale")}>
+                    <select
+                      name="scaleId"
+                      aria-label={t("competencies.frameworks.scale")}
+                      value={scaleId}
+                      onChange={(e) => setScaleId(e.target.value)}
+                      className="h-10 w-full min-w-0 rounded border bg-background px-3"
+                    >
+                      <option value="">—</option>
+                      {setup?.scales.map((x) => (
+                        <option key={x.id} value={x.id}>
+                          {x.name}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
                   <Field label={t("competencies.description")}>
                     <Textarea name="description" maxLength={4000} />
                   </Field>
-                  <Field label={t("competencies.levelsHint")}>
-                    <Textarea name="levels" required />
-                  </Field>
+                  {selectedScale ? (
+                    <p>{selectedScale.levels.map((x) => `${x.rank}: ${x.label}`).join(" · ")}</p>
+                  ) : (
+                    <Field label={t("competencies.levelsHint")}>
+                      <Textarea name="levels" required />
+                    </Field>
+                  )}
                   <Button disabled={creating}>{t("competencies.save")}</Button>
                 </BusyForm>
                 {data.catalog.map((item) => (
@@ -402,6 +435,13 @@ export default function CompetenciesPage() {
                       jobRoleId: value(d, "jobRoleId"),
                       competencyId: value(d, "competencyId"),
                       minimumLevel: Number(value(d, "minimumLevel")),
+                      mandatory: value(d, "mandatory") !== "optional",
+                      expectedVersion:
+                        data.requirements.find(
+                          (x) =>
+                            x.jobRoleId === value(d, "jobRoleId") &&
+                            x.competencyId === value(d, "competencyId"),
+                        )?.version ?? 0,
                       effectiveFrom: optionalDate(d, "effectiveFrom") ?? new Date().toISOString(),
                       effectiveUntil: optionalDate(d, "effectiveUntil"),
                       courseId: value(d, "courseId") || null,
@@ -417,6 +457,16 @@ export default function CompetenciesPage() {
                     label={t("competencies.competency")}
                     options={active}
                   />
+                  <Field label={t("competencies.frameworks.requirementType")}>
+                    <select
+                      name="mandatory"
+                      aria-label={t("competencies.frameworks.requirementType")}
+                      className="h-10 w-full min-w-0 rounded border bg-background px-3"
+                    >
+                      <option value="mandatory">{t("competencies.frameworks.mandatory")}</option>
+                      <option value="optional">{t("competencies.frameworks.optional")}</option>
+                    </select>
+                  </Field>
                   <Field label={t("competencies.required")}>
                     <Input name="minimumLevel" type="number" min={1} max={20} required />
                   </Field>
@@ -476,6 +526,24 @@ export default function CompetenciesPage() {
                     </p>
                   ))}
                 </section>
+                <details className="col-span-full rounded border p-4">
+                  <summary>{t("competencies.frameworks.requirementHistory")}</summary>
+                  <ul>
+                    {data.requirementHistory.map((x) => (
+                      <li key={x.id}>
+                        {data.roles.find((r) => r.id === x.jobRoleId)?.name} ·{" "}
+                        {catalogName(x.competencyId)} · {t("competencies.enterprise.revision")}{" "}
+                        {x.version} · ≥ {x.minimumLevel} ·{" "}
+                        {t(
+                          x.mandatory
+                            ? "competencies.frameworks.mandatory"
+                            : "competencies.frameworks.optional",
+                        )}{" "}
+                        · {x.effectiveFrom} → {x.effectiveUntil ?? "—"}
+                      </li>
+                    ))}
+                  </ul>
+                </details>
               </TabsContent>
             </>
           )}

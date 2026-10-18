@@ -37504,6 +37504,8 @@ export interface GetCompetencyWorkspaceResponse {
        * @pattern [^ ]
        */
       category: string;
+      frameworkId?: string | null;
+      scaleId?: string | null;
       /**
        * @maxItems 20
        * @minItems 1
@@ -37551,6 +37553,7 @@ export interface GetCompetencyWorkspaceResponse {
        * @max 20
        */
       minimumLevel: number;
+      mandatory: boolean;
       /** @format date-time */
       effectiveFrom: string;
       effectiveUntil: string | null;
@@ -37558,6 +37561,32 @@ export interface GetCompetencyWorkspaceResponse {
       learningPathId: string | null;
       /** @format uuid */
       id: string;
+      version: number;
+    }[];
+    requirementHistory: {
+      /** @format uuid */
+      jobRoleId: string;
+      /** @format uuid */
+      competencyId: string;
+      /**
+       * @min 1
+       * @max 20
+       */
+      minimumLevel: number;
+      mandatory: boolean;
+      /** @format date-time */
+      effectiveFrom: string;
+      effectiveUntil: string | null;
+      courseId: string | null;
+      learningPathId: string | null;
+      /** @format uuid */
+      id: string;
+      version: number;
+      /** @format uuid */
+      requirementId: string;
+      recordedBy: string | null;
+      /** @format date-time */
+      createdAt: string;
     }[];
     units: {
       /** @format uuid */
@@ -37577,6 +37606,7 @@ export interface GetCompetencyWorkspaceResponse {
       /** @format uuid */
       competencyId: string;
       requiredLevel: number;
+      mandatory: boolean;
       assessmentId: string | null;
       currentLevel: number | null;
       status:
@@ -37603,6 +37633,7 @@ export interface GetCompetencyWorkspaceResponse {
        */
       level: number;
       status: "pending" | "approved" | "rejected";
+      developmentPlanId?: string | null;
       evidenceType: string;
       /**
        * @minLength 1
@@ -37718,6 +37749,8 @@ export interface CreateCompetencyBody {
    * @pattern [^ ]
    */
   category: string;
+  frameworkId?: string | null;
+  scaleId?: string | null;
   /**
    * @maxItems 20
    * @minItems 1
@@ -37787,6 +37820,9 @@ export interface SetCompetencyRequirementBody {
    * @max 20
    */
   minimumLevel: number;
+  mandatory?: boolean;
+  /** @min 0 */
+  expectedVersion?: number;
   /** @format date-time */
   effectiveFrom: string;
   effectiveUntil: string | null;
@@ -37828,6 +37864,7 @@ export interface RecordCompetencyEvidenceBody {
    */
   level: number;
   status: "pending" | "approved" | "rejected";
+  developmentPlanId?: string | null;
   evidenceType?: "observation" | "document" | "training" | "self_report";
   /**
    * @minLength 1
@@ -37920,6 +37957,282 @@ export interface RevokeCompetencyAssessmentBody {
 }
 
 export interface RevokeCompetencyAssessmentResponse {
+  data: {
+    /** @format uuid */
+    id: string;
+  };
+}
+
+export interface GetDevelopmentPlansResponse {
+  data: {
+    plans: {
+      /** @format uuid */
+      id: string;
+      /** @format uuid */
+      userId: string;
+      /** @format uuid */
+      competencyId: string;
+      /**
+       * @min 1
+       * @max 20
+       */
+      targetLevel: number;
+      /**
+       * @minLength 1
+       * @maxLength 200
+       * @pattern [^ ]
+       */
+      title: string;
+      /** @format date-time */
+      deadline: string;
+      state: "draft" | "pending_approval" | "active" | "submitted" | "completed" | "cancelled";
+      version: number;
+      responsibleId: string | null;
+      /** @format uuid */
+      createdBy: string;
+      completedAssessmentId: string | null;
+      createdAt: string;
+    }[];
+    activities: {
+      /** @format uuid */
+      id: string;
+      /** @format uuid */
+      planId: string;
+      /**
+       * @minLength 1
+       * @maxLength 4000
+       * @pattern [^ ]
+       */
+      title: string;
+      courseId: string | null;
+      learningPathId: string | null;
+      reportedAt: string | null;
+      reportedBy: string | null;
+    }[];
+    history: {
+      /** @format uuid */
+      id: string;
+      /** @format uuid */
+      planId: string;
+      /** @format uuid */
+      actorId: string;
+      action: string;
+      /**
+       * @minLength 1
+       * @maxLength 4000
+       * @pattern [^ ]
+       */
+      rationale: string;
+      version: number;
+      fromState:
+        | ("draft" | "pending_approval" | "active" | "submitted" | "completed" | "cancelled")
+        | null;
+      toState: "draft" | "pending_approval" | "active" | "submitted" | "completed" | "cancelled";
+      activityId: string | null;
+      assessmentId: string | null;
+      createdAt: string;
+    }[];
+  };
+}
+
+export interface CreateDevelopmentPlanBody {
+  /** @format uuid */
+  id: string;
+  /** @format uuid */
+  userId: string;
+  /** @format uuid */
+  competencyId: string;
+  /**
+   * @min 1
+   * @max 20
+   */
+  targetLevel: number;
+  /**
+   * @minLength 1
+   * @maxLength 200
+   * @pattern [^ ]
+   */
+  title: string;
+  /** @format date-time */
+  deadline: string;
+  /**
+   * @maxItems 20
+   * @minItems 1
+   */
+  activities: {
+    /**
+     * @minLength 1
+     * @maxLength 4000
+     * @pattern [^ ]
+     */
+    title: string;
+    courseId: string | null;
+    learningPathId: string | null;
+  }[];
+}
+
+export interface CreateDevelopmentPlanResponse {
+  data: {
+    /** @format uuid */
+    id: string;
+  };
+}
+
+export interface DecideDevelopmentPlanBody {
+  /** @format uuid */
+  id: string;
+  /** @min 1 */
+  expectedVersion: number;
+  action:
+    | "request_approval"
+    | "approve"
+    | "report_activity"
+    | "submit"
+    | "return"
+    | "complete"
+    | "cancel";
+  /**
+   * @minLength 1
+   * @maxLength 4000
+   * @pattern [^ ]
+   */
+  rationale: string;
+  activityId: string | null;
+}
+
+export interface DecideDevelopmentPlanResponse {
+  data: {
+    /** @format uuid */
+    id: string;
+  };
+}
+
+export interface GetCompetencyFrameworkSetupResponse {
+  data: {
+    frameworks: {
+      /**
+       * @minLength 1
+       * @maxLength 60
+       * @pattern ^[A-Z0-9_-]+$
+       */
+      code: string;
+      /**
+       * @minLength 1
+       * @maxLength 200
+       * @pattern [^ ]
+       */
+      name: string;
+      /** @maxLength 4000 */
+      description: string;
+      /**
+       * @maxItems 30
+       * @minItems 1
+       * @uniqueItems true
+       */
+      categories: string[];
+      /** @format uuid */
+      id: string;
+      active: boolean;
+    }[];
+    scales: {
+      /**
+       * @minLength 1
+       * @maxLength 60
+       * @pattern ^[A-Z0-9_-]+$
+       */
+      code: string;
+      /**
+       * @minLength 1
+       * @maxLength 200
+       * @pattern [^ ]
+       */
+      name: string;
+      /**
+       * @maxItems 20
+       * @minItems 1
+       */
+      levels: {
+        /**
+         * @min 1
+         * @max 20
+         */
+        rank: number;
+        /**
+         * @minLength 1
+         * @maxLength 200
+         * @pattern [^ ]
+         */
+        label: string;
+      }[];
+      /** @format uuid */
+      id: string;
+    }[];
+  };
+}
+
+export interface CreateCompetencyFrameworkBody {
+  /**
+   * @minLength 1
+   * @maxLength 60
+   * @pattern ^[A-Z0-9_-]+$
+   */
+  code: string;
+  /**
+   * @minLength 1
+   * @maxLength 200
+   * @pattern [^ ]
+   */
+  name: string;
+  /** @maxLength 4000 */
+  description: string;
+  /**
+   * @maxItems 30
+   * @minItems 1
+   * @uniqueItems true
+   */
+  categories: string[];
+}
+
+export interface CreateCompetencyFrameworkResponse {
+  data: {
+    /** @format uuid */
+    id: string;
+  };
+}
+
+export interface CreateCompetencyScaleBody {
+  /**
+   * @minLength 1
+   * @maxLength 60
+   * @pattern ^[A-Z0-9_-]+$
+   */
+  code: string;
+  /**
+   * @minLength 1
+   * @maxLength 200
+   * @pattern [^ ]
+   */
+  name: string;
+  /**
+   * @maxItems 20
+   * @minItems 1
+   */
+  levels: {
+    /**
+     * @min 1
+     * @max 20
+     */
+    rank: number;
+    /**
+     * @minLength 1
+     * @maxLength 200
+     * @pattern [^ ]
+     */
+    label: string;
+  }[];
+}
+
+export interface CreateCompetencyScaleResponse {
   data: {
     /** @format uuid */
     id: string;
@@ -48556,6 +48869,118 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<RevokeCompetencyAssessmentResponse, any>({
         path: `/api/competencies/revocations`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name CompetenciesControllerGetDevelopmentPlans
+     * @request GET:/api/competencies/development-plans
+     */
+    competenciesControllerGetDevelopmentPlans: (
+      query?: {
+        /** @format uuid */
+        userId?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<GetDevelopmentPlansResponse, any>({
+        path: `/api/competencies/development-plans`,
+        method: "GET",
+        query: query,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name CompetenciesControllerCreateDevelopmentPlan
+     * @request POST:/api/competencies/development-plans
+     */
+    competenciesControllerCreateDevelopmentPlan: (
+      data: CreateDevelopmentPlanBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<CreateDevelopmentPlanResponse, any>({
+        path: `/api/competencies/development-plans`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name CompetenciesControllerDecideDevelopmentPlan
+     * @request POST:/api/competencies/development-plans/{id}/decisions
+     */
+    competenciesControllerDecideDevelopmentPlan: (
+      id: string,
+      data: DecideDevelopmentPlanBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<DecideDevelopmentPlanResponse, any>({
+        path: `/api/competencies/development-plans/${id}/decisions`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name CompetenciesControllerGetCompetencyFrameworkSetup
+     * @request GET:/api/competencies/framework-setup
+     */
+    competenciesControllerGetCompetencyFrameworkSetup: (params: RequestParams = {}) =>
+      this.request<GetCompetencyFrameworkSetupResponse, any>({
+        path: `/api/competencies/framework-setup`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name CompetenciesControllerCreateCompetencyFramework
+     * @request POST:/api/competencies/frameworks
+     */
+    competenciesControllerCreateCompetencyFramework: (
+      data: CreateCompetencyFrameworkBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<CreateCompetencyFrameworkResponse, any>({
+        path: `/api/competencies/frameworks`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name CompetenciesControllerCreateCompetencyScale
+     * @request POST:/api/competencies/scales
+     */
+    competenciesControllerCreateCompetencyScale: (
+      data: CreateCompetencyScaleBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<CreateCompetencyScaleResponse, any>({
+        path: `/api/competencies/scales`,
         method: "POST",
         body: data,
         type: ContentType.Json,

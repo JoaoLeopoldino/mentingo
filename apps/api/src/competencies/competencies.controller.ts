@@ -30,8 +30,25 @@ import {
   CompetencyEvidence,
 } from "./competencies.schema";
 import { CompetenciesService } from "./competencies.service";
+import {
+  createCompetencyFrameworkSchema,
+  createCompetencyScaleSchema,
+  competencyFrameworkSetupSchema,
+  CreateCompetencyFramework,
+  CreateCompetencyScale
+} from "./competency-frameworks.schema";
+import {
+  createDevelopmentPlanSchema,
+  developmentPlanCommandSchema,
+  developmentPlansWorkspaceSchema,
+  CreateDevelopmentPlan,
+  DevelopmentPlanCommand,
+} from "./development-plans.schema";
 
 import type { CompetencyWorkspace, CompetencyIdResponse } from "./competencies.schema";
+import type {
+  CompetencyFrameworkSetup} from "./competency-frameworks.schema";
+import type { DevelopmentPlansWorkspace } from "./development-plans.schema";
 @Controller("competencies")
 @RequirePermission(
   PERMISSIONS.COMPETENCY_READ_SELF,
@@ -165,5 +182,74 @@ export class CompetenciesController {
     @CurrentUser() actor: CurrentUserType,
   ): Promise<BaseResponse<CompetencyIdResponse>> {
     return new BaseResponse(await this.competenciesService.revoke(actor, body));
+  }
+  @Get("development-plans")
+  @Validate({
+    request: [{ type: "query", name: "userId", schema: UUIDSchema, required: false }],
+    response: baseResponse(developmentPlansWorkspaceSchema),
+  })
+  async getDevelopmentPlans(
+    @Query("userId") userId: UUIDType | undefined,
+    @CurrentUser() actor: CurrentUserType,
+  ): Promise<BaseResponse<DevelopmentPlansWorkspace>> {
+    return new BaseResponse(await this.competenciesService.developmentPlans(actor, userId));
+  }
+  @Post("development-plans")
+  @Validate({
+    request: [{ type: "body", schema: createDevelopmentPlanSchema }],
+    response: baseResponse(competencyIdResponseSchema),
+  })
+  async createDevelopmentPlan(
+    @Body() body: CreateDevelopmentPlan,
+    @CurrentUser() actor: CurrentUserType,
+  ): Promise<BaseResponse<CompetencyIdResponse>> {
+    return new BaseResponse(await this.competenciesService.createDevelopmentPlan(actor, body));
+  }
+  @Post("development-plans/:id/decisions")
+  @Validate({
+    request: [
+      { type: "param", name: "id", schema: UUIDSchema },
+      { type: "body", schema: developmentPlanCommandSchema },
+    ],
+    response: baseResponse(competencyIdResponseSchema),
+  })
+  async decideDevelopmentPlan(
+    @Param("id") id: UUIDType,
+    @Body() body: DevelopmentPlanCommand,
+    @CurrentUser() actor: CurrentUserType,
+  ): Promise<BaseResponse<CompetencyIdResponse>> {
+    return new BaseResponse(await this.competenciesService.developmentPlanCommand(actor, id, body));
+  }
+  @Get("framework-setup")
+  @RequirePermission(PERMISSIONS.COMPETENCY_MANAGE)
+  @Validate({ response: baseResponse(competencyFrameworkSetupSchema) })
+  async getCompetencyFrameworkSetup(
+    @CurrentUser() actor: CurrentUserType,
+  ): Promise<BaseResponse<CompetencyFrameworkSetup>> {
+    return new BaseResponse(await this.competenciesService.frameworkSetup(actor));
+  }
+  @Post("frameworks")
+  @RequirePermission(PERMISSIONS.COMPETENCY_MANAGE)
+  @Validate({
+    request: [{ type: "body", schema: createCompetencyFrameworkSchema }],
+    response: baseResponse(competencyIdResponseSchema),
+  })
+  async createCompetencyFramework(
+    @Body() body: CreateCompetencyFramework,
+    @CurrentUser() actor: CurrentUserType,
+  ): Promise<BaseResponse<CompetencyIdResponse>> {
+    return new BaseResponse(await this.competenciesService.createFramework(actor, body));
+  }
+  @Post("scales")
+  @RequirePermission(PERMISSIONS.COMPETENCY_MANAGE)
+  @Validate({
+    request: [{ type: "body", schema: createCompetencyScaleSchema }],
+    response: baseResponse(competencyIdResponseSchema),
+  })
+  async createCompetencyScale(
+    @Body() body: CreateCompetencyScale,
+    @CurrentUser() actor: CurrentUserType,
+  ): Promise<BaseResponse<CompetencyIdResponse>> {
+    return new BaseResponse(await this.competenciesService.createScale(actor, body));
   }
 }

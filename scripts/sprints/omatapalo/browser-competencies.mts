@@ -23,6 +23,8 @@ const groups = new GroupFactory(api);
 const users = new UserFactory(api);
 const results: string[] = [];
 const startedAt = Date.now();
+page.on("response", async (r: any) => { if (r.url().includes("/api/competencies") && r.request().method() !== "GET") console.log("competency-response", r.request().method(), r.url().split("/api/")[1], r.status(), r.status() >= 400 ? await r.text() : ""); });
+page.on("pageerror", (error: Error) => console.log("browser-error", error.message));
 try {
   await page.goto("http://localhost:5173/auth/login");
   await page.getByTestId(LOGIN_PAGE_HANDLES.EMAIL).fill("admin+localhost@example.com");
@@ -141,13 +143,12 @@ try {
   const form = page.getByTestId("competency-evidence-form");
   for (const level of [1, 2]) {
     await form.getByLabel("Competência", { exact: true }).selectOption(competency!.id);
-    await form.getByLabel("Nível de proficiência", { exact: true }).fill(String(level));
-    await form.locator('select[name="status"]').selectOption("approved");
+    await form.getByLabel("Nível proposto", { exact: true }).fill(String(level));
     await form
       .getByLabel("Origem da evidência", { exact: true })
       .fill("Observação presencial — demonstração");
     await form
-      .getByLabel("Evidência e fundamentação da avaliação", { exact: true })
+      .getByLabel("Descrição e fundamentação da evidência", { exact: true })
       .fill(
         `Observação fictícia em Luanda: nível ${level}, sem certificação automática por questionário.`,
       );
@@ -155,8 +156,45 @@ try {
       (r: any) => r.url().endsWith("/api/competencies/evidence") && r.status() === 201,
     );
     await form.getByRole("button", { name: "Guardar", exact: true }).click();
-    await saved;
+    const submittedEvidenceId = (await (await saved).json()).data.id;
     await expect(form.getByLabel("Origem da evidência", { exact: true })).toHaveValue("");
+    const reviewForm = page.getByTestId("competency-review-form");
+    await reviewForm
+      .getByLabel("Descrição e fundamentação da evidência", { exact: true })
+      .selectOption(submittedEvidenceId);
+    await reviewForm.getByLabel("Estado", { exact: true }).selectOption("approved");
+    await reviewForm
+      .getByLabel("Fundamentação da decisão", { exact: true })
+      .fill("Evidência revista explicitamente na demonstração");
+    const reviewSaved = page.waitForResponse(
+      (r: any) => r.url().endsWith("/api/competencies/evidence-reviews") && r.status() === 201,
+    );
+    reviewSaved.catch(() => {});
+
+    await reviewForm.getByRole("button", { name: "Guardar", exact: true }).click();
+    await reviewSaved;
+    await expect(reviewForm.getByLabel("Fundamentação da decisão", { exact: true })).toHaveValue(
+      "",
+    );
+    const assessmentForm = page.getByTestId("competency-assessment-form");
+    await assessmentForm.getByLabel("Competência", { exact: true }).selectOption(competency!.id);
+    await assessmentForm.getByLabel("Nível de proficiência", { exact: true }).fill(String(level));
+    await assessmentForm
+      .getByLabel("Evidência de suporte aceite (opcional)", { exact: true })
+      .selectOption(submittedEvidenceId);
+    await assessmentForm
+      .getByLabel("Fundamentação da decisão", { exact: true })
+      .fill(`Avaliação profissional formal fictícia de nível ${level}`);
+    const assessed = page.waitForResponse(
+      (r: any) => r.url().endsWith("/api/competencies/assessments") && r.status() === 201,
+    );
+    await assessmentForm
+      .getByRole("button", { name: "Registar avaliação formal", exact: true })
+      .click();
+    await assessed;
+    await expect(
+      assessmentForm.getByLabel("Fundamentação da decisão", { exact: true }),
+    ).toHaveValue("");
   }
   await expect(page.getByTestId("competency-evidence").first()).toBeVisible();
   await expect(page.getByTestId("competency-evidence")).toHaveCount(
@@ -164,7 +202,9 @@ try {
       .data.evidence.length,
   );
   await page.screenshot({ path: `${output}/08-competency-evidence.png`, fullPage: true });
-  results.push("Professional assessment recorded in UI; previous evidence preserved");
+  results.push(
+    "Evidence submitted and reviewed separately from formal assessments; immutable history preserved",
+  );
   await page.getByRole("tab", { name: "Matriz de competências da equipa" }).click();
   const matrix = page.getByTestId("competency-matrix");
   await expect(matrix.getByRole("row").filter({ hasText: employees[0]!.name })).toContainText(

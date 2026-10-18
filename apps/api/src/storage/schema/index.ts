@@ -3568,6 +3568,12 @@ export const competencies = pgTable(
     code: text("code").notNull(),
     name: text("name").notNull(),
     description: text("description").notNull().default(""),
+    frameworkId: uuid("framework_id").references((): AnyPgColumn => competencyFrameworks.id, {
+      onDelete: "restrict",
+    }),
+    scaleId: uuid("scale_id").references((): AnyPgColumn => competencyScales.id, {
+      onDelete: "restrict",
+    }),
     category: text("category").notNull().default(""),
     active: boolean("active").notNull().default(true),
   },
@@ -3616,6 +3622,8 @@ export const competencyRequirements = pgTable(
     competencyId: uuid("competency_id")
       .notNull()
       .references(() => competencies.id, { onDelete: "restrict" }),
+    version: integer("version").notNull().default(1),
+    mandatory: boolean("mandatory").notNull().default(true),
     minimumLevel: integer("minimum_level").notNull(),
     effectiveFrom: timestampWithTimezone({ name: "effective_from" })
       .notNull()
@@ -3673,6 +3681,10 @@ export const competencyEvidence = pgTable(
     competencyId: uuid("competency_id")
       .notNull()
       .references(() => competencies.id, { onDelete: "restrict" }),
+    developmentPlanId: uuid("development_plan_id").references(
+      (): AnyPgColumn => competencyDevelopmentPlans.id,
+      { onDelete: "restrict" },
+    ),
     level: integer("level").notNull(),
     status: text("status").$type<"pending" | "approved" | "rejected">().notNull(),
     source: text("source").notNull(),
@@ -3799,5 +3811,176 @@ export const competencyRevocations = pgTable(
       t.assessmentId,
       t.effectiveAt,
     ),
+  })),
+);
+
+export const competencyDevelopmentPlans = pgTable(
+  "competency_development_plans",
+  {
+    ...id,
+    ...timestamps,
+    tenantId,
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "restrict" }),
+    competencyId: uuid("competency_id")
+      .notNull()
+      .references(() => competencies.id, { onDelete: "restrict" }),
+    title: text("title").notNull(),
+    targetLevel: integer("target_level").notNull(),
+    deadline: timestampWithTimezone({ name: "deadline" }).notNull(),
+    state: text("state")
+      .$type<import("../../competencies/development-plans.schema").DevelopmentPlanState>()
+      .notNull()
+      .default("draft"),
+    version: integer("version").notNull().default(1),
+    responsibleId: uuid("responsible_id").references(() => users.id, { onDelete: "restrict" }),
+    createdBy: uuid("created_by")
+      .notNull()
+      .references(() => users.id, { onDelete: "restrict" }),
+    completedAssessmentId: uuid("completed_assessment_id").references(
+      () => competencyAssessments.id,
+      { onDelete: "restrict" },
+    ),
+    commandHash: text("command_hash").notNull(),
+  },
+  withTenantIdIndex("competency_development_plans", (t) => ({
+    employeeIndex: index("competency_plans_employee_idx").on(t.tenantId, t.userId, t.state),
+    levelReference: foreignKey({
+      columns: [t.tenantId, t.competencyId, t.targetLevel],
+      foreignColumns: [
+        competencyLevels.tenantId,
+        competencyLevels.competencyId,
+        competencyLevels.rank,
+      ],
+      name: "competency_plans_level_fk",
+    }),
+  })),
+);
+export const competencyPlanActivities = pgTable(
+  "competency_plan_activities",
+  {
+    ...id,
+    ...timestamps,
+    tenantId,
+    planId: uuid("plan_id")
+      .notNull()
+      .references(() => competencyDevelopmentPlans.id, { onDelete: "restrict" }),
+    title: text("title").notNull(),
+    courseId: uuid("course_id").references(() => courses.id, { onDelete: "restrict" }),
+    learningPathId: uuid("learning_path_id").references(() => learningPaths.id, {
+      onDelete: "restrict",
+    }),
+    reportedAt: timestampWithTimezone({ name: "reported_at" }),
+    reportedBy: uuid("reported_by").references(() => users.id, { onDelete: "restrict" }),
+  },
+  withTenantIdIndex("competency_plan_activities", (t) => ({
+    planIndex: index("competency_plan_activities_plan_idx").on(t.tenantId, t.planId),
+  })),
+);
+export const competencyPlanHistory = pgTable(
+  "competency_plan_history",
+  {
+    ...id,
+    ...timestamps,
+    tenantId,
+    planId: uuid("plan_id")
+      .notNull()
+      .references(() => competencyDevelopmentPlans.id, { onDelete: "restrict" }),
+    actorId: uuid("actor_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "restrict" }),
+    action: text("action").notNull(),
+    rationale: text("rationale").notNull(),
+    version: integer("version").notNull(),
+    fromState:
+      text("from_state").$type<
+        import("../../competencies/development-plans.schema").DevelopmentPlanState
+      >(),
+    toState: text("to_state")
+      .$type<import("../../competencies/development-plans.schema").DevelopmentPlanState>()
+      .notNull(),
+    activityId: uuid("activity_id").references(() => competencyPlanActivities.id, {
+      onDelete: "restrict",
+    }),
+    assessmentId: uuid("assessment_id").references(() => competencyAssessments.id, {
+      onDelete: "restrict",
+    }),
+    commandHash: text("command_hash").notNull(),
+  },
+  withTenantIdIndex("competency_plan_history", (t) => ({
+    revisionUnique: unique().on(t.tenantId, t.planId, t.version),
+  })),
+);
+
+export const competencyFrameworks = pgTable(
+  "competency_frameworks",
+  {
+    ...id,
+    ...timestamps,
+    tenantId,
+    code: text("code").notNull(),
+    name: text("name").notNull(),
+    description: text("description").notNull().default(""),
+    categories: jsonb("categories").$type<string[]>().notNull(),
+    active: boolean("active").notNull().default(true),
+  },
+  withTenantIdIndex("competency_frameworks", (t) => ({
+    codeUnique: unique().on(t.tenantId, t.code),
+  })),
+);
+export const competencyScales = pgTable(
+  "competency_scales",
+  {
+    ...id,
+    ...timestamps,
+    tenantId,
+    code: text("code").notNull(),
+    name: text("name").notNull(),
+    levels: jsonb("levels")
+      .$type<
+        import("../../competencies/competency-frameworks.schema").CreateCompetencyScale["levels"]
+      >()
+      .notNull(),
+  },
+  withTenantIdIndex("competency_scales", (t) => ({ codeUnique: unique().on(t.tenantId, t.code) })),
+);
+export const competencyRequirementVersions = pgTable(
+  "competency_requirement_versions",
+  {
+    ...id,
+    ...timestamps,
+    tenantId,
+    requirementId: uuid("requirement_id")
+      .notNull()
+      .references(() => competencyRequirements.id, { onDelete: "restrict" }),
+    jobRoleId: uuid("job_role_id")
+      .notNull()
+      .references(() => competencyJobRoles.id, { onDelete: "restrict" }),
+    competencyId: uuid("competency_id")
+      .notNull()
+      .references(() => competencies.id, { onDelete: "restrict" }),
+    version: integer("version").notNull(),
+    minimumLevel: integer("minimum_level").notNull(),
+    mandatory: boolean("mandatory").notNull().default(true),
+    effectiveFrom: timestampWithTimezone({ name: "effective_from" }).notNull(),
+    effectiveUntil: timestampWithTimezone({ name: "effective_until" }),
+    courseId: uuid("course_id").references(() => courses.id, { onDelete: "restrict" }),
+    learningPathId: uuid("learning_path_id").references(() => learningPaths.id, {
+      onDelete: "restrict",
+    }),
+    recordedBy: uuid("recorded_by").references(() => users.id, { onDelete: "restrict" }),
+  },
+  withTenantIdIndex("competency_requirement_versions", (t) => ({
+    revisionUnique: unique().on(t.tenantId, t.requirementId, t.version),
+    levelReference: foreignKey({
+      columns: [t.tenantId, t.competencyId, t.minimumLevel],
+      foreignColumns: [
+        competencyLevels.tenantId,
+        competencyLevels.competencyId,
+        competencyLevels.rank,
+      ],
+      name: "competency_requirement_versions_level_fk",
+    }),
   })),
 );
