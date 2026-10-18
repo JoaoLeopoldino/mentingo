@@ -23061,6 +23061,247 @@
           }
         }
       }
+    },
+    "/api/competencies/workspace": {
+      "get": {
+        "operationId": "CompetenciesController_getCompetencyWorkspace",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "language",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "en",
+              "anyOf": [
+                {
+                  "const": "en",
+                  "type": "string"
+                },
+                {
+                  "const": "pl",
+                  "type": "string"
+                },
+                {
+                  "const": "de",
+                  "type": "string"
+                },
+                {
+                  "const": "lt",
+                  "type": "string"
+                },
+                {
+                  "const": "cs",
+                  "type": "string"
+                },
+                {
+                  "const": "es",
+                  "type": "string"
+                },
+                {
+                  "const": "fr",
+                  "type": "string"
+                },
+                {
+                  "const": "pt-AO",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCompetencyWorkspaceResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/competencies/catalog": {
+      "post": {
+        "operationId": "CompetenciesController_createCompetency",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCompetencyBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCompetencyResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/competencies/catalog/{id}": {
+      "patch": {
+        "operationId": "CompetenciesController_setCompetencyActive",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetCompetencyActiveBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SetCompetencyActiveResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/competencies/roles": {
+      "post": {
+        "operationId": "CompetenciesController_createCompetencyJobRole",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCompetencyJobRoleBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCompetencyJobRoleResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/competencies/requirements": {
+      "put": {
+        "operationId": "CompetenciesController_setCompetencyRequirement",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetCompetencyRequirementBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SetCompetencyRequirementResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/competencies/assignments": {
+      "put": {
+        "operationId": "CompetenciesController_assignCompetencyRole",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignCompetencyRoleBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssignCompetencyRoleResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/competencies/evidence": {
+      "post": {
+        "operationId": "CompetenciesController_recordCompetencyEvidence",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecordCompetencyEvidenceBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordCompetencyEvidenceResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "info": {
@@ -23845,6 +24086,18 @@
                 "type": "array",
                 "items": {
                   "anyOf": [
+                    {
+                      "const": "competency.manage",
+                      "type": "string"
+                    },
+                    {
+                      "const": "competency.assess_managed",
+                      "type": "string"
+                    },
+                    {
+                      "const": "competency.read_self",
+                      "type": "string"
+                    },
                     {
                       "const": "phishing.manage",
                       "type": "string"
@@ -190272,6 +190525,907 @@
                 "updatedAt"
               ]
             }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "GetCompetencyWorkspaceResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "learning": {
+                "type": "object",
+                "properties": {
+                  "courses": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name"
+                      ]
+                    }
+                  },
+                  "learningPaths": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "courses",
+                  "learningPaths"
+                ]
+              },
+              "canManage": {
+                "type": "boolean"
+              },
+              "canAssess": {
+                "type": "boolean"
+              },
+              "catalog": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "minLength": 1,
+                      "maxLength": 60,
+                      "pattern": "^[A-Z0-9_-]+$",
+                      "type": "string"
+                    },
+                    "name": {
+                      "minLength": 1,
+                      "maxLength": 200,
+                      "pattern": "[^ ]",
+                      "type": "string"
+                    },
+                    "description": {
+                      "maxLength": 4000,
+                      "type": "string"
+                    },
+                    "category": {
+                      "minLength": 1,
+                      "maxLength": 200,
+                      "pattern": "[^ ]",
+                      "type": "string"
+                    },
+                    "levels": {
+                      "minItems": 1,
+                      "maxItems": 20,
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "rank": {
+                            "minimum": 1,
+                            "maximum": 20,
+                            "type": "integer"
+                          },
+                          "label": {
+                            "minLength": 1,
+                            "maxLength": 200,
+                            "pattern": "[^ ]",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "rank",
+                          "label"
+                        ]
+                      }
+                    },
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "active": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "name",
+                    "description",
+                    "category",
+                    "levels",
+                    "id",
+                    "active"
+                  ]
+                }
+              },
+              "roles": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "minLength": 1,
+                      "maxLength": 60,
+                      "pattern": "^[A-Z0-9_-]+$",
+                      "type": "string"
+                    },
+                    "name": {
+                      "minLength": 1,
+                      "maxLength": 200,
+                      "pattern": "[^ ]",
+                      "type": "string"
+                    },
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "name",
+                    "id"
+                  ]
+                }
+              },
+              "requirements": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "jobRoleId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "competencyId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "minimumLevel": {
+                      "minimum": 1,
+                      "maximum": 20,
+                      "type": "integer"
+                    },
+                    "effectiveFrom": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "effectiveUntil": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "courseId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "learningPathId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "jobRoleId",
+                    "competencyId",
+                    "minimumLevel",
+                    "effectiveFrom",
+                    "effectiveUntil",
+                    "courseId",
+                    "learningPathId",
+                    "id"
+                  ]
+                }
+              },
+              "units": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                }
+              },
+              "employees": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "jobRoleId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "organizationalUnitId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "jobRoleId",
+                    "organizationalUnitId"
+                  ]
+                }
+              },
+              "matrix": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "userId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "competencyId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "requiredLevel": {
+                      "type": "integer"
+                    },
+                    "currentLevel": {
+                      "anyOf": [
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "status": {
+                      "anyOf": [
+                        {
+                          "const": "met",
+                          "type": "string"
+                        },
+                        {
+                          "const": "missing",
+                          "type": "string"
+                        },
+                        {
+                          "const": "insufficient",
+                          "type": "string"
+                        },
+                        {
+                          "const": "pending",
+                          "type": "string"
+                        },
+                        {
+                          "const": "rejected",
+                          "type": "string"
+                        },
+                        {
+                          "const": "expired",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "courseId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "learningPathId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "userId",
+                    "competencyId",
+                    "requiredLevel",
+                    "currentLevel",
+                    "status",
+                    "courseId",
+                    "learningPathId"
+                  ]
+                }
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "userId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "competencyId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "level": {
+                      "minimum": 1,
+                      "maximum": 20,
+                      "type": "integer"
+                    },
+                    "status": {
+                      "anyOf": [
+                        {
+                          "const": "pending",
+                          "type": "string"
+                        },
+                        {
+                          "const": "approved",
+                          "type": "string"
+                        },
+                        {
+                          "const": "rejected",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "source": {
+                      "minLength": 1,
+                      "maxLength": 200,
+                      "pattern": "[^ ]",
+                      "type": "string"
+                    },
+                    "evidence": {
+                      "minLength": 1,
+                      "maxLength": 4000,
+                      "pattern": "[^ ]",
+                      "type": "string"
+                    },
+                    "expiresAt": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "reviewAt": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "recordedBy": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "assessorId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "assessedAt": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "createdAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "userId",
+                    "competencyId",
+                    "level",
+                    "status",
+                    "source",
+                    "evidence",
+                    "expiresAt",
+                    "reviewAt",
+                    "id",
+                    "recordedBy",
+                    "assessorId",
+                    "assessedAt",
+                    "createdAt"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "learning",
+              "canManage",
+              "canAssess",
+              "catalog",
+              "roles",
+              "requirements",
+              "units",
+              "employees",
+              "matrix",
+              "evidence"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "CreateCompetencyBody": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "code": {
+            "minLength": 1,
+            "maxLength": 60,
+            "pattern": "^[A-Z0-9_-]+$",
+            "type": "string"
+          },
+          "name": {
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "[^ ]",
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 4000,
+            "type": "string"
+          },
+          "category": {
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "[^ ]",
+            "type": "string"
+          },
+          "levels": {
+            "minItems": 1,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rank": {
+                  "minimum": 1,
+                  "maximum": 20,
+                  "type": "integer"
+                },
+                "label": {
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "pattern": "[^ ]",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "rank",
+                "label"
+              ]
+            }
+          }
+        },
+        "required": [
+          "code",
+          "name",
+          "description",
+          "category",
+          "levels"
+        ]
+      },
+      "CreateCompetencyResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "SetCompetencyActiveBody": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "active": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "active"
+        ]
+      },
+      "SetCompetencyActiveResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "CreateCompetencyJobRoleBody": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "code": {
+            "minLength": 1,
+            "maxLength": 60,
+            "pattern": "^[A-Z0-9_-]+$",
+            "type": "string"
+          },
+          "name": {
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "[^ ]",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "name"
+        ]
+      },
+      "CreateCompetencyJobRoleResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "SetCompetencyRequirementBody": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "jobRoleId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "competencyId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "minimumLevel": {
+            "minimum": 1,
+            "maximum": 20,
+            "type": "integer"
+          },
+          "effectiveFrom": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "effectiveUntil": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "courseId": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "learningPathId": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "jobRoleId",
+          "competencyId",
+          "minimumLevel",
+          "effectiveFrom",
+          "effectiveUntil",
+          "courseId",
+          "learningPathId"
+        ]
+      },
+      "SetCompetencyRequirementResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "AssignCompetencyRoleBody": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "userId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "jobRoleId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "organizationalUnitId": {
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "userId",
+          "jobRoleId",
+          "organizationalUnitId"
+        ]
+      },
+      "AssignCompetencyRoleResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "RecordCompetencyEvidenceBody": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "userId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "competencyId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "level": {
+            "minimum": 1,
+            "maximum": 20,
+            "type": "integer"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "const": "pending",
+                "type": "string"
+              },
+              {
+                "const": "approved",
+                "type": "string"
+              },
+              {
+                "const": "rejected",
+                "type": "string"
+              }
+            ]
+          },
+          "source": {
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "[^ ]",
+            "type": "string"
+          },
+          "evidence": {
+            "minLength": 1,
+            "maxLength": 4000,
+            "pattern": "[^ ]",
+            "type": "string"
+          },
+          "expiresAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reviewAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "userId",
+          "competencyId",
+          "level",
+          "status",
+          "source",
+          "evidence",
+          "expiresAt",
+          "reviewAt"
+        ]
+      },
+      "RecordCompetencyEvidenceResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id"
+            ]
           }
         },
         "required": [

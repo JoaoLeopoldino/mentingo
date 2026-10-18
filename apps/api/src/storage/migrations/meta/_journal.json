@@ -1562,6 +1562,27 @@
       "when": 1792278483521,
       "tag": "0222_offline_assessment_receipts",
       "breakpoints": true
+    },
+    {
+      "idx": 223,
+      "version": "7",
+      "when": 1792295257858,
+      "tag": "0223_enterprise_competencies",
+      "breakpoints": true
+    },
+    {
+      "idx": 224,
+      "version": "7",
+      "when": 1792295363428,
+      "tag": "0224_competency_tenant_policies",
+      "breakpoints": true
+    },
+    {
+      "idx": 225,
+      "version": "7",
+      "when": 1792295451989,
+      "tag": "0225_competency_evidence_constraints",
+      "breakpoints": true
     }
   ]
 }

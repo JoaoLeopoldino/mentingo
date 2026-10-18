@@ -202,6 +202,9 @@ export interface CurrentUserResponse {
     profilePictureUrl: string | null;
     roleSlugs: string[];
     permissions: (
+      | "competency.manage"
+      | "competency.assess_managed"
+      | "competency.read_self"
       | "phishing.manage"
       | "phishing.report_read"
       | "account.read_self"
@@ -37464,6 +37467,312 @@ export interface ReorderResponse {
   }[];
 }
 
+export interface GetCompetencyWorkspaceResponse {
+  data: {
+    learning: {
+      courses: {
+        /** @format uuid */
+        id: string;
+        name: string;
+      }[];
+      learningPaths: {
+        /** @format uuid */
+        id: string;
+        name: string;
+      }[];
+    };
+    canManage: boolean;
+    canAssess: boolean;
+    catalog: {
+      /**
+       * @minLength 1
+       * @maxLength 60
+       * @pattern ^[A-Z0-9_-]+$
+       */
+      code: string;
+      /**
+       * @minLength 1
+       * @maxLength 200
+       * @pattern [^ ]
+       */
+      name: string;
+      /** @maxLength 4000 */
+      description: string;
+      /**
+       * @minLength 1
+       * @maxLength 200
+       * @pattern [^ ]
+       */
+      category: string;
+      /**
+       * @maxItems 20
+       * @minItems 1
+       */
+      levels: {
+        /**
+         * @min 1
+         * @max 20
+         */
+        rank: number;
+        /**
+         * @minLength 1
+         * @maxLength 200
+         * @pattern [^ ]
+         */
+        label: string;
+      }[];
+      /** @format uuid */
+      id: string;
+      active: boolean;
+    }[];
+    roles: {
+      /**
+       * @minLength 1
+       * @maxLength 60
+       * @pattern ^[A-Z0-9_-]+$
+       */
+      code: string;
+      /**
+       * @minLength 1
+       * @maxLength 200
+       * @pattern [^ ]
+       */
+      name: string;
+      /** @format uuid */
+      id: string;
+    }[];
+    requirements: {
+      /** @format uuid */
+      jobRoleId: string;
+      /** @format uuid */
+      competencyId: string;
+      /**
+       * @min 1
+       * @max 20
+       */
+      minimumLevel: number;
+      /** @format date-time */
+      effectiveFrom: string;
+      effectiveUntil: string | null;
+      courseId: string | null;
+      learningPathId: string | null;
+      /** @format uuid */
+      id: string;
+    }[];
+    units: {
+      /** @format uuid */
+      id: string;
+      name: string;
+    }[];
+    employees: {
+      /** @format uuid */
+      id: string;
+      name: string;
+      jobRoleId: string | null;
+      organizationalUnitId: string | null;
+    }[];
+    matrix: {
+      /** @format uuid */
+      userId: string;
+      /** @format uuid */
+      competencyId: string;
+      requiredLevel: number;
+      currentLevel: number | null;
+      status: "met" | "missing" | "insufficient" | "pending" | "rejected" | "expired";
+      courseId: string | null;
+      learningPathId: string | null;
+    }[];
+    evidence: {
+      /** @format uuid */
+      userId: string;
+      /** @format uuid */
+      competencyId: string;
+      /**
+       * @min 1
+       * @max 20
+       */
+      level: number;
+      status: "pending" | "approved" | "rejected";
+      /**
+       * @minLength 1
+       * @maxLength 200
+       * @pattern [^ ]
+       */
+      source: string;
+      /**
+       * @minLength 1
+       * @maxLength 4000
+       * @pattern [^ ]
+       */
+      evidence: string;
+      expiresAt: string | null;
+      reviewAt: string | null;
+      /** @format uuid */
+      id: string;
+      /** @format uuid */
+      recordedBy: string;
+      assessorId: string | null;
+      assessedAt: string | null;
+      /** @format date-time */
+      createdAt: string;
+    }[];
+  };
+}
+
+export interface CreateCompetencyBody {
+  /**
+   * @minLength 1
+   * @maxLength 60
+   * @pattern ^[A-Z0-9_-]+$
+   */
+  code: string;
+  /**
+   * @minLength 1
+   * @maxLength 200
+   * @pattern [^ ]
+   */
+  name: string;
+  /** @maxLength 4000 */
+  description: string;
+  /**
+   * @minLength 1
+   * @maxLength 200
+   * @pattern [^ ]
+   */
+  category: string;
+  /**
+   * @maxItems 20
+   * @minItems 1
+   */
+  levels: {
+    /**
+     * @min 1
+     * @max 20
+     */
+    rank: number;
+    /**
+     * @minLength 1
+     * @maxLength 200
+     * @pattern [^ ]
+     */
+    label: string;
+  }[];
+}
+
+export interface CreateCompetencyResponse {
+  data: {
+    /** @format uuid */
+    id: string;
+  };
+}
+
+export interface SetCompetencyActiveBody {
+  active: boolean;
+}
+
+export interface SetCompetencyActiveResponse {
+  data: {
+    /** @format uuid */
+    id: string;
+  };
+}
+
+export interface CreateCompetencyJobRoleBody {
+  /**
+   * @minLength 1
+   * @maxLength 60
+   * @pattern ^[A-Z0-9_-]+$
+   */
+  code: string;
+  /**
+   * @minLength 1
+   * @maxLength 200
+   * @pattern [^ ]
+   */
+  name: string;
+}
+
+export interface CreateCompetencyJobRoleResponse {
+  data: {
+    /** @format uuid */
+    id: string;
+  };
+}
+
+export interface SetCompetencyRequirementBody {
+  /** @format uuid */
+  jobRoleId: string;
+  /** @format uuid */
+  competencyId: string;
+  /**
+   * @min 1
+   * @max 20
+   */
+  minimumLevel: number;
+  /** @format date-time */
+  effectiveFrom: string;
+  effectiveUntil: string | null;
+  courseId: string | null;
+  learningPathId: string | null;
+}
+
+export interface SetCompetencyRequirementResponse {
+  data: {
+    /** @format uuid */
+    id: string;
+  };
+}
+
+export interface AssignCompetencyRoleBody {
+  /** @format uuid */
+  userId: string;
+  /** @format uuid */
+  jobRoleId: string;
+  /** @format uuid */
+  organizationalUnitId: string;
+}
+
+export interface AssignCompetencyRoleResponse {
+  data: {
+    /** @format uuid */
+    id: string;
+  };
+}
+
+export interface RecordCompetencyEvidenceBody {
+  /** @format uuid */
+  userId: string;
+  /** @format uuid */
+  competencyId: string;
+  /**
+   * @min 1
+   * @max 20
+   */
+  level: number;
+  status: "pending" | "approved" | "rejected";
+  /**
+   * @minLength 1
+   * @maxLength 200
+   * @pattern [^ ]
+   */
+  source: string;
+  /**
+   * @minLength 1
+   * @maxLength 4000
+   * @pattern [^ ]
+   */
+  evidence: string;
+  expiresAt: string | null;
+  reviewAt: string | null;
+}
+
+export interface RecordCompetencyEvidenceResponse {
+  data: {
+    /** @format uuid */
+    id: string;
+  };
+}
+
 import type {
   AxiosInstance,
   AxiosRequestConfig,
@@ -47900,6 +48209,144 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<ReorderResponse, any>({
         path: `/api/todo-tasks/order`,
         method: "PUT",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name CompetenciesControllerGetCompetencyWorkspace
+     * @request GET:/api/competencies/workspace
+     */
+    competenciesControllerGetCompetencyWorkspace: (
+      query?: {
+        /** @format uuid */
+        userId?: string;
+        /** @default "en" */
+        language?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<GetCompetencyWorkspaceResponse, any>({
+        path: `/api/competencies/workspace`,
+        method: "GET",
+        query: query,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name CompetenciesControllerCreateCompetency
+     * @request POST:/api/competencies/catalog
+     */
+    competenciesControllerCreateCompetency: (
+      data: CreateCompetencyBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<CreateCompetencyResponse, any>({
+        path: `/api/competencies/catalog`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name CompetenciesControllerSetCompetencyActive
+     * @request PATCH:/api/competencies/catalog/{id}
+     */
+    competenciesControllerSetCompetencyActive: (
+      id: string,
+      data: SetCompetencyActiveBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<SetCompetencyActiveResponse, any>({
+        path: `/api/competencies/catalog/${id}`,
+        method: "PATCH",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name CompetenciesControllerCreateCompetencyJobRole
+     * @request POST:/api/competencies/roles
+     */
+    competenciesControllerCreateCompetencyJobRole: (
+      data: CreateCompetencyJobRoleBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<CreateCompetencyJobRoleResponse, any>({
+        path: `/api/competencies/roles`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name CompetenciesControllerSetCompetencyRequirement
+     * @request PUT:/api/competencies/requirements
+     */
+    competenciesControllerSetCompetencyRequirement: (
+      data: SetCompetencyRequirementBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<SetCompetencyRequirementResponse, any>({
+        path: `/api/competencies/requirements`,
+        method: "PUT",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name CompetenciesControllerAssignCompetencyRole
+     * @request PUT:/api/competencies/assignments
+     */
+    competenciesControllerAssignCompetencyRole: (
+      data: AssignCompetencyRoleBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<AssignCompetencyRoleResponse, any>({
+        path: `/api/competencies/assignments`,
+        method: "PUT",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name CompetenciesControllerRecordCompetencyEvidence
+     * @request POST:/api/competencies/evidence
+     */
+    competenciesControllerRecordCompetencyEvidence: (
+      data: RecordCompetencyEvidenceBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<RecordCompetencyEvidenceResponse, any>({
+        path: `/api/competencies/evidence`,
+        method: "POST",
         body: data,
         type: ContentType.Json,
         format: "json",

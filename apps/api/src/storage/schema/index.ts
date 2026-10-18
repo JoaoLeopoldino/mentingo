@@ -105,6 +105,7 @@ import {
   bigint,
   boolean,
   check,
+  foreignKey,
   date,
   index,
   integer,
@@ -3554,5 +3555,150 @@ export const reportsExports = pgTable(
   },
   withTenantIdIndex("reports_exports", (table) => ({
     expiryIdx: index("reports_exports_tenant_expiry_idx").on(table.tenantId, table.expiresAt),
+  })),
+);
+
+// Enterprise competencies reuse groups as organizational units. Evidence is append-only.
+export const competencies = pgTable(
+  "competencies",
+  {
+    ...id,
+    ...timestamps,
+    tenantId,
+    code: text("code").notNull(),
+    name: text("name").notNull(),
+    description: text("description").notNull().default(""),
+    category: text("category").notNull().default(""),
+    active: boolean("active").notNull().default(true),
+  },
+  withTenantIdIndex("competencies", (t) => ({ codeUnique: unique().on(t.tenantId, t.code) })),
+);
+
+export const competencyLevels = pgTable(
+  "competency_levels",
+  {
+    ...id,
+    tenantId,
+    competencyId: uuid("competency_id")
+      .notNull()
+      .references(() => competencies.id, { onDelete: "restrict" }),
+    rank: integer("rank").notNull(),
+    label: text("label").notNull(),
+  },
+  withTenantIdIndex("competency_levels", (t) => ({
+    rankUnique: unique().on(t.tenantId, t.competencyId, t.rank),
+  })),
+);
+
+export const competencyJobRoles = pgTable(
+  "competency_job_roles",
+  {
+    ...id,
+    ...timestamps,
+    tenantId,
+    code: text("code").notNull(),
+    name: text("name").notNull(),
+  },
+  withTenantIdIndex("competency_job_roles", (t) => ({
+    codeUnique: unique().on(t.tenantId, t.code),
+  })),
+);
+
+export const competencyRequirements = pgTable(
+  "competency_requirements",
+  {
+    ...id,
+    ...timestamps,
+    tenantId,
+    jobRoleId: uuid("job_role_id")
+      .notNull()
+      .references(() => competencyJobRoles.id, { onDelete: "restrict" }),
+    competencyId: uuid("competency_id")
+      .notNull()
+      .references(() => competencies.id, { onDelete: "restrict" }),
+    minimumLevel: integer("minimum_level").notNull(),
+    effectiveFrom: timestampWithTimezone({ name: "effective_from" })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    effectiveUntil: timestampWithTimezone({ name: "effective_until" }),
+    courseId: uuid("course_id").references(() => courses.id, { onDelete: "set null" }),
+    learningPathId: uuid("learning_path_id").references(() => learningPaths.id, {
+      onDelete: "set null",
+    }),
+  },
+  withTenantIdIndex("competency_requirements", (t) => ({
+    levelReference: foreignKey({
+      columns: [t.tenantId, t.competencyId, t.minimumLevel],
+      foreignColumns: [
+        competencyLevels.tenantId,
+        competencyLevels.competencyId,
+        competencyLevels.rank,
+      ],
+      name: "competency_requirements_level_fk",
+    }),
+    roleCompetencyUnique: unique().on(t.tenantId, t.jobRoleId, t.competencyId),
+  })),
+);
+
+export const competencyAssignments = pgTable(
+  "competency_assignments",
+  {
+    ...id,
+    ...timestamps,
+    tenantId,
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    jobRoleId: uuid("job_role_id")
+      .notNull()
+      .references(() => competencyJobRoles.id, { onDelete: "restrict" }),
+    organizationalUnitId: uuid("organizational_unit_id")
+      .notNull()
+      .references(() => groups.id, { onDelete: "restrict" }),
+  },
+  withTenantIdIndex("competency_assignments", (t) => ({
+    employeeUnique: unique().on(t.tenantId, t.userId),
+  })),
+);
+
+export const competencyEvidence = pgTable(
+  "competency_evidence",
+  {
+    ...id,
+    ...timestamps,
+    tenantId,
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "restrict" }),
+    competencyId: uuid("competency_id")
+      .notNull()
+      .references(() => competencies.id, { onDelete: "restrict" }),
+    level: integer("level").notNull(),
+    status: text("status").$type<"pending" | "approved" | "rejected">().notNull(),
+    source: text("source").notNull(),
+    evidence: text("evidence").notNull(),
+    recordedBy: uuid("recorded_by")
+      .notNull()
+      .references(() => users.id, { onDelete: "restrict" }),
+    assessorId: uuid("assessor_id").references(() => users.id, { onDelete: "restrict" }),
+    assessedAt: timestampWithTimezone({ name: "assessed_at" }),
+    expiresAt: timestampWithTimezone({ name: "expires_at" }),
+    reviewAt: timestampWithTimezone({ name: "review_at" }),
+  },
+  withTenantIdIndex("competency_evidence", (t) => ({
+    levelReference: foreignKey({
+      columns: [t.tenantId, t.competencyId, t.level],
+      foreignColumns: [
+        competencyLevels.tenantId,
+        competencyLevels.competencyId,
+        competencyLevels.rank,
+      ],
+      name: "competency_evidence_level_fk",
+    }),
+    employeeCompetencyIdx: index("competency_evidence_employee_competency_idx").on(
+      t.tenantId,
+      t.userId,
+      t.competencyId,
+    ),
   })),
 );
