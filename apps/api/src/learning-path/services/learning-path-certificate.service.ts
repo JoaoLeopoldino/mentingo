@@ -15,6 +15,7 @@ import {
   isSupportedLanguage,
 } from "@repo/shared";
 import { format } from "date-fns";
+import { and, eq, isNull } from "drizzle-orm";
 import { escape } from "lodash";
 import puppeteer, { type Browser, type Page } from "puppeteer";
 
@@ -25,6 +26,7 @@ import { IMAGE_QUALITY } from "src/file/image-variants/image-variant.constants";
 import { S3Service } from "src/s3/s3.service";
 import { SettingsService } from "src/settings/settings.service";
 import { DB } from "src/storage/db/db.providers";
+import { users } from "src/storage/schema";
 
 import { LEARNING_PATH_ERRORS } from "../constants/learning-path.errors";
 import { LearningPathRepository } from "../learning-path.repository";
@@ -76,6 +78,27 @@ export class LearningPathCertificateService {
     learningPathId: UUIDType,
     trx?: DatabasePg,
   ) {
+    const learningPath = await this.learningPathRepository.findLearningPathById(
+      learningPathId,
+      trx,
+    );
+    if (!learningPath?.tenantId) {
+      throw new NotFoundException(LEARNING_PATH_ERRORS.NOT_FOUND);
+    }
+    const [recipient] = await (trx ?? this.db)
+      .select({ id: users.id })
+      .from(users)
+      .where(
+        and(
+          eq(users.id, userId),
+          eq(users.tenantId, learningPath.tenantId),
+          isNull(users.deletedAt),
+        ),
+      )
+      .limit(1);
+    if (!recipient)
+      throw new NotFoundException("studentCertificateView.informations.certificateNotFound");
+
     const existingCertificate =
       await this.learningPathRepository.findLearningPathCertificateByUserAndPath(
         userId,
@@ -85,14 +108,6 @@ export class LearningPathCertificateService {
 
     if (existingCertificate) {
       return existingCertificate;
-    }
-
-    const learningPath = await this.learningPathRepository.findLearningPathById(
-      learningPathId,
-      trx,
-    );
-    if (!learningPath?.tenantId) {
-      throw new NotFoundException(LEARNING_PATH_ERRORS.NOT_FOUND);
     }
 
     if (!learningPath.includesCertificate) {

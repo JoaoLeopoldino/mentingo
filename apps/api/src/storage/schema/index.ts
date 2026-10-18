@@ -3115,7 +3115,11 @@ export const learningPathCertificates = pgTable(
     }),
     tenantId,
   },
-  withTenantIdIndex("learning_path_certificates"),
+  withTenantIdIndex("learning_path_certificates", (table) => ({
+    activeRecipientUniqueIdx: uniqueIndex("learning_path_certificates_active_recipient_idx")
+      .on(table.tenantId, table.userId, table.learningPathId)
+      .where(sql`${table.status} = 'active'`),
+  })),
 );
 
 export const learningPathExports = pgTable(

@@ -1633,6 +1633,13 @@ export class LearningPathRepository {
           eq(learningPathCertificates.learningPathId, learningPathId),
         ),
       )
+      .orderBy(
+        desc(
+          sql`${learningPathCertificates.status} = ${LEARNING_PATH_CERTIFICATE_STATUSES.ACTIVE}`,
+        ),
+        desc(learningPathCertificates.issuedAt),
+        desc(learningPathCertificates.id),
+      )
       .limit(1);
 
     return certificate;
@@ -1759,6 +1766,7 @@ export class LearningPathRepository {
         tenantId,
         status: LEARNING_PATH_CERTIFICATE_STATUSES.ACTIVE,
       })
+      .onConflictDoNothing()
       .returning();
 
     return certificate;

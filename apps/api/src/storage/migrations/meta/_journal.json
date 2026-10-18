@@ -1646,6 +1646,13 @@
       "when": 1792339893235,
       "tag": "0234_certificate_revocation_decision",
       "breakpoints": true
+    },
+    {
+      "idx": 235,
+      "version": "7",
+      "when": 1792354023917,
+      "tag": "0235_learning_path_certificate_active_uniqueness",
+      "breakpoints": true
     }
   ]
 }

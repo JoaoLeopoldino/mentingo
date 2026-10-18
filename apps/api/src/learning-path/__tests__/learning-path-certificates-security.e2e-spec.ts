@@ -4,6 +4,7 @@ import { LEARNING_PATH_CERTIFICATE_STATUSES } from "@repo/shared";
 import { eq } from "drizzle-orm";
 import request from "supertest";
 
+import { LearningPathCertificateService } from "src/learning-path/services/learning-path-certificate.service";
 import { learningPathCertificates, learningPaths, tenants, users } from "src/storage/schema";
 
 import { createE2ETest } from "../../../test/create-e2e-test";
@@ -18,11 +19,13 @@ import type { DatabasePg } from "src/common";
 describe("Learning path certificate security with real tenant RLS", () => {
   let app: INestApplication, db: DatabasePg, dbAdmin: DatabasePg;
   let factory: ReturnType<typeof createUserFactory>;
+  let inTenant: <T>(fn: () => Promise<T>) => Promise<T>;
   beforeAll(async () => {
     const context = await createE2ETest({ useDbProxy: true });
     app = context.app;
     db = context.db;
     dbAdmin = context.dbAdmin;
+    inTenant = (fn) => context.runAsTenant(context.defaultTenantId, fn);
     factory = createUserFactory(db);
   });
   beforeEach(async () => {
@@ -57,6 +60,126 @@ describe("Learning path certificate security with real tenant RLS", () => {
       .returning();
     return { owner, reader, admin, path, certificate };
   }
+  it("issues one credential under five concurrent issuance requests", async () => {
+    const owner = await factory.withUserSettings(db).create();
+    const path = await createLearningPathFactory(db).create({
+      authorId: owner.id,
+      includesCertificate: true,
+    });
+    const service = app.get(LearningPathCertificateService);
+    const issued = await Promise.all(
+      Array.from({ length: 5 }, () =>
+        inTenant(() => service.createLearningPathCertificate(owner.id, path.id)),
+      ),
+    );
+    expect(new Set(issued.map((certificate) => certificate.id)).size).toBe(1);
+    const stored = await db
+      .select()
+      .from(learningPathCertificates)
+      .where(eq(learningPathCertificates.learningPathId, path.id));
+    expect(stored).toHaveLength(1);
+  });
+  it("enforces one active credential in PostgreSQL while retaining inactive history", async () => {
+    const { owner, path } = await fixture();
+    await db
+      .insert(learningPathCertificates)
+      .values({
+        userId: owner.id,
+        learningPathId: path.id,
+        status: LEARNING_PATH_CERTIFICATE_STATUSES.EXPIRED,
+      });
+    await expect(
+      db.insert(learningPathCertificates).values({ userId: owner.id, learningPathId: path.id }),
+    ).rejects.toMatchObject({ code: "23505" });
+  });
+  it("selects the active credential ahead of older inactive history", async () => {
+    const owner = await factory.withUserSettings(db).create();
+    const path = await createLearningPathFactory(db).create({
+      authorId: owner.id,
+      includesCertificate: true,
+    });
+    await db
+      .insert(learningPathCertificates)
+      .values({
+        userId: owner.id,
+        learningPathId: path.id,
+        status: LEARNING_PATH_CERTIFICATE_STATUSES.EXPIRED,
+        issuedAt: "2026-01-01T00:00:00Z",
+      });
+    const [active] = await db
+      .insert(learningPathCertificates)
+      .values({ userId: owner.id, learningPathId: path.id })
+      .returning();
+    const result = await inTenant(() =>
+      app.get(LearningPathCertificateService).createLearningPathCertificate(owner.id, path.id),
+    );
+    expect(result.id).toBe(active.id);
+  });
+  it("refuses issuance linking a visible path to another tenant's employee", async () => {
+    const { path } = await fixture();
+    const [foreignTenant] = await dbAdmin
+      .insert(tenants)
+      .values({ name: "Benguela fictícia externa", host: `https://issue-${randomUUID()}.invalid` })
+      .returning();
+    const [foreign] = await dbAdmin
+      .insert(users)
+      .values({
+        firstName: "Externo",
+        lastName: "Fictício",
+        email: `foreign-${randomUUID()}@example.com`,
+        tenantId: foreignTenant.id,
+      })
+      .returning();
+    await expect(
+      inTenant(() =>
+        app.get(LearningPathCertificateService).createLearningPathCertificate(foreign.id, path.id),
+      ),
+    ).rejects.toMatchObject({ status: 404 });
+    expect(
+      await dbAdmin
+        .select()
+        .from(learningPathCertificates)
+        .where(eq(learningPathCertificates.userId, foreign.id)),
+    ).toHaveLength(0);
+  });
+  it("refuses new issuance for a deleted employee", async () => {
+    const { reader, path } = await fixture();
+    await db
+      .update(users)
+      .set({ deletedAt: new Date().toISOString() })
+      .where(eq(users.id, reader.id));
+    await expect(
+      inTenant(() =>
+        app.get(LearningPathCertificateService).createLearningPathCertificate(reader.id, path.id),
+      ),
+    ).rejects.toMatchObject({ status: 404 });
+    expect(
+      await db
+        .select()
+        .from(learningPathCertificates)
+        .where(eq(learningPathCertificates.userId, reader.id)),
+    ).toHaveLength(0);
+  });
+  it("does not silently reactivate an expired credential on repeated issuance", async () => {
+    const { owner, path, certificate } = await fixture();
+    await db
+      .update(learningPathCertificates)
+      .set({ status: LEARNING_PATH_CERTIFICATE_STATUSES.EXPIRED })
+      .where(eq(learningPathCertificates.id, certificate.id));
+    const result = await inTenant(() =>
+      app.get(LearningPathCertificateService).createLearningPathCertificate(owner.id, path.id),
+    );
+    expect(result).toMatchObject({
+      id: certificate.id,
+      status: LEARNING_PATH_CERTIFICATE_STATUSES.EXPIRED,
+    });
+    expect(
+      await db
+        .select()
+        .from(learningPathCertificates)
+        .where(eq(learningPathCertificates.userId, owner.id)),
+    ).toHaveLength(1);
+  });
   it("allows the owner and administrator but refuses another learner's metadata", async () => {
     const { owner, reader, admin, path } = await fixture();
     for (const [actor, status] of [

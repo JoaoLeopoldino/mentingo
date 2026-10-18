@@ -85,3 +85,13 @@ Foram executados 51 testes de certificados com PostgreSQL, incluindo autorizaç�
 A consulta privada de certificados de percursos passou a aplicar a mesma política dos certificados de curso: o próprio formando, administradores autorizados e gestores no âmbito dos seus grupos. Outro formando ou tenant recebe 404. A leitura pública consulta estado activo e validade antes de gerar página/imagem, com `no-store`; parâmetros inválidos são recusados. Oito testes com PostgreSQL/RLS passaram, incluindo acesso alheio, tenant, expiração e imagem após expiração. A revogação e a recertificação completa de percursos continuam por implementar/aceitar.
 
 A página pública de curso e os metadados de percurso têm textos pt-AO explícitos, evitando fallback inglês. O QA detectou «Open platform», agora «Abrir a plataforma». A criação de curso respeita o parâmetro de emissão de certificado; três regressões cobrem true/false/ausente. A configuração administrativa própria continua disponível. Não se concede competência profissional por emissão de certificado.
+
+## Integridade de emissão de percursos — 18/10/2026
+
+A emissão recusa associar um percurso visível a um colaborador de outro tenant ou eliminado. Dois testes com RLS real reproduziram a aceitação indevida antes da correcção; a prova é do serviço interno de emissão, não uma exploração demonstrada de um endpoint público.
+
+Uma restrição parcial PostgreSQL permite apenas uma credencial activa por tenant/colaborador/percurso, conservando registos inactivos. A emissão concorrente reutiliza a credencial vencedora; a consulta dá prioridade à credencial activa e, depois, à mais recente. Pedir emissão novamente não reactiva silenciosamente uma credencial expirada.
+
+A suite foi alargada para 14 testes, todos aprovados, incluindo cinco pedidos de emissão concorrentes, unicidade na base, prioridade da credencial corrente e recusas de acesso/tenant anteriores. A migration aditiva `0235_learning_path_certificate_active_uniqueness.sql` foi gerada pelo Drizzle e aplicada apenas às bases locais conhecidas. O preflight recusa duplicados, sem os eliminar ou fundir. A base de demonstração tinha zero certificados de percursos; a impressão antes/depois permaneceu igual. Os testes exercitam também histórico inactivo com dados não vazios.
+
+Esta correcção não acrescenta revogação formal, ciclos ou recertificação empresarial de percursos. Esses fluxos continuam pendentes e o critério global de certificados permanece aberto. Não se reconstruíram datas/decisões históricas nem se alterou o domínio de competências.

@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX IF NOT EXISTS "learning_path_certificates_active_recipient_idx" ON "learning_path_certificates" USING btree ("tenant_id","user_id","learning_path_id") WHERE "learning_path_certificates"."status" = 'active';
