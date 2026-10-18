@@ -8323,5 +8323,9 @@
       "manual_reset": "Renewed",
       "expired": "Expired"
     }
+  },
+  "accessibility": {
+    "home": "Go to homepage",
+    "profilePhoto": "Profile picture"
   }
 }

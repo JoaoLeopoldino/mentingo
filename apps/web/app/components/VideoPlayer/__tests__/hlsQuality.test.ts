@@ -35,7 +35,7 @@ describe("hlsQuality", () => {
     expect(getHlsQualityOptions([createQualityLevel(720), createQualityLevel(720)])).toEqual([]);
   });
 
-  it("auto hd enables only 720p to 1080p representations when available", () => {
+  it("auto keeps the complete ladder available for bandwidth adaptation", () => {
     const representations = [
       createQualityLevel(360),
       createQualityLevel(720),
@@ -46,14 +46,14 @@ describe("hlsQuality", () => {
     applyHlsQualitySelection(representations, HLS_AUTO_HD_VALUE);
 
     expect(representations.map((representation) => representation.enabled)).toEqual([
-      false,
       true,
       true,
-      false,
+      true,
+      true,
     ]);
   });
 
-  it("auto hd falls back to the best lower representation when no hd representation exists", () => {
+  it("auto permits adaptation across all lower representations without an HD rendition", () => {
     const representations = [
       createQualityLevel(240),
       createQualityLevel(360),
@@ -63,8 +63,8 @@ describe("hlsQuality", () => {
     applyHlsQualitySelection(representations, HLS_AUTO_HD_VALUE);
 
     expect(representations.map((representation) => representation.enabled)).toEqual([
-      false,
-      false,
+      true,
+      true,
       true,
     ]);
   });

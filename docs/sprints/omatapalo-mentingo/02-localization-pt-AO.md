@@ -2,7 +2,9 @@
 
 Estado actual: **catálogo UI completo estruturalmente; revisão linguística e canais complementares incompletos**. Os números dos checkpoints abaixo são históricos.
 
-Branch actual: `sprint/omatapalo-resume-20261017`. Consulte a actualização final neste relatório.
+Branch actual: `feat/omatapalo-enterprise-competencies-20261018`. Catálogo actual: **6.228/6.228 = 100% estrutural**, 6.171 valores diferentes do inglês e 57 invariantes; zero omissões/erros de placeholders. Revisão linguística humana não quantificada. Consulte o relatório 18; os números anteriores abaixo são históricos.
+
+Actualização empresarial: textos de acessibilidade da navegação/fotografia de perfil em todos os oito catálogos; números do histórico por `Intl.NumberFormat`; página pública e metadados de certificados em pt-AO. Cinco testes do validador e seis de idioma passaram. A revisão visual detectou e corrigiu «Open platform». Os nove corpos e 19 assuntos de email anteriormente traduzidos não foram novamente enviados nesta execução. Nem os 100% estruturais nem os valores diferentes do inglês demonstram revisão humana de todas as frases ou localização de todos os PDFs/mensagens externas. Tempo exclusivo não medido; integra a execução 18.
 
 Base: `7a23e967`; branch `sprint/omatapalo-validation-20261017`. Ambiente isolado no commit `c6c53fc7`. O commit de localização será registado no estado global.
 

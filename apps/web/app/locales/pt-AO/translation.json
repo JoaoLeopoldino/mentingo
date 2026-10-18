@@ -8354,5 +8354,9 @@
       "manual_reset": "Renovado",
       "expired": "Expirado"
     }
+  },
+  "accessibility": {
+    "home": "Ir para a página inicial",
+    "profilePhoto": "Fotografia de perfil"
   }
 }

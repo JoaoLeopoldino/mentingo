@@ -2,6 +2,7 @@ import { Link, useParams } from "@remix-run/react";
 import { PERMISSIONS, hasPermission } from "@repo/shared";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+
 import { useRevokeCertificate } from "~/api/mutations/useRevokeCertificate";
 import { useCertificateLearningHistory } from "~/api/queries/useCertificateLearningHistory";
 import { useCurrentUser } from "~/api/queries/useCurrentUser";
@@ -20,6 +21,7 @@ export default function LearningHistoryPage() {
   const { mutateAsync: revoke, isPending: revoking } = useRevokeCertificate();
   const [reason, setReason] = useState("");
   const [confirmed, setConfirmed] = useState(false);
+  const number = new Intl.NumberFormat(language, { maximumFractionDigits: 2 });
   const canRevoke = hasPermission(actor?.permissions ?? [], PERMISSIONS.COURSE_UPDATE);
   if (isPending)
     return (
@@ -153,7 +155,8 @@ export default function LearningHistoryPage() {
                 .filter((a) => a.learningCycle === cycle)
                 .map((a) => (
                   <li key={a.id}>
-                    {formatLocalizedDate(language, a.submittedAt)} · {a.scorePercentage ?? "—"}%
+                    {formatLocalizedDate(language, a.submittedAt)} ·{" "}
+                    {a.scorePercentage === null ? "—" : number.format(Number(a.scorePercentage))} %
                   </li>
                 ))}
             </ul>
@@ -163,7 +166,8 @@ export default function LearningHistoryPage() {
                 .filter((a) => a.learningCycle === cycle)
                 .map((a) => (
                   <li key={a.id}>
-                    {a.attemptNumber} · {a.scoreRaw ?? "—"} ·{" "}
+                    {a.attemptNumber} ·{" "}
+                    {a.scoreRaw === null ? "—" : number.format(Number(a.scoreRaw))} ·{" "}
                     {a.completedAt ? formatLocalizedDate(language, a.completedAt) : "—"}
                   </li>
                 ))}
