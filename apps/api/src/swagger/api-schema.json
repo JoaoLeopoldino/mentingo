@@ -7975,6 +7975,102 @@
         }
       }
     },
+    "/api/offline-assessments/{lessonId}/snapshot": {
+      "get": {
+        "operationId": "OfflineAssessmentController_getOfflineAssessmentSnapshot",
+        "parameters": [
+          {
+            "name": "lessonId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "language",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "default": "en",
+              "anyOf": [
+                {
+                  "const": "en",
+                  "type": "string"
+                },
+                {
+                  "const": "pl",
+                  "type": "string"
+                },
+                {
+                  "const": "de",
+                  "type": "string"
+                },
+                {
+                  "const": "lt",
+                  "type": "string"
+                },
+                {
+                  "const": "cs",
+                  "type": "string"
+                },
+                {
+                  "const": "es",
+                  "type": "string"
+                },
+                {
+                  "const": "fr",
+                  "type": "string"
+                },
+                {
+                  "const": "pt-AO",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetOfflineAssessmentSnapshotResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/offline-assessments/sync": {
+      "post": {
+        "operationId": "OfflineAssessmentController_submitOfflineAssessment",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitOfflineAssessmentBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubmitOfflineAssessmentResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/lesson/{lessonId}/ai-judge-configuration": {
       "get": {
         "operationId": "AiJudgeConfigurationController_getConfiguration",
@@ -44615,6 +44711,240 @@
             },
             "required": [
               "message"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "GetOfflineAssessmentSnapshotResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "snapshot": {
+                "type": "string"
+              },
+              "lessonId": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "courseId": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "language": {
+                "default": "en",
+                "anyOf": [
+                  {
+                    "const": "en",
+                    "type": "string"
+                  },
+                  {
+                    "const": "pl",
+                    "type": "string"
+                  },
+                  {
+                    "const": "de",
+                    "type": "string"
+                  },
+                  {
+                    "const": "lt",
+                    "type": "string"
+                  },
+                  {
+                    "const": "cs",
+                    "type": "string"
+                  },
+                  {
+                    "const": "es",
+                    "type": "string"
+                  },
+                  {
+                    "const": "fr",
+                    "type": "string"
+                  },
+                  {
+                    "const": "pt-AO",
+                    "type": "string"
+                  }
+                ]
+              },
+              "learningCycle": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "expiresAt": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "questions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "prompt": {
+                      "type": "string"
+                    },
+                    "options": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "format": "uuid",
+                            "type": "string"
+                          },
+                          "label": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "label"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "title",
+                    "prompt",
+                    "options"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "snapshot",
+              "lessonId",
+              "courseId",
+              "title",
+              "language",
+              "learningCycle",
+              "expiresAt",
+              "questions"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "SubmitOfflineAssessmentBody": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "clientAttemptId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "snapshot": {
+            "minLength": 32,
+            "maxLength": 16384,
+            "type": "string"
+          },
+          "clientSubmittedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "answers": {
+            "minItems": 1,
+            "maxItems": 100,
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "properties": {
+                "questionId": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "optionId": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "questionId",
+                "optionId"
+              ]
+            }
+          }
+        },
+        "required": [
+          "clientAttemptId",
+          "snapshot",
+          "clientSubmittedAt",
+          "answers"
+        ]
+      },
+      "SubmitOfflineAssessmentResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "synced",
+                "type": "string"
+              },
+              "clientAttemptId": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "attemptId": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "learningCycle": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "correctAnswerCount": {
+                "type": "integer"
+              },
+              "wrongAnswerCount": {
+                "type": "integer"
+              },
+              "questionCount": {
+                "type": "integer"
+              },
+              "score": {
+                "type": "number"
+              },
+              "receivedAt": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "clientSubmittedAt": {
+                "format": "date-time",
+                "type": "string"
+              }
+            },
+            "required": [
+              "state",
+              "clientAttemptId",
+              "attemptId",
+              "learningCycle",
+              "correctAnswerCount",
+              "wrongAnswerCount",
+              "questionCount",
+              "score",
+              "receivedAt",
+              "clientSubmittedAt"
             ]
           }
         },

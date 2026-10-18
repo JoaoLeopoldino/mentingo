@@ -4191,6 +4191,76 @@ export interface UpdateLessonDisplayOrderResponse {
   };
 }
 
+export interface GetOfflineAssessmentSnapshotResponse {
+  data: {
+    snapshot: string;
+    /** @format uuid */
+    lessonId: string;
+    /** @format uuid */
+    courseId: string;
+    title: string;
+    /** @default "en" */
+    language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    /** @min 1 */
+    learningCycle: number;
+    /** @format date-time */
+    expiresAt: string;
+    questions: {
+      /** @format uuid */
+      id: string;
+      title: string;
+      prompt: string;
+      options: {
+        /** @format uuid */
+        id: string;
+        label: string;
+      }[];
+    }[];
+  };
+}
+
+export interface SubmitOfflineAssessmentBody {
+  /** @format uuid */
+  clientAttemptId: string;
+  /**
+   * @minLength 32
+   * @maxLength 16384
+   */
+  snapshot: string;
+  /** @format date-time */
+  clientSubmittedAt: string;
+  /**
+   * @maxItems 100
+   * @minItems 1
+   */
+  answers: {
+    /** @format uuid */
+    questionId: string;
+    /** @format uuid */
+    optionId: string;
+  }[];
+}
+
+export interface SubmitOfflineAssessmentResponse {
+  data: {
+    state: "synced";
+    /** @format uuid */
+    clientAttemptId: string;
+    /** @format uuid */
+    attemptId: string;
+    /** @min 1 */
+    learningCycle: number;
+    correctAnswerCount: number;
+    wrongAnswerCount: number;
+    questionCount: number;
+    score: number;
+    /** @format date-time */
+    receivedAt: string;
+    /** @format date-time */
+    clientSubmittedAt: string;
+  };
+}
+
 export interface GetConfigurationResponse {
   data: {
     /** @format uuid */
@@ -41362,6 +41432,47 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<UpdateLessonDisplayOrderResponse, any>({
         path: `/api/lesson/update-lesson-display-order`,
         method: "PATCH",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name OfflineAssessmentControllerGetOfflineAssessmentSnapshot
+     * @request GET:/api/offline-assessments/{lessonId}/snapshot
+     */
+    offlineAssessmentControllerGetOfflineAssessmentSnapshot: (
+      lessonId: string,
+      query: {
+        /** @default "en" */
+        language: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<GetOfflineAssessmentSnapshotResponse, any>({
+        path: `/api/offline-assessments/${lessonId}/snapshot`,
+        method: "GET",
+        query: query,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name OfflineAssessmentControllerSubmitOfflineAssessment
+     * @request POST:/api/offline-assessments/sync
+     */
+    offlineAssessmentControllerSubmitOfflineAssessment: (
+      data: SubmitOfflineAssessmentBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<SubmitOfflineAssessmentResponse, any>({
+        path: `/api/offline-assessments/sync`,
+        method: "POST",
         body: data,
         type: ContentType.Json,
         format: "json",

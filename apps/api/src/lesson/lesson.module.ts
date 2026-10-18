@@ -34,6 +34,9 @@ import { AiMentorConfigurationGraphService } from "./ai-mentor-configuration/ser
 import { AiMentorConfigurationService } from "./ai-mentor-configuration/services/ai-mentor-configuration.service";
 import { AiMentorLessonTranslationService } from "./ai-mentor-configuration/services/ai-mentor-lesson-translation.service";
 import { LessonController } from "./lesson.controller";
+import { OfflineAssessmentController } from "./offline/offline-assessment.controller";
+import { OfflineAssessmentRepository } from "./offline/offline-assessment.repository";
+import { OfflineAssessmentService } from "./offline/offline-assessment.service";
 import { AdminLessonRepository } from "./repositories/adminLesson.repository";
 import { LessonRepository } from "./repositories/lesson.repository";
 import { AdminLessonService } from "./services/adminLesson.service";
@@ -57,12 +60,15 @@ import { LessonService } from "./services/lesson.service";
   ],
   controllers: [
     LessonController,
+    OfflineAssessmentController,
     AiJudgeConfigurationController,
     AiJudgeConfigurationGenerationController,
     AiMentorConfigurationController,
     AiMentorConfigurationGenerationController,
   ],
   providers: [
+    OfflineAssessmentRepository,
+    OfflineAssessmentService,
     AiJudgeConfigurationRepository,
     AiJudgeConfigurationGenerationQueueService,
     AiJudgeConfigurationGenerationService,

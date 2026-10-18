@@ -1555,6 +1555,13 @@
       "when": 1792256403526,
       "tag": "0221_outgoing_jackpot",
       "breakpoints": true
+    },
+    {
+      "idx": 222,
+      "version": "7",
+      "when": 1792278483521,
+      "tag": "0222_offline_assessment_receipts",
+      "breakpoints": true
     }
   ]
 }

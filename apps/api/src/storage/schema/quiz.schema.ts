@@ -45,6 +45,8 @@ import {
 
 import { lessons, users } from ".";
 
+import type { OfflineAssessmentResult } from "../../lesson/offline/offline-assessment.types";
+
 export const assessments = pgTable(
   "assessments",
   {
@@ -277,6 +279,10 @@ export const assessmentAttempts = pgTable(
   {
     ...id,
     learningCycle: integer("learning_cycle").notNull().default(1),
+    offlineClientAttemptId: uuid("offline_client_attempt_id"),
+    offlinePayloadHash: text("offline_payload_hash"),
+    offlineClientSubmittedAt: timestampWithTimezone({ name: "offline_client_submitted_at" }),
+    offlineSyncResult: jsonb("offline_sync_result").$type<OfflineAssessmentResult>(),
     assessmentId: uuid("assessment_id")
       .references(() => assessments.id, { onDelete: "cascade" })
       .notNull(),
@@ -310,6 +316,11 @@ export const assessmentAttempts = pgTable(
   },
   (table) => ({
     ...withTenantIdIndex("assessment_attempts")(table),
+    offlineOperationUniqueIdx: uniqueIndex(
+      "assessment_attempts_tenant_learner_offline_operation_idx",
+    )
+      .on(table.tenantId, table.learnerId, table.offlineClientAttemptId)
+      .where(sql`${table.offlineClientAttemptId} IS NOT NULL`),
     attemptUniqueIdx: uniqueIndex("assessment_attempts_tenant_assessment_learner_number_idx").on(
       table.tenantId,
       table.assessmentId,
