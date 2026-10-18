@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Inject,
   InternalServerErrorException,
   Logger,
   NotFoundException,
@@ -17,10 +18,13 @@ import { format } from "date-fns";
 import { escape } from "lodash";
 import puppeteer, { type Browser, type Page } from "puppeteer";
 
+import { DatabasePg } from "src/common";
+import { assertCanReadLearnerCertificates } from "src/common/permissions/assert-can-read-learner-certificates";
 import { FileService } from "src/file/file.service";
 import { IMAGE_QUALITY } from "src/file/image-variants/image-variant.constants";
 import { S3Service } from "src/s3/s3.service";
 import { SettingsService } from "src/settings/settings.service";
+import { DB } from "src/storage/db/db.providers";
 
 import { LEARNING_PATH_ERRORS } from "../constants/learning-path.errors";
 import { LearningPathRepository } from "../learning-path.repository";
@@ -30,7 +34,8 @@ import type {
   LearningPathCertificateShareRecord,
 } from "./learning-path-certificate.types";
 import type { SupportedLanguages } from "@repo/shared";
-import type { UUIDType, DatabasePg } from "src/common";
+import type { UUIDType } from "src/common";
+import type { CurrentUserType } from "src/common/types/current-user.type";
 
 const SHARE_IMAGE_WIDTH = 1600;
 const SHARE_IMAGE_HEIGHT = 900;
@@ -42,6 +47,7 @@ export class LearningPathCertificateService {
   private browserInitialization: Promise<Browser> | null = null;
 
   constructor(
+    @Inject(DB) private readonly db: DatabasePg,
     private readonly learningPathRepository: LearningPathRepository,
     private readonly settingsService: SettingsService,
     private readonly s3Service: S3Service,
@@ -120,7 +126,9 @@ export class LearningPathCertificateService {
     userId: UUIDType,
     learningPathId: UUIDType,
     language: SupportedLanguages,
+    currentUser: CurrentUserType,
   ) {
+    await assertCanReadLearnerCertificates(this.db, userId, currentUser);
     const certificate = await this.learningPathRepository.findLearningPathCertificateByUserAndPath(
       userId,
       learningPathId,
@@ -398,6 +406,10 @@ export class LearningPathCertificateService {
   private getSharePageContent(context: any, embeddedImageSrc: string) {
     const title = context.certificate.pathTitle ?? "";
     const translations = withEnglishLanguageFallback({
+      "pt-AO": {
+        pageTitle: `Certificado de conclusão do percurso de aprendizagem "${title}"`,
+        pageDescription: `${context.certificate.fullName} concluiu o percurso de aprendizagem "${title}" e recebeu um certificado de formação.`,
+      },
       pl: {
         pageTitle: `Certyfikat ukończenia ścieżki rozwoju "${title}"`,
         pageDescription: `${context.certificate.fullName} ukończył/a ścieżkę rozwoju "${title}" i otrzymał/a certyfikat.`,

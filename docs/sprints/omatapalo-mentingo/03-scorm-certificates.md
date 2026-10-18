@@ -1,6 +1,6 @@
 # Etapa 2 — SCORM e certificados
 
-Estado: **implementação funcional de ciclos e histórico, com testes de integração; player SCORM no navegador ainda por validar**.
+Estado actual: **SCORM 1.2 independente no Chrome, dois ciclos, emissão automática, histórico UI e revogação demonstrados; Android e matriz completa de percursos pendentes**. Primeiro checkpoint novo `9c0a6700`, commits posteriores no branch. [Validação empresarial actual](18-enterprise-validation.md). As secções iniciais abaixo são históricas.
 
 Base: `7a23e967`; autorização: `dc15e4f2`; branch `sprint/omatapalo-validation-20261017`. As alterações desta etapa seguem num commit próprio, identificável pelo título `fix(lms): preserve assessment evidence across renewal cycles`.
 

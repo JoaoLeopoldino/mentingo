@@ -122,6 +122,35 @@ describe("CertificatesController (e2e)", () => {
     await truncateAllTables(baseDb, db);
   });
 
+  describe("course certificate creation setting", () => {
+    it.each([true, false, undefined])(
+      "persists hasCertificate=%s through native course creation",
+      async (hasCertificate) => {
+        const author = await userFactory
+          .withCredentials({ password })
+          .withAdminSettings(db)
+          .create();
+        const category = await categoryFactory.create();
+        const response = await request(app.getHttpServer())
+          .post("/api/course")
+          .set("Cookie", await cookieFor(author, app))
+          .send({
+            title: "Segurança fictícia",
+            description: "Regressão de emissão",
+            categoryId: category.id,
+            language: "pt-AO",
+            hasCertificate,
+          })
+          .expect(201);
+        const [created] = await db
+          .select()
+          .from(courses)
+          .where(eq(courses.id, response.body.data.id));
+        expect(created.hasCertificate).toBe(hasCertificate ?? false);
+      },
+    );
+  });
+
   describe("public certificate validation", () => {
     async function fixture(expiresAt?: string) {
       const owner = await userFactory.withCredentials({ password }).withUserSettings(db).create();
@@ -152,6 +181,8 @@ describe("CertificatesController (e2e)", () => {
         .expect(200);
       expect(page.headers["cache-control"]).toContain("no-store");
       expect(page.text).toContain("Segurança no Trabalho");
+      expect(page.text).toContain("Abrir a plataforma");
+      expect(page.text).not.toContain("Open platform");
       expect(page.text).not.toContain(owner.email);
       const image = await request(app.getHttpServer())
         .get("/api/certificates/share-image")
@@ -222,14 +253,12 @@ describe("CertificatesController (e2e)", () => {
         thumbnailS3Key: null,
         hasCertificate: true,
       });
-      await db
-        .insert(studentCourses)
-        .values({
-          studentId: learner.id,
-          courseId: course.id,
-          completedAt: new Date().toISOString(),
-          learningCycle: 1,
-        });
+      await db.insert(studentCourses).values({
+        studentId: learner.id,
+        courseId: course.id,
+        completedAt: new Date().toISOString(),
+        learningCycle: 1,
+      });
       const certificate = await inTenant(() =>
         certificatesService.createCertificate(learner.id, course.id),
       );

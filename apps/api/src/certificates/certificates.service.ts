@@ -36,6 +36,7 @@ import { DatabasePg } from "src/common";
 import { getSortOptions } from "src/common/helpers/getSortOptions";
 import { resolveTenantOrigin } from "src/common/helpers/resolveTenantOrigin";
 import { DEFAULT_PAGE_SIZE, parsePagination } from "src/common/pagination";
+import { assertCanReadLearnerCertificates } from "src/common/permissions/assert-can-read-learner-certificates";
 import { canUpdateCourseByAuthor } from "src/common/permissions/course-permission.utils";
 import {
   getGroupManagerCourseScopeCondition,
@@ -52,7 +53,7 @@ import { OutboxPublisher } from "src/outbox/outbox.publisher";
 import { S3Service } from "src/s3/s3.service";
 import { SettingsService } from "src/settings/settings.service";
 import { DB, DB_ADMIN } from "src/storage/db/db.providers";
-import { certificates, courses, studentCourses, users } from "src/storage/schema";
+import { certificates, courses, studentCourses } from "src/storage/schema";
 
 import { CertificateRepository } from "./certificate.repository";
 import {
@@ -931,6 +932,11 @@ export class CertificatesService implements OnModuleDestroy {
 
   private getSharePageContent(context: ShareRenderContext, embeddedImageSrc: string) {
     const translations = withEnglishLanguageFallback({
+      "pt-AO": {
+        openLabel: "Abrir a plataforma",
+        pageTitle: `Certificado de formação: "${context.certificate.courseTitle}"`,
+        pageDescription: `${context.certificate.fullName} concluiu a acção de formação "${context.certificate.courseTitle}" e recebeu um certificado de formação.`,
+      },
       pl: {
         openLabel: "Otwórz platformę",
         pageTitle: `Certyfikat ukończenia kursu "${context.certificate.courseTitle}"`,
@@ -1164,23 +1170,7 @@ export class CertificatesService implements OnModuleDestroy {
   }
 
   private async assertCanReadUserCertificates(userId: UUIDType, currentUser: CurrentUserType) {
-    if (userId === currentUser.userId) return;
-
-    const learnerScope = getGroupManagerLearnerScopeCondition(currentUser, users.id, [
-      PERMISSIONS.USER_MANAGE,
-    ]);
-    if (!hasPermission(currentUser.permissions, PERMISSIONS.USER_MANAGE) && !learnerScope) {
-      throw new NotFoundException("studentCertificateView.informations.certificateNotFound");
-    }
-
-    const [target] = await this.db
-      .select({ id: users.id })
-      .from(users)
-      .where(and(eq(users.id, userId), eq(users.tenantId, currentUser.tenantId), learnerScope))
-      .limit(1);
-    if (!target) {
-      throw new NotFoundException("studentCertificateView.informations.certificateNotFound");
-    }
+    return assertCanReadLearnerCertificates(this.db, userId, currentUser);
   }
 
   private async assertCanManageCourseCertificates(

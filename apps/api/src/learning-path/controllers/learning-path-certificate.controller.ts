@@ -1,5 +1,17 @@
-import { Body, Controller, Get, Post, Query, Req, Res, UseGuards } from "@nestjs/common";
-import { PERMISSIONS, SupportedLanguages } from "@repo/shared";
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Req,
+  Res,
+  UseGuards,
+  ParseUUIDPipe,
+  ParseEnumPipe,
+} from "@nestjs/common";
+import { PERMISSIONS, SUPPORTED_LANGUAGES, SupportedLanguages } from "@repo/shared";
+import { Type } from "@sinclair/typebox";
 import { Request, Response } from "express";
 import { Validate } from "nestjs-typebox";
 
@@ -44,11 +56,13 @@ export class LearningPathCertificateController {
     @Query("userId") userId: UUIDType,
     @Query("learningPathId") learningPathId: UUIDType,
     @Query("language") language: SupportedLanguages,
+    @CurrentUser() currentUser: CurrentUserType,
   ): Promise<LearningPathCertificateShare> {
     return this.learningPathCertificateService.getLearningPathCertificate(
       userId,
       learningPathId,
       language,
+      currentUser,
     );
   }
 
@@ -110,6 +124,17 @@ export class LearningPathCertificateController {
 
   @Public()
   @Get("share")
+  @Validate({
+    request: [
+      { type: "query", name: "certificateId", schema: UUIDSchema, pipes: [new ParseUUIDPipe()] },
+      {
+        type: "query",
+        name: "lang",
+        schema: Type.Optional(supportedLanguagesSchema),
+        pipes: [new ParseEnumPipe(SUPPORTED_LANGUAGES, { optional: true })],
+      },
+    ],
+  })
   async getCertificateSharePage(
     @Query("certificateId") certificateId: UUIDType,
     @Query("lang") language: SupportedLanguages,
@@ -122,7 +147,7 @@ export class LearningPathCertificateController {
 
     res.set({
       "Content-Type": "text/html; charset=utf-8",
-      "Cache-Control": "public, max-age=300",
+      "Cache-Control": "no-store",
     });
 
     res.send(html);
@@ -130,6 +155,17 @@ export class LearningPathCertificateController {
 
   @Public()
   @Get("share-image")
+  @Validate({
+    request: [
+      { type: "query", name: "certificateId", schema: UUIDSchema, pipes: [new ParseUUIDPipe()] },
+      {
+        type: "query",
+        name: "lang",
+        schema: Type.Optional(supportedLanguagesSchema),
+        pipes: [new ParseEnumPipe(SUPPORTED_LANGUAGES, { optional: true })],
+      },
+    ],
+  })
   async getCertificateShareImage(
     @Query("certificateId") certificateId: UUIDType,
     @Query("lang") language: SupportedLanguages,
@@ -143,7 +179,7 @@ export class LearningPathCertificateController {
     res.set({
       "Content-Type": "image/png",
       "Content-Length": imageBuffer.length,
-      "Cache-Control": "public, max-age=3600",
+      "Cache-Control": "no-store",
     });
 
     res.send(imageBuffer);

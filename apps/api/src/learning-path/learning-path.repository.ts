@@ -19,6 +19,7 @@ import {
   eq,
   exists,
   getTableColumns,
+  gt,
   ilike,
   inArray,
   isNull,
@@ -1719,7 +1720,17 @@ export class LearningPathRepository {
       .innerJoin(users, eq(users.id, learningPathCertificates.userId))
       .innerJoin(learningPaths, eq(learningPaths.id, learningPathCertificates.learningPathId))
       .innerJoin(tenants, eq(tenants.id, learningPathCertificates.tenantId))
-      .where(eq(learningPathCertificates.id, certificateId))
+      .where(
+        and(
+          eq(learningPathCertificates.id, certificateId),
+          eq(learningPathCertificates.status, LEARNING_PATH_CERTIFICATE_STATUSES.ACTIVE),
+          or(
+            isNull(learningPathCertificates.expiresAt),
+            gt(learningPathCertificates.expiresAt, sql`now()`),
+          ),
+          isNull(users.deletedAt),
+        ),
+      )
       .limit(1);
 
     return certificate;

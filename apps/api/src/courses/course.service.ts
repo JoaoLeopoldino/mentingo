@@ -2456,6 +2456,7 @@ export class CourseService {
         priceInCents: createCourseBody.priceInCents,
         currency: finalCurrency,
         courseType: isScormCourse ? COURSE_TYPE.SCORM : COURSE_TYPE.DEFAULT,
+        hasCertificate: createCourseBody.hasCertificate ?? false,
         authorId: currentUser.userId,
         authorMetadata: await this.getAuthorMetadata(currentUser.userId, dbInstance),
         categoryId: createCourseBody.categoryId,

@@ -46099,9 +46099,11 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/learning-path/certificates/share
      */
     learningPathCertificateControllerGetCertificateSharePage: (
-      query: {
-        certificateId: string;
-        lang: string;
+      query?: {
+        /** @format uuid */
+        certificateId?: string;
+        /** @default "en" */
+        lang?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
@@ -46119,9 +46121,11 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/learning-path/certificates/share-image
      */
     learningPathCertificateControllerGetCertificateShareImage: (
-      query: {
-        certificateId: string;
-        lang: string;
+      query?: {
+        /** @format uuid */
+        certificateId?: string;
+        /** @default "en" */
+        lang?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
       },
       params: RequestParams = {},
     ) =>
