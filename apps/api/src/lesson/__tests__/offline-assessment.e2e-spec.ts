@@ -8,6 +8,7 @@ import { OfflineAssessmentRepository } from "src/lesson/offline/offline-assessme
 import { DEFAULT_STUDENT_SETTINGS } from "src/settings/constants/settings.constants";
 import {
   assessmentAttempts,
+  competencyEvidence,
   assessmentQuestionChoiceOptions,
   settings,
   tenants,
@@ -132,6 +133,8 @@ describe("Offline assessments with tenant transactions (e2e)", () => {
         .where(eq(assessmentAttempts.learnerId, fixture.student.id));
       expect(attempts).toHaveLength(1);
       expect(attempts[0].offlineClientAttemptId).toBe(fixture.submission.clientAttemptId);
+      // A quiz grade never creates a professional competency assessment.
+      expect(await db.select().from(competencyEvidence)).toHaveLength(0);
       expect(Date.parse(attempts[0].submittedAt)).toBeGreaterThan(
         Date.parse(fixture.submission.clientSubmittedAt),
       );

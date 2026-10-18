@@ -150,10 +150,10 @@ it("retains a conflict for review and never retries it automatically", async () 
   expect((await queue.list("alice"))[0]).toMatchObject({
     state: "failed",
     body,
-    error: "offlineQuiz.conflict",
+    error: "offlineRecovery.changed",
   });
 });
-it("purges private attempts on logout and cannot resurrect them from a late acknowledgement", async () => {
+it("does not resurrect explicitly purged attempts from a late acknowledgement", async () => {
   await queue.enqueue("alice", "course", "lesson", 1, body);
   let started!: () => void;
   let finish!: (result: OfflineSyncResult) => void;
@@ -211,4 +211,105 @@ it("does not accept an acknowledgement belonging to another attempt", async () =
   );
   expect((await queue.list("alice"))[0].state).toBe("pending");
   expect((await queue.list("alice"))[0].result).toBeUndefined();
+});
+
+it("retains expired authentication and retries the same immutable UUID only on explicit recovery", async () => {
+  await queue.enqueue("alice", "course", "lesson", 1, body);
+  await queue.sync(
+    "alice",
+    async () => {
+      throw { response: { status: 401 } };
+    },
+    () => true,
+    1000,
+  );
+  expect((await queue.list("alice"))[0]).toMatchObject({
+    state: "failed",
+    failureStatus: 401,
+    error: "offlineRecovery.authRequired",
+    body,
+  });
+  await queue.sync(
+    "alice",
+    async () => {
+      throw new Error("must not retry automatically");
+    },
+    () => true,
+    2000,
+  );
+  expect(await queue.retry("bob", body.clientAttemptId)).toBe(false);
+  expect(await queue.retry("alice", body.clientAttemptId, 3000)).toBe(true);
+  expect((await queue.list("alice"))[0]).toMatchObject({
+    state: "pending",
+    id: body.clientAttemptId,
+    body,
+  });
+});
+it("archives a rejected snapshot without deleting answers and permits a separate new attempt", async () => {
+  await queue.enqueue("alice", "course", "lesson", 1, body);
+  await queue.sync(
+    "alice",
+    async () => {
+      throw { response: { status: 409 } };
+    },
+    () => true,
+    1000,
+  );
+  expect(await queue.archive("alice", body.clientAttemptId, 2000)).toBe(true);
+  const next = { ...body, clientAttemptId: crypto.randomUUID(), snapshot: "new signed snapshot" };
+  await queue.enqueue("alice", "course", "lesson", 1, next);
+  storage.close();
+  storage = new OfflineStorage(storage.name);
+  queue = new OfflineQueue(storage);
+  const records = await queue.list("alice");
+  expect(records).toHaveLength(2);
+  expect(records.find((x) => x.id === body.clientAttemptId)).toMatchObject({
+    archivedAt: 2000,
+    body,
+  });
+  expect(await queue.retry("alice", body.clientAttemptId, 3000)).toBe(false);
+  let count = 0;
+  await queue.sync(
+    "alice",
+    async () => {
+      count++;
+      throw { response: { status: 403 } };
+    },
+    () => true,
+    3000,
+  );
+  expect(count).toBe(1);
+  expect((await queue.list("alice")).find((x) => x.id === next.clientAttemptId)).toMatchObject({
+    error: "offlineRecovery.forbidden",
+    failureStatus: 403,
+  });
+});
+
+it("preserves original question wording for review independently of a later course download", async () => {
+  const review = {
+    title: "Original assessment",
+    language: "pt-AO" as const,
+    questions: [
+      {
+        id: "question",
+        title: "Original question",
+        prompt: "Original prompt",
+        options: [{ id: "option", label: "Original answer" }],
+      },
+    ],
+  };
+  await queue.enqueue("alice", "course", "lesson", 1, body, review);
+  await queue.sync(
+    "alice",
+    async () => {
+      throw { response: { status: 409 } };
+    },
+    () => true,
+    1000,
+  );
+  await queue.archive("alice", body.clientAttemptId, 2000);
+  storage.close();
+  storage = new OfflineStorage(storage.name);
+  queue = new OfflineQueue(storage);
+  expect((await queue.list("alice"))[0]).toMatchObject({ body, review });
 });

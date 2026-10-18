@@ -8,12 +8,23 @@ import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 
 import type { OfflineOperation, OfflineQuizSnapshot } from "./offline.types";
 
-type OfflineQuizProps = { quiz: OfflineQuizSnapshot; operation?: OfflineOperation };
-export function OfflineQuiz({ quiz, operation }: OfflineQuizProps) {
+type OfflineQuizProps = {
+  quiz: OfflineQuizSnapshot;
+  operation?: OfflineOperation;
+  blockedByArchive?: boolean;
+};
+export function OfflineQuiz({ quiz, operation, blockedByArchive }: OfflineQuizProps) {
   const { t } = useTranslation();
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const { mutateAsync: enqueue, isPending, isError, error } = useEnqueueOfflineAttempt();
   const expired = Date.now() >= Date.parse(quiz.expiresAt);
+  if (blockedByArchive)
+    return (
+      <section className="space-y-3 border-t pt-4">
+        <h3 className="font-semibold">{quiz.title}</h3>
+        <p role="alert">{t("offlineRecovery.downloadCurrent")}</p>
+      </section>
+    );
   return (
     <section className="space-y-4 border-t pt-4" data-testid="offline-quiz">
       <h3 className="text-lg font-semibold">{quiz.title}</h3>

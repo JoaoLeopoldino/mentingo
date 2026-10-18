@@ -14,11 +14,13 @@ export class OfflineQueue {
     lessonId: string,
     learningCycle: number,
     body: OfflineSubmission,
+    review?: OfflineOperation["review"],
   ) {
     return this.storage.transaction("rw", this.storage.operations, async () => {
       const existing = await this.storage.operations
         .where("[owner+lessonId+learningCycle]")
         .equals([owner, lessonId, learningCycle])
+        .filter((item) => !item.archivedAt)
         .first();
       if (existing) return existing;
       const operation: OfflineOperation = {
@@ -28,12 +30,39 @@ export class OfflineQueue {
         lessonId,
         learningCycle,
         body,
+        review,
         state: "pending",
         tries: 0,
         nextRetryAt: 0,
       };
       await this.storage.operations.add(operation);
       return operation;
+    });
+  }
+  async retry(owner: string, id: string, now = Date.now()) {
+    return this.storage.transaction("rw", this.storage.operations, async () => {
+      const row = await this.storage.operations.get([owner, id]);
+      if (!row || row.archivedAt || row.state === "synced" || (row.leaseUntil ?? 0) > now)
+        return false;
+      await this.storage.operations.put({
+        ...row,
+        state: "pending",
+        nextRetryAt: 0,
+        error: undefined,
+        failureStatus: undefined,
+        leaseId: undefined,
+        leaseUntil: undefined,
+      });
+      return true;
+    });
+  }
+  async archive(owner: string, id: string, now = Date.now()) {
+    return this.storage.transaction("rw", this.storage.operations, async () => {
+      const row = await this.storage.operations.get([owner, id]);
+      if (!row || row.state !== "failed" || (row.leaseUntil ?? 0) > now) return false;
+      // Preserve original UUID, signed snapshot, timestamps and answers. A new download/attempt is separate.
+      await this.storage.operations.put({ ...row, archivedAt: now });
+      return true;
     });
   }
   private resultState(
@@ -49,7 +78,10 @@ export class OfflineQueue {
       const rows = await this.list(owner);
       const row = rows.find(
         (item) =>
-          item.state === "pending" && item.nextRetryAt <= now && (item.leaseUntil ?? 0) <= now,
+          !item.archivedAt &&
+          item.state === "pending" &&
+          item.nextRetryAt <= now &&
+          (item.leaseUntil ?? 0) <= now,
       );
       if (!row) return undefined;
       const claimed = {
@@ -74,6 +106,7 @@ export class OfflineQueue {
       let result: OfflineSyncResult | undefined;
       let error: string | undefined;
       let permanent = false;
+      let failureStatus: number | undefined;
       try {
         if (!isCurrentOwner()) return;
         const received = await send(operation.body);
@@ -81,9 +114,13 @@ export class OfflineQueue {
         result = received;
       } catch (failure) {
         const status = (failure as { response?: { status?: number } }).response?.status;
+        failureStatus = status;
         permanent =
           status !== undefined && status >= 400 && status < 500 && status !== 408 && status !== 429;
-        error = permanent ? "offlineQuiz.conflict" : "offlineQuiz.retry";
+        if (status === 401) error = "offlineRecovery.authRequired";
+        else if (status === 403) error = "offlineRecovery.forbidden";
+        else if (status === 409 || status === 410) error = "offlineRecovery.changed";
+        else error = permanent ? "offlineQuiz.conflict" : "offlineQuiz.retry";
       }
       await this.storage.transaction("rw", this.storage.operations, async () => {
         const current = await this.storage.operations.get([owner, operation.id]);
@@ -94,6 +131,7 @@ export class OfflineQueue {
           state: this.resultState(result, permanent),
           result,
           error,
+          failureStatus,
           leaseId: undefined,
           leaseUntil: undefined,
           nextRetryAt: now + Math.min(300000, 2000 * 2 ** Math.min(current.tries, 7)),

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 
 import { useAuthStore } from "~/modules/Auth/authStore";
 import { useCurrentUserStore } from "~/modules/common/store/useCurrentUserStore";
+import { suspendOfflineSession } from "~/modules/Offline/offline-session";
 
 import type { CurrentUserResponse } from "~/api/generated-api";
 
@@ -13,6 +14,7 @@ export const useSyncUserAfterLogin = (user?: CurrentUserResponse["data"] | null)
     const { currentUser, setCurrentUser, hasVerifiedMFA, setHasVerifiedMFA } =
       useCurrentUserStore.getState();
     if (user === null) {
+      if (currentUser) suspendOfflineSession();
       if (currentUser) setCurrentUser(undefined);
       if (isLoggedIn) setLoggedIn(false);
       if (hasVerifiedMFA) setHasVerifiedMFA(false);

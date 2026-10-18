@@ -1,6 +1,6 @@
 /** Synthetic course, real local API and Chrome; no successful response is mocked. */
 import { createRequire } from "node:module";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, writeFile, readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { FixtureApiClient } from "../../../apps/web/e2e/utils/api-client";
 import { CourseFactory } from "../../../apps/web/e2e/factories/course.factory";
@@ -13,6 +13,7 @@ const root = fileURLToPath(new URL("../../../", import.meta.url));
 const baseURL = "http://localhost:5173";
 const profile = `${root}.local/sprint/offline-assessment-profile-${Date.now()}`;
 const results: string[] = [];
+const startedAt = Date.now();
 const record = (message: string) => {
   results.push(message);
   console.log(message);
@@ -120,11 +121,80 @@ try {
   await expect(page.getByTestId("offline-attempt-status")).toContainText("sincronização pendente");
   record("Offline answers survive closing and reopening Chrome");
   await page.screenshot({ path: `${output}/06-offline-assessment-pending.png`, fullPage: true });
+  if (process.env.SPRINT_TEST_ASSESSMENT_CHANGE === "1") {
+    await api.api.lessonControllerBetaUpdateLesson(
+      { language: "pt-AO", title: "Avaliação de segurança actualizada" },
+      { id: quiz.id },
+    );
+    await context.setOffline(false);
+    await expect(page.getByTestId("offline-recovery")).toContainText(
+      "A avaliação ou o ciclo de formação mudou",
+      { timeout: 45000 },
+    );
+    const download = page.waitForEvent("download");
+    await page
+      .getByTestId("offline-recovery")
+      .getByRole("button", { name: "Exportar respostas originais" })
+      .click();
+    const file = await download;
+    const exported = JSON.parse(await readFile((await file.path())!, "utf8"));
+    expect(exported.attempt.body.answers).toHaveLength(1);
+    expect(
+      exported.attempt.review.questions[0].options.some(
+        (option: any) => option.label === "Capacete de protecção",
+      ),
+    ).toBe(true);
+    expect(exported.attempt.failureStatus).toBe(409);
+    page.once("dialog", (dialog) => dialog.accept());
+    await page
+      .getByTestId("offline-recovery")
+      .getByRole("button", { name: "Arquivar para revisão" })
+      .click();
+    await expect(page.getByTestId("offline-recovery")).toContainText("Arquivada neste dispositivo");
+    await expect(
+      page.getByRole("alert").filter({ hasText: "Descarregue novamente a formação" }),
+    ).toBeVisible();
+    await page.screenshot({ path: `${output}/09-offline-changed-assessment.png`, fullPage: true });
+    await page.goto(`${baseURL}/course/${courseId}`);
+    await page.getByTestId("offline-download").click();
+    await expect(page.getByRole("status").filter({ hasText: "Disponível offline" })).toBeVisible();
+    await page.getByRole("link", { name: "Descargas offline" }).click();
+    await expect(page.getByTestId("offline-quiz")).toBeVisible();
+    await context.setOffline(true);
+    await page.getByRole("radio", { name: "Capacete de protecção" }).check();
+    await page.getByTestId("offline-quiz-submit").click();
+    await expect(page.getByTestId("offline-attempt-status")).toContainText(
+      "sincronização pendente",
+    );
+    record(
+      "Real HTTP 409: original answers exported and archived, stale snapshot blocked, fresh download permits a separate attempt",
+    );
+  }
+  const recoveryMode = process.env.SPRINT_TEST_AUTH_RECOVERY === "1";
+  if (recoveryMode) {
+    const sessionCookies = await context.cookies();
+    await context.clearCookies();
+    await context.setOffline(false);
+    await expect(page.getByTestId("offline-recovery")).toContainText("A sessão expirou", {
+      timeout: 45000,
+    });
+    await expect(page.getByTestId("offline-attempt-status")).toContainText("requer revisão");
+    await page.screenshot({ path: `${output}/09-offline-session-recovery.png`, fullPage: true });
+    await context.addCookies(sessionCookies);
+    record(
+      "Real HTTP 401 preserves original answers; recovery offers explicit retry after restoring authentication",
+    );
+  }
   const syncResponse = page.waitForResponse(
     (response: { url(): string; status(): number }) =>
       response.url().endsWith("/api/offline-assessments/sync") && response.status() === 200,
   );
-  await context.setOffline(false);
+  if (recoveryMode)
+    await page
+      .getByTestId("offline-recovery")
+      .getByRole("button", { name: "Repetir sincronização" })
+      .click();
+  else await context.setOffline(false);
   const receipt = (await (await syncResponse).json()).data;
   expect(receipt.score).toBe(100);
   expect(receipt.state).toBe("synced");
@@ -140,7 +210,7 @@ try {
     try {
       return await new Promise<any>((resolve, reject) => {
         const request = database.transaction("operations").objectStore("operations").getAll();
-        request.onsuccess = () => resolve(request.result[0]);
+        request.onsuccess = () => resolve(request.result.find((item: any) => !item.archivedAt));
         request.onerror = () => reject(request.error);
       });
     } finally {
@@ -181,6 +251,10 @@ try {
   if (categoryId) await categories.delete(categoryId).catch(() => {});
   await writeFile(
     `${root}.local/sprint/browser-offline-assessment.json`,
-    JSON.stringify({ profile, results, courseId, categoryId }, null, 2),
+    JSON.stringify(
+      { profile, results, courseId, categoryId, elapsedMs: Date.now() - startedAt },
+      null,
+      2,
+    ),
   );
 }

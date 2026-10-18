@@ -13,6 +13,7 @@ import { useCurrentUserStore } from "~/modules/common/store/useCurrentUserStore"
 
 import { getOfflineOwner } from "./offline-session";
 import { offlineStorage } from "./offline-storage";
+import { OfflineAttemptRecovery } from "./OfflineAttemptRecovery";
 import { OfflineQuiz } from "./OfflineQuiz";
 
 import type { OfflinePdf } from "./offline.types";
@@ -61,6 +62,10 @@ export default function OfflinePage() {
       {!owner && <p role="alert">{t("offline.error.session")}</p>}
       {owner && isPending && <p role="status">{t("offline.loading")}</p>}
       {(isError || attemptsError || failure) && <p role="alert">{t("offline.error.storage")}</p>}
+      {owner &&
+        operations
+          .filter((item) => item.state !== "synced" || item.archivedAt)
+          .map((operation) => <OfflineAttemptRecovery key={operation.id} operation={operation} />)}
       {owner && !isPending && courses.length === 0 && <p>{t("offline.empty")}</p>}
       {owner &&
         courses.map((course) => (
@@ -106,9 +111,14 @@ export default function OfflinePage() {
                 <OfflineQuiz
                   key={quiz.lessonId}
                   quiz={quiz}
+                  blockedByArchive={operations.some(
+                    (item) => !!item.archivedAt && item.body.snapshot === quiz.snapshot,
+                  )}
                   operation={operations.find(
                     (item) =>
-                      item.lessonId === quiz.lessonId && item.learningCycle === quiz.learningCycle,
+                      !item.archivedAt &&
+                      item.lessonId === quiz.lessonId &&
+                      item.learningCycle === quiz.learningCycle,
                   )}
                 />
               ))}

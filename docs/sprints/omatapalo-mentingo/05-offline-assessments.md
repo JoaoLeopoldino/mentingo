@@ -15,17 +15,17 @@ O formando descarrega previamente um questionário nativo compatível e guarda u
 
 ## Evidências e testes
 
-| Verificação | Resultado actual |
-|---|---|
-| Assinatura: roundtrip, adulteração, expiração/rotação e formato/chave | 4 testes unitários passaram na implementação inicial |
-| API com PostgreSQL e proxy real de tenant | Primeira execução: **8 passaram em 75,080 s**, incluindo rollback, concorrência e acesso de outro formando |
-| Repetição alargada | 13 passaram e 3 falharam; timeout da limpeza causou corrida entre fixtures e a segunda conta de tenant não tinha settings. Não contar como sucesso |
-| Suite offline separada com RLS | **9 passaram em 312,853 s**, incluindo recusa de outro tenant com papel RLS e rollback; fixtures com settings explícitos por tenant |
-| IndexedDB real da biblioteca com fake-indexeddb | **6 passaram**, incluindo reabertura, confirmação perdida, lease interrompido, conflito, logout e recibo incorrecto |
-| Catálogos/Intl/fallback | **10 passaram**, 900,623 ms; pt-AO 2.050/6.027 chaves, 34,01%, 3.977 em fallback inglês |
-| Typecheck web | **Passou na versão final**, incluindo o contrato gerado e as alterações de UI |
-| Build API | Passou; migration aplicada apenas às duas bases locais do sprint |
-| Navegador com rede desligada | **4 checkpoints Chrome passaram, código zero**: descarga real, respostas/reabertura sem rede, reconexão/correcção e progresso nativo |
+| Verificação                                                           | Resultado actual                                                                                                                                   |
+| --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Assinatura: roundtrip, adulteração, expiração/rotação e formato/chave | 4 testes unitários passaram na implementação inicial                                                                                               |
+| API com PostgreSQL e proxy real de tenant                             | Primeira execução: **8 passaram em 75,080 s**, incluindo rollback, concorrência e acesso de outro formando                                         |
+| Repetição alargada                                                    | 13 passaram e 3 falharam; timeout da limpeza causou corrida entre fixtures e a segunda conta de tenant não tinha settings. Não contar como sucesso |
+| Suite offline separada com RLS                                        | **9 passaram em 312,853 s**, incluindo recusa de outro tenant com papel RLS e rollback; fixtures com settings explícitos por tenant                |
+| IndexedDB real da biblioteca com fake-indexeddb                       | **6 passaram**, incluindo reabertura, confirmação perdida, lease interrompido, conflito, logout e recibo incorrecto                                |
+| Catálogos/Intl/fallback                                               | **10 passaram**, 900,623 ms; pt-AO 2.050/6.027 chaves, 34,01%, 3.977 em fallback inglês                                                            |
+| Typecheck web                                                         | **Passou na versão final**, incluindo o contrato gerado e as alterações de UI                                                                      |
+| Build API                                                             | Passou; migration aplicada apenas às duas bases locais do sprint                                                                                   |
+| Navegador com rede desligada                                          | **4 checkpoints Chrome passaram, código zero**: descarga real, respostas/reabertura sem rede, reconexão/correcção e progresso nativo               |
 
 A execução inicial bloqueou porque o harness legado substituía a ligação tenant-aware por uma ligação directa: o bloqueio exterior e a avaliação nativa usavam ligações distintas. A suite específica utiliza `createE2ETest({ useDbProxy: true })`, com papel PostgreSQL sem bypass RLS. O teste de rollback força apenas a falha de persistência do recibo; os cenários de sucesso usam o motor e a base reais. A suite antiga mantém o seu harness e partilha a fixture nativa extraída para `test/helpers/native-quiz-fixture.ts`.
 
@@ -81,3 +81,23 @@ Sobre este build passaram novamente os **cinco checkpoints Chrome de texto/PDF**
 O teste de actualização IndexedDB v1 → v2 preservou os conteúdos previamente descarregados e criou a fila vazia. O ficheiro de storage passou **6 testes em 4,83 s**; trata-se de uma regressão nova além dos 32 testes web do conjunto anterior, totalizando **33 casos web distintos** validados nesta retoma. Não somar novamente os cinco casos de storage já incluídos nos 32. O tempo de estudo offline e a presença não são medidos por esta fila.
 
 Referências de implementação: `apps/api/src/lesson/offline/offline-assessment.service.ts:49–128` (elegibilidade/snapshot), `:130–248` (validação/correcção/recibo); `offline-assessment.repository.ts:22–125` (transacção, contexto e persistência); `apps/web/app/modules/Offline/offline-queue.ts:11–105` (fila, lease e envio); `offline-storage.ts:18–38` (upgrade e limpeza); `apps/api/src/lesson/__tests__/offline-assessment.e2e-spec.ts:108–275` (critérios HTTP). Não inferir comportamento de produção para além destas provas locais.
+
+## Recuperação operacional — execução de 18-10-2026
+
+As limitações de recuperação descritas nos checkpoints anteriores foram parcialmente encerradas por implementação real: repetição explícita, diferenciação de 401/403/409, exportação, arquivo confirmado e nova descarga. Uma tentativa arquivada conserva UUID, respostas, assinatura e timestamps; novas tentativas também conservam o texto original das perguntas/opções para revisão. O arquivo bloqueia a versão descarregada anteriormente. A nova avaliação exige nova descarga e recebe outro UUID; não se transferem automaticamente respostas para perguntas alteradas.
+
+A sessão expirada deixa de provocar limpeza silenciosa de respostas. A mudança de conta ou fim de sessão remove conteúdos preparados, mas as operações mantêm-se particionadas por conta/origem e ocultas a outra conta. A suspensão de autenticação bloqueia a interface até nova autenticação. Estes dados não são cifrados contra quem controla o perfil do navegador: validar política de dispositivo privado/partilhado antes de produção. A aplicação não consegue garantir persistência após limpeza externa do navegador ou evicção pelo Android.
+
+Passaram **29 testes web** relevantes (incluindo 9 de fila, 4 de sessão, 6 de storage e 2 do sincronizador de autenticação), typecheck, lint e build. Os restantes testes deste conjunto cobrem texto e idioma; não somar novamente os 21 da baseline como funcionalidades adicionais.
+
+Dois percursos Chrome reais passaram, com 6 checkpoints cada: (1) remoção controlada de cookies, HTTP 401, respostas preservadas e repetição após repor autenticação; (2) edição real da avaliação pela API, HTTP 409, exportação de respostas/texto original, arquivo, bloqueio da cópia antiga, nova descarga e nova tentativa validada. Ambos voltaram a confirmar recibo idempotente e conclusão nativa. A prova de 401 simula perda de autenticação; não esperou pela expiração natural de um JWT. A prova de alteração terminou em **8,222 s** na execução medida, incluindo preparação/cleanup do script; não é tempo de implementação.
+
+```sh
+source scripts/sprints/omatapalo/environment.sh
+SPRINT_TEST_AUTH_RECOVERY=1 sprint_pnpm --filter api exec tsx --tsconfig ../web/tsconfig.json ../../scripts/sprints/omatapalo/browser-offline-assessment.mts
+SPRINT_TEST_ASSESSMENT_CHANGE=1 sprint_pnpm --filter api exec tsx --tsconfig ../web/tsconfig.json ../../scripts/sprints/omatapalo/browser-offline-assessment.mts
+```
+
+O guião Android físico está no [relatório 13](13-android-physical-validation.md), **sem execução física**. Mantêm-se pendentes multi-dispositivo, SCORM offline, sincronização com a aplicação fechada e validação de operação em dispositivos reais. A recuperação administrativa é revisão manual dos dados exportados; não existe reconciliação automática nem certificação de conclusões a partir desse ficheiro.
+
+A suite de regressão API/RLS foi repetida integralmente: **9/9 passaram em 149,41 s**, incluindo preparação/limpeza de dados de ensaio. O caso de correcção confirma explicitamente que a nota do questionário não cria evidência de competência profissional. Não interpretar os tempos Jest por caso como latência HTTP.

@@ -103,6 +103,11 @@ ApiClient.instance.interceptors.response.use(
       });
     }
 
+    // Offline synchronization must preserve the owner's local answers on expired auth.
+    // Recovery is explicit; other requests retain their existing refresh behaviour.
+    if (error.response?.status === 401 && error.config?.url?.endsWith("/offline-assessments/sync"))
+      return Promise.reject(error);
+
     if (error.config?.url?.includes("/logout")) {
       return Promise.reject(error);
     }

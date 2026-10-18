@@ -17,12 +17,42 @@ export function getOfflineOwner() {
     return undefined;
   return `${window.location.origin}:${user.id}`;
 }
+const suspendedKey = "mentingo:offline-suspended-owner";
+export function suspendOfflineSession() {
+  const owner = getOfflineOwner();
+  try {
+    if (owner) localStorage.setItem(suspendedKey, owner);
+  } catch {
+    /* Auth can still lock the interface when browser storage is unavailable. */
+  }
+}
+export function clearOfflineSuspension() {
+  try {
+    localStorage.removeItem(suspendedKey);
+  } catch {
+    /* Never block sign-out. */
+  }
+}
 let observedOwner: string | undefined;
 export function observeOfflineSession() {
   const update = () => {
     const owner = getOfflineOwner();
-    if (observedOwner && observedOwner !== owner)
-      void offlineStorage.purgeOwner(observedOwner).catch(() => {});
+    let suspended: string | null = null;
+    try {
+      suspended = localStorage.getItem(suspendedKey);
+    } catch {
+      /* Fail closed; retained attempts stay partitioned by owner. */
+    }
+    // Expired authentication locks local content, preserving answers for the same account.
+    if (!owner && observedOwner === suspended) return;
+    const previous = observedOwner ?? suspended ?? undefined;
+    if (previous && previous !== owner)
+      void offlineStorage.courses
+        .where("owner")
+        .equals(previous)
+        .delete()
+        .catch(() => {});
+    if (owner && suspended) clearOfflineSuspension();
     observedOwner = owner;
   };
   update();

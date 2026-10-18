@@ -6,6 +6,7 @@ import { useToast } from "~/components/ui/use-toast";
 import { useNavigationHistoryStore } from "~/lib/stores/navigationHistory";
 import { useAuthStore } from "~/modules/Auth/authStore";
 import { useCurrentUserStore } from "~/modules/common/store/useCurrentUserStore";
+import { clearOfflineSuspension } from "~/modules/Offline/offline-session";
 
 import { ApiClient } from "../api-client";
 import { queryClient } from "../queryClient";
@@ -22,6 +23,7 @@ export function useLogoutUser() {
     mutationFn: async () => {
       const response = await ApiClient.api.authControllerLogout();
 
+      clearOfflineSuspension();
       setCurrentUser(undefined);
       setLoggedIn(false);
 

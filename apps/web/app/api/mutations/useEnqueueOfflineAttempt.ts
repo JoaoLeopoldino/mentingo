@@ -25,12 +25,19 @@ export function useEnqueueOfflineAttempt() {
       const owner = getOfflineOwner();
       if (!owner) throw new Error("offline.error.session");
       if (Date.now() >= Date.parse(quiz.expiresAt)) throw new Error("offlineQuiz.error.expired");
-      return offlineQueue.enqueue(owner, quiz.courseId, quiz.lessonId, quiz.learningCycle, {
-        clientAttemptId: crypto.randomUUID(),
-        snapshot: quiz.snapshot,
-        clientSubmittedAt: new Date().toISOString(),
-        answers,
-      });
+      return offlineQueue.enqueue(
+        owner,
+        quiz.courseId,
+        quiz.lessonId,
+        quiz.learningCycle,
+        {
+          clientAttemptId: crypto.randomUUID(),
+          snapshot: quiz.snapshot,
+          clientSubmittedAt: new Date().toISOString(),
+          answers,
+        },
+        { title: quiz.title, language: quiz.language, questions: quiz.questions },
+      );
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: OFFLINE_ATTEMPTS_KEY });

@@ -1,9 +1,9 @@
+import type { SupportedLanguages } from "@repo/shared";
 import type {
   GetOfflineAssessmentSnapshotResponse,
   SubmitOfflineAssessmentBody,
   SubmitOfflineAssessmentResponse,
 } from "~/api/generated-api";
-import type { SupportedLanguages } from "@repo/shared";
 
 export type OfflinePdf = { id: string; title: string; bytes: Uint8Array };
 export type OfflineLesson = { id: string; title: string; html: string; pdfs: OfflinePdf[] };
@@ -43,5 +43,8 @@ export type OfflineOperation = {
   leaseId?: string;
   leaseUntil?: number;
   error?: string;
+  failureStatus?: number;
+  archivedAt?: number;
+  review?: Pick<OfflineQuizSnapshot, "title" | "language" | "questions">;
   result?: OfflineSyncResult;
 };
