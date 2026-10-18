@@ -1,5 +1,7 @@
 # Evolução empresarial das competências — execução de 18/10/2026
 
+**Estado: fatia empresarial funcional em ambiente local, com limites explícitos; CONDITIONAL GO para piloto, sem GO para produção.** Foram implementadas decisões profissionais independentes das evidências, frameworks/escalas, requisitos versionados, planos com aprovação/histórico, funções simultâneas e filtros/paginação. O checklist global mantém 22/32 (68,75%).
+
 ## Estado e referência
 
 Branch isolado: `feat/omatapalo-enterprise-competencies-20261018`, a partir de `4e187000`. Checkout original preservado. Início medido: 11:11:17 UTC (12:11:17 em Luanda). Este relatório será actualizado por etapa; tempo decorrido não equivale a horas de engenharia exclusiva.
@@ -88,3 +90,85 @@ O validador nativo exigiu alinhar a ordem dos parâmetros do controller com os d
 Sem credenciação de avaliadores por especialidade, delegações ou escalonamento; a administração reutiliza utilizadores/permissões existentes. Escalas e categorias são básicas; competências antigas podem continuar sem framework. Definições dos planos e actividades não são editáveis após criação nesta fatia; devolução permite reapreciar a decisão e acrescentar evidências depois de reaprovação, mas alterar a definição requer actualmente outro plano. Declaração de actividade concluída não é verificação automática da conclusão do curso. O histórico de uma pessoa não tem paginação própria. Ligações a cursos/percursos não concedem acesso ou inscrição. Referências históricas impedem a eliminação física de recursos ligados, exigindo política de arquivo/retirada. Estas condições devem ser resolvidas/aceites antes de produção.
 
 **Checklist global inalterado: 22/32 = 68,75%.** Os quatro critérios originais de competências já estavam demonstrados; esta evolução reforça-os e não cria pontos artificiais. Android físico, ERP real, SCORM independente/xAPI, certificados públicos e operação continuam gates separados. Comparação publicada em [17](17-competency-totara-parity.md). Decisão: CONDITIONAL GO para piloto controlado.
+
+## Compatibilidade e retenção de recursos — correcção final
+
+O ensaio de eliminação de uma formação ligada a um plano reproduziu um erro 500. A referência deve ser preservada, mas o erro deve ser operacional. Um helper comum traduz exclusivamente as violações FK das actividades de plano/versões de requisitos para `409 competencies.errors.learningResourceInUse`, depois do rollback. Não intercepta erros de autorização ou outras causas. Cursos/percursos referidos pelo histórico não são eliminados fisicamente; a política de arquivo/retirada deve ser acordada.
+
+Red: um caso falhou (500 em vez de 409), 19,172 s. Green específico: 1 passou, 11 casos não seleccionados, 24,749 s. Regressão final: **20 passaram em três suites, 121,718 s**, incluindo os 12 cenários de competências e oito de eliminação normal/protegida de cursos/percursos. Os outros 180 casos dessas suites ficaram fora do filtro; não foram executados. O novo cenário confirma referências reais a curso/percurso, retenção após retirar uma recomendação da versão corrente, rollback integral de lote com recurso protegido e eliminação normal de curso não referenciado.
+
+Regressões web preservadas: **31/31**, seis ficheiros, 4,51 s (fila, sessão, texto/armazenamento offline, Auto HLS e localização/formatação). Validador de traduções: cinco testes Node, 60,57 ms. Cobertura final do catálogo: **6.202/6.202 chaves**, 57 invariantes técnicos, 6.145 valores distintos do inglês, zero omissões/erros de placeholders. Estas métricas são estruturais e de validação automática; a revisão linguística humana integral não foi medida. As datas do perfil/histórico reutilizam o formatador localizado existente.
+
+## Demonstração reproduzível
+
+1. `source scripts/sprints/omatapalo/environment.sh`, com os quatro serviços isolados existentes activos.
+2. Compilar API (`sprint_pnpm --filter api build`) e iniciar (`sprint_pnpm --filter api start:prod`). Aguardar a mensagem de arranque concluído antes de gerar o cliente ou verificar migrações.
+3. Após alterações de contrato, `sprint_pnpm generate:client`. Build web: `NODE_OPTIONS=--max-old-space-size=4096 sprint_pnpm --filter web exec remix vite:build --config ../../scripts/sprints/omatapalo/vite-low-memory.config.mts`.
+4. Preview: `node scripts/sprints/omatapalo/serve-preview.mjs` (não iniciar outra instância se a porta já estiver ocupada pelo preview do sprint). Aplicação: http://localhost:5173 ; percurso: http://localhost:5173/competencies . Conta administrativa exclusivamente fictícia já preparada no ambiente local.
+5. QA de três papéis: `sprint_pnpm --filter api exec tsx --tsconfig ../web/tsconfig.json ../../scripts/sprints/omatapalo/browser-enterprise-competencies.mts`. O script cria um novo cenário fictício, mantém-no para demonstração e não utiliza registo público nem credenciais existentes de colaboradores. Os seus resultados/capturas ficam em `.local/sprint/`.
+6. Administrador cria framework/escala/competência; colaborador cria plano a partir da lacuna e solicita aprovação; gestor aprova; colaborador declara actividade e apresenta evidência; gestor usa a fila de pendências, revê, avalia formalmente e conclui. O colaborador consulta seis decisões. O administrador acrescenta função de segurança em Huíla com nível 3, observa nível 2 insuficiente e termina a atribuição, preservando-a. Os colaboradores fictícios anteriores em Luanda/Huíla/Benguela continuam presentes.
+
+Testes de domínio e API acima têm comandos reprodutíveis. O benchmark de 500 colaboradores é parte de `competencies.e2e-spec.ts`, executado apenas através do guard `test-api-e2e.sh`; não cria 500 contas na base principal da demonstração.
+
+## Integração futura com Primavera — contrato a acordar, não implementado
+
+| Origem de RH | Destino/cuidado |
+|---|---|
+| Empresa/base ERP | Tenant definido pela configuração autenticada do adapter; nunca aceite livremente do payload. |
+| Identificador estável do colaborador | Exige mapa persistente `(tenant, origem, employeeExternalId) → userId`. O modelo actual de utilizador não fornece esse vínculo RH; o email não deve ser a chave imutável. |
+| Identificador da atribuição profissional | `externalHrId`, único no tenant; corresponde à atribuição, não substitui o identificador do colaborador. |
+| Cargo/código da função | Mapeamento explícito para função Mentingo, sem criar duplicados por variações de texto. |
+| Unidade/província/local | Mapear identificadores externos para grupos/unidades acordados; não inferir uma hierarquia RH a partir de nomes de grupos de aprendizagem. |
+| Chefia | Resolver colaborador/gestor. Só estabelecer âmbito após verificar permissões; um cargo no ERP não confere automaticamente autoridade de avaliação. |
+| Início/fim/situação | Aplicar vigência e terminar atribuições, preservando anteriores. Cancelamento de futuras atribuições e alterações de uma mesma atribuição externa exigem contrato e API de reconciliação adicionais. |
+
+Confirmar versão Primavera, API/módulos autorizados e semântica dos identificadores. O CRUD entregue suporta criação idempotente/término, mas ainda não fornece sincronização incremental, reconciliação de alterações, recibos de importação ou credenciais para ERP. Um conector de produção deve ter permissão própria limitada, sem acesso administrativo de avaliação, e reutilizar BullMQ para comandos com retry e outbox para eventos duráveis. Guardar credenciais no servidor, reconciliar contagens/IDs e reportar rejeições; não desactivar pessoas por ausência numa extracção parcial. Nenhuma chamada real a Primavera foi efectuada.
+
+## Gate e esforço restante
+
+| Área | Estado verificável | Próxima condição |
+|---|---|---|
+| Competências | Percurso empresarial mínimo funcional, incluindo RLS e três papéis | Aprovar semântica de níveis, autoridade e políticas de revisão/retirada com RH; completar ciclo administrativo acordado |
+| Offline | Regressões de armazenamento/fila/sessão passaram; Chrome anterior preservado | Android físico e política de dispositivos continuam pendentes |
+| SCORM | Sem alteração nesta evolução | Pacote independente/SCORM 2004/xAPI/LRS não demonstrados por estes testes |
+| Certificados | Implementação anterior preservada, sem atribuição automática de proficiência | Matriz pública/revogação e operação continuam a exigir validação própria |
+| Tenants | Novas operações com autorização e RLS reais | Revisão de segurança global e análise da resposta 401 esporádica anterior; não foi declarada resolvida |
+| pt-AO | Catálogo estrutural completo, percursos novos em pt-AO | Revisão humana e canais complementares |
+| ERP | Apenas desenho do contrato | Acesso autorizado/API concreta, identificadores e permissão de sincronização |
+| Produção | Não demonstrada | 20/50/100 sessões concorrentes, restauro, observabilidade, RPO/RTO/SLAs e migração do cliente |
+
+Estimativa provisória para **preparar um piloto governado deste módulo**, por um engenheiro experiente assistido por Codex, sem multiplicador de IA:
+
+| Trabalho restante | Optimista | Provável | Conservador | Dependência |
+|---|---:|---:|---:|---|
+| Validar regras, níveis, evidências, validade e autoridade; documentar decisões | 4 h | 8 h | 16 h | Disponibilidade de RH/gestores |
+| Completar administração acordada (revisão de definições de planos, classificação do catálogo anterior, arquivo/retirada) | 8 h | 16 h | 32 h | Regras de alteração e retenção aprovadas |
+| Revisão de autorização, concorrência e casos de histórico; repetição de QA com utilizadores | 8 h | 16 h | 32 h | Revisor e cenários representativos |
+| Repetição do piloto, documentação/transferência e correcções observadas | 4 h | 8 h | 16 h | Ambiente e avaliadores de aceitação |
+| **Total deste âmbito** | **24 h** | **48 h** | **96 h** | **3/6/12 dias assumindo 8 h/dia** |
+
+Estas são estimativas de trabalho humano futuro, não tempo medido. Excluem suite RH completa, achievement paths genéricos, BI, ERP real, operação de produção e migração Totara. A execução demonstrou viabilidade de fatias locais, não uma taxa universal de produtividade; integrações/produção têm incerteza maior. Não foram introduzidos dependências pagas, outro backend ou serviço externo. Custos monetários de operação não foram medidos; permanecem dependentes do alojamento, vídeo, AI, backups, observabilidade e pessoal do cenário anterior. O histórico aumenta retenção/armazenamento e exige uma política antes de produção.
+
+O risco de fork concentra-se no schema/migrações centrais, permissões, contratos gerados e interfaces. Mitigação entregue: alterações locais, commits delimitados, migrações Drizzle, cálculo de lacunas central e testes reprodutíveis. Cada actualização upstream precisa de rebase/revisão e dessas verificações; não foi medida uma taxa mensal de manutenção.
+
+## Fecho verificável e medição de tempo
+
+Commits locais anteriores deste trabalho: `57a73c8e` (semântica/histórico), `7fc2bbfd` (frameworks/planos/UI), `dc915432` (funções simultâneas/paginação). A correcção final de retenção, datas e relatório fica no commit que contém esta secção. Base `4e187000`; branch `feat/omatapalo-enterprise-competencies-20261018`. Checkout original continua em `7a23e967`, sem alterações tracked/staged, preservando `docs/audits/` já não versionado. Não houve push, merge ou deployment.
+
+Checkpoint observado de aceitação: **18/10/2026 15:43:08 UTC (16:43:08 em Luanda)**. Desde o início às 11:11:17 UTC decorreram **4 h 31 min 51 s de calendário**. Inclui esperas de ferramentas/aprovação, intervalos sem actividade continuamente medida, diagnóstico, builds, QA e documentação. Existem observações intermédias às 12:37:48 e 14:11:02 UTC; não se interpreta o intervalo entre observações como programação activa. Não foi recolhido um cronómetro exclusivo por funcionalidade e não se inventam horas/pessoa realizadas a partir deste total. Os tempos automatizados por etapa estão acima e nos logs identificados.
+
+Na aceitação final, API compilada/reiniciada e preview operacional; pedido anónimo a competências devolve 401. **Chrome: 7/7 em 24,626 s**, com os builds finais. As capturas foram inspeccionadas e a página também foi observada pelo Chrome DevTools MCP. A última compilação API/web e os typechecks terminaram sem erros; permanecem avisos de source maps/Tailwind/Sentry já observados no baseline, sem publicação de release.
+
+Última repetição do ensaio HTTP de 500 colaboradores (uma competência por colaborador, 100 avaliações correntes): mínimo **75,68 ms**, máximo **105,31 ms**, média **87,89 ms** em cinco páginas sequenciais. O checkpoint anterior, registado acima, teve média 84,29 ms. Não se extrapolam estes valores para mais competências, vídeo, AI ou sessões concorrentes.
+
+Microbenchmark adicional **só de CPU em memória**, separado do ensaio HTTP/PostgreSQL: 500 colaboradores × 20 competências, 30.000 evidências, 10.000 linhas de matriz, três aquecimentos e dez medições; mediana **8,62 ms**, intervalo **6,14–9,83 ms**. Não mede permissões, rede, SQL, renderização ou capacidade de produção. Script `benchmark-competency-gaps.mts` e resultado `.local/sprint/enterprise-final-domain-benchmark.json`.
+
+### Evidência de implementação para revisão
+
+- `apps/api/src/competencies/competency-gaps.ts`: estado profissional corrente e agregação de requisitos; `competency-requirement-versions.ts`: vigência/precedência das versões.
+- `apps/api/src/competencies/competencies.repository.ts`: locks, idempotência, histórico, funções e consultas correntes; `competencies.service.ts`: autorização e validação de referências.
+- `apps/api/src/competencies/development-plan-transitions.ts` e `development-plans.repository.ts`: estados, actividades, decisão final e histórico transaccional.
+- `apps/api/src/competencies/__tests__/competencies.e2e-spec.ts`: 12 cenários com PostgreSQL/RLS e volume.
+- `apps/web/app/modules/Competencies/`: quatro painéis/formulários repo-native e página de equipa/perfil. `scripts/sprints/omatapalo/browser-enterprise-competencies.mts`: QA dos três papéis, sem mocks do comportamento.
+
+**Próxima acção executável:** rever a demonstração com RH/gestores da Omatapalo e aprovar as regras/limites do piloto. Para continuar engenharia local, partir deste branch e dos comandos deste relatório; implementar as alterações administrativas acordadas e repetir o mesmo conjunto de testes. Não iniciar integração real, migração de dados do cliente ou produção a partir desta demonstração sem o respectivo âmbito autorizado.

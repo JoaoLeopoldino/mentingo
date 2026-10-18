@@ -1,5 +1,7 @@
 # Competências — MVP funcional local
 
+**Nota histórica:** o estado empresarial actual, incluindo decisões separadas, frameworks, planos, funções simultâneas, 500 colaboradores e QA dos três papéis, encontra-se no [relatório 16](16-enterprise-competencies.md). As secções seguintes preservam a entrega inicial.
+
 Estado em 18-10-2026: **implementado e ensaiado na API e no Chrome**. Base anterior `d8acd593`, branch `sprint/omatapalo-resume-20261017`. Commit desta entrega: consultar o commit que contém este relatório.
 
 ## Alterações

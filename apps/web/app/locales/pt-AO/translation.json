@@ -7736,7 +7736,8 @@
       "activitiesIncomplete": "Declare a conclusão das actividades antes de solicitar a avaliação final.",
       "planAssessmentRequired": "É necessária uma avaliação profissional válida, suficiente e fundamentada numa evidência aceite deste plano.",
       "requirementChanged": "O requisito foi alterado. Actualize a página e reveja a nova versão.",
-      "duplicateExternalId": "O identificador externo de RH já está associado a outra atribuição."
+      "duplicateExternalId": "O identificador externo de RH já está associado a outra atribuição.",
+      "learningResourceInUse": "Não é possível eliminar a formação ou o percurso: está ligado a planos ou ao histórico de competências. Preserve o recurso e retire-o da utilização corrente."
     },
     "enterprise": {
       "formalAssessments": "Avaliações profissionais formais",

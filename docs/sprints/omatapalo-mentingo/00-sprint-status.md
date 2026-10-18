@@ -8,12 +8,12 @@ Início: **2026-10-17 14:56:11 UTC**. Os intervalos incluem downloads, espera po
 
 | Etapa                  | Estado comprovado                                                                                                      | Próxima acção                                                                      |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| 0 — ambiente           | Node 22.15, pnpm 10.22, quatro serviços isolados, migrações, API e frontend activos, oito utilizadores fictícios       | baseline de carga/concorrência ainda por executar                                  |
-| 1 — pt-AO              | 6.099/6.099 chaves estruturais; zero omissões; 57 invariantes; nove emails essenciais e 19 assuntos traduzidos         | localização dos canais restantes e Android real                                    |
+| 0 — ambiente           | Node 22.15, pnpm 10.22, quatro serviços isolados, migrações, API e frontend activos, dados exclusivamente fictícios       | baseline de carga/concorrência ainda por executar                                  |
+| 1 — pt-AO              | 6.202/6.202 chaves estruturais; zero omissões; 57 invariantes; nove emails essenciais e 19 assuntos traduzidos         | localização dos canais restantes e Android real                                    |
 | 2 — SCORM/certificados | ciclos e histórico preservados; **41 testes certificados + 9 SCORM/S3 + 4 relatórios passaram**; 1 caso SCORM excluído | Chrome SCORM sintético passou; pacote independente/Android e revogação por validar |
 | 3 — conteúdos offline  | texto/PDF privado; reabertura sem rede e remoção confirmadas em Chrome, commit `7054413a`                              | Android físico e quotas em dispositivos modestos                                   |
 | 4 — avaliações offline | API com 9 testes RLS; fila durável e recovery; 6+6 checkpoints finais Chrome de recuperação                            | Android físico; recuperação assistida 401/409 já demonstrada                       |
-| 5 — competências       | MVP nativo: seis tabelas, API, UI, RBAC/RLS, evidência e lacunas; 6 API + 8 domínio + 5 checkpoints Chrome             | paginação e validação do gestor na UI                                              |
+| 5 — competências       | Frameworks, versões, planos, decisões separadas e funções simultâneas; 21 domínio + 12 API de competências + 7 checkpoints Chrome             | governação do piloto, ciclo administrativo completo e validação de produção                                              |
 | 6 — integrações/vídeo  | Auto HLS corrigido; quatro regressões passaram, banda não medida; conectores pendentes                                 | adapter Primavera explicitamente sintético, exportação analítica e Auto HLS        |
 | 7 — decisão            | gates críticos ainda não demonstrados                                                                                  | benchmark e decisão após execução                                                  |
 
@@ -70,3 +70,9 @@ Checkpoint medido desta execução: **18-10-2026 10:23:10 UTC**; desde 03:46:27 
 Separação de evidência/avaliação/revogação; frameworks, escalas e requisitos versionados; planos individuais com aprovação e histórico; duas funções activas e paginação/filtros da equipa. 21 testes de domínio, 11 API/RLS e sete checkpoints Chrome para administrador, gestor e colaborador. Ensaio HTTP sequencial com 500 colaboradores: média 84,29 ms/página de 100; não é carga concorrente. Catálogo pt-AO: 6.201 chaves estruturais antes das verificações finais, 57 invariantes, sem revisão linguística humana integral. Ver resultado actual do validador e relatório 16.
 
 O total mantém-se **22/32 = 68,75%**, pois os critérios originais de competências já estavam contados. Competências têm agora evidência reforçada; ERP, Android físico e produção continuam abertos. Nenhum push, merge ou deployment.
+
+## Verificação final desta evolução
+
+Três suites API: 20 passaram (12 de competências), 180 casos fora do filtro; 21 de domínio; 31 web offline/idioma/HLS; cinco testes do validador de traduções. Catálogo final: 6.202 chaves, 57 invariantes, sem erros estruturais/placeholder. A retenção de recursos ligados a planos/histórico devolve 409 e preserva o lote inteiro. Ver relatório 16 para tempos observados, comandos, falhas e limites. Os commits desta evolução são locais; não houve push/merge/deployment.
+
+Aceitação final dos builds: 18/10/2026 15:43:08 UTC; Chrome 7/7 em 24,626 s. Benchmark HTTP final: média 87,89 ms em cinco páginas de 100 colaboradores (500 pessoas, uma competência; sequencial). Tempo de calendário desde o início desta evolução: 4 h 31 min 51 s, incluindo esperas e intervalos sem medição exclusiva de actividade; detalhes no relatório 16. Estimativa provisória para preparação governada do piloto: 24/48/96 horas de trabalho futuro, sem extrapolação automática de produtividade de IA.

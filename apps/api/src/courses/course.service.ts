@@ -61,6 +61,7 @@ import { CertificatesService } from "src/certificates/certificates.service";
 import { AdminChapterRepository } from "src/chapter/repositories/adminChapter.repository";
 import { DatabasePg } from "src/common";
 import { EmailService } from "src/common/emails/emails.service";
+import { rethrowCompetencyResourceRetention } from "src/common/helpers/competency-resource-retention";
 import { getGroupFilterConditions } from "src/common/helpers/getGroupFilterConditions";
 import { getUserNameSearchCondition } from "src/common/helpers/getUserNameSearchCondition";
 import {
@@ -3859,7 +3860,7 @@ export class CourseService {
         }),
         trx,
       );
-    });
+    }).catch(rethrowCompetencyResourceRetention);
 
     return null;
   }
@@ -3934,7 +3935,7 @@ export class CourseService {
       );
 
       return null;
-    });
+    }).catch(rethrowCompetencyResourceRetention);
   }
 
   private async removeScormPackagesForCourses(

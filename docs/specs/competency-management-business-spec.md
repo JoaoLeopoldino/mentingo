@@ -77,3 +77,36 @@ A matriz combina os requisitos das funções activas numa única linha por compe
 A gestão de avaliadores mostra pessoas com permissões existentes e liga aos perfis administrativos; não corresponde a credenciação por especialidade. A administração de permissões e a designação da chefia são distintas.
 
 Ensaios actualizados: 21 testes de domínio, 11 API/PostgreSQL/RLS e sete checkpoints Chrome para três papéis. Paginação HTTP sequencial com 500 colaboradores fictícios: média 84,29 ms em cinco páginas de 100, sem duplicações; não demonstra 500 sessões simultâneas. Migração das cinco atribuições prévias preservou todos os campos originais.
+
+## Estrutura do referencial
+
+```mermaid
+flowchart LR
+  F[Framework e categorias] --> C[Competência]
+  S[Escala reutilizável] --> N[Níveis copiados e preservados]
+  C --> N
+  P[Colaborador] --> J[Atribuições profissionais em vigor]
+  J --> R[Funções]
+  R --> V[Versões de requisitos e vigência]
+  V --> C
+  V --> G[Matriz de lacunas]
+  A[Avaliação formal corrente] --> G
+```
+
+```mermaid
+flowchart LR
+  G[Lacuna] --> P[Plano individual]
+  P --> AT[Actividades e formações]
+  AT --> E[Evidência apresentada]
+  E --> RE[Revisão da evidência]
+  RE --> AV[Avaliação profissional explícita]
+  AV --> CP[Conclusão fundamentada do plano]
+  AV --> RV[Revogação ou suspensão explícita]
+  P --> H[Histórico imutável de decisões]
+```
+
+Uma evidência recusada não retira uma avaliação aprovada. Alterar a função não apaga a competência demonstrada. Uma avaliação posterior com nível inferior substitui a anterior para a situação corrente, preservando ambas. O plano e a actividade são instrumentos de desenvolvimento; não são certificação profissional automática.
+
+Formações e percursos ligados a planos ou versões de requisitos têm retenção referencial. A eliminação física é recusada com mensagem de negócio, incluindo em lote; o rollback preserva todos os recursos. A eliminação normal de uma formação sem essas referências foi ensaiada. A retirada da utilização corrente e a política de arquivo devem ser acordadas.
+
+Validação final de API: 20 testes passaram nos três módulos afectados, incluindo 12 de competências; 180 casos ficaram fora do filtro. Regressões web de offline/idioma/HLS: 31 passaram. Estes resultados não equivalem a certificação de segurança ou operação em produção. O desenho do vínculo futuro ao Primavera está no relatório 16 e não corresponde a integração real.

@@ -1,5 +1,8 @@
 # Decisão da sprint — checkpoint de 18-10-2026
 
+**Actualização empresarial:** mantém-se CONDITIONAL GO para piloto e 22/32 (68,75%), sem GO para produção. [Execução e evidências actuais](16-enterprise-competencies.md); [comparação delimitada com Totara](17-competency-totara-parity.md). Os números/código abaixo correspondem ao checkpoint anterior.
+
+
 **CONDITIONAL GO para continuar a validação; sem GO para substituir Totara em produção.** O Mentingo já sustenta uma demonstração técnica local com competências, catálogo pt-AO completo estruturalmente, avaliações offline recuperáveis e SCORM 1.2 no Chrome. Faltam provas críticas em dispositivo, interoperabilidade independente, integração empresarial e operação.
 
 Estado: **22/32 critérios = 68,75%**, preservando os 32 critérios do [checklist](11-sprint-progress.md). Esta percentagem não mede conclusão do contrato, esforço restante ou prontidão para produção. Código desta entrega: `ca797c72`, `067407d1`, `848677e0`, `94f14739`, `b414f7ba`, `906c9398`, `30ff88f2`. O [relatório de execução](14-next-execution.md) contém testes, falhas corrigidas, tempos observados, estimativas e dependências. A [galeria de QA](15-next-visual-qa.md) contém capturas reais revistas.

@@ -8168,7 +8168,8 @@
       "activitiesIncomplete": "Report activity completion before requesting final assessment.",
       "planAssessmentRequired": "A valid sufficient professional assessment supported by accepted evidence from this plan is required.",
       "requirementChanged": "The requirement has changed. Refresh and review the new version.",
-      "duplicateExternalId": "The external HR identifier is already used by another assignment."
+      "duplicateExternalId": "The external HR identifier is already used by another assignment.",
+      "learningResourceInUse": "This course or learning path cannot be deleted because it is referenced by development plans or competency history. Preserve it and withdraw it from current use."
     },
     "enterprise": {
       "formalAssessments": "Formal professional assessments",

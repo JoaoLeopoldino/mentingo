@@ -22,6 +22,7 @@ import { and, eq, inArray } from "drizzle-orm";
 import { match } from "ts-pattern";
 
 import { DatabasePg, type Pagination, type UUIDType } from "src/common";
+import { rethrowCompetencyResourceRetention } from "src/common/helpers/competency-resource-retention";
 import { setJsonbField } from "src/common/helpers/sqlHelpers";
 import {
   getGroupManagerLearnerScopeCondition,
@@ -726,7 +727,7 @@ export class LearningPathService {
       );
 
       return this.learningPathRepository.deleteLearningPath(learningPathId, trx);
-    });
+    }).catch(rethrowCompetencyResourceRetention);
 
     if (!deletedLearningPath) {
       throw new NotFoundException(LEARNING_PATH_ERRORS.NOT_FOUND);

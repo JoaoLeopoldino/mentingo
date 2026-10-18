@@ -7,6 +7,8 @@ import request from "supertest";
 import { TenantDbRunnerService } from "src/storage/db/tenant-db-runner.service";
 import {
   users,
+  courses,
+  learningPaths,
   competencyAssignments,
   competencyFrameworks,
   competencyRequirementVersions,
@@ -22,6 +24,7 @@ import {
 } from "src/storage/schema";
 
 import { createE2ETest } from "../../../test/create-e2e-test";
+import { createCourseFactory } from "../../../test/factory/course.factory";
 import { createGroupFactory } from "../../../test/factory/group.factory";
 import { createSettingsFactory } from "../../../test/factory/settings.factory";
 import { createUserFactory } from "../../../test/factory/user.factory";
@@ -978,33 +981,27 @@ describe("Enterprise competencies with real tenant RLS", () => {
         learningPathId: null,
       })
       .expect(200);
-    await db
-      .insert(competencyAssignments)
-      .values(
-        records.map((x) => ({
-          tenantId: owner.tenantId,
-          userId: x.id,
-          jobRoleId: role.body.data.id,
-          organizationalUnitId: unit.id,
-          startsAt: "2026-01-01T00:00:00Z",
-        })),
-      );
-    await db
-      .insert(competencyAssessments)
-      .values(
-        records
-          .slice(400)
-          .map((x) => ({
-            tenantId: owner.tenantId,
-            userId: x.id,
-            competencyId,
-            level: 2,
-            revision: 1,
-            assessorId: adminId,
-            rationale: "Avaliação formal fictícia para ensaio de paginação",
-            commandHash: `fixture-${x.id}`,
-          })),
-      );
+    await db.insert(competencyAssignments).values(
+      records.map((x) => ({
+        tenantId: owner.tenantId,
+        userId: x.id,
+        jobRoleId: role.body.data.id,
+        organizationalUnitId: unit.id,
+        startsAt: "2026-01-01T00:00:00Z",
+      })),
+    );
+    await db.insert(competencyAssessments).values(
+      records.slice(400).map((x) => ({
+        tenantId: owner.tenantId,
+        userId: x.id,
+        competencyId,
+        level: 2,
+        revision: 1,
+        assessorId: adminId,
+        rationale: "Avaliação formal fictícia para ensaio de paginação",
+        commandHash: `fixture-${x.id}`,
+      })),
+    );
     const seen = new Set<string>();
     const timings: number[] = [];
     for (let page = 1; page <= 5; page++) {
@@ -1098,4 +1095,105 @@ describe("Enterprise competencies with real tenant RLS", () => {
       }),
     );
   }, 120000);
+  it("preserves course and path references in plans and requirement history with explicit retention conflicts", async () => {
+    const competencyId = await create();
+    const course = await createCourseFactory(db).create({
+      authorId: adminId,
+      status: "draft",
+      thumbnailS3Key: null,
+    });
+    const [owner] = await db.select().from(users).where(eq(users.id, employeeId));
+    const [path] = await db
+      .insert(learningPaths)
+      .values({
+        authorId: adminId,
+        tenantId: owner.tenantId,
+        title: { "pt-AO": "Percurso fictício de segurança" },
+        baseLanguage: "pt-AO",
+        availableLocales: ["pt-AO"],
+      })
+      .returning();
+    const planId = randomUUID();
+    await request(app.getHttpServer())
+      .post("/api/competencies/development-plans")
+      .set("Cookie", employeeCookie)
+      .send({
+        id: planId,
+        userId: employeeId,
+        competencyId,
+        targetLevel: 1,
+        title: "Plano ligado a formação e percurso",
+        deadline: "2030-12-31T00:00:00Z",
+        activities: [
+          { title: "Formação existente", courseId: course.id, learningPathId: null },
+          { title: "Percurso existente", courseId: null, learningPathId: path.id },
+        ],
+      })
+      .expect(201);
+    const deletedCourse = await request(app.getHttpServer())
+      .delete(`/api/course/deleteCourse/${course.id}`)
+      .set("Cookie", adminCookie)
+      .expect(409);
+    expect(deletedCourse.body.message).toBe("competencies.errors.learningResourceInUse");
+    await request(app.getHttpServer())
+      .delete(`/api/learning-path/${path.id}`)
+      .set("Cookie", adminCookie)
+      .expect(409);
+    const historicalCourse = await createCourseFactory(db).create({
+      authorId: adminId,
+      status: "draft",
+      thumbnailS3Key: null,
+    });
+    const role = await request(app.getHttpServer())
+      .post("/api/competencies/roles")
+      .set("Cookie", adminCookie)
+      .send({ code: randomUUID().toUpperCase(), name: "Função com histórico de formação" })
+      .expect(201);
+    const rule = {
+      jobRoleId: role.body.data.id,
+      competencyId,
+      minimumLevel: 1,
+      effectiveFrom: "2026-01-01T00:00:00Z",
+      effectiveUntil: null,
+      courseId: historicalCourse.id,
+      learningPathId: null,
+    };
+    await request(app.getHttpServer())
+      .put("/api/competencies/requirements")
+      .set("Cookie", adminCookie)
+      .send(rule)
+      .expect(200);
+    await request(app.getHttpServer())
+      .put("/api/competencies/requirements")
+      .set("Cookie", adminCookie)
+      .send({ ...rule, courseId: null, expectedVersion: 1 })
+      .expect(200);
+    const unused = await createCourseFactory(db).create({
+      authorId: adminId,
+      status: "draft",
+      thumbnailS3Key: null,
+    });
+    await request(app.getHttpServer())
+      .delete("/api/course/deleteManyCourses")
+      .set("Cookie", adminCookie)
+      .send({ ids: [unused.id, historicalCourse.id] })
+      .expect(409);
+    expect(await db.select().from(courses).where(eq(courses.id, unused.id))).toHaveLength(1);
+    await request(app.getHttpServer())
+      .delete(`/api/course/deleteCourse/${unused.id}`)
+      .set("Cookie", adminCookie)
+      .expect(200);
+    const plans = (
+      await request(app.getHttpServer())
+        .get("/api/competencies/development-plans")
+        .set("Cookie", employeeCookie)
+        .expect(200)
+    ).body.data;
+    expect(plans.activities.filter((x: { planId: string }) => x.planId === planId)).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ courseId: course.id }),
+        expect.objectContaining({ learningPathId: path.id }),
+      ]),
+    );
+  });
 });

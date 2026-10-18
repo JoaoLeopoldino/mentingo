@@ -18,6 +18,8 @@ import { Input } from "~/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
 import { useCurrentUserStore } from "~/modules/common/store/useCurrentUserStore";
+import { useLanguageStore } from "~/modules/Dashboard/Settings/Language/LanguageStore";
+import { formatLocalizedDate } from "~/utils/formatLocalizedDate";
 import { setPageTitle } from "~/utils/setPageTitle";
 
 import { Field, Picker, BusyForm, value, optionalDate } from "./competency-controls";
@@ -33,6 +35,7 @@ export const meta: MetaFunction = ({ matches }) => setPageTitle(matches, "pages.
 
 export default function CompetenciesPage() {
   const { t } = useTranslation();
+  const language = useLanguageStore((state) => state.language);
   const [filters, setFilters] = useState<CompetencyWorkspaceQuery>({ page: 1, perPage: 25 });
   const [tab, setTab] = useState("matrix");
   const { data, isPending, error } = useCompetencyWorkspace(filters);
@@ -386,20 +389,12 @@ export default function CompetenciesPage() {
                       </p>
                       <p>
                         {t("competencies.enterprise.recordedBy")}: {employeeName(item.recordedBy)} ·{" "}
-                        {item.createdAt
-                          ? new Intl.DateTimeFormat("pt-AO", {
-                              timeZone: "Africa/Luanda",
-                              dateStyle: "short",
-                            }).format(new Date(item.createdAt))
-                          : "—"}
+                        {formatLocalizedDate(language, item.createdAt)}
                       </p>
                       {item.expiresAt && (
                         <p>
                           {t("competencies.expiry")}:{" "}
-                          {new Intl.DateTimeFormat("pt-AO", {
-                            timeZone: "Africa/Luanda",
-                            dateStyle: "short",
-                          }).format(new Date(item.expiresAt))}
+                          {formatLocalizedDate(language, item.expiresAt)}
                         </p>
                       )}
                     </article>
@@ -734,7 +729,8 @@ export default function CompetenciesPage() {
                             ? "competencies.frameworks.mandatory"
                             : "competencies.frameworks.optional",
                         )}{" "}
-                        · {x.effectiveFrom} → {x.effectiveUntil ?? "—"}
+                        · {formatLocalizedDate(language, x.effectiveFrom)} →{" "}
+                        {x.effectiveUntil ? formatLocalizedDate(language, x.effectiveUntil) : "—"}
                       </li>
                     ))}
                   </ul>
