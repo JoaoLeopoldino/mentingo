@@ -21,13 +21,11 @@ import {
   CreateJobRole,
   CompetencyRequirement,
   CompetencyAssignment,
-  CompetencyEvidence
+  CompetencyEvidence,
 } from "./competencies.schema";
 import { CompetenciesService } from "./competencies.service";
 
-import type {
-  CompetencyWorkspace,
-  CompetencyIdResponse} from "./competencies.schema";
+import type { CompetencyWorkspace, CompetencyIdResponse } from "./competencies.schema";
 @Controller("competencies")
 @RequirePermission(
   PERMISSIONS.COMPETENCY_READ_SELF,

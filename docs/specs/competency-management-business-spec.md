@@ -44,6 +44,6 @@ As formações recomendadas usam os mecanismos de acesso e inscrição existente
 
 ## Evidência de testes
 
-Seis testes de integração passaram contra PostgreSQL real com papel sujeito a RLS: percurso completo, âmbito do gestor, auto-certificação recusada, referências/níveis inválidos, desactivação e isolamento/imutabilidade de evidências.
+Oito testes de domínio cobrem estados, validade, vigência e precedência de decisões. Seis testes de integração passaram contra PostgreSQL real com papel sujeito a RLS: percurso completo, âmbito do gestor, auto-certificação recusada, referências/níveis inválidos, desactivação e isolamento/imutabilidade de evidências.
 
 O script `scripts/sprints/omatapalo/browser-competencies.mts` passou quatro checkpoints de interface com dados fictícios em Luanda, Huíla e Benguela. Criou/verificou catálogo e níveis, requisitos/atribuições, decisões sucessivas e matriz com competência cumprida/em falta. O administrador executou a demonstração no navegador; o âmbito específico do gestor foi ensaiado pela API. Não se realizou ensaio de carga ou validação em Android físico.

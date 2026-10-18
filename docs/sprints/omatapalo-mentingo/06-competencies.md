@@ -39,3 +39,9 @@ Capturas locais: `.local/sprint/screenshots/08-competency-{matrix,evidence,mobil
 Validar matriz e avaliação com um gestor na interface, expiração/revisão em relógio controlado e volume realista. Não existem múltiplas funções, anexos binários, paginação, histórico de versões de requisitos ou governação formal de avaliadores. O perfil pode apresentar UUID do avaliador quando este não está na lista de colaboradores visível. A recomendação não substitui a inscrição/acesso à formação.
 
 Tempo: primeiro relógio desta execução **03:46:27 UTC**. Os registos de build/testes dão durações dos processos; não há folha de horas exclusiva por módulo. O intervalo final, incluindo permissões, esperas e restantes funcionalidades, ficará registado no checkpoint da execução. Não tratar esse intervalo como horas de engenharia facturáveis.
+
+## Validação adicional de domínio e medição
+
+O cálculo de lacunas foi extraído para um módulo puro e passou **8 testes**: seis estados, precedência de decisões/evidências pendentes e vigência/desactivação. A suite API/RLS voltou a passar **6/6 em 35,089 s**, incluindo inicialização/compilação do processo.
+
+Um microbenchmark sintético de CPU com 500 colaboradores, 20 competências e 30.000 registos de evidência produziu 10.000 linhas: 10 execuções após 3 aquecimentos, mediana **9,90 ms**, mínimo **8,24 ms**, máximo **18,66 ms** nesta máquina. Não mede HTTP, PostgreSQL, concorrência, payloads completos ou capacidade para 500 sessões. A consulta de histórico ainda não tem paginação empresarial; esse limite mantém-se aberto. Script: `benchmark-competency-gaps.mts`.

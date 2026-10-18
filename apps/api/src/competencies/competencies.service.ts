@@ -8,6 +8,7 @@ import {
 import { type SupportedLanguages, PERMISSIONS, hasPermission } from "@repo/shared";
 
 import { CompetenciesRepository } from "./competencies.repository";
+import { buildCompetencyGaps } from "./competency-gaps";
 
 import type {
   CreateCompetency,
@@ -76,42 +77,12 @@ export class CompetenciesService {
       this.competenciesRepository.employees(scope),
     ]);
     const evidence = await this.competenciesRepository.evidence(employees.map((x) => x.id));
-    const now = Date.now();
-    const matrix: CompetencyWorkspace["matrix"] = [];
-    for (const employee of employees)
-      for (const requirement of requirements) {
-        if (
-          requirement.jobRoleId !== employee.jobRoleId ||
-          Date.parse(requirement.effectiveFrom) > now ||
-          (requirement.effectiveUntil && Date.parse(requirement.effectiveUntil) <= now) ||
-          !catalog.some((x) => x.id === requirement.competencyId && x.active)
-        )
-          continue;
-        // Pending self-evidence never supersedes an assessor's decision. Latest assessed record wins.
-        const records = evidence.filter(
-          (x) => x.userId === employee.id && x.competencyId === requirement.competencyId,
-        );
-        const decision = records.find((x) => x.status !== "pending");
-        let status: CompetencyWorkspace["matrix"][number]["status"] = "missing";
-        let currentLevel: number | null = null;
-        if (decision) {
-          if (decision.status === "rejected") status = "rejected";
-          else if (decision.expiresAt && Date.parse(decision.expiresAt) <= now) status = "expired";
-          else {
-            currentLevel = decision.level;
-            status = currentLevel >= requirement.minimumLevel ? "met" : "insufficient";
-          }
-        } else if (records.length) status = "pending";
-        matrix.push({
-          userId: employee.id,
-          competencyId: requirement.competencyId,
-          requiredLevel: requirement.minimumLevel,
-          currentLevel,
-          status,
-          courseId: requirement.courseId,
-          learningPathId: requirement.learningPathId,
-        });
-      }
+    const matrix = buildCompetencyGaps({
+      employees,
+      catalog,
+      requirements,
+      orderedEvidence: evidence,
+    });
     return {
       canManage: hasPermission(actor.permissions, PERMISSIONS.COMPETENCY_MANAGE),
       canAssess: hasPermission(actor.permissions, PERMISSIONS.COMPETENCY_ASSESS_MANAGED),
