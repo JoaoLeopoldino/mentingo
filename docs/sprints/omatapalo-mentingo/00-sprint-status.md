@@ -1,6 +1,6 @@
 # Sprint de validação técnica — Utu Lab / Omatapalo
 
-Estado actual: **22/32 critérios = 68,75%; CONDITIONAL GO para validação, sem GO para produção**. Evolução empresarial: [16](16-enterprise-competencies.md); [paridade delimitada](17-competency-totara-parity.md). Relatório anterior: [14](14-next-execution.md); [QA anterior](15-next-visual-qa.md). Os checkpoints abaixo preservam a evolução histórica.
+Estado actual: **25/32 critérios = 78,125%; CONDITIONAL GO para piloto delimitado; NO-GO para substituição em produção**. [Validação empresarial e requisitos a–j](18-enterprise-validation.md), [QA visual e acesso](19-enterprise-visual-qa.md), [alternativas/TCO](20-options-tco-and-decision.md), [32 critérios](11-sprint-progress.md). Evolução de competências preservada em [16](16-enterprise-competencies.md) e [17](17-competency-totara-parity.md). Os checkpoints abaixo preservam a evolução histórica.
 
 Base: `7a23e967d88947238386c588663140c21a284294` (v4.23.0). Branch actual: `feat/omatapalo-enterprise-competencies-20261018`, a partir de `4e187000`. Worktree persistente: `/Users/joaoleopoldino/Development/CaniveteLab/mentingo/.local/worktrees/omatapalo-20261017`. Checkout original recuperado e verificado; implementação mantida no worktree separado.
 
@@ -8,14 +8,14 @@ Início: **2026-10-17 14:56:11 UTC**. Os intervalos incluem downloads, espera po
 
 | Etapa                  | Estado comprovado                                                                                                      | Próxima acção                                                                      |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| 0 — ambiente           | Node 22.15, pnpm 10.22, quatro serviços isolados, migrações, API e frontend activos, dados exclusivamente fictícios       | baseline de carga/concorrência ainda por executar                                  |
-| 1 — pt-AO              | 6.202/6.202 chaves estruturais; zero omissões; 57 invariantes; nove emails essenciais e 19 assuntos traduzidos         | localização dos canais restantes e Android real                                    |
-| 2 — SCORM/certificados | ciclos e histórico preservados; **41 testes certificados + 9 SCORM/S3 + 4 relatórios passaram**; 1 caso SCORM excluído | Chrome SCORM sintético passou; pacote independente/Android e revogação por validar |
-| 3 — conteúdos offline  | texto/PDF privado; reabertura sem rede e remoção confirmadas em Chrome, commit `7054413a`                              | Android físico e quotas em dispositivos modestos                                   |
+| 0 — ambiente           | Node 22.15, pnpm 10.22, serviços isolados e builds funcionais; HTTP 20/50/100 e restauro DB executados | Ensaio sustentado, vídeo/IA, restauro integral/offsite e segurança global |
+| 1 — pt-AO              | 6.228/6.228 chaves estruturais; zero omissões; 57 invariantes; página pública localizada | Revisão humana/canais restantes; 100% estrutural não é revisão linguística |
+| 2 — SCORM/certificados | Rustici independente Chrome: retoma, nota 100, dois ciclos e revogação; histórico UI; autorização de percursos/RLS | Android, recertificação/revogação de percursos e renovação após revogação explícita |
+| 3 — conteúdos offline  | Texto/PDF privado, reabertura e remoção; actualização interrompida preserva a cópia anterior | Android físico e quotas reais; probe CDP bloqueado |
 | 4 — avaliações offline | API com 9 testes RLS; fila durável e recovery; 6+6 checkpoints finais Chrome de recuperação                            | Android físico; recuperação assistida 401/409 já demonstrada                       |
 | 5 — competências       | Frameworks, versões, planos, decisões separadas e funções simultâneas; 21 domínio + 12 API de competências + 7 checkpoints Chrome             | governação do piloto, ciclo administrativo completo e validação de produção                                              |
-| 6 — integrações/vídeo  | Auto HLS corrigido; quatro regressões passaram, banda não medida; conectores pendentes                                 | adapter Primavera explicitamente sintético, exportação analítica e Auto HLS        |
-| 7 — decisão            | gates críticos ainda não demonstrados                                                                                  | benchmark e decisão após execução                                                  |
+| 6 — integrações/vídeo  | Adapter/reconciliação sintéticos, dataset BI manual e nove testes HLS; 12 testes de integrações puros | ERP real, serviço BI/incremental, Teams e consumo/rebuffering de vídeo |
+| 7 — decisão            | HTTP sem erros; p95 0,92/1,71/3,62 s; DB restaurada; alternativas/TCO com hipóteses explícitas | Gates críticos prevalecem sobre a percentagem; ver relatórios 18–20 |
 
 Commits: ambiente **`c6c53fc7`**; pt-AO **`6a649d65`**. Autorização: **`dc15e4f2`**. Ciclos/histórico: **`52ddc41a`**; conteúdos offline: **`7054413a`**; API de avaliações offline: **`38683c60`**. Não houve push, deployment ou utilização de dados/credenciais de clientes.
 
@@ -76,3 +76,11 @@ O total mantém-se **22/32 = 68,75%**, pois os critérios originais de competên
 Três suites API: 20 passaram (12 de competências), 180 casos fora do filtro; 21 de domínio; 31 web offline/idioma/HLS; cinco testes do validador de traduções. Catálogo final: 6.202 chaves, 57 invariantes, sem erros estruturais/placeholder. A retenção de recursos ligados a planos/histórico devolve 409 e preserva o lote inteiro. Ver relatório 16 para tempos observados, comandos, falhas e limites. Os commits desta evolução são locais; não houve push/merge/deployment.
 
 Aceitação final dos builds: 18/10/2026 15:43:08 UTC; Chrome 7/7 em 24,626 s. Benchmark HTTP final: média 87,89 ms em cinco páginas de 100 colaboradores (500 pessoas, uma competência; sequencial). Tempo de calendário desde o início desta evolução: 4 h 31 min 51 s, incluindo esperas e intervalos sem medição exclusiva de actividade; detalhes no relatório 16. Estimativa provisória para preparação governada do piloto: 24/48/96 horas de trabalho futuro, sem extrapolação automática de produtividade de IA.
+
+## Validação empresarial — novo checkpoint
+
+**25/32 = 78,125%**, conferido por script sobre os mesmos critérios. Rustici SCORM 1.2 independente em Chrome, emissão/renovação/revogação e histórico; segurança de certificados de percursos; actualização offline que conserva a última cópia completa; adapter Primavera explicitamente sintético; seis CSV BI autorizados; quatro papéis comerciais com avaliação e certificado activo. [Execução, falhas, métricas e estimativas](18-enterprise-validation.md), [QA real](19-enterprise-visual-qa.md), [alternativas/TCO](20-options-tco-and-decision.md).
+
+Commits funcionais locais: `9c0a6700`, `33753ea0`, `ba08cc78`, `daacf849`, `f3e4a935`, `6ae6be93`, `cb975404`. Checkpoint temporal 19:53:46 UTC, intervalo desde 16:02:49: **3 h 50 min 57 s**, incluindo pausa/esperas; 40 min 18 s desde a retoma observada às 19:13:28. Não são horas exclusivas por módulo. A revisão final API precisou de heap 4 GiB após OOM a 2 GiB; typecheck passou. O relatório 18 regista os timeouts do ensaio combinado e a repetição isolada bem-sucedida.
+
+API/web operacionais em localhost, sem push/merge/deployment. Nenhuma eliminação no conjunto desta evolução. O checkout original permanece preservado em `main`, apenas com a pasta de auditoria anteriormente não versionada. Android/quota reais, ERP/Teams reais, SCORM 2004/xAPI, vídeo sob rede limitada e operação integral continuam por aceitar. A decisão é de piloto delimitado; não há aprovação de substituição em produção.

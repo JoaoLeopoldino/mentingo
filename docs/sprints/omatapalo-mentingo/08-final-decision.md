@@ -1,6 +1,6 @@
 # Decisão da sprint — checkpoint de 18-10-2026
 
-**Actualização empresarial:** mantém-se CONDITIONAL GO para piloto e 22/32 (68,75%), sem GO para produção. [Execução e evidências actuais](16-enterprise-competencies.md); [comparação delimitada com Totara](17-competency-totara-parity.md). Os números/código abaixo correspondem ao checkpoint anterior.
+**Decisão actual:** CONDITIONAL GO para piloto online delimitado; **NO-GO para substituição em produção**. **25/32 = 78,125%**, denominador original preservado. [Execução e matriz a–j](18-enterprise-validation.md), [capturas/contas locais](19-enterprise-visual-qa.md), [Moodle/IOMAD/Totara e TCO 12/24/36](20-options-tco-and-decision.md). Os números/código abaixo são históricos. Gates actuais: Android/quota, ERP/Teams reais, vídeo/IA sob carga, segurança/continuidade integral e matriz restante de certificados. O Chrome independente e o restauro DB já passaram; não os descrever como ainda inexistentes.
 
 
 **CONDITIONAL GO para continuar a validação; sem GO para substituir Totara em produção.** O Mentingo já sustenta uma demonstração técnica local com competências, catálogo pt-AO completo estruturalmente, avaliações offline recuperáveis e SCORM 1.2 no Chrome. Faltam provas críticas em dispositivo, interoperabilidade independente, integração empresarial e operação.
