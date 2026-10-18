@@ -1,6 +1,6 @@
 # Etapa 3 — Conteúdos offline
 
-Estado actual: **reconstruída após reinício; nova validação em curso**. Commit de base: `52ddc41a`; recuperação: `b6bf4bb9`. Branch: `sprint/omatapalo-resume-20261017`.
+Estado actual: **fatia de leitura funcional, novamente validada após reinício**. Commit da funcionalidade: `7054413a`; recuperação: `b6bf4bb9`. Branch: `sprint/omatapalo-resume-20261017`.
 
 ## Alterações efectuadas
 
@@ -57,3 +57,9 @@ Servir o build numa origem HTTPS de desenvolvimento isolada, com proxy correcto 
 ## Tempo efectivo
 
 Primeira implementação: aproximadamente 17:41–18:08 UTC, incluindo testes, downloads e várias correcções reais da integração Remix/Workbox. A retoma após reinício começou cerca de 22:20 UTC e é medida separadamente; o intervalo sem execução não conta como engenharia. A instalação e a reconstrução não são uma segunda funcionalidade entregue.
+
+## Validação final da recuperação — 23:03 UTC
+
+Build e typecheck web passaram. O worker final inclui 510 recursos / 14.430,29 KiB; os 63 recursos referidos pelo HTML foram confirmados no cache. **Os cinco checkpoints Chrome passaram novamente**, incluindo PDF efectivamente renderizado em canvas, fecho/reabertura sem rede, «Página 1 de 1», tamanho com vírgula decimal, HTML lang pt-AO e remoção persistente. A captura foi revista visualmente. Não houve resposta de sucesso simulada. Logs: `.local/sprint/browser-offline-recovery.log`, `build-web-recovery.log`, `verify-offline-build.log`, `web-tests-recovery.log` e `api-tests-recovery.log`.
+
+A retoma durou aproximadamente 43 minutos decorridos, incluindo reconstrução, instalação e esperas; não corresponde a uma segunda implementação independente. As limitações Android, dependências globais e ausência de avaliações mantêm-se.

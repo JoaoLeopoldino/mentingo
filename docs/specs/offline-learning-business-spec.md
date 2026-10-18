@@ -33,4 +33,4 @@ IndexedDB/Dexie guarda apenas o conteúdo de leitura, sem credenciais. Workbox g
 
 ## Test Evidence
 
-Antes do reinício, testes de persistência, isolamento, interrupção, limpeza de sessão e acesso a anexos passaram, incluindo Chrome com API e S3 reais. O worktree temporário desapareceu; a reconstrução voltou a passar 26 testes web e sete de integração de lições; o ensaio Chrome será repetido. O estado actual e os comandos estão em `docs/sprints/omatapalo-mentingo/04-offline-content.md`. Android, avaliações e conclusão offline ainda não foram demonstrados.
+Antes do reinício, testes de persistência, isolamento, interrupção, limpeza de sessão e acesso a anexos passaram, incluindo Chrome com API e S3 reais. O worktree temporário desapareceu; a reconstrução voltou a passar 26 testes web e sete de integração de lições; os cinco checkpoints Chrome também passaram novamente, incluindo fecho/reabertura sem rede, canvas PDF e remoção persistente. O estado actual e os comandos estão em `docs/sprints/omatapalo-mentingo/04-offline-content.md`. Android, avaliações e conclusão offline ainda não foram demonstrados.

@@ -24,3 +24,7 @@ Os relatórios 01–08 distinguem execução, testes, bloqueios e trabalho por i
 ## Retoma após reinício
 
 O worktree temporário desapareceu; os commits até `52ddc41a` foram recuperados no branch `sprint/omatapalo-resume-20261017`, em `.local/worktrees/omatapalo-20261017` dentro do checkout original. A implementação offline não consolidada precisa de reconstrução e nova validação. Os quatro serviços Docker e os dados sintéticos locais sobreviveram. A API e o frontend ainda não foram reiniciados nesta recuperação. Consultar [checkpoint de recuperação](09-recovery-checkpoint.md).
+
+## Checkpoint recuperado — 17-10-2026 23:03 UTC
+
+Implementação offline consolidada em **`7054413a`**, no worktree persistente. API e preview frontend operacionais. Passaram novamente 26 testes web, 10 Node, sete de integração de lições, lint, build API, typecheck/build web e **cinco checkpoints Chrome** (PDF privado, interrupção/retry, renderização, reabertura sem rede, remoção persistente). O build confirmou os 63 recursos de arranque no precache. Captura recuperada em `.local/sprint/screenshots/05-offline-text-pdf.png`. A formação offline continua limitada a leitura; avaliações e sincronização começam na etapa 4. Cobertura pt-AO actual 2.029/6.006 (33,78%).
