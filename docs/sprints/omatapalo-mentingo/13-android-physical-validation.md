@@ -77,3 +77,7 @@ Não versionar HARs brutos, cookies, palavras-passe, links de convite ou tokens 
 ## Gate de armazenamento — actualização de 18/10/2026
 
 Estado continua **BLOCKED: não executado num dispositivo físico**. O ambiente não disponibilizou dispositivo Android/adb. O probe Chrome CDP `Storage.overrideQuotaForOrigin` declarou quota 1, mas o valor observado em `navigator.storage.estimate()` não acompanhou o override; a descarga continuou a caber. Esse probe não fecha a aceitação de pouco espaço. Repetir fisicamente sem apagar dados de outras aplicações: limite de curso, falha de nova descarga e falha de actualização preservando a cópia completa anterior e todas as respostas pendentes. Guardar estimativas antes/depois, versão de Chrome, espaço livre e resultado PASS/FAIL/BLOCKED. O teste unitário injecta `QuotaExceededError`; não equivale a armazenamento Android cheio.
+
+## Disponibilidade confirmada — execução 21, 18/10/2026
+
+O utilizador respondeu **«Não está disponível nesta sessão»** à disponibilidade de Android físico por USB. Estado **BLOCKED**, sem execução física, métricas de telemóvel ou capturas Android. O guião mantém-se preparado; não se altera o checklist por haver Chrome/CDP. Nenhuma nova validação física é alegada no relatório 21.

@@ -70,3 +70,7 @@ Pacote Rustici original, CC BY 3.0 US, SHA-256 registado no relatório 03; ingl�
 `prepare-commercial-demo.mts`: preparação final 19,832 s. `complete-commercial-demo.mts`: primeira conclusão 16,651 s, sem tentativa prévia concluída. `review-commercial-demo.mts`: revisão final **6 checkpoints em 14,367 s**, incluindo quatro papéis, histórico e página pública; resultado em `.local/sprint/commercial-review.json`. Os intervalos são execução do guião, não horas de criação da funcionalidade.
 
 As capturas foram obtidas com Chrome real/Playwright e serviços locais, complementadas por Chrome DevTools MCP. Desktop é desktop; viewport móvel não substitui teste num telemóvel. Foram revistas imagens do gestor, relatórios, histórico e credencial; isto não é auditoria completa de acessibilidade. Persistem revisão humana pt-AO, composição final da marca do cliente, assinatura de certificados, renovação de revogados, formação presencial e alertas comerciais a acordar. Sem promessas de emissão offline ou integração real.
+
+## QA adicional — vídeo sob rede limitada
+
+A execução 21 acrescenta capturas reais do leitor em 720p/360p/144p, da acção de recuperação e da reprodução retomada. O controlo final foi observado com 44 px de altura e texto de 14 px; preservou a posição após interrupção. [Galeria, métricas e limitações](21-video-network-and-certificate-integrity.md#qa-visual). As contas e o curso comercial deste relatório foram preservados. Não se executou Android físico.

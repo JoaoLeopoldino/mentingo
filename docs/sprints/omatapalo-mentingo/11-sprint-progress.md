@@ -1,14 +1,14 @@
 # Relatório de progresso da sprint — 18-10-2026
 
-Estado actual: **78,125% dos critérios do checklist de validação demonstrados: 25 de 32**. Decisão: **CONDITIONAL GO para piloto delimitado; NO-GO para substituição em produção**. [Execução 18](18-enterprise-validation.md), [QA 19](19-enterprise-visual-qa.md) e [alternativas/TCO 20](20-options-tco-and-decision.md). Os checkpoints finais abaixo com 22/32 são históricos.
+Estado actual: **81,25% dos critérios do checklist de validação demonstrados: 26 de 32**. Decisão: **CONDITIONAL GO para piloto delimitado; NO-GO para substituição em produção**. [Execução 18](18-enterprise-validation.md), [QA 19](19-enterprise-visual-qa.md) e [alternativas/TCO 20](20-options-tco-and-decision.md). [Vídeo e integridade 21](21-video-network-and-certificate-integrity.md). Os checkpoints finais abaixo com 22/32 são históricos.
 
 Código funcional de referência: API `38683c60`, UI/fila `276827c8`, validação/build `ba3290a3`; checkpoint `3a6dc5e8`. A execução anterior recuperou o checkout original. A actual entrega acrescentou competências, recuperação offline, catálogo pt-AO integral, correcções SCORM/HLS e novas evidências visuais. A aplicação ensaiada é o build local do sprint; não foi substituída por uma demonstração simulada.
 
 ## Como interpretar a percentagem
 
-Este modelo foi definido neste relatório para tornar o acompanhamento verificável. Há quatro critérios por etapa, com peso igual e resultado binário: demonstrado vale 1; incompleto, não executado ou bloqueado vale 0. **25 ÷ 32 × 100 = 78,125%**. Os critérios completos estão abaixo; os pesos não representam esforço, custo, duração ou importância comercial iguais. Os três novos pontos são: adapter/reconciliação explicitamente sintéticos; dataset BI autorizado/consistente; comparação documental e TCO transparente. O último é um entregável documental, não execução de Moodle/Totara. Não se acrescentaram nem se flexibilizaram critérios para contar a carga nativa como vídeo/IA ou Chrome como Android.
+Este modelo foi definido neste relatório para tornar o acompanhamento verificável. Há quatro critérios por etapa, com peso igual e resultado binário: demonstrado vale 1; incompleto, não executado ou bloqueado vale 0. **26 ÷ 32 × 100 = 81,25%**. Os critérios completos estão abaixo; os pesos não representam esforço, custo, duração ou importância comercial iguais. O novo ponto desta execução é a medição real de vídeo sob rede limitada; não fecha Android, carga de vídeo/IA ou operação global. Os três pontos da execução anterior foram: adapter/reconciliação explicitamente sintéticos; dataset BI autorizado/consistente; comparação documental e TCO transparente. O último é um entregável documental, não execução de Moodle/Totara. Não se acrescentaram nem se flexibilizaram critérios para contar a carga nativa como vídeo/IA ou Chrome como Android.
 
-Não significa que falte metade do tempo de engenharia, que o produto esteja 50% pronto para produção ou que todos os requisitos de Omatapalo tenham metade da solução. O MVP de competências foi implementado e ensaiado; integrações continuam pendentes. Gates críticos, como Android físico e operação empresarial, prevalecem sobre qualquer média. O modelo de adequação comercial ponderado da auditoria não foi convertido numa pontuação de prontidão sem provas suficientes.
+Esta percentagem não mede tempo de engenharia restante, prontidão para produção ou grau de satisfação de cada requisito de Omatapalo. O MVP de competências foi implementado e ensaiado; integrações continuam pendentes. Gates críticos, como Android físico e operação empresarial, prevalecem sobre qualquer média. O modelo de adequação comercial ponderado da auditoria não foi convertido numa pontuação de prontidão sem provas suficientes.
 
 | Etapa                         | Demonstrados | Progresso do checklist | Situação                                                                                   |
 | ----------------------------- | -----------: | ---------------------: | ------------------------------------------------------------------------------------------ |
@@ -18,15 +18,15 @@ Não significa que falte metade do tempo de engenharia, que o produto esteja 50%
 | 3 — conteúdos offline         |          3/4 |                **75%** | Texto/PDF, descarga privada e reabertura sem rede; Android real pendente                   |
 | 4 — avaliações offline        |          4/4 |  **100% do checklist** | Recuperação 401/409, arquivo, nova descarga e sincronização demonstrados em Chrome         |
 | 5 — competências              |          4/4 |  **100% do checklist** | MVP local: catálogo, requisitos, evidências, lacunas, permissões e demo real               |
-| 6 — integrações e vídeo       |          3/4 |                **75%** | Simulação Primavera e dataset manual BI testados; ERP real/serviço BI e banda pendentes |
+| 6 — integrações e vídeo       |          4/4 | **100% do checklist** | Simulação ERP, CSV BI e vídeo medido; ERP real, serviço BI e pipeline privado pendentes |
 | 7 — benchmark e decisão final |          2/4 |                **50%** | Comparação/TCO documentados; HTTP e restauro DB parciais, vídeo/IA/operação integral abertos |
-| **Total**                     |    **25/32** |            **78,125%** | **Sprint incompleto; gates de produção abertos**                                           |
+| **Total**                     |    **26/32** |             **81,25%** | **Sprint incompleto; gates de produção abertos**                                           |
 
 A recuperação dos ficheiros é uma tarefa de saneamento adicional concluída; não se acrescentaram pontos ao denominador para aumentar o progresso.
 
 ## Localização: percentagem distinta
 
-A cobertura estrutural actual é **6.228/6.228 = 100%**, com 6.171 valores distintos do inglês e 57 invariantes explícitos. Há zero chaves em fallback no catálogo actual. A tradução foi gerada e validada por lotes; revisão linguística humana não medida. Nove corpos essenciais e 19 assuntos de email têm tradução, com testes anteriores de renderização. A experiência integral de todos os canais continua aberta; não se altera o denominador nem se fecha esse critério apenas por preencher JSON.
+A cobertura estrutural actual é **6.233/6.233 = 100%**, com 6.176 valores distintos do inglês e 57 invariantes explícitos. Há zero chaves em fallback no catálogo actual. A tradução foi gerada e validada por lotes; revisão linguística humana não medida. Nove corpos essenciais e 19 assuntos de email têm tradução, com testes anteriores de renderização. A experiência integral de todos os canais continua aberta; não se altera o denominador nem se fecha esse critério apenas por preencher JSON.
 
 O QA confirmou login, selector persistido e HTML `lang=pt-AO`. O botão “Download Report” foi traduzido e observado como “Descarregar relatório” no Chrome DevTools MCP. Os cursos fictícios em inglês não são traduções em falta da interface: conteúdos de formação requerem autoria/localização própria.
 
@@ -74,12 +74,12 @@ O QA confirmou login, selector persistido e HTML `lang=pt-AO`. O botão “Downl
 - [x] Evidências, estado, lacunas e cursos recomendados, sem certificar competência por nota de quiz.
 - [x] Permissões administrador/gestor/formando, testes de domínio/acesso e demo completa.
 
-### Etapa 6 — 3/4
+### Etapa 6 — 4/4
 
 - [x] Adapter Primavera sintético identificado, contrato, reconciliação e tratamento de erros; integração real depende da API do cliente. Sete testes e simulação executada, `applied:false`; sem escrita LMS.
 - [x] Dataset Power BI consistente e autorizado para inscrições, conclusões, progresso, certificados e competências. Cinco testes do dataset, três de autorização e duas exportações equivalentes; ficheiros CSV manuais, sem serviço BI.
 - [x] Comportamento Auto HLS corrigido/testado para permitir resoluções baixas. Quatro regressões unitárias passaram; não equivale à medição de banda do critério seguinte.
-- [ ] Arranque, rebuffering, resolução e tráfego medidos sob rede limitada.
+- [x] Arranque, rebuffering, resolução e tráfego medidos sob rede limitada. Relatório 21: Chrome nativo, 500/150 kbit/s, 360p/144p e interrupção com recuperação explícita; não equivale a Android ou vídeo concorrente.
 
 ### Etapa 7 — 2/4
 
@@ -97,7 +97,7 @@ O QA confirmou login, selector persistido e HTML `lang=pt-AO`. O botão “Downl
 
 ## Próxima acção de engenharia
 
-Executar o guião Android físico, medir vídeo, fechar recertificação de percursos/revogação, contratar revisão linguística e ensaiar restauro integral/segurança. A paginação de competências está implementada; a matriz foi incluída na carga HTTP, mas ainda exige governação e aceitação por gestores reais. Primavera real e operação BI automática dependem de acessos/contratos externos.
+Executar o guião Android físico quando existir dispositivo, validar vídeo privado com áudio, fechar recertificação de percursos/revogação, contratar revisão linguística e ensaiar restauro integral/segurança. A paginação de competências está implementada; a matriz foi incluída na carga HTTP, mas ainda exige governação e aceitação por gestores reais. Primavera real e operação BI automática dependem de acessos/contratos externos.
 
 O total de horas exclusivas de desenvolvimento não foi medido. O relatório 00 regista intervalos de execução reais, incluindo instalações/builds/esperas; estes intervalos não são uma folha de horas nem um multiplicador de produtividade da IA.
 

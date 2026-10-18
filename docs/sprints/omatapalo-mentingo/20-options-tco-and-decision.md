@@ -55,3 +55,7 @@ Executar a seguir o guião Android físico, incluindo armazenamento limitado, fe
 A Utu Lab ganha controlo do código e uma base adaptável já demonstrada; assume também responsabilidade por regressões, actualizações upstream, segurança, documentação e apoio. As customizações podem ser propriedade contratual do cliente, preservando MIT e licenças de terceiros; esta sprint não substituiu uma auditoria completa de dependências/IP.
 
 Tempo exclusivo deste estudo não foi cronometrado; integra o intervalo da execução 18. Não houve contacto comercial, contratação ou utilização de dados reais.
+
+## Checkpoint seguinte — vídeo medido, custos inalterados
+
+[Execução 21](21-video-network-and-certificate-integrity.md): 26/32 critérios, recuperação assistida do vídeo e reforço de integridade dos certificados de percursos. As medições são locais com padrão sintético, não uma cotação CDN nem validação de custo de conteúdos reais. Mantêm-se as hipóteses TCO e o envelope restante de produção 35/70/140 dias-pessoa; não se convertem minutos de testes sobrepostos em horas exclusivas ou multiplicador de IA. Piloto delimitado continua CONDITIONAL GO e produção NO-GO.

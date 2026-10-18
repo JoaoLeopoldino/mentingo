@@ -1,6 +1,6 @@
 # Sprint de validação técnica — Utu Lab / Omatapalo
 
-Estado actual: **25/32 critérios = 78,125%; CONDITIONAL GO para piloto delimitado; NO-GO para substituição em produção**. [Validação empresarial e requisitos a–j](18-enterprise-validation.md), [QA visual e acesso](19-enterprise-visual-qa.md), [alternativas/TCO](20-options-tco-and-decision.md), [32 critérios](11-sprint-progress.md). Evolução de competências preservada em [16](16-enterprise-competencies.md) e [17](17-competency-totara-parity.md). Os checkpoints abaixo preservam a evolução histórica.
+Estado actual: **26/32 critérios = 81,25%; CONDITIONAL GO para piloto delimitado; NO-GO para substituição em produção**. [Validação empresarial e requisitos a–j](18-enterprise-validation.md), [QA visual e acesso](19-enterprise-visual-qa.md), [alternativas/TCO](20-options-tco-and-decision.md), [32 critérios](11-sprint-progress.md), [vídeo e certificados 21](21-video-network-and-certificate-integrity.md). Evolução de competências preservada em [16](16-enterprise-competencies.md) e [17](17-competency-totara-parity.md). Os checkpoints abaixo preservam a evolução histórica.
 
 Base: `7a23e967d88947238386c588663140c21a284294` (v4.23.0). Branch actual: `feat/omatapalo-enterprise-competencies-20261018`, a partir de `4e187000`. Worktree persistente: `/Users/joaoleopoldino/Development/CaniveteLab/mentingo/.local/worktrees/omatapalo-20261017`. Checkout original recuperado e verificado; implementação mantida no worktree separado.
 
@@ -9,12 +9,12 @@ Início: **2026-10-17 14:56:11 UTC**. Os intervalos incluem downloads, espera po
 | Etapa                  | Estado comprovado                                                                                                      | Próxima acção                                                                      |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
 | 0 — ambiente           | Node 22.15, pnpm 10.22, serviços isolados e builds funcionais; HTTP 20/50/100 e restauro DB executados | Ensaio sustentado, vídeo/IA, restauro integral/offsite e segurança global |
-| 1 — pt-AO              | 6.228/6.228 chaves estruturais; zero omissões; 57 invariantes; página pública localizada | Revisão humana/canais restantes; 100% estrutural não é revisão linguística |
+| 1 — pt-AO              | 6.233/6.233 chaves estruturais; zero omissões; 57 invariantes; página pública localizada | Revisão humana/canais restantes; 100% estrutural não é revisão linguística |
 | 2 — SCORM/certificados | Rustici independente Chrome: retoma, nota 100, dois ciclos e revogação; histórico UI; autorização de percursos/RLS | Android, recertificação/revogação de percursos e renovação após revogação explícita |
 | 3 — conteúdos offline  | Texto/PDF privado, reabertura e remoção; actualização interrompida preserva a cópia anterior | Android físico e quotas reais; probe CDP bloqueado |
 | 4 — avaliações offline | API com 9 testes RLS; fila durável e recovery; 6+6 checkpoints finais Chrome de recuperação                            | Android físico; recuperação assistida 401/409 já demonstrada                       |
 | 5 — competências       | Frameworks, versões, planos, decisões separadas e funções simultâneas; 21 domínio + 12 API de competências + 7 checkpoints Chrome             | governação do piloto, ciclo administrativo completo e validação de produção                                              |
-| 6 — integrações/vídeo  | Adapter/reconciliação sintéticos, dataset BI manual e nove testes HLS; 12 testes de integrações puros | ERP real, serviço BI/incremental, Teams e consumo/rebuffering de vídeo |
+| 6 — integrações/vídeo  | Adapter sintético, CSV BI e quatro perfis HLS medidos; recuperação assistida; 41 testes VideoPlayer | ERP real, refresh BI, Teams, vídeo privado/áudio/Android e carga concorrente |
 | 7 — decisão            | HTTP sem erros; p95 0,92/1,71/3,62 s; DB restaurada; alternativas/TCO com hipóteses explícitas | Gates críticos prevalecem sobre a percentagem; ver relatórios 18–20 |
 
 Commits: ambiente **`c6c53fc7`**; pt-AO **`6a649d65`**. Autorização: **`dc15e4f2`**. Ciclos/histórico: **`52ddc41a`**; conteúdos offline: **`7054413a`**; API de avaliações offline: **`38683c60`**. Não houve push, deployment ou utilização de dados/credenciais de clientes.
@@ -84,3 +84,11 @@ Aceitação final dos builds: 18/10/2026 15:43:08 UTC; Chrome 7/7 em 24,626 s. B
 Commits funcionais locais: `9c0a6700`, `33753ea0`, `ba08cc78`, `daacf849`, `f3e4a935`, `6ae6be93`, `cb975404`. Checkpoint temporal 19:53:46 UTC, intervalo desde 16:02:49: **3 h 50 min 57 s**, incluindo pausa/esperas; 40 min 18 s desde a retoma observada às 19:13:28. Não são horas exclusivas por módulo. A revisão final API precisou de heap 4 GiB após OOM a 2 GiB; typecheck passou. O relatório 18 regista os timeouts do ensaio combinado e a repetição isolada bem-sucedida.
 
 API/web operacionais em localhost, sem push/merge/deployment. Nenhuma eliminação no conjunto desta evolução. O checkout original permanece preservado em `main`, apenas com a pasta de auditoria anteriormente não versionada. Android/quota reais, ERP/Teams reais, SCORM 2004/xAPI, vídeo sob rede limitada e operação integral continuam por aceitar. A decisão é de piloto delimitado; não há aprovação de substituição em produção.
+
+## Checkpoint de vídeo e integridade — 18/10/2026
+
+Código `fa521a48` e `b1b32296`; [evidências 21](21-video-network-and-certificate-integrity.md). **26/32 = 81,25%**, apenas mais um critério: medição de vídeo. Chrome seleccionou 144p a 150 kbit/s e 360p a 500 kbit/s; arranque 3,31/2,21 s, sem rebuffering nos perfis contínuos observados. Depois de um corte, a acção explícita retomou a posição em 3,85 s após clique; não é recuperação transparente.
+
+Passaram 14 testes PostgreSQL/RLS de certificados de percursos, 41 VideoPlayer, cinco do validador, builds API/web, typecheck web e lint focado. A migration aditiva preservou a tabela local; histórico não vazio ensaiado na base de teste. Registo/fallback pt-AO preservados, 6.233 chaves estruturais; revisão humana não quantificada. Android físico indisponível, confirmado pelo utilizador. Intervalo medido até à consolidação 19:58:51–20:30:14 UTC, **31 min 23 s**, incluindo esperas/builds e sem medir horas exclusivas. Não houve eliminação de ficheiros, push ou deployment. Aplicação local: http://localhost:5173.
+
+Fecho verificado às 20:32:53 UTC: intervalo total **34 min 02 s** desde 19:58:51, incluindo documentação; frontend HTTP 200/API anónima 401; checklist exactamente 26/32. Checkout original `main` preservado, apenas relatórios de auditoria não versionados. Sem ficheiros eliminados desde a base desta execução.

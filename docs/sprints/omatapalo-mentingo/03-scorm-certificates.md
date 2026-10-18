@@ -87,3 +87,7 @@ Reprodução: executar `prepare-independent-scorm.mjs`, depois `browser-independ
 Capturas: `.local/sprint/screenshots/18-independent-scorm-resume.png`, `18-independent-scorm-complete.png`, `18-public-certificate.png`, `18-certificate-history.png`, `18-revoked-certificate-history.png`. Logs ignorados: `certificates-enterprise-final.log`, `independent-scorm-browser-final.log`, `certificate-history-browser.log`.
 
 Limites: Android físico, SCORM 2004, xAPI/LRS e SCORM offline não demonstrados. O histórico ainda não pagina tentativas. A revogação de certificados de percursos de aprendizagem e a renovação após revogação explícita não são declaradas concluídas. O checklist permanece provisoriamente em 22/32 até fechar os critérios integrais.
+
+## Integridade adicional dos percursos — execução 21
+
+`fa521a48`: emissão recusa destinatário externo/eliminado, prioriza credencial activa sobre histórico e não reactiva expiradas. Índice único parcial impede múltiplas credenciais activas por tenant/colaborador/percurso, conservando expiradas; migration Drizzle aditiva e preflight sem apagar duplicados. **14/14 testes PostgreSQL/RLS passaram**. A base principal tinha zero registos desta tabela antes/depois; histórico não vazio foi ensaiado na base de teste. Revogação e recertificação formal de percursos continuam abertas. Não foi repetida nesta janela a demo SCORM independente do relatório 18. [Evidências e limites](21-video-network-and-certificate-integrity.md).
