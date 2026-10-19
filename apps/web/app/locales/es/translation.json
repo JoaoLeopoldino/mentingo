@@ -1529,12 +1529,20 @@
     "validation": {
       "nipMustBe10Digits": "NIP debe tener 10 dígitos",
       "krsMustBe10Digits": "KRS debe tener 10 dígitos",
-      "invalidEmailFormat": "Formato de correo electrónico no válido"
+      "invalidEmailFormat": "Formato de correo electrónico no válido",
+      "brandingNameRequired": "Introduzca un nombre.",
+      "brandingNameTooLong": "El nombre supera la longitud permitida."
     },
     "noCompanyInformationAvailable": "No hay información de la empresa disponible",
     "breadcrumbs": {
       "providerInformation": "Información del proveedor"
-    }
+    },
+    "applicationName": "Nombre de la aplicación",
+    "certificateIssuer": "Emisor del certificado",
+    "emailSenderName": "Nombre del remitente de correo",
+    "legalFooter": "Pie legal",
+    "defaultLocale": "Idioma predeterminado",
+    "publicVerificationBaseUrl": "Dirección pública de verificación"
   },
   "changeUserLanguageView": {
     "header": "Cambiar idioma",

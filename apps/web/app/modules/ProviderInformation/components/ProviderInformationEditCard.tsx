@@ -17,6 +17,21 @@ import type {
 const companyInformationFormSchema = z
   .object({
     companyName: z.string().optional(),
+    applicationName: z
+      .string()
+      .trim()
+      .min(1, "providerInformation.validation.brandingNameRequired")
+      .max(120, "providerInformation.validation.brandingNameTooLong"),
+    certificateIssuer: z
+      .string()
+      .trim()
+      .min(1, "providerInformation.validation.brandingNameRequired")
+      .max(160, "providerInformation.validation.brandingNameTooLong"),
+    emailSenderName: z
+      .string()
+      .trim()
+      .min(1, "providerInformation.validation.brandingNameRequired")
+      .max(120, "providerInformation.validation.brandingNameTooLong"),
     companyShortName: z
       .string()
       .max(10, "Company short name must be 10 characters or less")
@@ -68,13 +83,20 @@ export const ProviderInformationEditCard = ({
     formState: { errors },
   } = useForm<UpdateCompanyInformationBody>({
     resolver: zodResolver(companyInformationFormSchema),
-    defaultValues: companyInformation || {
+    defaultValues: {
       companyName: "",
       companyShortName: "",
       registeredAddress: "",
       taxNumber: "",
       emailAddress: "",
       courtRegisterNumber: "",
+      ...companyInformation,
+      applicationName:
+        companyInformation?.applicationName || companyInformation?.companyName || "Utu Lab",
+      certificateIssuer:
+        companyInformation?.certificateIssuer || companyInformation?.companyName || "Utu Lab",
+      emailSenderName:
+        companyInformation?.emailSenderName || companyInformation?.companyName || "Utu Lab",
     },
   });
 
@@ -109,6 +131,25 @@ export const ProviderInformationEditCard = ({
             <p className="mt-1 text-xs text-red-500">{errors.companyShortName.message}</p>
           )}
         </div>
+
+        {(["applicationName", "certificateIssuer", "emailSenderName"] as const).map((field) => (
+          <div key={field} className="space-y-2">
+            <Label htmlFor={field}>{t(`providerInformation.${field}`)}</Label>
+            <Input
+              id={field}
+              maxLength={field === "certificateIssuer" ? 160 : 120}
+              aria-invalid={Boolean(errors[field])}
+              aria-describedby={errors[field] ? `${field}-error` : undefined}
+              className={cn({ "border-red-500 focus:!ring-red-500": errors[field] })}
+              {...register(field)}
+            />
+            {errors[field] && (
+              <p id={`${field}-error`} className="mt-1 text-xs text-red-500">
+                {t(errors[field]?.message || "providerInformation.validation.brandingNameRequired")}
+              </p>
+            )}
+          </div>
+        ))}
 
         <div className="space-y-2">
           <Label htmlFor="registeredAddress">{t("providerInformation.registeredAddress")}</Label>

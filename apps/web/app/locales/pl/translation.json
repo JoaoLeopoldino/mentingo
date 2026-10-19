@@ -1780,12 +1780,20 @@
     "validation": {
       "nipMustBe10Digits": "NIP musi mieć 10 cyfr",
       "krsMustBe10Digits": "KRS musi mieć 10 cyfr",
-      "invalidEmailFormat": "Nieprawidłowy format email"
+      "invalidEmailFormat": "Nieprawidłowy format email",
+      "brandingNameRequired": "Wprowadź nazwę.",
+      "brandingNameTooLong": "Nazwa przekracza dozwoloną długość."
     },
     "noCompanyInformationAvailable": "Brak informacji o dostawcy",
     "breadcrumbs": {
       "providerInformation": "Informacje o dostawcy"
-    }
+    },
+    "applicationName": "Nazwa aplikacji",
+    "certificateIssuer": "Wystawca certyfikatu",
+    "emailSenderName": "Nazwa nadawcy wiadomości",
+    "legalFooter": "Stopka prawna",
+    "defaultLocale": "Język domyślny",
+    "publicVerificationBaseUrl": "Publiczny adres weryfikacji"
   },
   "changeUserLanguageView": {
     "header": "Zmień język",

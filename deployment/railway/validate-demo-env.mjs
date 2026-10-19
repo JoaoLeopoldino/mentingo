@@ -37,8 +37,15 @@ export function validateDemoEnvironment(env) {
   } catch {
     errors.push("CORS_ORIGIN: expected one HTTPS demo origin");
   }
-  if (env.EMAIL_ADAPTER !== "smtp")
-    errors.push("EMAIL_ADAPTER: configure authorized SMTP or a private SMTP capture service");
+  const privateCapture =
+    env.EMAIL_ADAPTER === "mailhog" &&
+    /^(localhost|127\.0\.0\.1|[a-zA-Z0-9-]+\.railway\.internal)$/.test(env.SMTP_HOST ?? "");
+  if (env.EMAIL_ADAPTER !== "smtp" && !privateCapture) {
+    errors.push("EMAIL_ADAPTER: use authorized SMTP or a private Mailhog capture host");
+  }
+  if (env.EMAIL_ADAPTER === "smtp" && (!env.SMTP_USER || !env.SMTP_PASSWORD)) {
+    errors.push("SMTP_USER/SMTP_PASSWORD: required by the SMTP adapter");
+  }
   for (const key of ["GOOGLE_OAUTH_ENABLED", "MICROSOFT_OAUTH_ENABLED", "SLACK_OAUTH_ENABLED"]) {
     if (env[key] !== "false") errors.push(`${key}: disable in this release profile`);
   }

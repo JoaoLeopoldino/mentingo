@@ -1535,12 +1535,20 @@
     "validation": {
       "nipMustBe10Digits": "NIP muss 10 Ziffern lang sein",
       "krsMustBe10Digits": "KRS muss 10-stellig sein",
-      "invalidEmailFormat": "Ungültiges E-Mail-Format"
+      "invalidEmailFormat": "Ungültiges E-Mail-Format",
+      "brandingNameRequired": "Geben Sie einen Namen ein.",
+      "brandingNameTooLong": "Der Name überschreitet die zulässige Länge."
     },
     "noCompanyInformationAvailable": "Keine Firmeninformationen verfügbar",
     "breadcrumbs": {
       "providerInformation": "Anbieterinformationen"
-    }
+    },
+    "applicationName": "Anwendungsname",
+    "certificateIssuer": "Zertifikatsaussteller",
+    "emailSenderName": "Name des E-Mail-Absenders",
+    "legalFooter": "Rechtlicher Fußtext",
+    "defaultLocale": "Standardsprache",
+    "publicVerificationBaseUrl": "Öffentliche Prüfadresse"
   },
   "changeUserLanguageView": {
     "header": "Sprache ändern",

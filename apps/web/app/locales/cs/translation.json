@@ -1541,12 +1541,20 @@
     "validation": {
       "nipMustBe10Digits": "NIP musí mít 10 číslic",
       "krsMustBe10Digits": "KRS musí mít 10 číslic",
-      "invalidEmailFormat": "Neplatný formát e-mailu"
+      "invalidEmailFormat": "Neplatný formát e-mailu",
+      "brandingNameRequired": "Zadejte název.",
+      "brandingNameTooLong": "Název překračuje povolenou délku."
     },
     "noCompanyInformationAvailable": "Nejsou k dispozici žádné informace o společnosti",
     "breadcrumbs": {
       "providerInformation": "Informace o poskytovateli"
-    }
+    },
+    "applicationName": "Název aplikace",
+    "certificateIssuer": "Vydavatel certifikátu",
+    "emailSenderName": "Jméno odesílatele e-mailu",
+    "legalFooter": "Právní zápatí",
+    "defaultLocale": "Výchozí jazyk",
+    "publicVerificationBaseUrl": "Veřejná ověřovací adresa"
   },
   "changeUserLanguageView": {
     "header": "Změnit jazyk",

@@ -26,7 +26,7 @@ A identificação visível reduz a possibilidade de confundir credenciais fictí
 
 O administrador actualiza as definições da organização. Logos/cores/assets existentes continuam a ser usados; os novos campos opcionais são geridos pelo contrato de definições, com interface administrativa específica ainda pendente. O operador activa o modo de demonstração no servidor e no build frontend. O servidor acrescenta o aviso às saídas de certificados e email, independentemente das opções do formando. O proxy pede um acesso adicional antes do login LMS.
 
-A preservação de identidade histórica por emissão ainda não está implementada: alterações actuais podem reflectir-se em renderizações antigas. Não apresentar este comportamento como preservação imutável do emissor. Novos campos legalFooter/defaultLocale/publicVerificationBaseUrl estão validados e armazenados mas o respectivo consumo operacional continua pendente.
+Novas emissões e renovações guardam o emissor, as chaves dos assets, as cores e a decisão de demonstração na própria transacção. PDFs e imagens públicas usam essa configuração, mesmo depois de mudar as definições. O aviso de demonstração fica associado à credencial e não desaparece ao desligar o modo no servidor. Certificados anteriores à migração mantêm configuração histórica desconhecida (snapshot nulo), sem backfill inventado. O preview privado no browser ainda usa as definições actuais; não confundir esse preview com o PDF histórico. A conservação dos ficheiros depende também da retenção dos objectos no storage. Novos campos legalFooter/defaultLocale/publicVerificationBaseUrl estão validados e armazenados mas o respectivo consumo operacional continua pendente.
 
 ## Key Technical Context
 
@@ -35,3 +35,7 @@ A preservação de identidade histórica por emissão ainda não está implement
 - Browser: PlatformLogo/Favicon, layout e root; `VITE_DEMONSTRATION_MODE` é público e não substitui a protecção servidor.
 - Proxy Railway: autenticação adicional, API privada, sem cache de dados privados; validação de ambiente separa runtime e migrador.
 - Evidência: testes unitários, regressão de definições, QA Chrome/PDF local. Não há demonstração Railway/Android físico nem release pública aprovada.
+
+## Test Evidence
+
+Sete testes PostgreSQL/RLS verificaram emissor congelado, emissão idempotente, PDF autenticado com marca persistente, rejeição de fonte de outro tenant e separação do cache de imagens antigas. Dezoito testes de certificados de percursos passaram com a nova captura. Uma API real em modo production, numa cópia local restaurada, autenticou o formando, gerou PDF e abriu competências usando apenas ligações de runtime sem permissões DDL. HTTPS e Railway continuam por demonstrar.

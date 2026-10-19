@@ -15,6 +15,8 @@ const valid = () => ({
   S3_BUCKET_NAME: "demo",
   EMAIL_ADAPTER: "smtp",
   SMTP_HOST: "smtp.example",
+  SMTP_USER: "synthetic-user",
+  SMTP_PASSWORD: "synthetic-test-only",
   SMTP_EMAIL_FROM: "sender@example.test",
   MASTER_KEY: Buffer.alloc(32).toString("base64"),
   JWT_SECRET: "a".repeat(64),
@@ -44,5 +46,27 @@ test("does not print secrets in validation diagnostics", () => {
     !validateDemoEnvironment({ ...valid(), JWT_SECRET: secret })
       .join()
       .includes(secret),
+  );
+});
+
+test("accepts private Mailhog capture without pretending external delivery", () => {
+  assert.deepEqual(
+    validateDemoEnvironment({
+      ...valid(),
+      EMAIL_ADAPTER: "mailhog",
+      SMTP_HOST: "127.0.0.1",
+      SMTP_USER: "",
+      SMTP_PASSWORD: "",
+    }),
+    [],
+  );
+});
+test("rejects public Mailhog capture endpoints", () => {
+  assert.ok(
+    validateDemoEnvironment({
+      ...valid(),
+      EMAIL_ADAPTER: "mailhog",
+      SMTP_HOST: "capture.example.com",
+    }).some((x) => x.includes("EMAIL_ADAPTER")),
   );
 });

@@ -13,3 +13,10 @@
 **/test-results
 **/playwright-report
 docs/audits
+
+# Local agent/cloud tooling can contain credentials; never ship it.
+**/.aws
+**/.codex
+**/.agents
+.railway
+.envrc

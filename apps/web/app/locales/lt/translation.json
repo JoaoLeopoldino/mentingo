@@ -1535,12 +1535,20 @@
     "validation": {
       "nipMustBe10Digits": "NIP turi būti 10 skaitmenų",
       "krsMustBe10Digits": "KRS turi būti 10 skaitmenų",
-      "invalidEmailFormat": "Netinkamas el. pašto formatas"
+      "invalidEmailFormat": "Netinkamas el. pašto formatas",
+      "brandingNameRequired": "Įveskite pavadinimą.",
+      "brandingNameTooLong": "Pavadinimas viršija leistiną ilgį."
     },
     "noCompanyInformationAvailable": "Nėra informacijos apie įmonę",
     "breadcrumbs": {
       "providerInformation": "Teikėjo informacija"
-    }
+    },
+    "applicationName": "Programos pavadinimas",
+    "certificateIssuer": "Sertifikato išdavėjas",
+    "emailSenderName": "El. pašto siuntėjo vardas",
+    "legalFooter": "Teisinė poraštė",
+    "defaultLocale": "Numatytoji kalba",
+    "publicVerificationBaseUrl": "Viešasis patvirtinimo adresas"
   },
   "changeUserLanguageView": {
     "header": "Keisti kalbą",

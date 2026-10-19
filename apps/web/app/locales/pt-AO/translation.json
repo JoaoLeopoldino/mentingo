@@ -1385,7 +1385,9 @@
     "validation": {
       "nipMustBe10Digits": "O NIP deve ter 10 algarismos",
       "krsMustBe10Digits": "O KRS deve ter 10 algarismos",
-      "invalidEmailFormat": "Formato de email inválido"
+      "invalidEmailFormat": "Formato de email inválido",
+      "brandingNameRequired": "Introduza um nome.",
+      "brandingNameTooLong": "O nome excede o comprimento permitido."
     },
     "description": "Informação sobre a sua empresa que ficará visível aos utilizadores",
     "editTitle": "Editar informação do fornecedor",
@@ -1401,7 +1403,13 @@
     "createError": "Não foi possível criar a informação do fornecedor",
     "updateError": "Não foi possível actualizar a informação do fornecedor",
     "saveError": "Não foi possível guardar a informação do fornecedor",
-    "noCompanyInformationAvailable": "Não existe informação da empresa disponível"
+    "noCompanyInformationAvailable": "Não existe informação da empresa disponível",
+    "applicationName": "Nome da aplicação",
+    "certificateIssuer": "Emissor do certificado de formação",
+    "emailSenderName": "Nome do remetente de email",
+    "legalFooter": "Texto legal do rodapé",
+    "defaultLocale": "Idioma por omissão",
+    "publicVerificationBaseUrl": "Endereço público de verificação"
   },
   "changeUserLanguageView": {
     "header": "Alterar idioma",

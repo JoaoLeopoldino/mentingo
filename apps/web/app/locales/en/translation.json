@@ -1536,12 +1536,20 @@
     "validation": {
       "nipMustBe10Digits": "NIP must be 10 digits",
       "krsMustBe10Digits": "KRS must be 10 digits",
-      "invalidEmailFormat": "Invalid email format"
+      "invalidEmailFormat": "Invalid email format",
+      "brandingNameRequired": "Enter a name.",
+      "brandingNameTooLong": "The name exceeds the permitted length."
     },
     "noCompanyInformationAvailable": "No company information available",
     "breadcrumbs": {
       "providerInformation": "Provider Information"
-    }
+    },
+    "applicationName": "Application name",
+    "certificateIssuer": "Certificate issuer",
+    "emailSenderName": "Email sender name",
+    "legalFooter": "Legal footer",
+    "defaultLocale": "Default language",
+    "publicVerificationBaseUrl": "Public verification address"
   },
   "changeUserLanguageView": {
     "header": "Change Language",

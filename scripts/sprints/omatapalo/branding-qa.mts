@@ -8,10 +8,13 @@ const { chromium, expect } = require("@playwright/test");
 process.chdir(fileURLToPath(new URL("../../../", import.meta.url)));
 const fixture = JSON.parse(await readFile(".local/sprint/integrated-demo.json", "utf8")).fixture;
 const browser = await chromium.launch({ channel: "chrome", headless: true });
+const apiUrl = process.env.BRANDING_QA_API_URL || "http://localhost:3002";
+if (!["http://localhost:3000", "http://localhost:3002"].includes(apiUrl))
+  throw new Error("Refusing a non-local QA endpoint");
 const startedAt = new Date().toISOString();
 const contexts: any[] = [];
 async function login(email: string, password: string) {
-  const api = new FixtureApiClient("http://localhost:3002");
+  const api = new FixtureApiClient(apiUrl);
   api.syncTenantOrigin("http://localhost:5173");
   const response = await api.api.authControllerLogin({ email, password });
   expect(response.status).toBe(201);
@@ -27,7 +30,7 @@ async function login(email: string, password: string) {
       return {
         name: pair.slice(0, index),
         value: pair.slice(index + 1),
-        url: "http://localhost:3002",
+        url: apiUrl,
       };
     }),
   );
@@ -57,9 +60,7 @@ try {
   expect(bytes.subarray(0, 4).toString()).toBe("%PDF");
   await writeFile(".local/sprint/24-demo-certificate.pdf", bytes, { mode: 0o600 });
   const page = await learner.context.newPage();
-  await page.goto(
-    `http://localhost:3002/api/certificates/share?certificateId=${certificate.id}&lang=pt-AO`,
-  );
+  await page.goto(`${apiUrl}/api/certificates/share?certificateId=${certificate.id}&lang=pt-AO`);
   await page.screenshot({
     path: ".local/sprint/screenshots/24-demo-public-certificate.png",
     fullPage: true,
@@ -81,16 +82,38 @@ try {
     path: ".local/sprint/screenshots/24-demo-login-mobile.png",
     fullPage: true,
   });
+  const administrator = await login("admin+localhost@example.com", "password");
+  const identityPage = await administrator.context.newPage();
+  await identityPage.goto("http://localhost:5173/provider-information");
+  await identityPage.getByRole("button", { name: /^(Editar|Edit)$/ }).click();
+  const brandingValues: Record<string, string> = {};
+  for (const field of ["applicationName", "certificateIssuer", "emailSenderName"]) {
+    const input = identityPage.locator(`#${field}`);
+    await expect(input).toBeVisible();
+    brandingValues[field] = await input.inputValue();
+  }
+  await identityPage.screenshot({ path: ".local/sprint/screenshots/24-demo-branding-editor.png", fullPage: true });
+  const [saved] = await Promise.all([
+    identityPage.waitForResponse((response: any) => response.url().includes("/settings/company-information") && response.request().method() === "PATCH"),
+    identityPage.getByRole("button", { name: /^(Guardar|Save)$/ }).click(),
+  ]);
+  expect(saved.status()).toBeLessThan(300);
+  const stored = (await administrator.api.api.settingsControllerGetCompanyInformation()).data.data;
+  for (const [field, value] of Object.entries(brandingValues)) expect(stored[field]).toBe(value);
+  await expect(identityPage.locator("#applicationName")).toHaveCount(0);
+  await identityPage.screenshot({ path: ".local/sprint/screenshots/24-demo-branding-saved.png", fullPage: true });
   await writeFile(
     ".local/sprint/24-branding-qa.json",
     JSON.stringify(
       {
+        apiUrl,
         startedAt,
         finishedAt: new Date().toISOString(),
         certificateId: certificate.id,
         pdfBytes: bytes.length,
         learnerBrandingWrite: denied.status,
         uiNotice: true,
+        brandingEditorPersisted: true,
         physicalAndroid: false,
       },
       null,
@@ -98,7 +121,7 @@ try {
     ),
   );
   console.log(
-    "Branding QA passed: learner PATCH403, actual certificate PDF, desktop/mobile browser demo notice",
+    "Branding QA passed: learner PATCH403, actual certificate PDF, desktop/mobile browser demo notice, administrator branding saved",
   );
 } catch (error) {
   // Axios errors contain request headers/cookies; never print the raw object.

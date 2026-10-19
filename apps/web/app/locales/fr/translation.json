@@ -1531,12 +1531,20 @@
     "validation": {
       "nipMustBe10Digits": "Le NIP doit comporter 10 chiffres",
       "krsMustBe10Digits": "KRS doit comporter 10 chiffres",
-      "invalidEmailFormat": "Format d'e-mail invalide"
+      "invalidEmailFormat": "Format d'e-mail invalide",
+      "brandingNameRequired": "Saisissez un nom.",
+      "brandingNameTooLong": "Le nom dépasse la longueur autorisée."
     },
     "noCompanyInformationAvailable": "Aucune information sur l'entreprise disponible",
     "breadcrumbs": {
       "providerInformation": "Informations sur le fournisseur"
-    }
+    },
+    "applicationName": "Nom de l’application",
+    "certificateIssuer": "Émetteur du certificat",
+    "emailSenderName": "Nom de l’expéditeur",
+    "legalFooter": "Pied de page juridique",
+    "defaultLocale": "Langue par défaut",
+    "publicVerificationBaseUrl": "Adresse publique de vérification"
   },
   "changeUserLanguageView": {
     "header": "Changer de langue",
