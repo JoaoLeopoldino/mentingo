@@ -25,13 +25,18 @@ describe("AppStartupService", () => {
     automations,
   );
 
+  const originalMaintenance = process.env.RUN_STARTUP_MAINTENANCE;
+
   beforeEach(() => {
+    delete process.env.RUN_STARTUP_MAINTENANCE;
     delete process.env.JEST_WORKER_ID;
     delete process.env.BUILD_VERIFICATION;
     jest.clearAllMocks();
   });
 
   afterAll(() => {
+    if (originalMaintenance === undefined) delete process.env.RUN_STARTUP_MAINTENANCE;
+    else process.env.RUN_STARTUP_MAINTENANCE = originalMaintenance;
     process.env.JEST_WORKER_ID = originalJestWorkerId;
     process.env.BUILD_VERIFICATION = originalBuildVerification;
   });
@@ -53,6 +58,16 @@ describe("AppStartupService", () => {
     await service.onModuleInit();
 
     expect(databaseMigrationService.runMigrations).not.toHaveBeenCalled();
+    expect(
+      permissionsBackfillService.backfillMissingPermissionsForAllTenants,
+    ).not.toHaveBeenCalled();
+  });
+
+  it("keeps migrations and privileged backfills out of an externally maintained runtime", async () => {
+    process.env.RUN_STARTUP_MAINTENANCE = "false";
+    await service.onModuleInit();
+    expect(databaseMigrationService.runMigrations).not.toHaveBeenCalled();
+    expect(automations.ensureDefaultAutomationsForAllTenants).not.toHaveBeenCalled();
     expect(
       permissionsBackfillService.backfillMissingPermissionsForAllTenants,
     ).not.toHaveBeenCalled();

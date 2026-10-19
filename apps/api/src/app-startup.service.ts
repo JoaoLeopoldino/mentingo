@@ -37,6 +37,10 @@ export class AppStartupService implements OnModuleInit {
   }
 
   private shouldSkipStartupMaintenance() {
-    return Boolean(process.env.JEST_WORKER_ID) || process.env.BUILD_VERIFICATION === "true";
+    return (
+      Boolean(process.env.JEST_WORKER_ID) ||
+      process.env.BUILD_VERIFICATION === "true" ||
+      process.env.RUN_STARTUP_MAINTENANCE === "false"
+    );
   }
 }

@@ -5,3 +5,11 @@
 **/terraform
 **/tf
 .local
+**/.env
+**/.env.*
+!**/.env.example
+**/*.log
+**/coverage
+**/test-results
+**/playwright-report
+docs/audits

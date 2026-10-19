@@ -1,4 +1,5 @@
 FROM node:22.15.0-alpine AS base
+ENV PUPPETEER_SKIP_DOWNLOAD=true HUSKY=0
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN npm install -g pnpm@10.22.0
@@ -16,6 +17,8 @@ RUN pnpm deploy --filter=api pnpm-deploy-output --prod --legacy
 FROM node:22.15.0-alpine
 WORKDIR /app
 COPY --from=base /app/pnpm-deploy-output /app
+COPY deployment/railway/migrate.mjs /app/release-migrate.mjs
+COPY deployment/railway/validate-demo-env.mjs /app/validate-demo-env.mjs
 
 RUN apk add --no-cache \
     chromium \

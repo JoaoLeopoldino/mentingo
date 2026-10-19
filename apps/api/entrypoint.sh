@@ -3,19 +3,22 @@ set -e
 
 COMMAND="${1:-server}"
 
-if [ $COMMAND = "server" ]; then
+if [ "$COMMAND" = "server" ]; then
+  if [ "${DEMONSTRATION_MODE:-false}" = "true" ]; then
+    node /app/validate-demo-env.mjs
+  fi
   echo "Starting server..."
-  npm run start:prod
-elif [ $COMMAND = "migrate" ]; then
+  exec node dist/src/main.js
+elif [ "$COMMAND" = "migrate" ]; then
   echo "Running migrations..."
-  npm run db:migrate
-elif [ $COMMAND = "seed" ]; then
+  exec node /app/release-migrate.mjs
+elif [ "$COMMAND" = "seed" ]; then
   echo "Running seeds..."
   npm run db:seed-staging
-elif [ $COMMAND = "seed-prod" ]; then
+elif [ "$COMMAND" = "seed-prod" ]; then
   echo "Running seeds..."
   npm run db:seed-prod
-elif [ $COMMAND = "truncate-tables" ]; then
+elif [ "$COMMAND" = "truncate-tables" ]; then
   echo "Truncating tables..."
   npm run db:truncate-tables
 else

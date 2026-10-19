@@ -1,0 +1,23 @@
+name: Utu upstream review (no merge)
+on:
+  schedule:
+    - cron: '23 6 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Summarize upstream without integrating it
+        run: bash scripts/releases/upstream-summary.sh > upstream-summary.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: upstream-review
+          path: upstream-summary.md
+          retention-days: 14
+      - name: Publish job summary
+        run: cat upstream-summary.md >> "$GITHUB_STEP_SUMMARY"
