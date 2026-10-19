@@ -1,6 +1,6 @@
 # Etapa 2 — SCORM e certificados
 
-Estado actual: **SCORM 1.2 independente no Chrome, dois ciclos, emissão automática, histórico UI e revogação demonstrados; Android e matriz completa de percursos pendentes**. Primeiro checkpoint novo `9c0a6700`, commits posteriores no branch. [Validação empresarial actual](18-enterprise-validation.md). As secções iniciais abaixo são históricas.
+Estado actual: **SCORM 1.2 independente no Chrome, dois ciclos, emissão automática, histórico UI e revogação demonstrados; percursos com revogação/recertificação API/Chrome e 18 testes; Android físico pendente**. Primeiro checkpoint novo `9c0a6700`, commits posteriores no branch. [Validação empresarial actual](22-integrated-demo-and-contract-matrix.md). As secções iniciais abaixo são históricas.
 
 Base: `7a23e967`; autorização: `dc15e4f2`; branch `sprint/omatapalo-validation-20261017`. As alterações desta etapa seguem num commit próprio, identificável pelo título `fix(lms): preserve assessment evidence across renewal cycles`.
 
@@ -91,3 +91,7 @@ Limites: Android físico, SCORM 2004, xAPI/LRS e SCORM offline não demonstrados
 ## Integridade adicional dos percursos — execução 21
 
 `fa521a48`: emissão recusa destinatário externo/eliminado, prioriza credencial activa sobre histórico e não reactiva expiradas. Índice único parcial impede múltiplas credenciais activas por tenant/colaborador/percurso, conservando expiradas; migration Drizzle aditiva e preflight sem apagar duplicados. **14/14 testes PostgreSQL/RLS passaram**. A base principal tinha zero registos desta tabela antes/depois; histórico não vazio foi ensaiado na base de teste. Revogação e recertificação formal de percursos continuam abertas. Não foi repetida nesta janela a demo SCORM independente do relatório 18. [Evidências e limites](21-video-network-and-certificate-integrity.md).
+
+## Fecho da fatia de percursos — 19/10/2026
+
+Revogação fundamentada, histórico autenticado e recertificação explícita após novas conclusões entregues. **18 testes PostgreSQL/RLS** passaram, incluindo gestor nativo limitado à equipa; cinco renovações concorrentes devolvem o mesmo ID. Chrome: nova formação fictícia efectivamente repetida, dois ciclos/tentativas nativos conservados, credencial de percurso substituta válida e anterior revogada inválida. Comandos administrativos foram exercitados pela API; sem ecrã dedicado de histórico/renovação de percursos ou novos avisos automáticos. Migration 0236 aditiva e cliente regenerados pelos scripts nativos. Regressão SCORM/S3 repetida: **10/10**, 50,302 s; não se declara SCORM offline/2004/xAPI. [Evidências e matriz contratual](22-integrated-demo-and-contract-matrix.md).

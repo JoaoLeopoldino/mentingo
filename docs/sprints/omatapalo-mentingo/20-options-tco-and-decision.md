@@ -1,5 +1,7 @@
 # Alternativas, custo e decisão — 18/10/2026
 
+Checkpoint histórico preservado. Estado seguinte: **27/32**, [demonstração e matriz contratual 22](22-integrated-demo-and-contract-matrix.md), [operação e desempenho 23](23-performance-recovery-and-validation.md).
+
 Estado: comparação por critérios de aceitação; **só Mentingo foi executado nesta sprint**. Moodle/IOMAD/Totara são referências documentais, não benchmarks feitos nesta máquina. Commit-base `656f4a9c`, primeiro checkpoint novo `9c0a6700`; commits finais no histórico do branch. Nenhum produto alternativo foi instalado nem contactado comercialmente.
 
 ## Comparação objectiva

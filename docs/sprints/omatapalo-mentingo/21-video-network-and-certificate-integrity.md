@@ -1,5 +1,7 @@
 # Vídeo sob rede limitada e integridade de certificados — 18/10/2026
 
+Checkpoint histórico preservado. Estado seguinte: **27/32**, [demonstração e matriz contratual 22](22-integrated-demo-and-contract-matrix.md), [operação e desempenho 23](23-performance-recovery-and-validation.md).
+
 Estado: **26/32 critérios demonstrados = 81,25%**, mantendo o denominador e os gates críticos. **CONDITIONAL GO para piloto delimitado; NO-GO para substituição em produção**. Código: `fa521a48` (certificados de percursos) e `b1b32296` (vídeo). Base desta execução: `75380ae5`, branch `feat/omatapalo-enterprise-competencies-20261018`. Sem push, merge, produção ou dados reais.
 
 Fecha-se apenas o critério de medição de arranque, rebuffering, resolução e tráfego sob rede limitada. A correcção de certificados reforça o critério anteriormente demonstrado; não cria outro ponto. O utilizador confirmou que **não dispõe de Android físico nesta sessão**: offline móvel permanece BLOCKED, sem o substituir por viewport ou Chrome de secretária.

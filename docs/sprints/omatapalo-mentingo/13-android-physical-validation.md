@@ -81,3 +81,16 @@ Estado continua **BLOCKED: não executado num dispositivo físico**. O ambiente 
 ## Disponibilidade confirmada — execução 21, 18/10/2026
 
 O utilizador respondeu **«Não está disponível nesta sessão»** à disponibilidade de Android físico por USB. Estado **BLOCKED**, sem execução física, métricas de telemóvel ou capturas Android. O guião mantém-se preparado; não se altera o checklist por haver Chrome/CDP. Nenhuma nova validação física é alegada no relatório 21.
+
+## Pacote e precaução USB — 19/10/2026
+
+`node scripts/sprints/omatapalo/prepare-android-kit.mjs` gera um ZIP local com este guião, README e dez casos em JSON, todos inicialmente **BLOCKED**. A indisponibilidade física continua confirmada, sem execução ou métricas Android.
+
+O modo de avião pode deixar acessível o túnel `adb reverse`. Depois de preparar a aplicação/cache/descarga, remover **apenas os dois encaminhamentos de ensaio**, mantendo a depuração USB:
+
+```sh
+adb -s SERIAL reverse --remove tcp:5173
+adb -s SERIAL reverse --remove tcp:3000
+```
+
+Confirmar no DevTools do dispositivo que pedidos novos à API falham, antes de atribuir PASS ao consumo/submissão sem rede. Reabrir a aplicação com esses encaminhamentos desligados. Para recuperar, repor os dois `reverse`, ligar a rede e sincronizar. Acessibilidade por USB não mede dados de uma operadora. Não apagar respostas nem armazenamento para simular um resultado; o teste de quota física requer espaço limitado num dispositivo/perfil de ensaio autorizado, ou fica BLOCKED.

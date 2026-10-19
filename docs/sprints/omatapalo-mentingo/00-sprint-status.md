@@ -1,6 +1,6 @@
 # Sprint de validação técnica — Utu Lab / Omatapalo
 
-Estado actual: **26/32 critérios = 81,25%; CONDITIONAL GO para piloto delimitado; NO-GO para substituição em produção**. [Validação empresarial e requisitos a–j](18-enterprise-validation.md), [QA visual e acesso](19-enterprise-visual-qa.md), [alternativas/TCO](20-options-tco-and-decision.md), [32 critérios](11-sprint-progress.md), [vídeo e certificados 21](21-video-network-and-certificate-integrity.md). Evolução de competências preservada em [16](16-enterprise-competencies.md) e [17](17-competency-totara-parity.md). Os checkpoints abaixo preservam a evolução histórica.
+Estado actual: **27/32 critérios = 84,375%; CONDITIONAL GO para piloto delimitado; NO-GO para substituição em produção**. [Validação empresarial e requisitos a–j](18-enterprise-validation.md), [QA visual e acesso](19-enterprise-visual-qa.md), [alternativas/TCO](20-options-tco-and-decision.md), [32 critérios](11-sprint-progress.md), [vídeo e certificados 21](21-video-network-and-certificate-integrity.md), [demo/contrato 22](22-integrated-demo-and-contract-matrix.md), [métricas/restauro 23](23-performance-recovery-and-validation.md). Evolução de competências preservada em [16](16-enterprise-competencies.md) e [17](17-competency-totara-parity.md). Os checkpoints abaixo preservam a evolução histórica.
 
 Base: `7a23e967d88947238386c588663140c21a284294` (v4.23.0). Branch actual: `feat/omatapalo-enterprise-competencies-20261018`, a partir de `4e187000`. Worktree persistente: `/Users/joaoleopoldino/Development/CaniveteLab/mentingo/.local/worktrees/omatapalo-20261017`. Checkout original recuperado e verificado; implementação mantida no worktree separado.
 
@@ -9,13 +9,13 @@ Início: **2026-10-17 14:56:11 UTC**. Os intervalos incluem downloads, espera po
 | Etapa                  | Estado comprovado                                                                                                      | Próxima acção                                                                      |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
 | 0 — ambiente           | Node 22.15, pnpm 10.22, serviços isolados e builds funcionais; HTTP 20/50/100 e restauro DB executados | Ensaio sustentado, vídeo/IA, restauro integral/offsite e segurança global |
-| 1 — pt-AO              | 6.233/6.233 chaves estruturais; zero omissões; 57 invariantes; página pública localizada | Revisão humana/canais restantes; 100% estrutural não é revisão linguística |
-| 2 — SCORM/certificados | Rustici independente Chrome: retoma, nota 100, dois ciclos e revogação; histórico UI; autorização de percursos/RLS | Android, recertificação/revogação de percursos e renovação após revogação explícita |
+| 1 — pt-AO              | 6.235/6.235 chaves estruturais; zero omissões; 57 invariantes; página pública localizada | Revisão humana/canais restantes; 100% estrutural não é revisão linguística |
+| 2 — SCORM/certificados | Rustici independente Chrome: retoma, nota 100, dois ciclos e revogação; histórico UI; autorização de percursos/RLS | Android, UX/avisos de percursos e política de recorrência; revogação/recertificação API/Chrome entregues no relatório 22 |
 | 3 — conteúdos offline  | Texto/PDF privado, reabertura e remoção; actualização interrompida preserva a cópia anterior | Android físico e quotas reais; probe CDP bloqueado |
 | 4 — avaliações offline | API com 9 testes RLS; fila durável e recovery; 6+6 checkpoints finais Chrome de recuperação                            | Android físico; recuperação assistida 401/409 já demonstrada                       |
 | 5 — competências       | Frameworks, versões, planos, decisões separadas e funções simultâneas; 21 domínio + 12 API de competências + 7 checkpoints Chrome             | governação do piloto, ciclo administrativo completo e validação de produção                                              |
 | 6 — integrações/vídeo  | Adapter sintético, CSV BI e quatro perfis HLS medidos; recuperação assistida; 41 testes VideoPlayer | ERP real, refresh BI, Teams, vídeo privado/áudio/Android e carga concorrente |
-| 7 — decisão            | HTTP sem erros; p95 0,92/1,71/3,62 s; DB restaurada; alternativas/TCO com hipóteses explícitas | Gates críticos prevalecem sobre a percentagem; ver relatórios 18–20 |
+| 7 — decisão            | HTTP repetido/instrumentado; DB, S3 e API restauradas; alternativas/TCO com hipóteses explícitas | Gates críticos prevalecem sobre a percentagem; ver relatórios 18–20 |
 
 Commits: ambiente **`c6c53fc7`**; pt-AO **`6a649d65`**. Autorização: **`dc15e4f2`**. Ciclos/histórico: **`52ddc41a`**; conteúdos offline: **`7054413a`**; API de avaliações offline: **`38683c60`**. Não houve push, deployment ou utilização de dados/credenciais de clientes.
 
@@ -92,3 +92,11 @@ Código `fa521a48` e `b1b32296`; [evidências 21](21-video-network-and-certifica
 Passaram 14 testes PostgreSQL/RLS de certificados de percursos, 41 VideoPlayer, cinco do validador, builds API/web, typecheck web e lint focado. A migration aditiva preservou a tabela local; histórico não vazio ensaiado na base de teste. Registo/fallback pt-AO preservados, 6.233 chaves estruturais; revisão humana não quantificada. Android físico indisponível, confirmado pelo utilizador. Intervalo medido até à consolidação 19:58:51–20:30:14 UTC, **31 min 23 s**, incluindo esperas/builds e sem medir horas exclusivas. Não houve eliminação de ficheiros, push ou deployment. Aplicação local: http://localhost:5173.
 
 Fecho verificado às 20:32:53 UTC: intervalo total **34 min 02 s** desde 19:58:51, incluindo documentação; frontend HTTP 200/API anónima 401; checklist exactamente 26/32. Checkout original `main` preservado, apenas relatórios de auditoria não versionados. Sem ficheiros eliminados desde a base desta execução.
+
+## Validação integrada e recuperação — 19/10/2026
+
+**27/32 = 84,375%**, sem novo denominador. Nove checkpoints Chrome dos três papéis e três de recertificação de percursos passaram; conclusão de curso não atribui proficiência profissional. 13 testes de competências, 18 de percursos/RLS, 10 SCORM/S3, 72 web offline/vídeo/idioma e 30+56 emails passaram. Catálogo pt-AO 6.235 chaves estruturais; revisão humana não medida.
+
+Restauro de 411 objectos e 12 tabelas conciliado; API separada autenticou utilizadores por palavra-passe, recuperou ficheiro privado e duas credenciais de percurso e gerou PDF legível; destinatários indevidos recusados. Pausas curtas de RustFS/Redis recuperaram. Offline físico, conectores reais, perda do host/offsite e revisão global continuam abertos. [Relatórios 22](22-integrated-demo-and-contract-matrix.md) e [23](23-performance-recovery-and-validation.md). Sem produção, push, merge ou eliminação de trabalho anterior.
+
+Checkpoint de fecho: **19/10/2026 06:36:29 UTC**, 9 h 25 min 04 s de calendário desde 18/10 21:11:25, incluindo longas pausas/esperas; não são horas exclusivas. Última janela observada 51 min 52 s. Referência HTTP final no código `e0687c70`, sem build concorrente: p95 **0,640/0,834/1,563 s**, 1.638 pedidos sem erros. Builds, typechecks e evidências consolidados no relatório 23.

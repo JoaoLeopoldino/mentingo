@@ -1,5 +1,7 @@
 # Validação empresarial — 18/10/2026
 
+Checkpoint histórico preservado. Estado seguinte: **27/32**, [demonstração e matriz contratual 22](22-integrated-demo-and-contract-matrix.md), [operação e desempenho 23](23-performance-recovery-and-validation.md).
+
 Este relatório preserva o **checkpoint histórico de 25/32**. Estado seguinte: **26/32**, [execução 21 — vídeo e integridade de certificados](21-video-network-and-certificate-integrity.md). As medições e contagens abaixo referem-se à execução original.
 
 Estado: **CONDITIONAL GO para um piloto delimitado; NO-GO para substituir já o Totara em produção**. Continuação de `656f4a9c`, branch `feat/omatapalo-enterprise-competencies-20261018`; primeiro checkpoint desta execução `9c0a6700`. Os commits seguintes podem ser consultados com `git log --oneline 656f4a9c..HEAD`. Sem push, merge, produção, dados reais ou eliminação de trabalho anterior.

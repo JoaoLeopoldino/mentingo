@@ -1,12 +1,12 @@
-# Relatório de progresso da sprint — 18-10-2026
+# Relatório de progresso da sprint — 19-10-2026
 
-Estado actual: **81,25% dos critérios do checklist de validação demonstrados: 26 de 32**. Decisão: **CONDITIONAL GO para piloto delimitado; NO-GO para substituição em produção**. [Execução 18](18-enterprise-validation.md), [QA 19](19-enterprise-visual-qa.md) e [alternativas/TCO 20](20-options-tco-and-decision.md). [Vídeo e integridade 21](21-video-network-and-certificate-integrity.md). Os checkpoints finais abaixo com 22/32 são históricos.
+Estado actual: **84,375% dos critérios do checklist de validação demonstrados: 27 de 32**. Decisão: **CONDITIONAL GO para piloto delimitado; NO-GO para substituição em produção**. [Execução 18](18-enterprise-validation.md), [QA 19](19-enterprise-visual-qa.md) e [alternativas/TCO 20](20-options-tco-and-decision.md). [Vídeo e integridade 21](21-video-network-and-certificate-integrity.md), [demo/matriz contratual 22](22-integrated-demo-and-contract-matrix.md), [operação/métricas 23](23-performance-recovery-and-validation.md). Os checkpoints finais abaixo com 22/32 são históricos.
 
-Código funcional de referência: API `38683c60`, UI/fila `276827c8`, validação/build `ba3290a3`; checkpoint `3a6dc5e8`. A execução anterior recuperou o checkout original. A actual entrega acrescentou competências, recuperação offline, catálogo pt-AO integral, correcções SCORM/HLS e novas evidências visuais. A aplicação ensaiada é o build local do sprint; não foi substituída por uma demonstração simulada.
+Código consolidado desta entrega: `668e42b0`, `e5ed0173`, `975eba93`, `e0687c70`. Os identificadores seguintes preservam o histórico. Código funcional de referência: API `38683c60`, UI/fila `276827c8`, validação/build `ba3290a3`; checkpoint `3a6dc5e8`. A execução anterior recuperou o checkout original. A actual entrega acrescentou competências, recuperação offline, catálogo pt-AO integral, correcções SCORM/HLS e novas evidências visuais. A aplicação ensaiada é o build local do sprint; não foi substituída por uma demonstração simulada.
 
 ## Como interpretar a percentagem
 
-Este modelo foi definido neste relatório para tornar o acompanhamento verificável. Há quatro critérios por etapa, com peso igual e resultado binário: demonstrado vale 1; incompleto, não executado ou bloqueado vale 0. **26 ÷ 32 × 100 = 81,25%**. Os critérios completos estão abaixo; os pesos não representam esforço, custo, duração ou importância comercial iguais. O novo ponto desta execução é a medição real de vídeo sob rede limitada; não fecha Android, carga de vídeo/IA ou operação global. Os três pontos da execução anterior foram: adapter/reconciliação explicitamente sintéticos; dataset BI autorizado/consistente; comparação documental e TCO transparente. O último é um entregável documental, não execução de Moodle/Totara. Não se acrescentaram nem se flexibilizaram critérios para contar a carga nativa como vídeo/IA ou Chrome como Android.
+Este modelo foi definido neste relatório para tornar o acompanhamento verificável. Há quatro critérios por etapa, com peso igual e resultado binário: demonstrado vale 1; incompleto, não executado ou bloqueado vale 0. **27 ÷ 32 × 100 = 84,375%**. Os critérios completos estão abaixo; os pesos não representam esforço, custo, duração ou importância comercial iguais. O novo ponto desta entrega é a matriz de certificados de percursos, com 18 testes e recertificação demonstrada. A medição de vídeo fechou um ponto no checkpoint anterior. Não se fecham Android, vídeo/IA concorrentes ou operação global. Os três pontos da execução anterior foram: adapter/reconciliação explicitamente sintéticos; dataset BI autorizado/consistente; comparação documental e TCO transparente. O último é um entregável documental, não execução de Moodle/Totara. Não se acrescentaram nem se flexibilizaram critérios para contar a carga nativa como vídeo/IA ou Chrome como Android.
 
 Esta percentagem não mede tempo de engenharia restante, prontidão para produção ou grau de satisfação de cada requisito de Omatapalo. O MVP de competências foi implementado e ensaiado; integrações continuam pendentes. Gates críticos, como Android físico e operação empresarial, prevalecem sobre qualquer média. O modelo de adequação comercial ponderado da auditoria não foi convertido numa pontuação de prontidão sem provas suficientes.
 
@@ -14,19 +14,19 @@ Esta percentagem não mede tempo de engenharia restante, prontidão para produç
 | ----------------------------- | -----------: | ---------------------: | ------------------------------------------------------------------------------------------ |
 | 0 — ambiente e baseline       |          4/4 |               **100%** | Ambiente de desenvolvimento isolado e fluxos básicos operacionais                          |
 | 1 — pt-AO funcional           |          3/4 |                **75%** | Registo, fallback, preferência e formatação; experiência integral incompleta               |
-| 2 — SCORM e certificados      |          2/4 |                **50%** | Chrome independente, histórico, revogação e acesso passaram; Android e matriz de percursos incompletos |
+| 2 — SCORM e certificados      |          3/4 |                **75%** | Percursos: revogação/recertificação/histórico/API/Chrome; Android continua pendente |
 | 3 — conteúdos offline         |          3/4 |                **75%** | Texto/PDF, descarga privada e reabertura sem rede; Android real pendente                   |
 | 4 — avaliações offline        |          4/4 |  **100% do checklist** | Recuperação 401/409, arquivo, nova descarga e sincronização demonstrados em Chrome         |
 | 5 — competências              |          4/4 |  **100% do checklist** | MVP local: catálogo, requisitos, evidências, lacunas, permissões e demo real               |
 | 6 — integrações e vídeo       |          4/4 | **100% do checklist** | Simulação ERP, CSV BI e vídeo medido; ERP real, serviço BI e pipeline privado pendentes |
 | 7 — benchmark e decisão final |          2/4 |                **50%** | Comparação/TCO documentados; HTTP e restauro DB parciais, vídeo/IA/operação integral abertos |
-| **Total**                     |    **26/32** |             **81,25%** | **Sprint incompleto; gates de produção abertos**                                           |
+| **Total**                     |    **27/32** |            **84,375%** | **Sprint incompleto; gates de produção abertos**                                           |
 
 A recuperação dos ficheiros é uma tarefa de saneamento adicional concluída; não se acrescentaram pontos ao denominador para aumentar o progresso.
 
 ## Localização: percentagem distinta
 
-A cobertura estrutural actual é **6.233/6.233 = 100%**, com 6.176 valores distintos do inglês e 57 invariantes explícitos. Há zero chaves em fallback no catálogo actual. A tradução foi gerada e validada por lotes; revisão linguística humana não medida. Nove corpos essenciais e 19 assuntos de email têm tradução, com testes anteriores de renderização. A experiência integral de todos os canais continua aberta; não se altera o denominador nem se fecha esse critério apenas por preencher JSON.
+A cobertura estrutural actual é **6.235/6.235 = 100%**, com 6.178 valores distintos do inglês e 57 invariantes explícitos. Há zero chaves em fallback no catálogo actual. A tradução foi gerada e validada por lotes; revisão linguística humana não medida. Nove corpos essenciais e 19 assuntos de email têm tradução, com testes anteriores de renderização. A experiência integral de todos os canais continua aberta; não se altera o denominador nem se fecha esse critério apenas por preencher JSON.
 
 O QA confirmou login, selector persistido e HTML `lang=pt-AO`. O botão “Download Report” foi traduzido e observado como “Descarregar relatório” no Chrome DevTools MCP. Os cursos fictícios em inglês não são traduções em falta da interface: conteúdos de formação requerem autoria/localização própria.
 
@@ -46,12 +46,12 @@ O QA confirmou login, selector persistido e HTML `lang=pt-AO`. O botão “Downl
 - [x] Intl pt-AO, Africa/Luanda e AOA testados no runtime utilizado. Testes de formatação.
 - [ ] Experiência linguística integral nos percursos exigidos, administração e canais complementares. Catálogo UI estruturalmente completo; revisão humana, textos fixos e restantes canais ainda incompletos.
 
-### Etapa 2 — 2/4
+### Etapa 2 — 3/4
 
 - [x] SCORM 1.2: ZIP/manifest, lançamento API, score, suspend_data, retoma, conclusão, permissões, exportação e reimportação ensaiados separadamente. Relatório 03: 9 testes/S3 passaram, um excluído.
 - [x] Certificados: autorização negativa, emissão/renovação concorrente, ciclos e histórico preservados em integração. Relatório 03: 41 testes de certificados e quatro de relatórios passaram.
 - [ ] Player SCORM no navegador/Android e pacotes independentes adequadamente licenciados demonstrados. Chrome passou com Rustici independente CC BY 3.0 US; Android continua pendente, mantendo o critério aberto.
-- [ ] Matriz completa de verificação pública, revogação e certificados de percursos de aprendizagem demonstrada. Histórico UI e revogação de curso entregues; leitura/expiração/RLS de percursos passaram, mas revogação/recertificação de percursos ainda incompletas.
+- [x] Matriz completa de verificação pública, revogação e certificados de percursos de aprendizagem demonstrada. Relatório 22: 18 testes PostgreSQL/RLS; novas conclusões reais no Chrome, credencial substituta e snapshots conservados. Administração de percursos exercitada pela API; UX dedicada e alertas permanecem lacunas contratuais.
 
 ### Etapa 3 — 3/4
 
@@ -84,8 +84,8 @@ O QA confirmou login, selector persistido e HTML `lang=pt-AO`. O botão “Downl
 ### Etapa 7 — 2/4
 
 - [x] Estado implementado/testado/bloqueado, incidentes e tempos efectivamente observados documentados; decisão provisória explícita.
-- [ ] Perfis de carga 20/50/100 sessões, com vídeo/IA separados e resultados reproduzíveis. HTTP nativo executado sem erros, p95 0,92/1,71/3,62 s; vídeo/IA ainda não medidos.
-- [ ] Validação operacional e de segurança completa, incluindo restore, RPO/RTO e regressões acordadas. Restauro PostgreSQL local passou; S3/offsite/host perdido/SLA e revisão global incompletos.
+- [ ] Perfis de carga 20/50/100 sessões, com vídeo/IA separados e resultados reproduzíveis. HTTP nativo repetido com percentis por endpoint, CPU/RAM e amostras SQL; vídeo separado a 150 kbit/s. Carga concorrente de streaming e IA ainda não demonstradas; relatório 23.
+- [ ] Validação operacional e de segurança completa, incluindo restore, RPO/RTO e regressões acordadas. DB/S3/API restauradas localmente, login e ficheiros privados ensaiados. Offsite/host perdido/SLA e revisão global continuam incompletos.
 - [x] Comparação Moodle/IOMAD pelos mesmos critérios, TCO 12/24/36 meses com hipóteses e estimativa revista do trabalho restante. Relatório 20; apenas documentação nas alternativas, sem instalação ou preços inventados.
 
 ## O que foi executado nesta retoma
@@ -97,7 +97,7 @@ O QA confirmou login, selector persistido e HTML `lang=pt-AO`. O botão “Downl
 
 ## Próxima acção de engenharia
 
-Executar o guião Android físico quando existir dispositivo, validar vídeo privado com áudio, fechar recertificação de percursos/revogação, contratar revisão linguística e ensaiar restauro integral/segurança. A paginação de competências está implementada; a matriz foi incluída na carga HTTP, mas ainda exige governação e aceitação por gestores reais. Primavera real e operação BI automática dependem de acessos/contratos externos.
+Executar o pacote Android físico quando existir dispositivo, validar vídeo privado com áudio, concluir a UX/avisos dos percursos, contratar revisão linguística e ensaiar recuperação externa/perda do host e segurança global. A paginação de competências está implementada; a matriz foi incluída na carga HTTP, mas ainda exige governação e aceitação por gestores reais. Primavera real e operação BI automática dependem de acessos/contratos externos.
 
 O total de horas exclusivas de desenvolvimento não foi medido. O relatório 00 regista intervalos de execução reais, incluindo instalações/builds/esperas; estes intervalos não são uma folha de horas nem um multiplicador de produtividade da IA.
 

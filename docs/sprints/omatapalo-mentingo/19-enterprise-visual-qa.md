@@ -74,3 +74,7 @@ As capturas foram obtidas com Chrome real/Playwright e serviços locais, complem
 ## QA adicional — vídeo sob rede limitada
 
 A execução 21 acrescenta capturas reais do leitor em 720p/360p/144p, da acção de recuperação e da reprodução retomada. O controlo final foi observado com 44 px de altura e texto de 14 px; preservou a posição após interrupção. [Galeria, métricas e limitações](21-video-network-and-certificate-integrity.md#qa-visual). As contas e o curso comercial deste relatório foram preservados. Não se executou Android físico.
+
+## Demo integrada final — 19/10/2026
+
+[Relatório 22](22-integrated-demo-and-contract-matrix.md): três perfis em cadeia, simulação identificada, curso ligado ao plano, competência formal decidida pelo gestor e CSV conciliados. Nove checkpoints integrados e três de recertificação passaram no Chrome. A galeria mostra título da formação no plano, dois ciclos e credencial de percurso renovada. [Relatório 23](23-performance-recovery-and-validation.md) contém também o PDF recuperado e revisto visualmente. Chrome DevTools MCP confirmou o título pt-AO da página pública canónica; a gravação de snapshot em ficheiro foi recusada pelo âmbito de caminhos do plugin, tendo sido usada leitura inline. Não se alegou ficheiro gravado nem ensaio Android.
