@@ -33,6 +33,8 @@ import { createSettingsFactory } from "../../../test/factory/settings.factory";
 import { createUserFactory, credentialFactory } from "../../../test/factory/user.factory";
 import { cookieFor } from "../../../test/helpers/test-helpers";
 
+import { startLoadObservation, loadInfrastructure } from "./enterprise-load-observability";
+
 import type { INestApplication } from "@nestjs/common";
 
 const loadTest = process.env.SPRINT_LOAD_TEST === "true" ? it : it.skip;
@@ -199,6 +201,7 @@ describe("Enterprise HTTP load with 500 fictional employees and real RLS", () =>
       const setupMs = performance.now() - setupStarted;
       const profiles = [];
       for (const concurrency of [20, 50, 100]) {
+        const finishObservation = await startLoadObservation(db);
         const lag = monitorEventLoopDelay({ resolution: 20 });
         lag.enable();
         const records: { endpoint: string; ms: number; status: number }[] = [];
@@ -210,15 +213,22 @@ describe("Enterprise HTTP load with 500 fictional employees and real RLS", () =>
               const client = body
                 ? request(server).post(endpoint).send(body)
                 : request(server).get(endpoint);
-              const response = await client
-                .set("Cookie", cookie)
-                .timeout({ response: 60000, deadline: 90000 });
-              records.push({
-                endpoint: endpoint.split("?")[0],
-                ms: performance.now() - start,
-                status: response.status,
-              });
-              expect(response.status).toBe(body ? 201 : 200);
+              try {
+                const response = await client
+                  .set("Cookie", cookie)
+                  .timeout({ response: 60000, deadline: 90000 });
+                records.push({
+                  endpoint: endpoint.split("?")[0],
+                  ms: performance.now() - start,
+                  status: response.status,
+                });
+              } catch {
+                records.push({
+                  endpoint: endpoint.split("?")[0],
+                  ms: performance.now() - start,
+                  status: 0,
+                });
+              }
             };
             for (let round = 0; round < 3; round++) {
               await read("/api/auth/current-user");
@@ -252,7 +262,9 @@ describe("Enterprise HTTP load with 500 fictional employees and real RLS", () =>
             maxMs: values.at(-1),
           };
         };
+        const observation = await finishObservation();
         const result = {
+          observation,
           concurrency,
           elapsedMs,
           throughputRequestsPerSecond: records.length / (elapsedMs / 1000),
@@ -267,7 +279,13 @@ describe("Enterprise HTTP load with 500 fictional employees and real RLS", () =>
           rssMiB: process.memoryUsage().rss / 1048576,
         };
         profiles.push(result);
-        console.log("ENTERPRISE_HTTP_LOAD", JSON.stringify(result));
+        console.log("ENTERPRISE_HTTP_LOAD", JSON.stringify({ ...result, observation: undefined }));
+        const partialFolder = resolve(process.cwd(), "../../.local/sprint");
+        mkdirSync(partialFolder, { recursive: true });
+        writeFileSync(
+          resolve(partialFolder, "enterprise-http-load.partial.json"),
+          JSON.stringify({ timestamp: new Date().toISOString(), profiles }, null, 2),
+        );
       }
       const output = resolve(process.cwd(), "../../.local/sprint");
       mkdirSync(output, { recursive: true });
@@ -276,6 +294,7 @@ describe("Enterprise HTTP load with 500 fictional employees and real RLS", () =>
         JSON.stringify(
           {
             timestamp: new Date().toISOString(),
+            infrastructure: await loadInfrastructure(),
             setupMs,
             employees: 500,
             competenciesPerEmployee: 1,
@@ -290,6 +309,7 @@ describe("Enterprise HTTP load with 500 fictional employees and real RLS", () =>
           2,
         ),
       );
+      expect(profiles.every((profile) => profile.errors === 0)).toBe(true);
     },
     300000,
   );

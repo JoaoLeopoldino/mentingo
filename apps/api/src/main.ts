@@ -137,6 +137,8 @@ async function bootstrap() {
   const redisIoAdapter = new RedisIoAdapter(app, redisPublisher, redisSubscriber);
   app.useWebSocketAdapter(redisIoAdapter);
 
-  await app.listen(3000);
+  const port = Number(process.env.PORT ?? 3000);
+  if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error("Invalid API port");
+  await app.listen(port, process.env.API_BIND_HOST ?? "0.0.0.0");
 }
 bootstrap();

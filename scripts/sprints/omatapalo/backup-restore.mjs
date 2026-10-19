@@ -23,6 +23,10 @@ const tables = [
   "scorm_attempts",
   "competency_assessments",
   "competency_plan_history",
+  "learning_path_certificates",
+  "student_learning_paths",
+  "resources",
+  "resource_entity",
 ];
 const fingerprint = (db) =>
   Object.fromEntries(
