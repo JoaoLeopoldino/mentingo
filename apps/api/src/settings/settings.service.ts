@@ -1546,9 +1546,10 @@ export class SettingsService {
     const globalSettings = await this.getGlobalSettingsRecord();
     const parsedSettings = this.parseGlobalSettings(globalSettings.settings);
     const companyName =
+      parsedSettings.companyInformation?.applicationName ||
       parsedSettings.companyInformation?.companyShortName ||
       parsedSettings.companyInformation?.companyName ||
-      "Mentingo";
+      "Utu Lab";
     const shortName = parsedSettings.companyInformation?.companyShortName || companyName;
     const simpleLogoUrl = this.buildSettingsImageUrl(
       SETTINGS_IMAGE_ASSET.PLATFORM_SIMPLE_LOGO,
@@ -1563,7 +1564,7 @@ export class SettingsService {
             type: "image/webp",
           };
         })
-      : [{ src: "/app-signet.svg", sizes: "any", type: "image/svg+xml" }];
+      : [{ src: "/utu-signet.svg", sizes: "any", type: "image/svg+xml" }];
 
     return {
       name: `${companyName} LMS`,

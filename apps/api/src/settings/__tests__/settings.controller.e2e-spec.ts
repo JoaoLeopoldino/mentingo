@@ -435,6 +435,40 @@ describe("SettingsController (e2e)", () => {
         await truncateTables(baseDb, ["courses", "chapters", "users", "categories", "settings"]);
       });
 
+      it("persists optional tenant branding without replacing existing company fields", async () => {
+        await request(app.getHttpServer())
+          .patch("/api/settings/company-information")
+          .set("Cookie", adminCookies)
+          .send({ companyName: "Instituição Fictícia" })
+          .expect(200);
+        await request(app.getHttpServer())
+          .patch("/api/settings/company-information")
+          .set("Cookie", adminCookies)
+          .send({
+            applicationName: "Utu Formação",
+            certificateIssuer: "Emissor Fictício",
+            defaultLocale: "pt-AO",
+          })
+          .expect(200);
+        const result = await request(app.getHttpServer())
+          .get("/api/settings/company-information")
+          .expect(200);
+        expect(result.body.data).toMatchObject({
+          companyName: "Instituição Fictícia",
+          applicationName: "Utu Formação",
+          certificateIssuer: "Emissor Fictício",
+          defaultLocale: "pt-AO",
+        });
+      });
+
+      it("rejects an unsafe verification URL in tenant branding", async () => {
+        await request(app.getHttpServer())
+          .patch("/api/settings/company-information")
+          .set("Cookie", adminCookies)
+          .send({ publicVerificationBaseUrl: "javascript:alert(1)" })
+          .expect(400);
+      });
+
       it("should toggle the global unregistered user courses accessibility setting (as Admin)", async () => {
         const initialGlobalSettings = await db.query.settings.findFirst({
           where: (s, { isNull }) => isNull(s.userId),

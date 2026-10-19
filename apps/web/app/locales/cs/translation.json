@@ -8338,5 +8338,8 @@
     "retrying": "Obnovování videa…",
     "player": "Přehrávač videa",
     "quality": "Kvalita videa"
+  },
+  "demo": {
+    "environmentNotice": "Ukázkové prostředí · Utu Lab · Fiktivní údaje"
   }
 }

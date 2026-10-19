@@ -60,9 +60,9 @@ describe("company metadata without route loaders", () => {
 
   it("reads company branding from the query cache for route metadata", () => {
     queryClient.setQueryData(companyInformationQueryOptions.queryKey, {
-      data: { companyShortName: "Acme" },
+      data: { companyShortName: "Acme", applicationName: "Utu Formação" },
     });
     const result = setPageTitle([], "pages.dashboard");
-    expect(result[0].title).toMatch(/^Acme - /);
+    expect(result[0].title).toMatch(/^Utu Formação - /);
   });
 });

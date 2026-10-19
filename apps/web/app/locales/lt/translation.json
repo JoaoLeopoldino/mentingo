@@ -8336,5 +8336,8 @@
     "retrying": "Vaizdo įrašas tęsiamas…",
     "player": "Vaizdo įrašų leistuvas",
     "quality": "Vaizdo kokybė"
+  },
+  "demo": {
+    "environmentNotice": "Demonstracinė aplinka · Utu Lab · Išgalvoti duomenys"
   }
 }

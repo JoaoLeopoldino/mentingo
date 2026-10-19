@@ -15,6 +15,12 @@ import type { Static } from "@sinclair/typebox";
 
 export const companyInformationJSONSchema = Type.Object({
   companyName: Type.Optional(Type.String()),
+  applicationName: Type.Optional(Type.String({ minLength: 1, maxLength: 120 })),
+  certificateIssuer: Type.Optional(Type.String({ minLength: 1, maxLength: 160 })),
+  emailSenderName: Type.Optional(Type.String({ minLength: 1, maxLength: 120 })),
+  legalFooter: Type.Optional(Type.String({ maxLength: 1000 })),
+  defaultLocale: Type.Optional(Type.Enum(SUPPORTED_LANGUAGES)),
+  publicVerificationBaseUrl: Type.Optional(Type.String({ pattern: "^https://[^\\s]+$" })),
   companyShortName: Type.Optional(Type.String({ maxLength: 10 })),
   registeredAddress: Type.Optional(Type.String()),
   taxNumber: Type.Optional(Type.String()),

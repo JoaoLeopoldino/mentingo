@@ -453,6 +453,26 @@ export interface GetPublicGlobalSettingsResponse {
     certificateBackgroundImage: string | null;
     companyInformation?: {
       companyName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      applicationName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 160
+       */
+      certificateIssuer?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      emailSenderName?: string;
+      /** @maxLength 1000 */
+      legalFooter?: string;
+      defaultLocale?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+      /** @pattern ^https://[^\s]+$ */
+      publicVerificationBaseUrl?: string;
       /** @maxLength 10 */
       companyShortName?: string;
       registeredAddress?: string;
@@ -741,6 +761,26 @@ export interface UpdateUnregisteredUserCoursesAccessibilityResponse {
     certificateBackgroundImage: string | null;
     companyInformation?: {
       companyName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      applicationName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 160
+       */
+      certificateIssuer?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      emailSenderName?: string;
+      /** @maxLength 1000 */
+      legalFooter?: string;
+      defaultLocale?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+      /** @pattern ^https://[^\s]+$ */
+      publicVerificationBaseUrl?: string;
       /** @maxLength 10 */
       companyShortName?: string;
       registeredAddress?: string;
@@ -783,6 +823,26 @@ export interface UpdateEnforceSSOResponse {
     certificateBackgroundImage: string | null;
     companyInformation?: {
       companyName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      applicationName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 160
+       */
+      certificateIssuer?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      emailSenderName?: string;
+      /** @maxLength 1000 */
+      legalFooter?: string;
+      defaultLocale?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+      /** @pattern ^https://[^\s]+$ */
+      publicVerificationBaseUrl?: string;
       /** @maxLength 10 */
       companyShortName?: string;
       registeredAddress?: string;
@@ -825,6 +885,26 @@ export interface UpdateModernCourseListEnabledResponse {
     certificateBackgroundImage: string | null;
     companyInformation?: {
       companyName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      applicationName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 160
+       */
+      certificateIssuer?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      emailSenderName?: string;
+      /** @maxLength 1000 */
+      legalFooter?: string;
+      defaultLocale?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+      /** @pattern ^https://[^\s]+$ */
+      publicVerificationBaseUrl?: string;
       /** @maxLength 10 */
       companyShortName?: string;
       registeredAddress?: string;
@@ -871,6 +951,26 @@ export interface UpdateFeaturedCourseResponse {
     certificateBackgroundImage: string | null;
     companyInformation?: {
       companyName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      applicationName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 160
+       */
+      certificateIssuer?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      emailSenderName?: string;
+      /** @maxLength 1000 */
+      legalFooter?: string;
+      defaultLocale?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+      /** @pattern ^https://[^\s]+$ */
+      publicVerificationBaseUrl?: string;
       /** @maxLength 10 */
       companyShortName?: string;
       registeredAddress?: string;
@@ -913,6 +1013,26 @@ export interface UpdateCourseDiscussionsEnabledResponse {
     certificateBackgroundImage: string | null;
     companyInformation?: {
       companyName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      applicationName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 160
+       */
+      certificateIssuer?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      emailSenderName?: string;
+      /** @maxLength 1000 */
+      legalFooter?: string;
+      defaultLocale?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+      /** @pattern ^https://[^\s]+$ */
+      publicVerificationBaseUrl?: string;
       /** @maxLength 10 */
       companyShortName?: string;
       registeredAddress?: string;
@@ -955,6 +1075,26 @@ export interface UpdateCalendarEnabledResponse {
     certificateBackgroundImage: string | null;
     companyInformation?: {
       companyName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      applicationName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 160
+       */
+      certificateIssuer?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      emailSenderName?: string;
+      /** @maxLength 1000 */
+      legalFooter?: string;
+      defaultLocale?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+      /** @pattern ^https://[^\s]+$ */
+      publicVerificationBaseUrl?: string;
       /** @maxLength 10 */
       companyShortName?: string;
       registeredAddress?: string;
@@ -997,6 +1137,26 @@ export interface UpdateLiveTrainingEnabledResponse {
     certificateBackgroundImage: string | null;
     companyInformation?: {
       companyName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      applicationName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 160
+       */
+      certificateIssuer?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      emailSenderName?: string;
+      /** @maxLength 1000 */
+      legalFooter?: string;
+      defaultLocale?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+      /** @pattern ^https://[^\s]+$ */
+      publicVerificationBaseUrl?: string;
       /** @maxLength 10 */
       companyShortName?: string;
       registeredAddress?: string;
@@ -1044,6 +1204,26 @@ export interface UpdateLiveTrainingMaxParallelSessionsResponse {
     certificateBackgroundImage: string | null;
     companyInformation?: {
       companyName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      applicationName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 160
+       */
+      certificateIssuer?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      emailSenderName?: string;
+      /** @maxLength 1000 */
+      legalFooter?: string;
+      defaultLocale?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+      /** @pattern ^https://[^\s]+$ */
+      publicVerificationBaseUrl?: string;
       /** @maxLength 10 */
       companyShortName?: string;
       registeredAddress?: string;
@@ -1086,6 +1266,26 @@ export interface UpdateLearningPathsEnabledResponse {
     certificateBackgroundImage: string | null;
     companyInformation?: {
       companyName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      applicationName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 160
+       */
+      certificateIssuer?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      emailSenderName?: string;
+      /** @maxLength 1000 */
+      legalFooter?: string;
+      defaultLocale?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+      /** @pattern ^https://[^\s]+$ */
+      publicVerificationBaseUrl?: string;
       /** @maxLength 10 */
       companyShortName?: string;
       registeredAddress?: string;
@@ -1159,6 +1359,26 @@ export interface UpdateColorSchemaResponse {
     certificateBackgroundImage: string | null;
     companyInformation?: {
       companyName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      applicationName?: string;
+      /**
+       * @minLength 1
+       * @maxLength 160
+       */
+      certificateIssuer?: string;
+      /**
+       * @minLength 1
+       * @maxLength 120
+       */
+      emailSenderName?: string;
+      /** @maxLength 1000 */
+      legalFooter?: string;
+      defaultLocale?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+      /** @pattern ^https://[^\s]+$ */
+      publicVerificationBaseUrl?: string;
       /** @maxLength 10 */
       companyShortName?: string;
       registeredAddress?: string;
@@ -1308,6 +1528,26 @@ export interface GetLoginBackgroundResponse {
 export interface GetCompanyInformationResponse {
   data: {
     companyName?: string;
+    /**
+     * @minLength 1
+     * @maxLength 120
+     */
+    applicationName?: string;
+    /**
+     * @minLength 1
+     * @maxLength 160
+     */
+    certificateIssuer?: string;
+    /**
+     * @minLength 1
+     * @maxLength 120
+     */
+    emailSenderName?: string;
+    /** @maxLength 1000 */
+    legalFooter?: string;
+    defaultLocale?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    /** @pattern ^https://[^\s]+$ */
+    publicVerificationBaseUrl?: string;
     /** @maxLength 10 */
     companyShortName?: string;
     registeredAddress?: string;
@@ -1319,6 +1559,26 @@ export interface GetCompanyInformationResponse {
 
 export interface UpdateCompanyInformationBody {
   companyName?: string;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  applicationName?: string;
+  /**
+   * @minLength 1
+   * @maxLength 160
+   */
+  certificateIssuer?: string;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  emailSenderName?: string;
+  /** @maxLength 1000 */
+  legalFooter?: string;
+  defaultLocale?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+  /** @pattern ^https://[^\s]+$ */
+  publicVerificationBaseUrl?: string;
   /** @maxLength 10 */
   companyShortName?: string;
   registeredAddress?: string;
@@ -1330,6 +1590,26 @@ export interface UpdateCompanyInformationBody {
 export interface UpdateCompanyInformationResponse {
   data: {
     companyName?: string;
+    /**
+     * @minLength 1
+     * @maxLength 120
+     */
+    applicationName?: string;
+    /**
+     * @minLength 1
+     * @maxLength 160
+     */
+    certificateIssuer?: string;
+    /**
+     * @minLength 1
+     * @maxLength 120
+     */
+    emailSenderName?: string;
+    /** @maxLength 1000 */
+    legalFooter?: string;
+    defaultLocale?: "en" | "pl" | "de" | "lt" | "cs" | "es" | "fr" | "pt-AO";
+    /** @pattern ^https://[^\s]+$ */
+    publicVerificationBaseUrl?: string;
     /** @maxLength 10 */
     companyShortName?: string;
     registeredAddress?: string;

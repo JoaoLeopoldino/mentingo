@@ -8325,5 +8325,8 @@
     "retrying": "Video wird fortgesetzt…",
     "player": "Videoplayer",
     "quality": "Videoqualität"
+  },
+  "demo": {
+    "environmentNotice": "Demonstrationsumgebung · Utu Lab · Fiktive Daten"
   }
 }

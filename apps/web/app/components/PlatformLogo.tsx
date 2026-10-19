@@ -1,7 +1,7 @@
 import { memo } from "react";
 
 import { usePlatformSimpleLogo } from "~/api/queries";
-import { Icon } from "~/components/Icon";
+import { useCompanyInformationSuspense } from "~/api/queries/useCompanyInformationSuspense";
 import { usePlatformLogo } from "~/hooks/usePlatformLogo";
 import { cn } from "~/lib/utils";
 
@@ -13,6 +13,12 @@ interface PlatformLogoProps {
 
 export const PlatformLogo = memo(
   ({ className, variant = "full", alt = "Platform Logo" }: PlatformLogoProps) => {
+    const { data: companyInformation } = useCompanyInformationSuspense();
+    const brandName =
+      companyInformation.data.applicationName ||
+      companyInformation.data.companyShortName ||
+      companyInformation.data.companyName ||
+      "Utu Lab";
     const { data: customLogoUrl, isLoading } = usePlatformLogo();
     const { data: customSimpleLogoUrl, isLoading: isSimpleLogoLoading } = usePlatformSimpleLogo();
 
@@ -45,10 +51,14 @@ export const PlatformLogo = memo(
     }
 
     if (variant === "signet") {
-      return <Icon name="AppSignet" className={className} />;
+      return (
+        <span className={cn("font-bold", className)} aria-label={brandName}>
+          {brandName.slice(0, 1)}
+        </span>
+      );
     }
 
-    return <Icon name="AppLogo" className={className} />;
+    return <span className={cn("font-bold", className)}>{brandName}</span>;
   },
 );
 

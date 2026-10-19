@@ -272,7 +272,11 @@ export class LearningPathCertificateService {
 
     const accentColor = certificate.certificateFontColor || imageSettings.primaryColor || "#1f2937";
 
+    const companyInformation = await this.settingsService.getCompanyInformation();
     const html = buildCertificateMarkup({
+      demonstration: process.env.DEMONSTRATION_MODE === "true",
+      platformName:
+        companyInformation.certificateIssuer || companyInformation.companyName || "Utu Lab",
       studentName: certificate.fullName || "",
       courseName: certificate.pathTitle ?? "",
       completionDate: this.formatDate(certificate.issuedAt || null),
@@ -499,6 +503,11 @@ export class LearningPathCertificateService {
       context.certificate.certificateFontColor || context.settings.primaryColor || "#1f2937";
 
     return buildCertificateMarkup({
+      demonstration: process.env.DEMONSTRATION_MODE === "true",
+      platformName:
+        context.settings.companyInformation?.certificateIssuer ||
+        context.settings.companyInformation?.companyName ||
+        "Utu Lab",
       studentName: context.certificate.fullName || "",
       courseName: context.certificate.pathTitle ?? "",
       completionDate: context.formattedDate,

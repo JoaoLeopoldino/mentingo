@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 import { usePlatformSimpleLogo } from "../api/queries/usePlatformSimpleLogo";
-import appSignetSvg from "../assets/svgs/app-signet.svg";
+import appSignetSvg from "../assets/svgs/utu-signet.svg";
 
 export function PlatformFavicon() {
   const { data: platformSimpleLogoUrl, isLoading } = usePlatformSimpleLogo();

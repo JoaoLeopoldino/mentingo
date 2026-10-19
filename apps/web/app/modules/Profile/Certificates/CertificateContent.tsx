@@ -19,6 +19,7 @@ interface CertificateContentProps {
   isDownload?: boolean;
   backgroundImageUrl?: string | null;
   platformLogo?: string | null;
+  platformName?: string;
   signatureImageUrl?: string | null;
   lang?: SupportedLanguages;
   colorTheme?: CertificateColorTheme;
@@ -34,6 +35,7 @@ const CertificateContent = ({
   isDownload,
   backgroundImageUrl,
   platformLogo,
+  platformName = "Utu Lab",
   signatureImageUrl,
   lang = "en",
   colorTheme = defaultCertificateColorTheme,
@@ -65,6 +67,8 @@ const CertificateContent = ({
   }, [isDownload]);
 
   const certificateBodyMarkup = buildCertificateMarkup({
+    demonstration: import.meta.env.VITE_DEMONSTRATION_MODE === "true",
+    platformName,
     studentName,
     courseName,
     completionDate,

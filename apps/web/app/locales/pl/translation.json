@@ -8422,5 +8422,8 @@
     "retrying": "Wznawianie filmu…",
     "player": "Odtwarzacz wideo",
     "quality": "Jakość wideo"
+  },
+  "demo": {
+    "environmentNotice": "Środowisko demonstracyjne · Utu Lab · Dane fikcyjne"
   }
 }

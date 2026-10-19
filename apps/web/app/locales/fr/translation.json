@@ -7851,5 +7851,8 @@
     "retrying": "Reprise de la vidéo…",
     "player": "Lecteur vidéo",
     "quality": "Qualité vidéo"
+  },
+  "demo": {
+    "environmentNotice": "Environnement de démonstration · Utu Lab · Données fictives"
   }
 }

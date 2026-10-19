@@ -25828,6 +25828,65 @@
                   "companyName": {
                     "type": "string"
                   },
+                  "applicationName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "certificateIssuer": {
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "type": "string"
+                  },
+                  "emailSenderName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "legalFooter": {
+                    "maxLength": 1000,
+                    "type": "string"
+                  },
+                  "defaultLocale": {
+                    "anyOf": [
+                      {
+                        "const": "en",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pl",
+                        "type": "string"
+                      },
+                      {
+                        "const": "de",
+                        "type": "string"
+                      },
+                      {
+                        "const": "lt",
+                        "type": "string"
+                      },
+                      {
+                        "const": "cs",
+                        "type": "string"
+                      },
+                      {
+                        "const": "es",
+                        "type": "string"
+                      },
+                      {
+                        "const": "fr",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pt-AO",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "publicVerificationBaseUrl": {
+                    "pattern": "^https://[^\\s]+$",
+                    "type": "string"
+                  },
                   "companyShortName": {
                     "maxLength": 10,
                     "type": "string"
@@ -27659,6 +27718,65 @@
                   "companyName": {
                     "type": "string"
                   },
+                  "applicationName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "certificateIssuer": {
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "type": "string"
+                  },
+                  "emailSenderName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "legalFooter": {
+                    "maxLength": 1000,
+                    "type": "string"
+                  },
+                  "defaultLocale": {
+                    "anyOf": [
+                      {
+                        "const": "en",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pl",
+                        "type": "string"
+                      },
+                      {
+                        "const": "de",
+                        "type": "string"
+                      },
+                      {
+                        "const": "lt",
+                        "type": "string"
+                      },
+                      {
+                        "const": "cs",
+                        "type": "string"
+                      },
+                      {
+                        "const": "es",
+                        "type": "string"
+                      },
+                      {
+                        "const": "fr",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pt-AO",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "publicVerificationBaseUrl": {
+                    "pattern": "^https://[^\\s]+$",
+                    "type": "string"
+                  },
                   "companyShortName": {
                     "maxLength": 10,
                     "type": "string"
@@ -27891,6 +28009,65 @@
                   "companyName": {
                     "type": "string"
                   },
+                  "applicationName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "certificateIssuer": {
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "type": "string"
+                  },
+                  "emailSenderName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "legalFooter": {
+                    "maxLength": 1000,
+                    "type": "string"
+                  },
+                  "defaultLocale": {
+                    "anyOf": [
+                      {
+                        "const": "en",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pl",
+                        "type": "string"
+                      },
+                      {
+                        "const": "de",
+                        "type": "string"
+                      },
+                      {
+                        "const": "lt",
+                        "type": "string"
+                      },
+                      {
+                        "const": "cs",
+                        "type": "string"
+                      },
+                      {
+                        "const": "es",
+                        "type": "string"
+                      },
+                      {
+                        "const": "fr",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pt-AO",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "publicVerificationBaseUrl": {
+                    "pattern": "^https://[^\\s]+$",
+                    "type": "string"
+                  },
                   "companyShortName": {
                     "maxLength": 10,
                     "type": "string"
@@ -28121,6 +28298,65 @@
                 "type": "object",
                 "properties": {
                   "companyName": {
+                    "type": "string"
+                  },
+                  "applicationName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "certificateIssuer": {
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "type": "string"
+                  },
+                  "emailSenderName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "legalFooter": {
+                    "maxLength": 1000,
+                    "type": "string"
+                  },
+                  "defaultLocale": {
+                    "anyOf": [
+                      {
+                        "const": "en",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pl",
+                        "type": "string"
+                      },
+                      {
+                        "const": "de",
+                        "type": "string"
+                      },
+                      {
+                        "const": "lt",
+                        "type": "string"
+                      },
+                      {
+                        "const": "cs",
+                        "type": "string"
+                      },
+                      {
+                        "const": "es",
+                        "type": "string"
+                      },
+                      {
+                        "const": "fr",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pt-AO",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "publicVerificationBaseUrl": {
+                    "pattern": "^https://[^\\s]+$",
                     "type": "string"
                   },
                   "companyShortName": {
@@ -28374,6 +28610,65 @@
                   "companyName": {
                     "type": "string"
                   },
+                  "applicationName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "certificateIssuer": {
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "type": "string"
+                  },
+                  "emailSenderName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "legalFooter": {
+                    "maxLength": 1000,
+                    "type": "string"
+                  },
+                  "defaultLocale": {
+                    "anyOf": [
+                      {
+                        "const": "en",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pl",
+                        "type": "string"
+                      },
+                      {
+                        "const": "de",
+                        "type": "string"
+                      },
+                      {
+                        "const": "lt",
+                        "type": "string"
+                      },
+                      {
+                        "const": "cs",
+                        "type": "string"
+                      },
+                      {
+                        "const": "es",
+                        "type": "string"
+                      },
+                      {
+                        "const": "fr",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pt-AO",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "publicVerificationBaseUrl": {
+                    "pattern": "^https://[^\\s]+$",
+                    "type": "string"
+                  },
                   "companyShortName": {
                     "maxLength": 10,
                     "type": "string"
@@ -28604,6 +28899,65 @@
                 "type": "object",
                 "properties": {
                   "companyName": {
+                    "type": "string"
+                  },
+                  "applicationName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "certificateIssuer": {
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "type": "string"
+                  },
+                  "emailSenderName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "legalFooter": {
+                    "maxLength": 1000,
+                    "type": "string"
+                  },
+                  "defaultLocale": {
+                    "anyOf": [
+                      {
+                        "const": "en",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pl",
+                        "type": "string"
+                      },
+                      {
+                        "const": "de",
+                        "type": "string"
+                      },
+                      {
+                        "const": "lt",
+                        "type": "string"
+                      },
+                      {
+                        "const": "cs",
+                        "type": "string"
+                      },
+                      {
+                        "const": "es",
+                        "type": "string"
+                      },
+                      {
+                        "const": "fr",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pt-AO",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "publicVerificationBaseUrl": {
+                    "pattern": "^https://[^\\s]+$",
                     "type": "string"
                   },
                   "companyShortName": {
@@ -28838,6 +29192,65 @@
                   "companyName": {
                     "type": "string"
                   },
+                  "applicationName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "certificateIssuer": {
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "type": "string"
+                  },
+                  "emailSenderName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "legalFooter": {
+                    "maxLength": 1000,
+                    "type": "string"
+                  },
+                  "defaultLocale": {
+                    "anyOf": [
+                      {
+                        "const": "en",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pl",
+                        "type": "string"
+                      },
+                      {
+                        "const": "de",
+                        "type": "string"
+                      },
+                      {
+                        "const": "lt",
+                        "type": "string"
+                      },
+                      {
+                        "const": "cs",
+                        "type": "string"
+                      },
+                      {
+                        "const": "es",
+                        "type": "string"
+                      },
+                      {
+                        "const": "fr",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pt-AO",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "publicVerificationBaseUrl": {
+                    "pattern": "^https://[^\\s]+$",
+                    "type": "string"
+                  },
                   "companyShortName": {
                     "maxLength": 10,
                     "type": "string"
@@ -29068,6 +29481,65 @@
                 "type": "object",
                 "properties": {
                   "companyName": {
+                    "type": "string"
+                  },
+                  "applicationName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "certificateIssuer": {
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "type": "string"
+                  },
+                  "emailSenderName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "legalFooter": {
+                    "maxLength": 1000,
+                    "type": "string"
+                  },
+                  "defaultLocale": {
+                    "anyOf": [
+                      {
+                        "const": "en",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pl",
+                        "type": "string"
+                      },
+                      {
+                        "const": "de",
+                        "type": "string"
+                      },
+                      {
+                        "const": "lt",
+                        "type": "string"
+                      },
+                      {
+                        "const": "cs",
+                        "type": "string"
+                      },
+                      {
+                        "const": "es",
+                        "type": "string"
+                      },
+                      {
+                        "const": "fr",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pt-AO",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "publicVerificationBaseUrl": {
+                    "pattern": "^https://[^\\s]+$",
                     "type": "string"
                   },
                   "companyShortName": {
@@ -29314,6 +29786,65 @@
                   "companyName": {
                     "type": "string"
                   },
+                  "applicationName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "certificateIssuer": {
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "type": "string"
+                  },
+                  "emailSenderName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "legalFooter": {
+                    "maxLength": 1000,
+                    "type": "string"
+                  },
+                  "defaultLocale": {
+                    "anyOf": [
+                      {
+                        "const": "en",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pl",
+                        "type": "string"
+                      },
+                      {
+                        "const": "de",
+                        "type": "string"
+                      },
+                      {
+                        "const": "lt",
+                        "type": "string"
+                      },
+                      {
+                        "const": "cs",
+                        "type": "string"
+                      },
+                      {
+                        "const": "es",
+                        "type": "string"
+                      },
+                      {
+                        "const": "fr",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pt-AO",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "publicVerificationBaseUrl": {
+                    "pattern": "^https://[^\\s]+$",
+                    "type": "string"
+                  },
                   "companyShortName": {
                     "maxLength": 10,
                     "type": "string"
@@ -29544,6 +30075,65 @@
                 "type": "object",
                 "properties": {
                   "companyName": {
+                    "type": "string"
+                  },
+                  "applicationName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "certificateIssuer": {
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "type": "string"
+                  },
+                  "emailSenderName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "legalFooter": {
+                    "maxLength": 1000,
+                    "type": "string"
+                  },
+                  "defaultLocale": {
+                    "anyOf": [
+                      {
+                        "const": "en",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pl",
+                        "type": "string"
+                      },
+                      {
+                        "const": "de",
+                        "type": "string"
+                      },
+                      {
+                        "const": "lt",
+                        "type": "string"
+                      },
+                      {
+                        "const": "cs",
+                        "type": "string"
+                      },
+                      {
+                        "const": "es",
+                        "type": "string"
+                      },
+                      {
+                        "const": "fr",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pt-AO",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "publicVerificationBaseUrl": {
+                    "pattern": "^https://[^\\s]+$",
                     "type": "string"
                   },
                   "companyShortName": {
@@ -29955,6 +30545,65 @@
                 "type": "object",
                 "properties": {
                   "companyName": {
+                    "type": "string"
+                  },
+                  "applicationName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "certificateIssuer": {
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "type": "string"
+                  },
+                  "emailSenderName": {
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "legalFooter": {
+                    "maxLength": 1000,
+                    "type": "string"
+                  },
+                  "defaultLocale": {
+                    "anyOf": [
+                      {
+                        "const": "en",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pl",
+                        "type": "string"
+                      },
+                      {
+                        "const": "de",
+                        "type": "string"
+                      },
+                      {
+                        "const": "lt",
+                        "type": "string"
+                      },
+                      {
+                        "const": "cs",
+                        "type": "string"
+                      },
+                      {
+                        "const": "es",
+                        "type": "string"
+                      },
+                      {
+                        "const": "fr",
+                        "type": "string"
+                      },
+                      {
+                        "const": "pt-AO",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "publicVerificationBaseUrl": {
+                    "pattern": "^https://[^\\s]+$",
                     "type": "string"
                   },
                   "companyShortName": {
@@ -30715,6 +31364,65 @@
               "companyName": {
                 "type": "string"
               },
+              "applicationName": {
+                "minLength": 1,
+                "maxLength": 120,
+                "type": "string"
+              },
+              "certificateIssuer": {
+                "minLength": 1,
+                "maxLength": 160,
+                "type": "string"
+              },
+              "emailSenderName": {
+                "minLength": 1,
+                "maxLength": 120,
+                "type": "string"
+              },
+              "legalFooter": {
+                "maxLength": 1000,
+                "type": "string"
+              },
+              "defaultLocale": {
+                "anyOf": [
+                  {
+                    "const": "en",
+                    "type": "string"
+                  },
+                  {
+                    "const": "pl",
+                    "type": "string"
+                  },
+                  {
+                    "const": "de",
+                    "type": "string"
+                  },
+                  {
+                    "const": "lt",
+                    "type": "string"
+                  },
+                  {
+                    "const": "cs",
+                    "type": "string"
+                  },
+                  {
+                    "const": "es",
+                    "type": "string"
+                  },
+                  {
+                    "const": "fr",
+                    "type": "string"
+                  },
+                  {
+                    "const": "pt-AO",
+                    "type": "string"
+                  }
+                ]
+              },
+              "publicVerificationBaseUrl": {
+                "pattern": "^https://[^\\s]+$",
+                "type": "string"
+              },
               "companyShortName": {
                 "maxLength": 10,
                 "type": "string"
@@ -30744,6 +31452,65 @@
           "companyName": {
             "type": "string"
           },
+          "applicationName": {
+            "minLength": 1,
+            "maxLength": 120,
+            "type": "string"
+          },
+          "certificateIssuer": {
+            "minLength": 1,
+            "maxLength": 160,
+            "type": "string"
+          },
+          "emailSenderName": {
+            "minLength": 1,
+            "maxLength": 120,
+            "type": "string"
+          },
+          "legalFooter": {
+            "maxLength": 1000,
+            "type": "string"
+          },
+          "defaultLocale": {
+            "anyOf": [
+              {
+                "const": "en",
+                "type": "string"
+              },
+              {
+                "const": "pl",
+                "type": "string"
+              },
+              {
+                "const": "de",
+                "type": "string"
+              },
+              {
+                "const": "lt",
+                "type": "string"
+              },
+              {
+                "const": "cs",
+                "type": "string"
+              },
+              {
+                "const": "es",
+                "type": "string"
+              },
+              {
+                "const": "fr",
+                "type": "string"
+              },
+              {
+                "const": "pt-AO",
+                "type": "string"
+              }
+            ]
+          },
+          "publicVerificationBaseUrl": {
+            "pattern": "^https://[^\\s]+$",
+            "type": "string"
+          },
           "companyShortName": {
             "maxLength": 10,
             "type": "string"
@@ -30769,6 +31536,65 @@
             "type": "object",
             "properties": {
               "companyName": {
+                "type": "string"
+              },
+              "applicationName": {
+                "minLength": 1,
+                "maxLength": 120,
+                "type": "string"
+              },
+              "certificateIssuer": {
+                "minLength": 1,
+                "maxLength": 160,
+                "type": "string"
+              },
+              "emailSenderName": {
+                "minLength": 1,
+                "maxLength": 120,
+                "type": "string"
+              },
+              "legalFooter": {
+                "maxLength": 1000,
+                "type": "string"
+              },
+              "defaultLocale": {
+                "anyOf": [
+                  {
+                    "const": "en",
+                    "type": "string"
+                  },
+                  {
+                    "const": "pl",
+                    "type": "string"
+                  },
+                  {
+                    "const": "de",
+                    "type": "string"
+                  },
+                  {
+                    "const": "lt",
+                    "type": "string"
+                  },
+                  {
+                    "const": "cs",
+                    "type": "string"
+                  },
+                  {
+                    "const": "es",
+                    "type": "string"
+                  },
+                  {
+                    "const": "fr",
+                    "type": "string"
+                  },
+                  {
+                    "const": "pt-AO",
+                    "type": "string"
+                  }
+                ]
+              },
+              "publicVerificationBaseUrl": {
+                "pattern": "^https://[^\\s]+$",
                 "type": "string"
               },
               "companyShortName": {

@@ -8277,5 +8277,8 @@
     "retrying": "Reanudando el vídeo…",
     "player": "Reproductor de vídeo",
     "quality": "Calidad del vídeo"
+  },
+  "demo": {
+    "environmentNotice": "Entorno de demostración · Utu Lab · Datos ficticios"
   }
 }

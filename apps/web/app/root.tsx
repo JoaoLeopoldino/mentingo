@@ -9,6 +9,7 @@ import {
   useLocation,
 } from "@remix-run/react";
 import { Suspense } from "react";
+import { useTranslation } from "react-i18next";
 
 import { version } from "~/../version.json";
 
@@ -28,25 +29,37 @@ import type { LinksFunction } from "@remix-run/node";
 
 export const links: LinksFunction = () => {
   return [
-    { rel: "icon", href: "/app-signet.svg", type: "image/svg+xml" },
-    { rel: "shortcut icon", href: "/app-signet.svg", type: "image/svg+xml" },
-    { rel: "apple-touch-icon", href: "/app-signet.svg" },
+    { rel: "icon", href: "/utu-signet.svg", type: "image/svg+xml" },
+    { rel: "shortcut icon", href: "/utu-signet.svg", type: "image/svg+xml" },
+    { rel: "apple-touch-icon", href: "/utu-signet.svg" },
     { rel: "manifest", href: "/api/settings/manifest.webmanifest" },
     { rel: "stylesheet", href: css },
   ];
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { t } = useTranslation();
   return (
     <html lang="en" className="scroll-smooth">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="generator" content={`Mentingo LMS ${version}`} />
+        <meta name="generator" content={`Utu Lab LMS ${version}`} />
+        {import.meta.env.VITE_DEMONSTRATION_MODE === "true" && (
+          <meta name="robots" content="noindex,nofollow,noarchive" />
+        )}
         <Meta />
         <Links />
       </head>
       <body>
+        {import.meta.env.VITE_DEMONSTRATION_MODE === "true" && (
+          <div
+            role="note"
+            className="border-b bg-muted px-4 py-2 text-center text-sm font-semibold text-foreground"
+          >
+            {t("demo.environmentNotice")}
+          </div>
+        )}
         {children}
         <ScrollRestoration />
         <Scripts />

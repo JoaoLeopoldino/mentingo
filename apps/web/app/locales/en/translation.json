@@ -8367,5 +8367,8 @@
     "retrying": "Resuming video…",
     "player": "Video player",
     "quality": "Video quality"
+  },
+  "demo": {
+    "environmentNotice": "Demonstration environment · Utu Lab · Fictional data"
   }
 }

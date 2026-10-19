@@ -35,20 +35,21 @@ export class EmailService {
   }
 
   async sendEmail(email: Email): Promise<void> {
-    await this.emailAdapter.sendMail({ ...email, from: this.fromEmail });
+    await this.emailAdapter.sendMail(
+      this.withDemonstrationNotice({ ...email, from: this.fromEmail }),
+    );
   }
 
   async sendEmailWithLogo(
     email: Omit<Email, "from">,
     options: BrandedEmailSendOptions,
   ): Promise<void> {
-    const { logoBuffer, borderCircleBuffer } = await this.tenantDbRunnerService.runWithTenant(
-      options.tenantId,
-      async () => ({
+    const { logoBuffer, borderCircleBuffer, companyInformation } =
+      await this.tenantDbRunnerService.runWithTenant(options.tenantId, async () => ({
+        companyInformation: await this.settingsService.getCompanyInformation(),
         logoBuffer: await this.settingsService.getPlatformLogoBuffer(),
         borderCircleBuffer: await this.settingsService.getEmailBorderCircleBuffer(),
-      }),
-    );
+      }));
 
     const attachments: Attachment[] = [...(email.attachments ?? [])];
 
@@ -72,10 +73,27 @@ export class EmailService {
 
     const payload = {
       ...(email as Email),
-      from: this.fromEmail,
+      from: companyInformation.emailSenderName
+        ? `${JSON.stringify(companyInformation.emailSenderName.replace(/[\r\n]/g, " "))} <${this.fromEmail.match(/<([^<>]+)>$/)?.[1] ?? this.fromEmail}>`
+        : this.fromEmail,
       attachments: attachments.length > 0 ? attachments : undefined,
     };
-    await this.emailAdapter.sendMail(payload);
+    await this.emailAdapter.sendMail(this.withDemonstrationNotice(payload));
+  }
+
+  private withDemonstrationNotice(email: Email): Email {
+    if (process.env.DEMONSTRATION_MODE !== "true") return email;
+    const notice = "Ambiente de Demonstração · Utu Lab · Dados fictícios";
+    const htmlNotice = `<p role="note">${notice}</p>`;
+    const html = email.html?.match(/<body\b[^>]*>/i)
+      ? email.html.replace(/(<body\b[^>]*>)/i, `$1${htmlNotice}`)
+      : `${htmlNotice}${email.html ?? ""}`;
+    return {
+      ...email,
+      subject: `[DEMONSTRAÇÃO] ${email.subject}`,
+      ...(email.html !== undefined ? { html } : {}),
+      ...(email.text !== undefined ? { text: `${notice}\n\n${email.text}` } : {}),
+    } as Email;
   }
 
   async getEmailPreviewLogo(tenantId: UUIDType): Promise<string | undefined> {
@@ -101,7 +119,7 @@ export class EmailService {
   ): Promise<DefaultEmailSettings> {
     return this.tenantDbRunnerService.runWithTenant(tenantId, async () => {
       const globalSettings = await this.settingsService.getGlobalSettings();
-      const companyName = globalSettings.companyInformation?.companyName || "Mentingo.com";
+      const companyName = globalSettings.companyInformation?.companyName || "Utu Lab";
 
       return {
         primaryColor: globalSettings.primaryColor || DEFAULT_EMAIL_PRIMARY_COLOR,
@@ -120,7 +138,7 @@ export class EmailService {
         'primaryColor',
         COALESCE(NULLIF(${globalSettingsColumn}->>'primaryColor', ''), ${DEFAULT_EMAIL_PRIMARY_COLOR}),
         'companyName',
-        COALESCE(NULLIF(${globalSettingsColumn} #>> '{companyInformation,companyName}', ''), 'Mentingo.com')
+        COALESCE(NULLIF(${globalSettingsColumn} #>> '{companyInformation,companyName}', ''), 'Utu Lab')
       )
     `;
   }

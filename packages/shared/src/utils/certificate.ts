@@ -38,6 +38,7 @@ export type BuildCertificateMarkupOptions = {
   isModal?: boolean;
   isDownload?: boolean;
   certificateKind?: CertificateKind;
+  demonstration?: boolean;
 };
 
 export const CERTIFICATE_KIND = {
@@ -161,6 +162,8 @@ export function buildCertificateMarkup(options: BuildCertificateMarkupOptions): 
     completionDate = "",
     expiryDate = "",
     platformLogoUrl,
+    platformName,
+    demonstration = false,
     signatureImageUrl,
     backgroundImageUrl,
     lang = "en",
@@ -178,7 +181,7 @@ export function buildCertificateMarkup(options: BuildCertificateMarkupOptions): 
 
   const logoMarkup = platformLogoUrl
     ? `<img src="${escapeHtml(platformLogoUrl)}" alt="Platform Logo" class="aspect-auto h-11" />`
-    : `<div class="h-11" style="color:${escapeHtml(colorTheme.logoColor)};">${APP_LOGO_SVG}</div>`;
+    : `<div class="h-11" style="color:${escapeHtml(colorTheme.logoColor)};">${platformName ? escapeHtml(platformName) : APP_LOGO_SVG}</div>`;
 
   const signatureImageMarkup = signatureImageUrl
     ? `<img src="${escapeHtml(signatureImageUrl)}" alt="${escapeHtml(t.signature)}" class="mb-2 h-20 w-full object-contain" style="display:block;margin-bottom:8px;height:5rem;width:100%;object-fit:contain;" />`
@@ -207,9 +210,11 @@ export function buildCertificateMarkup(options: BuildCertificateMarkupOptions): 
 
   const certificateBodyMarkup = `<div
     class="flex h-full w-full flex-col items-center justify-center gap-y-12 px-14 py-12"
-    style="${backgroundStyle}"
+    style="position:relative;${backgroundStyle}"
   >
+    ${demonstration ? '<div role="note" style="position:absolute;top:12px;left:0;right:0;text-align:center;font-size:18px;font-weight:bold;color:#9f1239;">DEMONSTRAÇÃO — SEM VALIDADE</div>' : ""}
     ${logoMarkup}
+    ${platformName && platformLogoUrl ? `<p style="font-size:16px;">${escapeHtml(platformName)}</p>` : ""}
     <div class="flex flex-col items-center justify-center gap-y-4">
       <p
         class="text-[62px] font-black uppercase tracking-wider"

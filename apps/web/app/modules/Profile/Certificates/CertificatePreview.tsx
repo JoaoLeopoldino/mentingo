@@ -8,6 +8,8 @@ import { cn } from "~/lib/utils";
 import { useLanguageStore } from "~/modules/Dashboard/Settings/Language/LanguageStore";
 import { formatCertificateDate } from "~/utils/formatCertificateDate";
 
+import { useCompanyInformation } from "~/api/queries/useCompanyInformation";
+
 import CertificateContent from "./CertificateContent";
 import CertificateControls from "./CertificateControls";
 import { CERTIFICATE_KIND } from "./certificateKind";
@@ -56,6 +58,7 @@ const CertificatePreview = ({
   onColorPickerOpenChange,
   certificateKind = CERTIFICATE_KIND.COURSE,
 }: CertificatePreviewProps) => {
+  const { data: companyInformation } = useCompanyInformation();
   const currentLanguage = useLanguageStore((state) => state.language);
   const { downloadCertificatePdf, isPreparingDownload } = useCertificatePDF(certificateKind);
   const { mutateAsync: createCertificateShareLink, isPending: isPreparingShare } =
@@ -136,6 +139,11 @@ const CertificatePreview = ({
           </div>
 
           <CertificateContent
+            platformName={
+              companyInformation?.data.certificateIssuer ||
+              companyInformation?.data.companyName ||
+              "Utu Lab"
+            }
             studentName={studentName}
             courseName={courseName}
             completionDate={formattedCompletionDate}

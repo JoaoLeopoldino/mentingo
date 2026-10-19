@@ -7,6 +7,10 @@ const { certificateContentProps } = vi.hoisted(() => ({
   certificateContentProps: vi.fn(),
 }));
 
+vi.mock("~/api/queries/useCompanyInformation", () => ({
+  useCompanyInformation: () => ({data: {data: {certificateIssuer: "Emissor de Demonstração"}}}),
+}));
+
 vi.mock("~/api/mutations/useCreateCertificateShareLink", () => ({
   useCreateCertificateShareLink: () => ({ mutateAsync: vi.fn(), isPending: false }),
 }));
@@ -43,6 +47,7 @@ describe("CertificatePreview", () => {
     expect(screen.getByText("18.05.2026")).toBeInTheDocument();
     expect(certificateContentProps).toHaveBeenLastCalledWith(
       expect.objectContaining({
+        platformName: "Emissor de Demonstração",
         completionDate: "18.05.2026",
         expiryDate: "18.05.2027",
       }),

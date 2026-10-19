@@ -676,7 +676,11 @@ export class CertificatesService implements OnModuleDestroy {
     const certificateDate =
       certificate.issuedAt || certificate.completionDate || certificate.createdAt;
 
+    const companyInformation = await this.settingsService.getCompanyInformation();
     const html = buildCertificateMarkup({
+      demonstration: process.env.DEMONSTRATION_MODE === "true",
+      platformName:
+        companyInformation.certificateIssuer || companyInformation.companyName || "Utu Lab",
       studentName: certificate.fullName || "",
       courseName: certificate.courseTitle || "",
       completionDate: this.formatDate(certificateDate || null),
@@ -1010,6 +1014,11 @@ export class CertificatesService implements OnModuleDestroy {
     const accentColor = context.certificate.certificateFontColor || DEFAULT_CERTIFICATE_FONT_COLOR;
 
     return buildCertificateMarkup({
+      demonstration: process.env.DEMONSTRATION_MODE === "true",
+      platformName:
+        context.settings.companyInformation?.certificateIssuer ||
+        context.settings.companyInformation?.companyName ||
+        "Utu Lab",
       studentName: context.certificate.fullName || "",
       courseName: context.certificate.courseTitle || "",
       completionDate: context.formattedDate,

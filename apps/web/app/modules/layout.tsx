@@ -7,9 +7,10 @@ import { useCompanyInformationSuspense } from "~/api/queries/useCompanyInformati
 import { queryClient } from "~/api/queryClient";
 
 export const meta: MetaFunction = () => {
-  const companyShortName = queryClient.getQueryData(companyInformationQueryOptions.queryKey)?.data
-    ?.companyShortName;
-  const title = companyShortName ? `${companyShortName}` : "Mentingo";
+  const companyShortName =
+    queryClient.getQueryData(companyInformationQueryOptions.queryKey)?.data?.applicationName ||
+    queryClient.getQueryData(companyInformationQueryOptions.queryKey)?.data?.companyShortName;
+  const title = companyShortName ? `${companyShortName}` : "Utu Lab";
 
   return [{ title }];
 };
@@ -18,7 +19,8 @@ export default function Layout() {
   const { data: companyInfo } = useCompanyInformationSuspense();
   const { pathname } = useLocation();
   const { i18n } = useTranslation();
-  const companyShortName = companyInfo.data.companyShortName;
+  const companyShortName =
+    companyInfo.data.applicationName || companyInfo.data.companyShortName || "Utu Lab";
   const previousCompanyName = useRef<string | null>(null);
 
   // Remix metadata cannot subscribe to Query state. Brand the initial title
@@ -28,7 +30,7 @@ export default function Layout() {
     previousCompanyName.current = companyShortName ?? null;
     let pageTitle = document.title;
     if (previousName && previousName !== companyShortName) {
-      if (pageTitle === previousName) pageTitle = "Mentingo";
+      if (pageTitle === previousName) pageTitle = "Utu Lab";
       if (pageTitle.startsWith(`${previousName} - `)) {
         pageTitle = pageTitle.slice(previousName.length + 3);
       }
@@ -39,7 +41,7 @@ export default function Layout() {
     }
     if (pageTitle === companyShortName || pageTitle.startsWith(`${companyShortName} - `)) return;
     document.title =
-      pageTitle === "Mentingo" ? companyShortName : `${companyShortName} - ${pageTitle}`;
+      pageTitle === "Utu Lab" ? companyShortName : `${companyShortName} - ${pageTitle}`;
   }, [companyShortName, pathname, i18n.language]);
 
   return <Outlet />;
