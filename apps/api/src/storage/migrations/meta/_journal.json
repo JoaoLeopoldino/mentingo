@@ -1660,6 +1660,13 @@
       "when": 1792358495287,
       "tag": "0236_learning_path_certificate_lifecycle",
       "breakpoints": true
+    },
+    {
+      "idx": 237,
+      "version": "7",
+      "when": 1792395055539,
+      "tag": "0237_certificate_branding_snapshot",
+      "breakpoints": true
     }
   ]
 }

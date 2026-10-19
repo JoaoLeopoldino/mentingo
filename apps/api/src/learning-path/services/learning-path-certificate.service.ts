@@ -217,7 +217,13 @@ export class LearningPathCertificateService {
   async getPublicShareImage(certificateId: UUIDType, language?: SupportedLanguages) {
     const shareLanguage = this.normalizeLanguage(language);
     const certificate = await this.getPublicShareCertificate(certificateId, shareLanguage);
-    const imageKey = this.getShareImageKey(certificate.tenantId, certificateId, shareLanguage);
+    const imageKey = this.getShareImageKey(
+      certificate.tenantId,
+      certificateId,
+      shareLanguage,
+      certificate.brandingSnapshot?.demonstration === true ||
+        process.env.DEMONSTRATION_MODE === "true",
+    );
 
     const exists = await this.s3Service.getFileExists(imageKey).catch((error) => {
       this.logger.warn(`Learning path certificate share image existence check failed: ${error}`);
@@ -262,24 +268,43 @@ export class LearningPathCertificateService {
     )
       throw new NotFoundException("studentCertificateView.informations.certificateNotFound");
 
-    const imageSettings = await this.settingsService.getImageS3Keys();
+    const currentImageSettings = await this.settingsService.getImageS3Keys();
+    const storedBranding = certificate.brandingSnapshot;
+    const imageSettings = storedBranding
+      ? {
+          ...currentImageSettings,
+          platformLogoS3Key: storedBranding.logoKey,
+          certificateBackgroundImage: storedBranding.backgroundKey,
+          primaryColor: storedBranding.primaryColor,
+        }
+      : currentImageSettings;
     const [platformLogoImageUrl, backgroundImageUrl, certificateSignatureImageUrl] =
       await Promise.all([
         this.getImageDataUriFromS3Key(imageSettings.platformLogoS3Key),
         this.getImageDataUriFromS3Key(imageSettings.certificateBackgroundImage),
-        this.getImageDataUriFromS3Key(certificate.certificateSignature),
+        this.getImageDataUriFromS3Key(
+          storedBranding ? storedBranding.signatureKey : certificate.certificateSignature,
+        ),
       ]);
 
-    const accentColor = certificate.certificateFontColor || imageSettings.primaryColor || "#1f2937";
+    const accentColor = storedBranding
+      ? storedBranding.fontColor || storedBranding.primaryColor || "#1f2937"
+      : certificate.certificateFontColor || imageSettings.primaryColor || "#1f2937";
 
     const companyInformation = await this.settingsService.getCompanyInformation();
     const html = buildCertificateMarkup({
-      demonstration: process.env.DEMONSTRATION_MODE === "true",
+      demonstration:
+        certificate.brandingSnapshot?.demonstration === true ||
+        process.env.DEMONSTRATION_MODE === "true",
       platformName:
-        companyInformation.certificateIssuer || companyInformation.companyName || "Utu Lab",
+        storedBranding?.issuer ||
+        companyInformation.certificateIssuer ||
+        companyInformation.companyName ||
+        "Utu Lab",
       studentName: certificate.fullName || "",
       courseName: certificate.pathTitle ?? "",
       completionDate: this.formatDate(certificate.issuedAt || null),
+      expiryDate: this.formatDate(certificate.expiresAt || null),
       platformLogoUrl: platformLogoImageUrl,
       signatureImageUrl: certificateSignatureImageUrl,
       backgroundImageUrl,
@@ -328,7 +353,22 @@ export class LearningPathCertificateService {
   private async buildShareRenderContext(certificateId: UUIDType, language?: SupportedLanguages) {
     const shareLanguage = this.normalizeLanguage(language);
     const certificate = await this.getPublicShareCertificate(certificateId, shareLanguage);
-    const settings = await this.settingsService.getGlobalSettingsByTenantId(certificate.tenantId);
+    let settings = await this.settingsService.getGlobalSettingsByTenantId(certificate.tenantId);
+    const storedBranding = certificate.brandingSnapshot;
+    if (storedBranding) {
+      settings = {
+        ...settings,
+        companyInformation: {
+          ...settings.companyInformation,
+          certificateIssuer: storedBranding.issuer,
+        },
+        platformLogoS3Key: await this.getImageDataUriFromS3Key(storedBranding.logoKey),
+        certificateBackgroundImage: await this.getImageDataUriFromS3Key(
+          storedBranding.backgroundKey,
+        ),
+        primaryColor: storedBranding.primaryColor,
+      };
+    }
 
     const shareUrl = this.buildTenantUrl(
       certificate.tenantHost,
@@ -348,8 +388,11 @@ export class LearningPathCertificateService {
       },
     );
 
-    const certificateSignatureUrl = certificate.certificateSignature
-      ? await this.fileService.getFileUrl(certificate.certificateSignature, {
+    const signatureKey = storedBranding
+      ? storedBranding.signatureKey
+      : certificate.certificateSignature;
+    const certificateSignatureUrl = signatureKey
+      ? await this.fileService.getFileUrl(signatureKey, {
           quality: IMAGE_QUALITY.SM,
         })
       : null;
@@ -500,10 +543,16 @@ export class LearningPathCertificateService {
 
   private buildShareImageMarkup(context: any) {
     const accentColor =
-      context.certificate.certificateFontColor || context.settings.primaryColor || "#1f2937";
+      (context.certificate.brandingSnapshot
+        ? context.certificate.brandingSnapshot.fontColor
+        : context.certificate.certificateFontColor) ||
+      context.settings.primaryColor ||
+      "#1f2937";
 
     return buildCertificateMarkup({
-      demonstration: process.env.DEMONSTRATION_MODE === "true",
+      demonstration:
+        context.certificate.brandingSnapshot?.demonstration === true ||
+        process.env.DEMONSTRATION_MODE === "true",
       platformName:
         context.settings.companyInformation?.certificateIssuer ||
         context.settings.companyInformation?.companyName ||
@@ -511,9 +560,10 @@ export class LearningPathCertificateService {
       studentName: context.certificate.fullName || "",
       courseName: context.certificate.pathTitle ?? "",
       completionDate: context.formattedDate,
-      platformLogoUrl: null,
+      expiryDate: this.formatDate(context.certificate.expiresAt || null),
+      platformLogoUrl: context.settings.platformLogoS3Key,
       signatureImageUrl: context.certificateSignatureUrl,
-      backgroundImageUrl: null,
+      backgroundImageUrl: context.settings.certificateBackgroundImage,
       lang: context.language,
       certificateKind: CERTIFICATE_KIND.LEARNING_PATH,
       colorTheme: {
@@ -726,7 +776,8 @@ export class LearningPathCertificateService {
     tenantId: UUIDType,
     certificateId: UUIDType,
     language: SupportedLanguages,
+    demonstration: boolean,
   ) {
-    return `${tenantId}/learning-path-certificate-share/${certificateId}/${language}.png`;
+    return `${tenantId}/learning-path-certificate-share/v3-${demonstration ? "demo" : "standard"}/${certificateId}/${language}.png`;
   }
 }

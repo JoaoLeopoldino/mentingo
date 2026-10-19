@@ -30,6 +30,7 @@ import {
 } from "drizzle-orm";
 
 import { DatabasePg, type UUIDType } from "src/common";
+import { captureCertificateBranding } from "src/common/certificates/capture-certificate-branding";
 import { getUserNameSearchCondition } from "src/common/helpers/getUserNameSearchCondition";
 import { addPagination } from "src/common/pagination";
 import { LESSON_TYPES } from "src/lesson/lesson.type";
@@ -576,6 +577,7 @@ export class CertificateRepository {
     const [certificate] = await this.db
       .select({
         id: certificates.id,
+        brandingSnapshot: certificates.brandingSnapshot,
         tenantId: certificates.tenantId,
         createdAt: certificates.createdAt,
         issuedAt: certificates.issuedAt,
@@ -613,6 +615,7 @@ export class CertificateRepository {
     const [certificate] = await this.dbAdmin
       .select({
         id: certificates.id,
+        brandingSnapshot: certificates.brandingSnapshot,
         tenantId: certificates.tenantId,
         tenantHost: tenants.host,
         tenantName: tenants.name,
@@ -724,6 +727,11 @@ export class CertificateRepository {
   ) {
     const dbInstance = trx || this.db;
 
+    const brandingSnapshot = await captureCertificateBranding(dbInstance, {
+      kind: "course",
+      id: courseId,
+    });
+
     const [createdCertificate] = await dbInstance
       .insert(certificates)
       .values({
@@ -732,6 +740,7 @@ export class CertificateRepository {
         issuedAt: issuedAt.toISOString(),
         expiresAt: expiresAt?.toISOString() ?? null,
         learningCycle,
+        brandingSnapshot,
       })
       .returning();
 

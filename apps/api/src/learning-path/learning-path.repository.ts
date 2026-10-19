@@ -33,6 +33,7 @@ import {
 import { alias, type AnyPgColumn } from "drizzle-orm/pg-core";
 
 import { DatabasePg } from "src/common";
+import { captureCertificateBranding } from "src/common/certificates/capture-certificate-branding";
 import { getGroupFilterConditions } from "src/common/helpers/getGroupFilterConditions";
 import { getSortOptions } from "src/common/helpers/getSortOptions";
 import { buildJsonbField } from "src/common/helpers/sqlHelpers";
@@ -1759,6 +1760,11 @@ export class LearningPathRepository {
 
     if (existingCertificate) return existingCertificate;
 
+    const brandingSnapshot = await captureCertificateBranding(dbInstance, {
+      kind: "learningPath",
+      id: learningPathId,
+    });
+
     const [certificate] = await dbInstance
       .insert(learningPathCertificates)
       .values({
@@ -1766,6 +1772,7 @@ export class LearningPathRepository {
         learningPathId,
         tenantId,
         completionSnapshot,
+        brandingSnapshot,
         status: LEARNING_PATH_CERTIFICATE_STATUSES.ACTIVE,
       })
       .onConflictDoNothing()

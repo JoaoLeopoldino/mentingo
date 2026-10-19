@@ -10,6 +10,7 @@ import { PERMISSIONS, LEARNING_PATH_CERTIFICATE_STATUSES, hasAllPermissions } fr
 import { and, desc, eq, isNull, sql } from "drizzle-orm";
 
 import { DatabasePg, type UUIDType } from "src/common";
+import { captureCertificateBranding } from "src/common/certificates/capture-certificate-branding";
 import { assertCanReadLearnerCertificates } from "src/common/permissions/assert-can-read-learner-certificates";
 import { DB } from "src/storage/db/db.providers";
 import {
@@ -211,6 +212,10 @@ export class LearningPathCertificateLifecycleService {
         .update(learningPathCertificates)
         .set({ status: LEARNING_PATH_CERTIFICATE_STATUSES.EXPIRED })
         .where(eq(learningPathCertificates.id, id));
+      const brandingSnapshot = await captureCertificateBranding(trx, {
+        kind: "learningPath",
+        id: certificate.learningPathId,
+      });
       const [row] = await trx
         .insert(learningPathCertificates)
         .values({
@@ -218,6 +223,7 @@ export class LearningPathCertificateLifecycleService {
           learningPathId: certificate.learningPathId,
           tenantId: actor.tenantId,
           completionSnapshot: current,
+          brandingSnapshot,
           replacesCertificateId: id,
           renewalReason: body.reason.trim(),
           issuedBy: actor.userId,

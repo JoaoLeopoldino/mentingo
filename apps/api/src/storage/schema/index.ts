@@ -153,6 +153,7 @@ import type {
   NotificationAccountActionKind,
 } from "src/automation-execution/automation-execution.types";
 import type { MicrosoftCalendarOutboundErrorCode } from "src/calendar/calendar.constants";
+import type { CertificateBrandingSnapshot } from "src/common/certificates/certificate-branding.types";
 import type { ActivityHistory, AllSettings } from "src/common/types";
 import type {
   CourseTransferKind,
@@ -1969,6 +1970,7 @@ export const certificates = pgTable(
   "certificates",
   {
     ...id,
+    brandingSnapshot: jsonb("branding_snapshot").$type<CertificateBrandingSnapshot>(),
     learningCycle: integer("learning_cycle").notNull().default(1),
     ...timestamps,
     userId: uuid("user_id")
@@ -3090,6 +3092,7 @@ export const learningPathCertificates = pgTable(
   "learning_path_certificates",
   {
     ...id,
+    brandingSnapshot: jsonb("branding_snapshot").$type<CertificateBrandingSnapshot>(),
     ...timestamps,
     userId: uuid("user_id")
       .references(() => users.id, { onDelete: "cascade" })
