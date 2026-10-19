@@ -191,7 +191,11 @@ export class CompetenciesService {
       requirementHistory,
       learning: hasPermission(actor.permissions, PERMISSIONS.COMPETENCY_MANAGE)
         ? await this.competenciesRepository.learningOptions(language)
-        : { courses: [], learningPaths: [] },
+        : await this.competenciesRepository.learningOptions(
+            language,
+            [...new Set(matrix.flatMap((row) => (row.courseId ? [row.courseId] : [])))],
+            [...new Set(matrix.flatMap((row) => (row.learningPathId ? [row.learningPathId] : [])))],
+          ),
       units: hasPermission(actor.permissions, PERMISSIONS.COMPETENCY_MANAGE)
         ? units
         : units.filter((x) => allAssignments.some((a) => a.organizationalUnitId === x.id)),

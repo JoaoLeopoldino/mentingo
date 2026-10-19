@@ -64,13 +64,22 @@ export class CompetenciesRepository {
       })
       .from(groups);
   }
-  async learningOptions(language?: SupportedLanguages) {
+  async learningOptions(
+    language?: SupportedLanguages,
+    courseIds?: UUIDType[],
+    learningPathIds?: UUIDType[],
+  ) {
+    let courseCondition = courseIds ? sql`false` : undefined;
+    let pathCondition = learningPathIds ? sql`false` : undefined;
+    if (courseIds?.length) courseCondition = inArray(courses.id, courseIds);
+    if (learningPathIds?.length) pathCondition = inArray(learningPaths.id, learningPathIds);
     const coursesList = await this.db
       .select({
         id: courses.id,
         name: this.localizationService.getLocalizedSqlField(courses.title, language, courses),
       })
-      .from(courses);
+      .from(courses)
+      .where(courseCondition);
     const paths = await this.db
       .select({
         id: learningPaths.id,
@@ -80,7 +89,8 @@ export class CompetenciesRepository {
           learningPaths,
         ),
       })
-      .from(learningPaths);
+      .from(learningPaths)
+      .where(pathCondition);
     return { courses: coursesList, learningPaths: paths };
   }
   async employees(ids?: UUIDType[]) {

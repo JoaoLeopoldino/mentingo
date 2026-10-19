@@ -125,6 +125,60 @@ describe("Enterprise competencies with real tenant RLS", () => {
     expiresAt: null,
     reviewAt: null,
   });
+  it("shows only course names recommended for the authorized employee, without exposing the tenant catalog", async () => {
+    const recommended = await createCourseFactory(db).create({
+      authorId: adminId,
+      title: "Formação EPI recomendada",
+    });
+    const unrelated = await createCourseFactory(db).create({
+      authorId: adminId,
+      title: "Rascunho não recomendado",
+    });
+    const competencyId = await create();
+    const role = await request(app.getHttpServer())
+      .post("/api/competencies/roles")
+      .set("Cookie", adminCookie)
+      .send({ code: randomUUID().toUpperCase(), name: "Operador de ensaio de títulos" })
+      .expect(201);
+    await request(app.getHttpServer())
+      .put("/api/competencies/requirements")
+      .set("Cookie", adminCookie)
+      .send({
+        jobRoleId: role.body.data.id,
+        competencyId,
+        minimumLevel: 2,
+        effectiveFrom: "2026-01-01T00:00:00Z",
+        effectiveUntil: null,
+        courseId: recommended.id,
+        learningPathId: null,
+      })
+      .expect(200);
+    await request(app.getHttpServer())
+      .put("/api/competencies/assignments")
+      .set("Cookie", adminCookie)
+      .send({ userId: employeeId, jobRoleId: role.body.data.id, organizationalUnitId: unitId })
+      .expect(200);
+    for (const cookie of [employeeCookie, managerCookie]) {
+      const result = await workspace(cookie, employeeId).expect(200);
+      expect(result.body.data.learning.courses).toEqual([
+        { id: recommended.id, name: "Formação EPI recomendada" },
+      ]);
+      expect(
+        result.body.data.learning.courses.some((x: { id: string }) => x.id === unrelated.id),
+      ).toBe(false);
+    }
+    const outsider = await factoryUserForCourseTitleTest();
+    const result = await workspace(outsider.cookie).expect(200);
+    expect(result.body.data.learning.courses).toEqual([]);
+    await workspace(managerCookie, outsider.id).expect(403);
+  });
+  async function factoryUserForCourseTitleTest() {
+    const user = await createUserFactory(db)
+      .withUserSettings(db)
+      .withCredentials({ password: "password123" })
+      .create();
+    return { id: user.id, cookie: await cookieFor(user, app) };
+  }
   it("completes catalog → role → requirement → assignment → gap → assessment and history", async () => {
     const competencyId = await create();
     const role = await request(app.getHttpServer())
