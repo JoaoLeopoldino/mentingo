@@ -3113,9 +3113,17 @@ export const learningPathCertificates = pgTable(
       withTimezone: true,
       precision: 3,
     }),
+    revokedAt: timestamp("revoked_at", {mode: "string", withTimezone: true, precision: 3}),
+    revokedBy: uuid("revoked_by").references(() => users.id, {onDelete: "restrict"}),
+    revocationReason: text("revocation_reason"),
+    replacesCertificateId: uuid("replaces_certificate_id"),
+    renewalReason: text("renewal_reason"),
+    issuedBy: uuid("issued_by").references(() => users.id, {onDelete: "restrict"}),
+    completionSnapshot: jsonb("completion_snapshot").$type<{courseId: string; learningCycle: number; completedAt: string | null}[]>().notNull().default([]),
     tenantId,
   },
   withTenantIdIndex("learning_path_certificates", (table) => ({
+    renewalSourceUniqueIdx: uniqueIndex("learning_path_certificates_renewal_source_idx").on(table.tenantId, table.replacesCertificateId),
     activeRecipientUniqueIdx: uniqueIndex("learning_path_certificates_active_recipient_idx")
       .on(table.tenantId, table.userId, table.learningPathId)
       .where(sql`${table.status} = 'active'`),

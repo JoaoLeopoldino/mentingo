@@ -37,7 +37,7 @@ const proxyLocalApi = (req, res) => {
   upstream.end();
 };
 app.use("/api/scorm/content", proxyLocalApi);
-app.get(["/api/certificates/share", "/api/certificates/share-image"], proxyLocalApi);
+app.get(["/api/certificates/share", "/api/certificates/share-image", "/api/learning-path/certificates/share", "/api/learning-path/certificates/share-image"], proxyLocalApi);
 app.use(express.static(client, { etag: true, maxAge: 0 }));
 app.get("*", (_req, res) => res.sendFile(`${client}index.html`));
 app.listen(5173, "127.0.0.1", () => console.log("Isolated SPA preview: http://localhost:5173"));

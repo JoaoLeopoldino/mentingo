@@ -4512,7 +4512,9 @@
       "courseCompletionRequired": "Tem de concluir a formação antes de gerar um certificado.",
       "certificateRevoked": "Este certificado foi revogado. Não pode ser emitido novamente no mesmo ciclo de formação.",
       "certificateNotActive": "Este certificado já não está activo.",
-      "revocationReasonRequired": "Indique um motivo fundamentado para a revogação, com pelo menos 10 caracteres."
+      "revocationReasonRequired": "Indique um motivo fundamentado para a revogação, com pelo menos 10 caracteres.",
+      "renewalRequiresFreshCompletions": "Conclua novamente todas as formações do percurso em novos ciclos antes da recertificação.",
+      "renewalExpiryInvalid": "A validade do novo certificado deve terminar numa data futura."
     },
     "button": {
       "download": "Descarregar",
@@ -8359,7 +8361,6 @@
     "home": "Ir para a página inicial",
     "profilePhoto": "Fotografia de perfil"
   },
-
   "videoPlayback": {
     "interrupted": "A reprodução foi interrompida. Verifique a ligação e volte a tentar.",
     "retry": "Voltar a tentar reproduzir",

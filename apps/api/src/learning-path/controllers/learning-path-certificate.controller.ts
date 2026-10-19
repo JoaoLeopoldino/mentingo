@@ -1,5 +1,6 @@
 import {
   Body,
+  Param,
   Controller,
   Get,
   Post,
@@ -15,7 +16,7 @@ import { Type } from "@sinclair/typebox";
 import { Request, Response } from "express";
 import { Validate } from "nestjs-typebox";
 
-import { UUIDSchema, type UUIDType } from "src/common";
+import { BaseResponse, baseResponse, UUIDSchema, type UUIDType } from "src/common";
 import { Public } from "src/common/decorators/public.decorator";
 import { RequirePermission } from "src/common/decorators/require-permission.decorator";
 import { CurrentUser } from "src/common/decorators/user.decorator";
@@ -26,6 +27,16 @@ import { supportedLanguagesSchema } from "src/courses/schemas/course.schema";
 
 import { LearningPathsEnabledGuard } from "../guards/learning-paths-enabled.guard";
 import {
+  pathCertificateDecisionSchema,
+  renewPathCertificateSchema,
+  pathCertificateLifecycleSchema,
+  pathCertificateHistorySchema,
+  type PathCertificateDecision,
+  type RenewPathCertificate,
+  type PathCertificateLifecycle,
+  type PathCertificateHistory,
+} from "../learning-path-certificate-lifecycle.schema";
+import {
   learningPathCertificateCreateShareLinkSchema,
   learningPathCertificateDownloadSchema,
   learningPathCertificateShareLinkSchema,
@@ -35,12 +46,71 @@ import {
   type LearningPathCertificateShareLink,
   type LearningPathCertificateShare,
 } from "../learning-path.schema";
+import { LearningPathCertificateLifecycleService } from "../services/learning-path-certificate-lifecycle.service";
 import { LearningPathCertificateService } from "../services/learning-path-certificate.service";
 
 @Controller("learning-path/certificates")
 @UseGuards(PermissionsGuard, LearningPathsEnabledGuard)
 export class LearningPathCertificateController {
-  constructor(private readonly learningPathCertificateService: LearningPathCertificateService) {}
+  constructor(
+    private readonly learningPathCertificateService: LearningPathCertificateService,
+    private readonly learningPathCertificateLifecycleService: LearningPathCertificateLifecycleService,
+  ) {}
+
+  @Get("history")
+  @RequirePermission(PERMISSIONS.CERTIFICATE_READ)
+  @Validate({
+    request: [
+      { type: "query", name: "userId", schema: UUIDSchema },
+      { type: "query", name: "learningPathId", schema: UUIDSchema },
+    ],
+    response: baseResponse(pathCertificateHistorySchema),
+  })
+  async history(
+    @Query("userId") userId: UUIDType,
+    @Query("learningPathId") pathId: UUIDType,
+    @CurrentUser() actor: CurrentUserType,
+  ): Promise<BaseResponse<PathCertificateHistory>> {
+    return new BaseResponse(
+      await this.learningPathCertificateLifecycleService.history(userId, pathId, actor),
+    );
+  }
+  @Post(":certificateId/revoke")
+  @RequirePermission(PERMISSIONS.LEARNING_PATH_UPDATE, PERMISSIONS.USER_MANAGE)
+  @Validate({
+    request: [
+      { type: "param", name: "certificateId", schema: UUIDSchema },
+      { type: "body", schema: pathCertificateDecisionSchema },
+    ],
+    response: baseResponse(pathCertificateLifecycleSchema),
+  })
+  async revoke(
+    @Param("certificateId") id: UUIDType,
+    @Body() body: PathCertificateDecision,
+    @CurrentUser() actor: CurrentUserType,
+  ): Promise<BaseResponse<PathCertificateLifecycle>> {
+    return new BaseResponse(
+      await this.learningPathCertificateLifecycleService.revoke(id, body.reason, actor),
+    );
+  }
+  @Post(":certificateId/renew")
+  @RequirePermission(PERMISSIONS.LEARNING_PATH_UPDATE, PERMISSIONS.USER_MANAGE)
+  @Validate({
+    request: [
+      { type: "param", name: "certificateId", schema: UUIDSchema },
+      { type: "body", schema: renewPathCertificateSchema },
+    ],
+    response: baseResponse(pathCertificateLifecycleSchema),
+  })
+  async renew(
+    @Param("certificateId") id: UUIDType,
+    @Body() body: RenewPathCertificate,
+    @CurrentUser() actor: CurrentUserType,
+  ): Promise<BaseResponse<PathCertificateLifecycle>> {
+    return new BaseResponse(
+      await this.learningPathCertificateLifecycleService.renew(id, body, actor),
+    );
+  }
 
   @Get("certificate")
   @RequirePermission(PERMISSIONS.CERTIFICATE_READ)
@@ -57,13 +127,16 @@ export class LearningPathCertificateController {
     @Query("learningPathId") learningPathId: UUIDType,
     @Query("language") language: SupportedLanguages,
     @CurrentUser() currentUser: CurrentUserType,
+    @Res() res: Response,
   ): Promise<LearningPathCertificateShare> {
-    return this.learningPathCertificateService.getLearningPathCertificate(
+    const certificate = await this.learningPathCertificateService.getLearningPathCertificate(
       userId,
       learningPathId,
       language,
       currentUser,
     );
+    res.set("Cache-Control", "private, no-store").json(certificate);
+    return certificate;
   }
 
   @Post("download")

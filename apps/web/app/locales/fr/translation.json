@@ -4413,7 +4413,9 @@
       "courseCompletionRequired": "Vous devez terminer le cours avant de générer un certificat.",
       "certificateRevoked": "This certificate has been revoked. It cannot be reissued in the same learning cycle.",
       "certificateNotActive": "This certificate is no longer active.",
-      "revocationReasonRequired": "Provide a meaningful revocation reason with at least 10 characters."
+      "revocationReasonRequired": "Provide a meaningful revocation reason with at least 10 characters.",
+      "renewalRequiresFreshCompletions": "Terminez à nouveau tous les cours actuels du parcours dans de nouveaux cycles avant la recertification.",
+      "renewalExpiryInvalid": "La date d’expiration du nouveau certificat doit être future."
     },
     "button": {
       "download": "Télécharger",
@@ -7843,7 +7845,6 @@
     "home": "Go to homepage",
     "profilePhoto": "Profile picture"
   },
-
   "videoPlayback": {
     "interrupted": "La lecture a été interrompue. Vérifiez votre connexion et réessayez.",
     "retry": "Relancer la lecture",

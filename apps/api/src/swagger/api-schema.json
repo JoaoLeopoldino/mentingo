@@ -16613,6 +16613,116 @@
         }
       }
     },
+    "/api/learning-path/certificates/history": {
+      "get": {
+        "operationId": "LearningPathCertificateController_history",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "learningPathId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/learning-path/certificates/{certificateId}/revoke": {
+      "post": {
+        "operationId": "LearningPathCertificateController_revoke",
+        "parameters": [
+          {
+            "name": "certificateId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevokeBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevokeResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/learning-path/certificates/{certificateId}/renew": {
+      "post": {
+        "operationId": "LearningPathCertificateController_renew",
+        "parameters": [
+          {
+            "name": "certificateId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RenewBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RenewResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/learning-path/certificates/certificate": {
       "get": {
         "operationId": "LearningPathCertificateController_getCertificate",
@@ -166762,6 +166872,465 @@
               "state",
               "attemptsMade",
               "failedReason"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "HistoryResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "issuedAt": {
+                  "type": "string"
+                },
+                "expiresAt": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "revokedAt": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "revokedBy": {
+                  "anyOf": [
+                    {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "revocationReason": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "replacesCertificateId": {
+                  "anyOf": [
+                    {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "renewalReason": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "issuedBy": {
+                  "anyOf": [
+                    {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "completionSnapshot": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "courseId": {
+                        "format": "uuid",
+                        "type": "string"
+                      },
+                      "learningCycle": {
+                        "type": "number"
+                      },
+                      "completedAt": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "courseId",
+                      "learningCycle",
+                      "completedAt"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "id",
+                "status",
+                "issuedAt",
+                "expiresAt",
+                "revokedAt",
+                "revokedBy",
+                "revocationReason",
+                "replacesCertificateId",
+                "renewalReason",
+                "issuedBy",
+                "completionSnapshot"
+              ]
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "RevokeBody": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "reason": {
+            "minLength": 10,
+            "maxLength": 2000,
+            "type": "string"
+          }
+        },
+        "required": [
+          "reason"
+        ]
+      },
+      "RevokeResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "issuedAt": {
+                "type": "string"
+              },
+              "expiresAt": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "revokedAt": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "revokedBy": {
+                "anyOf": [
+                  {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "revocationReason": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "replacesCertificateId": {
+                "anyOf": [
+                  {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "renewalReason": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "issuedBy": {
+                "anyOf": [
+                  {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "completionSnapshot": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "courseId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "learningCycle": {
+                      "type": "number"
+                    },
+                    "completedAt": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "courseId",
+                    "learningCycle",
+                    "completedAt"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "id",
+              "status",
+              "issuedAt",
+              "expiresAt",
+              "revokedAt",
+              "revokedBy",
+              "revocationReason",
+              "replacesCertificateId",
+              "renewalReason",
+              "issuedBy",
+              "completionSnapshot"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "RenewBody": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "reason": {
+            "minLength": 10,
+            "maxLength": 2000,
+            "type": "string"
+          },
+          "expiresAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "reason"
+        ]
+      },
+      "RenewResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "issuedAt": {
+                "type": "string"
+              },
+              "expiresAt": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "revokedAt": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "revokedBy": {
+                "anyOf": [
+                  {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "revocationReason": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "replacesCertificateId": {
+                "anyOf": [
+                  {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "renewalReason": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "issuedBy": {
+                "anyOf": [
+                  {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "completionSnapshot": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "courseId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "learningCycle": {
+                      "type": "number"
+                    },
+                    "completedAt": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "courseId",
+                    "learningCycle",
+                    "completedAt"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "id",
+              "status",
+              "issuedAt",
+              "expiresAt",
+              "revokedAt",
+              "revokedBy",
+              "revocationReason",
+              "replacesCertificateId",
+              "renewalReason",
+              "issuedBy",
+              "completionSnapshot"
             ]
           }
         },

@@ -31,6 +31,8 @@ import { users } from "src/storage/schema";
 import { LEARNING_PATH_ERRORS } from "../constants/learning-path.errors";
 import { LearningPathRepository } from "../learning-path.repository";
 
+import { LearningPathCertificateLifecycleService } from "./learning-path-certificate-lifecycle.service";
+
 import type {
   LearningPathCertificateRenderRecord,
   LearningPathCertificateShareRecord,
@@ -51,6 +53,7 @@ export class LearningPathCertificateService {
   constructor(
     @Inject(DB) private readonly db: DatabasePg,
     private readonly learningPathRepository: LearningPathRepository,
+    private readonly learningPathCertificateLifecycleService: LearningPathCertificateLifecycleService,
     private readonly settingsService: SettingsService,
     private readonly s3Service: S3Service,
     private readonly fileService: FileService,
@@ -119,6 +122,11 @@ export class LearningPathCertificateService {
       learningPathId,
       learningPath.tenantId,
       trx,
+      await this.learningPathCertificateLifecycleService.snapshot(
+        userId,
+        learningPathId,
+        trx ?? this.db,
+      ),
     );
 
     if (!created) {
@@ -149,7 +157,13 @@ export class LearningPathCertificateService {
       learningPathId,
     );
 
-    if (!certificate) return null;
+    if (
+      !certificate ||
+      certificate.revokedAt ||
+      certificate.status !== "active" ||
+      (certificate.expiresAt && Date.parse(certificate.expiresAt) <= Date.now())
+    )
+      return null;
 
     return this.mapCertificateWithSignatureUrl(
       (await this.learningPathRepository.findLearningPathCertificateByIdForRender(
@@ -240,6 +254,13 @@ export class LearningPathCertificateService {
     if (!certificate?.tenantId) {
       throw new NotFoundException("studentCertificateView.informations.certificateNotFound");
     }
+
+    if (
+      certificate.revokedAt ||
+      certificate.status !== "active" ||
+      (certificate.expiresAt && Date.parse(certificate.expiresAt) <= Date.now())
+    )
+      throw new NotFoundException("studentCertificateView.informations.certificateNotFound");
 
     const imageSettings = await this.settingsService.getImageS3Keys();
     const [platformLogoImageUrl, backgroundImageUrl, certificateSignatureImageUrl] =

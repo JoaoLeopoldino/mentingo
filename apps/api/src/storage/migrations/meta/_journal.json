@@ -1653,6 +1653,13 @@
       "when": 1792354023917,
       "tag": "0235_learning_path_certificate_active_uniqueness",
       "breakpoints": true
+    },
+    {
+      "idx": 236,
+      "version": "7",
+      "when": 1792358495287,
+      "tag": "0236_learning_path_certificate_lifecycle",
+      "breakpoints": true
     }
   ]
 }

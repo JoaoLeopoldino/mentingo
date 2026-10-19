@@ -32602,6 +32602,89 @@ export interface GetLearningPathJobStatusResponse {
   };
 }
 
+export interface HistoryResponse {
+  data: {
+    /** @format uuid */
+    id: string;
+    status: string;
+    issuedAt: string;
+    expiresAt: string | null;
+    revokedAt: string | null;
+    revokedBy: string | null;
+    revocationReason: string | null;
+    replacesCertificateId: string | null;
+    renewalReason: string | null;
+    issuedBy: string | null;
+    completionSnapshot: {
+      /** @format uuid */
+      courseId: string;
+      learningCycle: number;
+      completedAt: string | null;
+    }[];
+  }[];
+}
+
+export interface RevokeBody {
+  /**
+   * @minLength 10
+   * @maxLength 2000
+   */
+  reason: string;
+}
+
+export interface RevokeResponse {
+  data: {
+    /** @format uuid */
+    id: string;
+    status: string;
+    issuedAt: string;
+    expiresAt: string | null;
+    revokedAt: string | null;
+    revokedBy: string | null;
+    revocationReason: string | null;
+    replacesCertificateId: string | null;
+    renewalReason: string | null;
+    issuedBy: string | null;
+    completionSnapshot: {
+      /** @format uuid */
+      courseId: string;
+      learningCycle: number;
+      completedAt: string | null;
+    }[];
+  };
+}
+
+export interface RenewBody {
+  /**
+   * @minLength 10
+   * @maxLength 2000
+   */
+  reason: string;
+  expiresAt?: string | null;
+}
+
+export interface RenewResponse {
+  data: {
+    /** @format uuid */
+    id: string;
+    status: string;
+    issuedAt: string;
+    expiresAt: string | null;
+    revokedAt: string | null;
+    revokedBy: string | null;
+    revocationReason: string | null;
+    replacesCertificateId: string | null;
+    renewalReason: string | null;
+    issuedBy: string | null;
+    completionSnapshot: {
+      /** @format uuid */
+      courseId: string;
+      learningCycle: number;
+      completedAt: string | null;
+    }[];
+  };
+}
+
 export interface SearchResponse {
   data: {
     searchMode?: "keyword" | "hybrid";
@@ -46026,6 +46109,69 @@ export class API<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<GetLearningPathJobStatusResponse, any>({
         path: `/api/learning-path/master/export-jobs/${jobId}`,
         method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name LearningPathCertificateControllerHistory
+     * @request GET:/api/learning-path/certificates/history
+     */
+    learningPathCertificateControllerHistory: (
+      query?: {
+        /** @format uuid */
+        userId?: string;
+        /** @format uuid */
+        learningPathId?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<HistoryResponse, any>({
+        path: `/api/learning-path/certificates/history`,
+        method: "GET",
+        query: query,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name LearningPathCertificateControllerRevoke
+     * @request POST:/api/learning-path/certificates/{certificateId}/revoke
+     */
+    learningPathCertificateControllerRevoke: (
+      certificateId: string,
+      data: RevokeBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<RevokeResponse, any>({
+        path: `/api/learning-path/certificates/${certificateId}/revoke`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name LearningPathCertificateControllerRenew
+     * @request POST:/api/learning-path/certificates/{certificateId}/renew
+     */
+    learningPathCertificateControllerRenew: (
+      certificateId: string,
+      data: RenewBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<RenewResponse, any>({
+        path: `/api/learning-path/certificates/${certificateId}/renew`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),

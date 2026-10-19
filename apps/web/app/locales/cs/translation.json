@@ -4699,7 +4699,9 @@
       "courseCompletionRequired": "Před vygenerováním certifikátu musíte kurz dokončit.",
       "certificateRevoked": "This certificate has been revoked. It cannot be reissued in the same learning cycle.",
       "certificateNotActive": "This certificate is no longer active.",
-      "revocationReasonRequired": "Provide a meaningful revocation reason with at least 10 characters."
+      "revocationReasonRequired": "Provide a meaningful revocation reason with at least 10 characters.",
+      "renewalRequiresFreshCompletions": "Před opětovnou certifikací znovu dokončete všechny aktuální kurzy vzdělávací cesty v nových vzdělávacích cyklech.",
+      "renewalExpiryInvalid": "Platnost nového certifikátu musí končit v budoucnu."
     },
     "button": {
       "download": "Stáhnout",
@@ -8330,7 +8332,6 @@
     "home": "Go to homepage",
     "profilePhoto": "Profile picture"
   },
-
   "videoPlayback": {
     "interrupted": "Přehrávání bylo přerušeno. Zkontrolujte připojení a zkuste to znovu.",
     "retry": "Zkusit přehrávání znovu",

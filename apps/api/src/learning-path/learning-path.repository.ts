@@ -1748,6 +1748,7 @@ export class LearningPathRepository {
     learningPathId: UUIDType,
     tenantId: UUIDType,
     dbInstance: DatabasePg = this.db,
+    completionSnapshot: typeof learningPathCertificates.$inferSelect.completionSnapshot = [],
   ) {
     const existingCertificate = await dbInstance.query.learningPathCertificates.findFirst({
       where: and(
@@ -1764,6 +1765,7 @@ export class LearningPathRepository {
         userId,
         learningPathId,
         tenantId,
+        completionSnapshot,
         status: LEARNING_PATH_CERTIFICATE_STATUSES.ACTIVE,
       })
       .onConflictDoNothing()

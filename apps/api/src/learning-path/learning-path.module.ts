@@ -18,6 +18,7 @@ import { LearningPathCourseSyncHandler } from "./handlers/learning-path-course-s
 import { LearningPathQueueService } from "./learning-path.queue.service";
 import { LearningPathRepository } from "./learning-path.repository";
 import { LearningPathWorker } from "./learning-path.worker";
+import { LearningPathCertificateLifecycleService } from "./services/learning-path-certificate-lifecycle.service";
 import { LearningPathCertificateService } from "./services/learning-path-certificate.service";
 import { LearningPathCourseSyncService } from "./services/learning-path-course-sync.service";
 import { LearningPathExportService } from "./services/learning-path-export.service";
@@ -48,6 +49,7 @@ import { LearningPathService } from "./services/learning-path.service";
     LearningPathExportService,
     LearningPathQueueService,
     LearningPathCertificateService,
+    LearningPathCertificateLifecycleService,
     LearningPathWorker,
     LearningPathsEnabledGuard,
   ],

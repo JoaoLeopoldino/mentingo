@@ -5,9 +5,17 @@ import { eq } from "drizzle-orm";
 import request from "supertest";
 
 import { LearningPathCertificateService } from "src/learning-path/services/learning-path-certificate.service";
-import { learningPathCertificates, learningPaths, tenants, users } from "src/storage/schema";
+import {
+  learningPathCertificates,
+  learningPaths,
+  learningPathCourses,
+  studentCourses,
+  tenants,
+  users,
+} from "src/storage/schema";
 
 import { createE2ETest } from "../../../test/create-e2e-test";
+import { createCourseFactory } from "../../../test/factory/course.factory";
 import { createLearningPathFactory } from "../../../test/factory/learningPath.factory";
 import { createSettingsFactory } from "../../../test/factory/settings.factory";
 import { createUserFactory } from "../../../test/factory/user.factory";
@@ -60,6 +68,160 @@ describe("Learning path certificate security with real tenant RLS", () => {
       .returning();
     return { owner, reader, admin, path, certificate };
   }
+  const decision = { reason: "Decisão administrativa fundamentada fictícia" };
+  it("revokes with an auditable reason, denies learner management and immediately invalidates the public credential", async () => {
+    const { owner, reader, admin, path, certificate } = await fixture();
+    const ownCookie = await cookieFor(owner, app),
+      adminCookie = await cookieFor(admin, app);
+    await request(app.getHttpServer())
+      .post(`/api/learning-path/certificates/${certificate.id}/revoke`)
+      .set("Cookie", ownCookie)
+      .send(decision)
+      .expect(403);
+    await request(app.getHttpServer())
+      .post(`/api/learning-path/certificates/${certificate.id}/revoke`)
+      .set("Cookie", adminCookie)
+      .send({ reason: "curto" })
+      .expect(400);
+    const revoked = await request(app.getHttpServer())
+      .post(`/api/learning-path/certificates/${certificate.id}/revoke`)
+      .set("Cookie", adminCookie)
+      .send(decision)
+      .expect(201);
+    expect(revoked.body.data).toMatchObject({
+      id: certificate.id,
+      revokedBy: admin.id,
+      revocationReason: decision.reason,
+    });
+    expect(revoked.body.data.revokedAt).toBeTruthy();
+    for (const endpoint of ["share", "share-image"])
+      await request(app.getHttpServer())
+        .get(`/api/learning-path/certificates/${endpoint}`)
+        .query({ certificateId: certificate.id, lang: "pt-AO" })
+        .expect(404);
+    await request(app.getHttpServer())
+      .post("/api/learning-path/certificates/download")
+      .set("Cookie", ownCookie)
+      .send({ certificateId: certificate.id, language: "pt-AO" })
+      .expect(404);
+    const current = await request(app.getHttpServer())
+      .get("/api/learning-path/certificates/certificate")
+      .query({ userId: owner.id, learningPathId: path.id, language: "pt-AO" })
+      .set("Cookie", ownCookie)
+      .expect(200);
+    expect(current.body).toBeNull();
+    const history = await request(app.getHttpServer())
+      .get("/api/learning-path/certificates/history")
+      .set("Cookie", ownCookie)
+      .query({ userId: owner.id, learningPathId: path.id })
+      .expect(200);
+    expect(history.body.data).toHaveLength(1);
+    expect(history.body.data[0]).toMatchObject({
+      id: certificate.id,
+      issuedAt: certificate.issuedAt,
+      revocationReason: decision.reason,
+    });
+    await request(app.getHttpServer())
+      .get("/api/learning-path/certificates/history")
+      .set("Cookie", await cookieFor(reader, app))
+      .query({ userId: owner.id, learningPathId: path.id })
+      .expect(404);
+    const repeated = await request(app.getHttpServer())
+      .post(`/api/learning-path/certificates/${certificate.id}/revoke`)
+      .set("Cookie", adminCookie)
+      .send(decision)
+      .expect(201);
+    expect(repeated.body.data.revokedAt).toBe(revoked.body.data.revokedAt);
+  });
+  it("requires fresh native course-cycle completions and preserves the previous credential on concurrent recertification", async () => {
+    const { owner, admin, path, certificate } = await fixture();
+    const course = await createCourseFactory(db).create({ authorId: admin.id });
+    await db
+      .insert(learningPathCourses)
+      .values({ learningPathId: path.id, courseId: course.id, displayOrder: 0 });
+    const previousCompletion = "2026-01-01T00:00:00.000Z";
+    const snapshot = [{ courseId: course.id, learningCycle: 1, completedAt: previousCompletion }];
+    await db
+      .update(learningPathCertificates)
+      .set({ completionSnapshot: snapshot, issuedAt: "2026-01-02T00:00:00.000Z" })
+      .where(eq(learningPathCertificates.id, certificate.id));
+    await db.insert(studentCourses).values({
+      studentId: owner.id,
+      courseId: course.id,
+      learningCycle: 1,
+      completedAt: previousCompletion,
+    });
+    const cookie = await cookieFor(admin, app);
+    const renew = () =>
+      request(app.getHttpServer())
+        .post(`/api/learning-path/certificates/${certificate.id}/renew`)
+        .set("Cookie", cookie)
+        .send(decision);
+    await renew().expect(409);
+    // Domain/API fixture: represent a newly completed native course cycle. Not a browser retake claim.
+    await db
+      .update(studentCourses)
+      .set({ learningCycle: 2, completedAt: new Date().toISOString() })
+      .where(eq(studentCourses.studentId, owner.id));
+    const results = await Promise.all(Array.from({ length: 5 }, () => renew().expect(201)));
+    expect(new Set(results.map((x) => x.body.data.id)).size).toBe(1);
+    const replacement = results[0].body.data;
+    expect(replacement).toMatchObject({
+      replacesCertificateId: certificate.id,
+      renewalReason: decision.reason,
+      issuedBy: admin.id,
+    });
+    expect(replacement.completionSnapshot[0].learningCycle).toBe(2);
+    const old = await db.query.learningPathCertificates.findFirst({
+      where: eq(learningPathCertificates.id, certificate.id),
+    });
+    expect(old).toMatchObject({
+      completionSnapshot: snapshot,
+      status: "expired",
+    });
+    expect(Date.parse(old!.issuedAt)).toBe(Date.parse("2026-01-02T00:00:00.000Z"));
+    await request(app.getHttpServer())
+      .get("/api/learning-path/certificates/share")
+      .query({ certificateId: replacement.id, lang: "pt-AO" })
+      .expect(200);
+    await request(app.getHttpServer())
+      .get("/api/learning-path/certificates/share")
+      .query({ certificateId: certificate.id, lang: "pt-AO" })
+      .expect(404);
+    const history = await request(app.getHttpServer())
+      .get("/api/learning-path/certificates/history")
+      .set("Cookie", await cookieFor(owner, app))
+      .query({ userId: owner.id, learningPathId: path.id })
+      .expect(200);
+    expect(history.body.data).toHaveLength(2);
+    expect(
+      (await db.select().from(studentCourses).where(eq(studentCourses.studentId, owner.id)))[0]
+        .learningCycle,
+    ).toBe(2);
+  });
+  it("refuses lifecycle decisions across tenants and preserves all records", async () => {
+    const { admin, path, certificate } = await fixture();
+    const [foreign] = await dbAdmin
+      .insert(tenants)
+      .values({ name: "Outro tenant fictício", host: `https://lifecycle-${randomUUID()}.invalid` })
+      .returning();
+    await dbAdmin
+      .update(learningPathCertificates)
+      .set({ tenantId: foreign.id })
+      .where(eq(learningPathCertificates.id, certificate.id));
+    for (const action of ["revoke", "renew"])
+      await request(app.getHttpServer())
+        .post(`/api/learning-path/certificates/${certificate.id}/${action}`)
+        .set("Cookie", await cookieFor(admin, app))
+        .send(decision)
+        .expect(404);
+    const stored = await dbAdmin.query.learningPathCertificates.findFirst({
+      where: eq(learningPathCertificates.id, certificate.id),
+    });
+    expect(stored?.revokedAt).toBeNull();
+    expect(stored?.status).toBe("active");
+    expect(path.id).toBe(certificate.learningPathId);
+  });
   it("issues one credential under five concurrent issuance requests", async () => {
     const owner = await factory.withUserSettings(db).create();
     const path = await createLearningPathFactory(db).create({
@@ -81,13 +243,11 @@ describe("Learning path certificate security with real tenant RLS", () => {
   });
   it("enforces one active credential in PostgreSQL while retaining inactive history", async () => {
     const { owner, path } = await fixture();
-    await db
-      .insert(learningPathCertificates)
-      .values({
-        userId: owner.id,
-        learningPathId: path.id,
-        status: LEARNING_PATH_CERTIFICATE_STATUSES.EXPIRED,
-      });
+    await db.insert(learningPathCertificates).values({
+      userId: owner.id,
+      learningPathId: path.id,
+      status: LEARNING_PATH_CERTIFICATE_STATUSES.EXPIRED,
+    });
     await expect(
       db.insert(learningPathCertificates).values({ userId: owner.id, learningPathId: path.id }),
     ).rejects.toMatchObject({ code: "23505" });
@@ -98,14 +258,12 @@ describe("Learning path certificate security with real tenant RLS", () => {
       authorId: owner.id,
       includesCertificate: true,
     });
-    await db
-      .insert(learningPathCertificates)
-      .values({
-        userId: owner.id,
-        learningPathId: path.id,
-        status: LEARNING_PATH_CERTIFICATE_STATUSES.EXPIRED,
-        issuedAt: "2026-01-01T00:00:00Z",
-      });
+    await db.insert(learningPathCertificates).values({
+      userId: owner.id,
+      learningPathId: path.id,
+      status: LEARNING_PATH_CERTIFICATE_STATUSES.EXPIRED,
+      issuedAt: "2026-01-01T00:00:00Z",
+    });
     const [active] = await db
       .insert(learningPathCertificates)
       .values({ userId: owner.id, learningPathId: path.id })

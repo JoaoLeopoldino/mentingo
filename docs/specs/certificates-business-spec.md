@@ -1,5 +1,7 @@
 # Certificates Business Spec
 
+> Estado actualizado em 19/10/2026: ver «Recertificação explícita de percursos» abaixo. As secções de validação anteriores conservam os respectivos checkpoints históricos.
+
 ## Business Overview
 
 Certificates provide formal proof that a learner completed a course or learning path. They support HR and L&D needs around recognition, compliance evidence, auditability, and external sharing of learning achievements.
@@ -95,3 +97,19 @@ Uma restrição parcial PostgreSQL permite apenas uma credencial activa por tena
 A suite foi alargada para 14 testes, todos aprovados, incluindo cinco pedidos de emissão concorrentes, unicidade na base, prioridade da credencial corrente e recusas de acesso/tenant anteriores. A migration aditiva `0235_learning_path_certificate_active_uniqueness.sql` foi gerada pelo Drizzle e aplicada apenas às bases locais conhecidas. O preflight recusa duplicados, sem os eliminar ou fundir. A base de demonstração tinha zero certificados de percursos; a impressão antes/depois permaneceu igual. Os testes exercitam também histórico inactivo com dados não vazios.
 
 Esta correcção não acrescenta revogação formal, ciclos ou recertificação empresarial de percursos. Esses fluxos continuam pendentes e o critério global de certificados permanece aberto. Não se reconstruíram datas/decisões históricas nem se alterou o domínio de competências.
+
+## Recertificação explícita de percursos — 19/10/2026
+
+O administrador pode revogar fundamentadamente uma credencial de percurso e emitir uma nova após novas conclusões das formações exigidas. O formando conserva o histórico; o gestor autorizado consulta o histórico dos membros da sua equipa. A decisão exige simultaneamente gestão global de percursos e de colaboradores, não apenas permissão para ler certificados.
+
+A emissão inicial guarda os cursos, ciclos e datas de conclusão observados. Para recertificar, todas as formações actualmente exigidas têm de estar concluídas depois da credencial anterior e num ciclo superior ao seu snapshot. Uma nova conclusão, por si só, não substitui a credencial: o administrador regista a recertificação com motivo e validade opcional. Pedidos repetidos/contemporâneos para a mesma credencial devolvem a mesma substituição; argumentos incompatíveis são recusados.
+
+A recertificação do percurso não repõe silenciosamente o progresso dos cursos partilhados. A repetição de uma formação é iniciada pelo fluxo nativo de renovação do curso, com o âmbito explícito do colaborador. Respostas/tentativas antigas continuam conservadas. Não é atribuída competência profissional por conclusão de curso ou emissão de certificado.
+
+A revogação conserva responsável, motivo e data, retira a credencial da consulta corrente e recusa partilha/download público e privado. O histórico autenticado conserva a credencial e o snapshot anterior; uma credencial substituta tem ID próprio e referência à anterior. Cópias anteriormente descarregadas não podem ser recolhidas. O estado técnico inactivo continua `expired`, complementado por `revokedAt` e motivo; consumidores do histórico devem dar precedência à revogação explícita.
+
+A migration aditiva 0236 conserva registos existentes. Credenciais legadas sem snapshot usam a data original como limite mínimo para novas conclusões; não se reconstrói um ciclo histórico desconhecido nem uma versão antiga do conteúdo. Imutabilidade refere-se aos campos de emissão/snapshot preservados pelas operações da API; não é arquivo legal inviolável contra um administrador da base.
+
+Contexto técnico essencial: serviço `learning-path-certificate-lifecycle.service.ts`, endpoints autenticados de histórico/revogação/renovação sob `/api/learning-path/certificates`, RLS e política comum de leitura. As decisões são gravadas na mesma transacção que a mudança de credencial. Não há efeitos externos/avisos novos; eventuais notificações futuras devem reutilizar o outbox. A resposta corrente sem credencial é JSON `null` explícito, conforme o contrato já declarado.
+
+Evidência: **17 testes PostgreSQL/RLS passaram**, incluindo cinco renovações concorrentes, recusas de gestão por formando/tenant, revogação pública, histórico/snapshots e novas conclusões. A evidência final de navegador e limites estão no relatório 22 da sprint. Comandos administrativos de percursos foram exercitados pela API; ainda não existe um ecrã específico de gestão do histórico/renovação de percursos. Recorrência, alertas e política RH de produção continuam por acordar.

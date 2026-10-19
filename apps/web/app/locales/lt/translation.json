@@ -4694,7 +4694,9 @@
       "courseCompletionRequired": "Prieš generuodami sertifikatą, turite baigti kursą.",
       "certificateRevoked": "This certificate has been revoked. It cannot be reissued in the same learning cycle.",
       "certificateNotActive": "This certificate is no longer active.",
-      "revocationReasonRequired": "Provide a meaningful revocation reason with at least 10 characters."
+      "revocationReasonRequired": "Provide a meaningful revocation reason with at least 10 characters.",
+      "renewalRequiresFreshCompletions": "Prieš pakartotinį sertifikavimą iš naujo užbaikite visus dabartinius mokymosi kelio kursus naujais mokymosi ciklais.",
+      "renewalExpiryInvalid": "Naujo sertifikato galiojimo pabaiga turi būti ateityje."
     },
     "button": {
       "download": "Atsisiųsti",
@@ -8328,7 +8330,6 @@
     "home": "Go to homepage",
     "profilePhoto": "Profile picture"
   },
-
   "videoPlayback": {
     "interrupted": "Atkūrimas nutrūko. Patikrinkite ryšį ir bandykite dar kartą.",
     "retry": "Bandyti atkurti dar kartą",
