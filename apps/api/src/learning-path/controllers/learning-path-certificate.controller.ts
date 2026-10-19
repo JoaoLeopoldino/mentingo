@@ -58,7 +58,7 @@ export class LearningPathCertificateController {
   ) {}
 
   @Get("history")
-  @RequirePermission(PERMISSIONS.CERTIFICATE_READ)
+  @RequirePermission(PERMISSIONS.CERTIFICATE_READ, PERMISSIONS.MANAGED_GROUP_RESULTS_READ)
   @Validate({
     request: [
       { type: "query", name: "userId", schema: UUIDSchema },

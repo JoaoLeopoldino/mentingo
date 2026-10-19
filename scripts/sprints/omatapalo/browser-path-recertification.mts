@@ -39,8 +39,10 @@ try {
   const admin = await login("admin+localhost@example.com", "password"),
     learner = await login(demo.fixture.employee.email, "Password123@"),
     manager = await login(demo.fixture.manager.email, "Password123@");
-  const globalSettings = (await admin.api.api.settingsControllerGetPublicGlobalSettings()).data.data;
-  if (!globalSettings.learningPathsEnabled) await admin.api.api.settingsControllerUpdateLearningPathsEnabled();
+  const globalSettings = (await admin.api.api.settingsControllerGetPublicGlobalSettings()).data
+    .data;
+  if (!globalSettings.learningPathsEnabled)
+    await admin.api.api.settingsControllerUpdateLearningPathsEnabled();
   const path = (
     await admin.api.api.learningPathControllerCreateLearningPath({
       language: "pt-AO",
@@ -203,6 +205,8 @@ try {
     ),
   );
   console.log(JSON.stringify({ passed: results.length, elapsedMs: Date.now() - started, results }));
+} catch (error) {
+  throw new Error((error as any).response?.data?.message ?? (error as Error).message);
 } finally {
   await browser.close();
 }

@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 
-import { LEARNING_PATH_CERTIFICATE_STATUSES } from "@repo/shared";
+import { LEARNING_PATH_CERTIFICATE_STATUSES, SYSTEM_ROLE_SLUGS } from "@repo/shared";
 import { eq } from "drizzle-orm";
 import request from "supertest";
 
@@ -12,13 +12,16 @@ import {
   studentCourses,
   tenants,
   users,
+  groupManagerGroups,
 } from "src/storage/schema";
 
 import { createE2ETest } from "../../../test/create-e2e-test";
 import { createCourseFactory } from "../../../test/factory/course.factory";
+import { createGroupFactory } from "../../../test/factory/group.factory";
 import { createLearningPathFactory } from "../../../test/factory/learningPath.factory";
 import { createSettingsFactory } from "../../../test/factory/settings.factory";
 import { createUserFactory } from "../../../test/factory/user.factory";
+import { assignSystemRoleToUserInTests } from "../../../test/helpers/permission-role-helpers";
 import { cookieFor, truncateAllTables } from "../../../test/helpers/test-helpers";
 
 import type { INestApplication } from "@nestjs/common";
@@ -69,6 +72,18 @@ describe("Learning path certificate security with real tenant RLS", () => {
     return { owner, reader, admin, path, certificate };
   }
   const decision = { reason: "Decisão administrativa fundamentada fictícia" };
+  it("allows a native operational manager to read team history while refusing employees outside the managed group", async () => {
+    const {owner,reader,path}=await fixture();
+    const manager=await factory.withUserSettings(db).withCredentials({password:"password123"}).create({roleSlug:SYSTEM_ROLE_SLUGS.GROUP_MANAGER});
+    await assignSystemRoleToUserInTests(db,manager.id,manager.tenantId,SYSTEM_ROLE_SLUGS.GROUP_MANAGER);
+    const group=await createGroupFactory(db).withMembers([owner.id]).create();
+    await db.insert(groupManagerGroups).values({managerUserId:manager.id,groupId:group.id});
+    const cookie=await cookieFor(manager,app);
+    await request(app.getHttpServer()).get("/api/learning-path/certificates/history").set("Cookie",cookie)
+      .query({userId:owner.id,learningPathId:path.id}).expect(200);
+    await request(app.getHttpServer()).get("/api/learning-path/certificates/history").set("Cookie",cookie)
+      .query({userId:reader.id,learningPathId:path.id}).expect(404);
+  });
   it("revokes with an auditable reason, denies learner management and immediately invalidates the public credential", async () => {
     const { owner, reader, admin, path, certificate } = await fixture();
     const ownCookie = await cookieFor(owner, app),
