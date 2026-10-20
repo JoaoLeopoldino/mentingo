@@ -412,6 +412,28 @@ describe("SettingsController (e2e)", () => {
           ],
         });
       });
+
+      it("should use the configured application name as the full manifest name", async () => {
+        await baseDb
+          .update(settings)
+          .set({
+            settings: sql`${settings.settings} || ${settingsToJSONBuildObject({
+              companyInformation: {
+                companyName: "Acme Learning",
+                companyShortName: "Acme",
+                applicationName: "Acme Academy · Demonstration",
+              },
+            })}::jsonb`,
+          })
+          .where(and(eq(settings.tenantId, defaultTenantId), isNull(settings.userId)));
+
+        const response = await request(app.getHttpServer())
+          .get("/api/settings/manifest.webmanifest")
+          .expect(200);
+
+        expect(response.body.name).toBe("Acme Academy · Demonstration");
+        expect(response.body.short_name).toBe("Acme LMS");
+      });
     });
 
     describe("PATCH /api/settings/admin/unregistered-user-courses-accessibility", () => {

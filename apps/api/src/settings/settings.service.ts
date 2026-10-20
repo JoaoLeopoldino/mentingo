@@ -1567,7 +1567,8 @@ export class SettingsService {
       : [{ src: "/utu-signet.svg", sizes: "any", type: "image/svg+xml" }];
 
     return {
-      name: `${companyName} LMS`,
+      // A configured application name is already the full display name; only the fallback needs "LMS".
+      name: parsedSettings.companyInformation?.applicationName || `${companyName} LMS`,
       short_name: `${shortName} LMS`,
       theme_color: parsedSettings.primaryColor || "#3f58b6",
       background_color: parsedSettings.contrastColor || "#fcfcfc",

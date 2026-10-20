@@ -9,10 +9,10 @@ import {
   useLocation,
 } from "@remix-run/react";
 import { Suspense } from "react";
-import { useTranslation } from "react-i18next";
 
 import { version } from "~/../version.json";
 
+import { DemoEnvironmentNotice } from "./components/DemoEnvironmentNotice";
 import { PlatformFavicon } from "./components/PlatformFavicon";
 import { Toaster } from "./components/ui/toaster";
 import { useNavigationTracker } from "./hooks/useNavigationTracker";
@@ -38,7 +38,6 @@ export const links: LinksFunction = () => {
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { t } = useTranslation();
   return (
     <html lang="en" className="scroll-smooth">
       <head>
@@ -52,14 +51,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {import.meta.env.VITE_DEMONSTRATION_MODE === "true" && (
-          <div
-            role="note"
-            className="border-b bg-muted px-4 py-2 text-center text-sm font-semibold text-foreground"
-          >
-            {t("demo.environmentNotice")}
-          </div>
-        )}
+        {import.meta.env.VITE_DEMONSTRATION_MODE === "true" && <DemoEnvironmentNotice />}
         {children}
         <ScrollRestoration />
         <Scripts />
