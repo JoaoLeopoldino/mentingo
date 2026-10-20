@@ -51,3 +51,10 @@ Data: 19/10/2026. Base preservada `77f6bae8`; commits de implementação `e19ed3
 - [ ] Inventário de licenças, revisão humana pt-AO, confirmação de que o bucket `kulonga` é só desta demo (sem prefixo; token com acesso ao bucket inteiro), congelamento do SHA com todos os serviços no mesmo commit, e remoção do domínio de teste `web-demo-2102.up.railway.app`.
 
 - [x] SMTP real (Resend, `demo@uturh.ao`, porta 2465): autenticação OK, envio aceite (250) e email recebido pelo responsável do projecto. O Railway bloqueia as portas SMTP 25/465/587.
+
+## QA visual do login em produção (20/10/2026, release rc.3 = 26575bd8; API, Web e Migrator no mesmo commit)
+
+- [x] Chrome limpo (sem extensão, sem service worker, sem armazenamento) em desktop 1440, mobile 390 e locale en-US/pt-AO: formulário visível, **zero erros de hidratação**, título `Utu LMS · Ambiente de Demonstração - Utu Lab - Entrar`, banner "Ambiente de Demonstração · Utu Lab · Dados fictícios" (ou equivalente em inglês), logótipo Utu Lab carregado do R2. Tempo até ao formulário visível numa carga fria: cerca de 5,3 a 5,8 s (bundle grande; relevante para redes lentas).
+- [x] Manifest: nome "Utu LMS · Ambiente de Demonstração", ícones WebP 192 e 512 gerados a partir do ícone carregado; logótipo e ícone servidos pela API a partir do R2 (upload e download provados).
+- Nota: num separador Chrome com a extensão de automação apareceram erros React #418/#423; não se reproduzem num Chrome limpo e atribuem-se à injecção da extensão no DOM. Correcção preventiva aplicada na mesma altura: o banner usa na primeira renderização o mesmo texto do HTML pré-renderizado e só depois o idioma activo.
+- Limitações visuais: o logótipo tem fundo não transparente (aparece como bloco bege); o HTML estático não tem `<title>` até a app carregar; `/favicon.ico` devolve HTML.
