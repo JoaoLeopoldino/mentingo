@@ -20,3 +20,10 @@ Capturas desta execução: `.local/sprint/screenshots/24-demo-login.png`, `24-de
 ## Notas de preparação no ambiente Railway (20/10/2026)
 
 Contas fictícias (`@demo.uturh.ao`): administrador, gestor de formação (`content_creator`), chefe de operação (`group_manager`), colaborador. Cursos prontos: "Segurança no Trabalho — operações fictícias" e "Procedimentos operacionais e qualidade — demonstração", ambos com certificado "DEMONSTRAÇÃO — SEM VALIDADE". O colaborador já concluiu ambos (certificados existentes); para demonstrar a conclusão ao vivo, criar um segundo colaborador pela UI de administração. Ainda não preparados neste ambiente: SCORM 1.2, quiz offline, competências, plano de desenvolvimento, relatórios/BI e Primavera sintético — não os mostrar sem os preparar e ensaiar.
+
+
+## Conteúdo preparado no ambiente (20/10/2026)
+
+- Cursos: "Segurança no Trabalho — operações fictícias" e "Procedimentos operacionais e qualidade — demonstração" (texto, quizzes, certificado "DEMONSTRAÇÃO — SEM VALIDADE"); "SCORM 1.2 — pacote independente (demonstração)" (pacote público Rustici, tentativa do colaborador em curso, incompleta, para mostrar ao vivo).
+- Competências: o colaborador (Luanda) tem lacuna em Segurança no trabalho (nível 2, exigido 3) e cumpre Qualidade operacional; plano de desenvolvimento aprovado com actividade ligada ao curso SCORM. O chefe de operação gere as três unidades.
+- Não mostrar como funcionalidade da aplicação: exportação para Power BI e reconciliação Primavera (apenas por ficheiro/relatório); quiz offline só depois de ensaiado em dispositivo real.
