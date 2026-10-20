@@ -20,6 +20,7 @@ COPY --from=base /app/pnpm-deploy-output /app
 COPY deployment/railway/migrate.mjs /app/release-migrate.mjs
 COPY deployment/railway/seed-demo-content.mjs /app/seed-demo-content.mjs
 COPY deployment/railway/demo-learner-flow.mjs /app/demo-learner-flow.mjs
+COPY deployment/railway/demo-certificate-pdf.mjs /app/demo-certificate-pdf.mjs
 COPY deployment/railway/validate-demo-env.mjs /app/validate-demo-env.mjs
 
 RUN apk add --no-cache \
