@@ -3,7 +3,8 @@ RUN apk add --no-cache apache2-utils
 COPY deployment/railway/15-demo-access.sh /docker-entrypoint.d/15-demo-access.sh
 RUN chmod +x /docker-entrypoint.d/15-demo-access.sh
 COPY deployment/railway/default.conf.template /etc/nginx/templates/default.conf.template
-ENV NGINX_ENVSUBST_FILTER="^(PORT|API_PRIVATE_HOST|API_PRIVATE_PORT)$"
+ENV NGINX_ENTRYPOINT_LOCAL_RESOLVERS=1 \
+    NGINX_ENVSUBST_FILTER="^(PORT|API_PRIVATE_HOST|API_PRIVATE_PORT|NGINX_LOCAL_RESOLVERS)$"
 EXPOSE 8080
 
 FROM node:22.15.0-alpine AS build
