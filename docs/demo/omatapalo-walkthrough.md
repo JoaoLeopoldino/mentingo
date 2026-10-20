@@ -26,4 +26,4 @@ Contas fictícias (`@demo.uturh.ao`): administrador, gestor de formação (`cont
 
 - Cursos: "Segurança no Trabalho — operações fictícias" e "Procedimentos operacionais e qualidade — demonstração" (texto, quizzes, certificado "DEMONSTRAÇÃO — SEM VALIDADE"); "SCORM 1.2 — pacote independente (demonstração)" (pacote público Rustici, tentativa do colaborador em curso, incompleta, para mostrar ao vivo).
 - Competências: o colaborador (Luanda) tem lacuna em Segurança no trabalho (nível 2, exigido 3) e cumpre Qualidade operacional; plano de desenvolvimento aprovado com actividade ligada ao curso SCORM. O chefe de operação gere as três unidades.
-- Não mostrar como funcionalidade da aplicação: exportação para Power BI e reconciliação Primavera (apenas por ficheiro/relatório); quiz offline só depois de ensaiado em dispositivo real.
+- Não mostrar como funcionalidade da aplicação: exportação para Power BI e reconciliação Primavera (apenas por ficheiro/relatório); quiz offline ensaiado em Chromium real no destino (curso "Avaliação offline fictícia" reservado para a demonstração); falta dispositivo móvel físico.
