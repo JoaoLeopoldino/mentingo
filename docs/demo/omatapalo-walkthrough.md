@@ -15,3 +15,8 @@ Apresentar apenas num ambiente autorizado, identificado como **Ambiente de Demon
 Aplicação da sprint: `http://localhost:5173`; API de validação de branding: `http://localhost:3002` durante o ensaio. Ficheiros de contas fictícias e credenciais permanecem em `.local`, nunca no guião público. Usar os harnesses `browser-integrated-demo.mts`, `browser-path-recertification.mts`, `browser-independent-scorm.mts` e `branding-qa.mts` com as guardas locais; cada um tem requisitos próprios de frescura/fixtures, não executar indiscriminadamente sobre uma demo preparada.
 
 Capturas desta execução: `.local/sprint/screenshots/24-demo-login.png`, `24-demo-login-mobile.png`, `24-demo-public-certificate.png`, `24-demo-certificate.png`. PDF: `.local/sprint/24-demo-certificate.pdf`. QA e tempos: `.local/sprint/24-branding-qa.json`. Não publicar dumps, manifests com contas ou logs de autenticação. Só partilhar capturas revistas e não sensíveis.
+
+
+## Notas de preparação no ambiente Railway (20/10/2026)
+
+Contas fictícias (`@demo.uturh.ao`): administrador, gestor de formação (`content_creator`), chefe de operação (`group_manager`), colaborador. Cursos prontos: "Segurança no Trabalho — operações fictícias" e "Procedimentos operacionais e qualidade — demonstração", ambos com certificado "DEMONSTRAÇÃO — SEM VALIDADE". O colaborador já concluiu ambos (certificados existentes); para demonstrar a conclusão ao vivo, criar um segundo colaborador pela UI de administração. Ainda não preparados neste ambiente: SCORM 1.2, quiz offline, competências, plano de desenvolvimento, relatórios/BI e Primavera sintético — não os mostrar sem os preparar e ensaiar.

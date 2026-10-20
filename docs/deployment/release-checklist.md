@@ -38,3 +38,14 @@ Data: 19/10/2026. Base preservada `77f6bae8`; commits de implementação `e19ed3
 ## Decisão
 
 **GO para continuação local. NO-GO para demonstração externa nesta candidata; NO-GO produção.** Uma página acessível, um PDF marcado e um proxy a responder não resolvem os bloqueios de publicação e operação. Quando os gates acima passarem, a decisão pode evoluir para demonstração restrita, sem declarar todos os requisitos a–j certificados para produção. Android físico continua pendente e offline SCORM não está demonstrado.
+
+
+## Actualização 20/10/2026 — evidência no destino (Railway)
+
+- [x] Projecto exclusivo `utu-mentingo-demo` (ambiente demo), sem PR deploys; serviços fixados ao commit, sem autodeploy por push.
+- [x] Migrations 0000–0237 aplicadas pelo Migrator dedicado (238); roles `lms_app_user` (sem BYPASSRLS) e `utu_control` sem DDL/CREATE, donas de zero tabelas; RLS em 139 de 149 tabelas.
+- [x] `omatapalo.uturh.ao`: DNS propagado, certificado Let's Encrypt válido, HTTP -> HTTPS 301; sem credenciais `/`, `/api`, `/socket.io` respondem 401; só `/healthz` e `/robots.txt` 200; noindex.
+- [x] Login administrador e colaborador 201, palavra-passe errada 401; cookies HttpOnly+Secure+SameSite=Strict; CORS limitado ao hostname; `current-user` 200 com cookie e 401 sem.
+- [x] Conteúdo fictício pt-AO (2 cursos, 3 quizzes), colaborador conclui, 2 certificados emitidos; PDF obtido no destino, SHA-256 conferido e inspeccionado: banner "DEMONSTRAÇÃO — SEM VALIDADE", emissor Utu Lab, sem activos do cliente.
+- [ ] Não demonstrado no destino: upload TUS, WebSocket, SCORM 1.2 e quiz offline, competências/plano, relatórios e exportação BI, página pública de verificação, entrega de email, rate limiting, isolamento entre tenants.
+- [ ] Inventário de licenças, revisão humana pt-AO, bucket exclusivo, congelamento do SHA com todos os serviços no mesmo commit, e remoção do domínio de teste `web-demo-2102.up.railway.app`.

@@ -12,3 +12,11 @@ Aplicável apenas ao projecto/ambiente demo identificado e às releases aprovada
 Meta proposta de piloto: RPO 24h/RTO 8h. **Não demonstrado no Railway nem contratado como SLA**. Os ensaios locais anteriores recuperaram PG/objectos/API, mas não cobrem perda da máquina, perda das chaves ou indisponibilidade regional.
 
 Rotação: JWT/refresh invalidam sessões; actualizar contas/gate SMTP/S3/control/app com coordenação; MASTER_KEY exige estratégia de re-encriptação e retenção de chaves, nunca substituir cegamente. Após suspeita de exposição, conter acessos e rever logs/artefactos antes de retomar.
+
+
+## Rollback no Railway (projecto utu-mentingo-demo)
+
+1. Imagens: cada serviço está fixado a um commit; voltar atrás = `connect-service-source` com o SHA anterior (API e Web) e aguardar SUCCESS. Ordem: API antes do Web (o nginx resolve a API no arranque).
+2. Base de dados: as migrations são aditivas, sem rollback automático. Antes de migrar, copiar o Postgres (pg_dump a partir do serviço Postgres via `railway ssh`) e guardar fora do projecto; restaurar numa BD nova e só depois repontuar `LMS_DATABASE_URL`/`CONTROL_DATABASE_URL`.
+3. Acesso de emergência: remover o domínio personalizado do Web (ou alterar `DEMO_GATE_PASSWORD`) corta o acesso externo sem apagar dados.
+4. Nunca apagar o volume `postgres-data` nem o bucket sem backup verificado.
