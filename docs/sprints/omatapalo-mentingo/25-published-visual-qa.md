@@ -1,5 +1,7 @@
 # QA visual do ambiente publicado — 20/10/2026
 
+> **Reensaio posterior:** o bloqueio de disponibilidade foi resolvido e não se reproduziu no commit `7be2da76`. Consultar [relatório26](26-published-visual-retest.md). Este documento conserva as evidências da falha anterior.
+
 **Resultado: REPROVADO para demonstração comercial no estado observado.** Login e PDF têm saídas legíveis; a ligação pública à API falhou durante a navegação e impediu concluir os percursos. Este ensaio não modifica código, configuração, conteúdos ou certificados.
 
 ## Âmbito, versão e método

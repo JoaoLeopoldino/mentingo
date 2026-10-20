@@ -1,5 +1,9 @@
 #!/bin/sh
 set -eu
+if [ "${DEMO_GATE_ENABLED:-true}" = "false" ]; then
+  echo "Demo HTTP gate disabled by DEMO_GATE_ENABLED=false" >&2
+  exit 0
+fi
 : "${DEMO_GATE_USERNAME:?Restricted demo requires DEMO_GATE_USERNAME}"
 : "${DEMO_GATE_PASSWORD:?Restricted demo requires DEMO_GATE_PASSWORD}"
 : "${API_PRIVATE_HOST:?Set the API private Railway hostname}"

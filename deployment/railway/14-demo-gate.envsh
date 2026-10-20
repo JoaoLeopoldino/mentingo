@@ -1,0 +1,9 @@
+# Sourced by the nginx entrypoint before templates are rendered.
+# DEMO_GATE_ENABLED=false removes the HTTP Basic gate; every other protection stays (invite-only
+# accounts, forced password change, API rate limiting, noindex, TLS). Default is enabled.
+if [ "${DEMO_GATE_ENABLED:-true}" = "false" ]; then
+  DEMO_GATE_AUTH_BASIC=off
+else
+  DEMO_GATE_AUTH_BASIC='"Utu Lab - Demonstracao restrita"'
+fi
+export DEMO_GATE_AUTH_BASIC
