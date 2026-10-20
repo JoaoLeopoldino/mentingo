@@ -49,8 +49,12 @@ const learnerId = (await call(adminCookies, "GET", `/api/user/all?keyword=${enco
   (user) => user.email === learnerEmail,
 )?.id;
 if (!learnerId) throw new Error("Learner not found");
-const categoryId = (await call(adminCookies, "POST", "/api/category", { title: `Avaliações offline (fictício)${process.env.OFFLINE_CATEGORY_SUFFIX ?? ""}`, language })).data.id;
-
+let categoryId = null;
+try {
+  categoryId = (await call(adminCookies, "POST", "/api/category", { title: `Avaliações offline (fictício)${process.env.OFFLINE_CATEGORY_SUFFIX ?? ""}`, language })).data.id;
+} catch (error) {
+  if (!String(error.message).includes("-> 409")) throw error;
+}
 async function createOfflineCourse(title) {
   const courseId = (
     await call(adminCookies, "POST", "/api/course", {
@@ -87,9 +91,18 @@ async function createOfflineCourse(title) {
   await call(adminCookies, "POST", `/api/course/${courseId}/enroll-courses`, { studentIds: [learnerId] });
   return courseId;
 }
-const trialCourse = await createOfflineCourse("Avaliação offline (ensaio técnico)");
-await createOfflineCourse("Avaliação offline fictícia");
-console.log("Courses created: one consumed by this test, one left for the live demonstration");
+const findCourse = async (title) =>
+  (await call(adminCookies, "GET", `/api/course/all?title=${encodeURIComponent(title)}&language=${language}&perPage=100`)).data.find((course) => course.title === title)?.id ?? null;
+let trialCourse;
+if (categoryId) {
+  trialCourse = await createOfflineCourse("Avaliação offline (ensaio técnico)");
+  await createOfflineCourse("Avaliação offline fictícia");
+  console.log("Courses created: one consumed by this test, one left for the live demonstration");
+} else {
+  trialCourse = await findCourse("Avaliação offline (ensaio técnico)");
+  if (!trialCourse) throw new Error("Category exists but the trial course was not found");
+  console.log("Courses already present: reusing them");
+}
 
 // 2. Real Chromium as the learner.
 const puppeteer = createRequire(process.env.PUPPETEER_FROM ?? "/app/package.json")("puppeteer");
