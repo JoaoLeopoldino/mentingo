@@ -48,4 +48,6 @@ Data: 19/10/2026. Base preservada `77f6bae8`; commits de implementação `e19ed3
 - [x] Login administrador e colaborador 201, palavra-passe errada 401; cookies HttpOnly+Secure+SameSite=Strict; CORS limitado ao hostname; `current-user` 200 com cookie e 401 sem.
 - [x] Conteúdo fictício pt-AO (2 cursos, 3 quizzes), colaborador conclui, 2 certificados emitidos; PDF obtido no destino, SHA-256 conferido e inspeccionado: banner "DEMONSTRAÇÃO — SEM VALIDADE", emissor Utu Lab, sem activos do cliente.
 - [ ] Não demonstrado no destino: upload TUS, WebSocket, SCORM 1.2 e quiz offline, competências/plano, relatórios e exportação BI, página pública de verificação, entrega de email, rate limiting, isolamento entre tenants.
-- [ ] Inventário de licenças, revisão humana pt-AO, bucket exclusivo, congelamento do SHA com todos os serviços no mesmo commit, e remoção do domínio de teste `web-demo-2102.up.railway.app`.
+- [ ] Inventário de licenças, revisão humana pt-AO, confirmação de que o bucket `kulonga` é só desta demo (sem prefixo; token com acesso ao bucket inteiro), congelamento do SHA com todos os serviços no mesmo commit, e remoção do domínio de teste `web-demo-2102.up.railway.app`.
+
+- [x] SMTP real (Resend, `demo@uturh.ao`, porta 2465): autenticação OK, envio aceite (250) e email recebido pelo responsável do projecto. O Railway bloqueia as portas SMTP 25/465/587.
