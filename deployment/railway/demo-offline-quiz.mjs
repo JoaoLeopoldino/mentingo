@@ -96,7 +96,8 @@ const puppeteer = createRequire(process.env.PUPPETEER_FROM ?? "/app/package.json
 const browser = await puppeteer.launch({
   executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
   headless: true,
-  args: ["--no-sandbox", "--disable-dev-shm-usage", "--lang=pt-AO"],
+  args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--disable-gpu", "--lang=pt-AO"],
+  protocolTimeout: 120000,
 });
 const page = await browser.newPage();
 page.setDefaultTimeout(60000);
