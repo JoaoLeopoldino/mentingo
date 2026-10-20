@@ -25,6 +25,7 @@ COPY deployment/railway/demo-branding-upload.mjs /app/demo-branding-upload.mjs
 COPY deployment/railway/demo-scorm-import.mjs /app/demo-scorm-import.mjs
 COPY deployment/railway/demo-competencies.mjs /app/demo-competencies.mjs
 COPY deployment/railway/demo-public-smoke.mjs /app/demo-public-smoke.mjs
+COPY deployment/railway/demo-offline-quiz.mjs /app/demo-offline-quiz.mjs
 COPY deployment/railway/assets /app/assets
 COPY deployment/railway/validate-demo-env.mjs /app/validate-demo-env.mjs
 
