@@ -138,6 +138,19 @@ const COURSES = [
 
 await login(required("SEED_ADMIN_EMAIL"), required("SEED_ADMIN_PASSWORD"));
 
+// Accounts are provisioned with a forced password change; the API refuses everything else until
+// it happens. Replace the initial secret with a new one held only in the job environment.
+const me = (await call("GET", "/api/auth/current-user")).json.data;
+if (me.requiresPasswordChange) {
+  const newPassword = required("SEED_ADMIN_NEW_PASSWORD");
+  await call("PATCH", `/api/user/change-password?id=${me.id}`, {
+    oldPassword: required("SEED_ADMIN_PASSWORD"),
+    newPassword,
+    confirmPassword: newPassword,
+  });
+  await login(required("SEED_ADMIN_EMAIL"), newPassword);
+}
+
 const learner = (await call("GET", `/api/user/all?keyword=${encodeURIComponent(learnerEmail)}`)).json;
 const learnerId = learner?.data?.find?.((user) => user.email === learnerEmail)?.id;
 if (!learnerId) throw new Error("Learner account not found; refusing to continue silently");
