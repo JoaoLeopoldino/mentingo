@@ -18,3 +18,5 @@ Não identifiquei uma correcção upstream nova de SCORM/offline/storage/brandin
 Hotspots Utu: schema/migrations, permissões partilhadas, tenant runner, certificados de curso/percurso, i18n, settings, filas, service worker, player e cliente gerado. `git diff --stat upstream/main...HEAD` e o script de resumo produzem o inventário exacto, sem reescrever a história.
 
 Divergências desta preparação: logótipo por omissão Utu, metadados, marca de demonstração, campos opcionais de branding no JSON existente, controlo da manutenção no arranque, ligação de controlo separada, Docker/proxy e validadores. A migração 0237 captura branding em novas emissões/renovações, com PDF e imagem pública baseados no snapshot. Legado mantém snapshot nulo e preview privado ainda usa definições actuais.
+
+- `deployment/railway/api.Dockerfile`: cópia de `api.Dockerfile` sem `--mount=type=cache,id=pnpm`, porque o Railway exige o prefixo do serviço no id da cache e recusa o ficheiro. Ao integrar alterações upstream de `api.Dockerfile`, repetir a cópia e retirar apenas essa opção. O `web.Dockerfile` do Railway pertence-nos e segue a mesma regra.

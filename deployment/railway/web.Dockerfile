@@ -15,7 +15,7 @@ ARG VITE_APP_URL
 ARG VITE_API_URL
 ARG VITE_DEMONSTRATION_MODE=true
 ENV VITE_GOOGLE_OAUTH_ENABLED=false VITE_MICROSOFT_OAUTH_ENABLED=false VITE_SLACK_OAUTH_ENABLED=false
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 RUN pnpm -w packages:build && pnpm build --filter=web
 
 FROM proxy AS release

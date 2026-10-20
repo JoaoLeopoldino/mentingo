@@ -1,0 +1,42 @@
+FROM node:22.15.0-alpine AS base
+ENV PUPPETEER_SKIP_DOWNLOAD=true HUSKY=0
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN npm install -g pnpm@10.22.0
+
+WORKDIR /app
+
+COPY . .
+
+RUN pnpm install --frozen-lockfile
+RUN pnpm -w packages:build
+RUN pnpm build --filter=api
+# TODO: Move pnpm deploy to turbo prune workflow
+RUN pnpm deploy --filter=api pnpm-deploy-output --prod --legacy
+
+FROM node:22.15.0-alpine
+WORKDIR /app
+COPY --from=base /app/pnpm-deploy-output /app
+COPY deployment/railway/migrate.mjs /app/release-migrate.mjs
+COPY deployment/railway/validate-demo-env.mjs /app/validate-demo-env.mjs
+
+RUN apk add --no-cache \
+    chromium \
+    nss \
+    freetype \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont \
+    font-noto \
+    xvfb \
+    libc6-compat \
+    ffmpeg \
+    libreoffice \
+    && rm -rf /var/cache/apk/*
+
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+
+RUN chmod +x /app/entrypoint.sh
+
+ENTRYPOINT [ "/app/entrypoint.sh" ]
