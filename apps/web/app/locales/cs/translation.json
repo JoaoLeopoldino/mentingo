@@ -2524,6 +2524,12 @@
       "MICROSOFT_CALENDAR_CLIENT_SECRET": {
         "label": "Tajný klíč klienta kalendáře Microsoft"
       },
+      "MICROSOFT_TENANT_ID": {
+        "label": "ID tenanta Microsoft Entra (ID adresáře nebo doména)"
+      },
+      "MICROSOFT_TEAMS_MEETINGS_ENABLED": {
+        "label": "Vytvářet schůzky Microsoft Teams pro relace (true/false)"
+      },
       "MICROSOFT_OAUTH_ENABLED": {
         "label": "Microsoft OAuth povoleno (pravda/nepravda)"
       },

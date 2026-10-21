@@ -3,6 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import axios, { AxiosError } from "axios";
 
+import { buildMicrosoftAuthority } from "src/common/helpers/microsoftTenant";
 import { EnvService } from "src/env/services/env.service";
 
 import {
@@ -22,15 +23,13 @@ import type {
   MicrosoftTokenResponse,
 } from "../types/microsoft-calendar.types";
 
-const MICROSOFT_AUTHORITY = "https://login.microsoftonline.com/common/oauth2/v2.0";
 const MICROSOFT_GRAPH = "https://graph.microsoft.com/v1.0";
 export const MICROSOFT_MENTINGO_MARKER_PROPERTY = MICROSOFT_CALENDAR_DEFAULT_MARKER_PROPERTY;
 const MICROSOFT_CALENDAR_SCOPES = ["User.Read", "Calendars.ReadWrite", "offline_access"];
 export const MICROSOFT_TEAMS_MEETING_SCOPES = ["OnlineMeetings.ReadWrite"];
 
-// Teams meetings are opt-in: requesting an extra scope at sign-in would make tenants that block user
-// consent reject the whole calendar connection.
-const isTeamsMeetingsEnabled = () => process.env.MICROSOFT_TEAMS_MEETINGS_ENABLED === "true";
+// Teams meetings are opt-in per organization (MICROSOFT_TEAMS_MEETINGS_ENABLED): requesting an extra
+// scope at sign-in would make tenants that block user consent reject the whole calendar connection.
 
 type MicrosoftGraphErrorResponse = {
   error?: string | { code?: string; message?: string };
@@ -81,9 +80,9 @@ export class MicrosoftGraphApiClient {
   }
 
   async getAuthorizationUrl(state: string, redirectUri: string): Promise<string> {
-    const { clientId } = await this.getRequiredConfiguration();
+    const { clientId, tenantId, teamsMeetingsEnabled } = await this.getRequiredConfiguration();
 
-    const url = new URL(`${MICROSOFT_AUTHORITY}/authorize`);
+    const url = new URL(`${buildMicrosoftAuthority(tenantId)}/authorize`);
     url.searchParams.set("client_id", clientId);
     url.searchParams.set("response_type", "code");
     url.searchParams.set("redirect_uri", redirectUri);
@@ -92,7 +91,7 @@ export class MicrosoftGraphApiClient {
       "scope",
       [
         ...MICROSOFT_CALENDAR_SCOPES,
-        ...(isTeamsMeetingsEnabled() ? MICROSOFT_TEAMS_MEETING_SCOPES : []),
+        ...(teamsMeetingsEnabled ? MICROSOFT_TEAMS_MEETING_SCOPES : []),
       ].join(" "),
     );
     url.searchParams.set("state", state);
@@ -112,8 +111,8 @@ export class MicrosoftGraphApiClient {
     });
   }
 
-  isTeamsMeetingsEnabled() {
-    return isTeamsMeetingsEnabled();
+  async isTeamsMeetingsEnabled() {
+    return (await this.getConfiguration()).teamsMeetingsEnabled;
   }
 
   async createOnlineMeeting(
@@ -276,7 +275,7 @@ export class MicrosoftGraphApiClient {
   }
 
   private async requestToken(payload: Record<string, string>): Promise<MicrosoftTokenResponse> {
-    const { clientId, clientSecret } = await this.getRequiredConfiguration();
+    const { clientId, clientSecret, tenantId } = await this.getRequiredConfiguration();
 
     const body = new URLSearchParams({
       client_id: clientId,
@@ -287,7 +286,7 @@ export class MicrosoftGraphApiClient {
 
     try {
       const response = await axios.post<MicrosoftTokenResponse>(
-        `${MICROSOFT_AUTHORITY}/token`,
+        `${buildMicrosoftAuthority(tenantId)}/token`,
         body,
         {
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -396,8 +395,13 @@ export class MicrosoftGraphApiClient {
   }
 
   private async getConfiguration() {
-    const [clientId, clientSecret] = await Promise.all(
-      ["MICROSOFT_CALENDAR_CLIENT_ID", "MICROSOFT_CALENDAR_CLIENT_SECRET"].map((envName) =>
+    const [clientId, clientSecret, tenantId, teamsMeetings] = await Promise.all(
+      [
+        "MICROSOFT_CALENDAR_CLIENT_ID",
+        "MICROSOFT_CALENDAR_CLIENT_SECRET",
+        "MICROSOFT_TENANT_ID",
+        "MICROSOFT_TEAMS_MEETINGS_ENABLED",
+      ].map((envName) =>
         this.envService
           .getEnv(envName)
           .then(({ value }) => value)
@@ -405,7 +409,7 @@ export class MicrosoftGraphApiClient {
       ),
     );
 
-    return { clientId, clientSecret };
+    return { clientId, clientSecret, tenantId, teamsMeetingsEnabled: teamsMeetings === "true" };
   }
 
   private getMarkerProperty() {
@@ -422,6 +426,6 @@ export class MicrosoftGraphApiClient {
     if (!configuration.clientId || !configuration.clientSecret)
       throw new MicrosoftGraphError("Microsoft Calendar is not configured");
 
-    return configuration as { clientId: string; clientSecret: string };
+    return configuration as typeof configuration & { clientId: string; clientSecret: string };
   }
 }

@@ -48,7 +48,7 @@ export class LiveTrainingTeamsMeetingService {
       return;
     }
 
-    if (!this.microsoftGraphApiClient.isTeamsMeetingsEnabled()) {
+    if (!(await this.microsoftGraphApiClient.isTeamsMeetingsEnabled())) {
       await this.saveError(row.id, current, LIVE_TRAINING_TEAMS_ERROR_CODES.DISABLED);
       return;
     }

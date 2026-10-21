@@ -2519,6 +2519,12 @@
       "MICROSOFT_CALENDAR_CLIENT_SECRET": {
         "label": "Microsoft Calendar Client Secret"
       },
+      "MICROSOFT_TENANT_ID": {
+        "label": "Microsoft Entra tenant ID (directory ID or domain)"
+      },
+      "MICROSOFT_TEAMS_MEETINGS_ENABLED": {
+        "label": "Create Microsoft Teams meetings for sessions (true/false)"
+      },
       "MICROSOFT_OAUTH_ENABLED": {
         "label": "Microsoft OAuth Enabled (true/false)"
       },

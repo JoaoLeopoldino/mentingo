@@ -48,7 +48,7 @@ describe("LiveTrainingTeamsMeetingService", () => {
 
   beforeEach(() => {
     jest.resetAllMocks();
-    graph.isTeamsMeetingsEnabled.mockReturnValue(true);
+    graph.isTeamsMeetingsEnabled.mockResolvedValue(true);
     graph.refreshAccessToken.mockResolvedValue({ access_token: "token" });
     encryption.decrypt.mockReturnValue("refresh");
     repository.listLiveTrainingHostIds.mockResolvedValue([]);
@@ -171,7 +171,7 @@ describe("LiveTrainingTeamsMeetingService", () => {
   });
 
   it("flags the feature as disabled instead of calling Microsoft", async () => {
-    graph.isTeamsMeetingsEnabled.mockReturnValue(false);
+    graph.isTeamsMeetingsEnabled.mockResolvedValue(false);
     repository.getLiveTrainingTeamsState.mockResolvedValue(
       buildRow({ teams: { requested: true, status: "pending" } }),
     );

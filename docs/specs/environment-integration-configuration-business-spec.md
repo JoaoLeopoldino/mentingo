@@ -39,6 +39,8 @@ On the environment screen, administrators reveal only the secret they want to in
 
 Microsoft Calendar connections use the calendar client ID and client secret saved for the tenant on this screen. Deployment-level environment values do not substitute for missing tenant credentials, so one tenant cannot inherit another installation-wide calendar application configuration.
 
+Each organization can also restrict Microsoft sign-in and calendar connections to its own Microsoft Entra directory by saving its tenant ID (directory GUID or verified domain); without it the multi-tenant authority is kept, and a malformed value is rejected. Microsoft Teams meetings for live-training sessions are an opt-in setting saved per organization on the same screen.
+
 In account settings, administrators can see integration key status, prefix, creation date, and last-used date. Generating or rotating a key shows the raw key immediately; after that, only metadata remains visible, so the caller must store the key securely.
 
 External callers authenticate with the integration API key. Most integration endpoints also require a tenant header so the request is scoped to the correct tenant. Managing-tenant administrators can operate across allowed tenants, while ordinary tenant administrators are restricted to their own tenant.
@@ -53,7 +55,7 @@ Tenant lifecycle automation is available only to integration keys owned by a man
 - External integration API implementation: `apps/api/src/integration/integration.controller.ts`.
 - Tenant lifecycle behavior reuses the super-admin tenant service in `apps/api/src/super-admin/tenants.service.ts`.
 - Key permissions are `PERMISSIONS.ENV_MANAGE`, `PERMISSIONS.INTEGRATION_KEY_MANAGE`, `PERMISSIONS.INTEGRATION_API_USE`, and `PERMISSIONS.TENANT_MANAGE` for integration tenant lifecycle calls.
-- Supported environment metadata includes OAuth providers, Microsoft Calendar client credentials, OpenAI, Bunny Stream, Stripe, Slack, Luma, and LiveKit values. Microsoft Calendar authentication reads its credentials exclusively from tenant-managed secrets.
+- Supported environment metadata includes OAuth providers, Microsoft Calendar client credentials, OpenAI, Bunny Stream, Stripe, Slack, Luma, and LiveKit values. Microsoft Calendar authentication reads its credentials, Entra tenant ID, and Teams opt-in exclusively from tenant-managed secrets.
 
 ## Test Evidence
 

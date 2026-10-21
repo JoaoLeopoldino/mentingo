@@ -2518,6 +2518,12 @@
       "MICROSOFT_CALENDAR_CLIENT_SECRET": {
         "label": "„Microsoft“ kalendoriaus kliento paslaptis"
       },
+      "MICROSOFT_TENANT_ID": {
+        "label": "„Microsoft Entra“ nuomininko ID (katalogo ID arba domenas)"
+      },
+      "MICROSOFT_TEAMS_MEETINGS_ENABLED": {
+        "label": "Kurti „Microsoft Teams“ susitikimus sesijoms (true/false)"
+      },
       "MICROSOFT_OAUTH_ENABLED": {
         "label": "„Microsoft OAuth“ įgalinta (teisinga / klaidinga)"
       },

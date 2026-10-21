@@ -1876,6 +1876,14 @@
                 "type": "string"
               },
               {
+                "const": "MICROSOFT_TENANT_ID",
+                "type": "string"
+              },
+              {
+                "const": "MICROSOFT_TEAMS_MEETINGS_ENABLED",
+                "type": "string"
+              },
+              {
                 "const": "MICROSOFT_OAUTH_ENABLED",
                 "type": "string"
               },
@@ -2021,6 +2029,14 @@
                     },
                     {
                       "const": "MICROSOFT_CALENDAR_CLIENT_SECRET",
+                      "type": "string"
+                    },
+                    {
+                      "const": "MICROSOFT_TENANT_ID",
+                      "type": "string"
+                    },
+                    {
+                      "const": "MICROSOFT_TEAMS_MEETINGS_ENABLED",
                       "type": "string"
                     },
                     {

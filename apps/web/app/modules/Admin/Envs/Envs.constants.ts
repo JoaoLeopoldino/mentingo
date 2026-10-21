@@ -15,6 +15,14 @@ export const SECRET_METADATA = {
     labelKey: "adminEnvsView.form.MICROSOFT_CALENDAR_CLIENT_SECRET.label",
     placeholderKey: "adminEnvsView.form.placeholder",
   },
+  MICROSOFT_TENANT_ID: {
+    labelKey: "adminEnvsView.form.MICROSOFT_TENANT_ID.label",
+    placeholderKey: "adminEnvsView.form.placeholder",
+  },
+  MICROSOFT_TEAMS_MEETINGS_ENABLED: {
+    labelKey: "adminEnvsView.form.MICROSOFT_TEAMS_MEETINGS_ENABLED.label",
+    placeholderKey: "adminEnvsView.form.placeholder",
+  },
   MICROSOFT_OAUTH_ENABLED: {
     labelKey: "adminEnvsView.form.MICROSOFT_OAUTH_ENABLED.label",
     placeholderKey: "adminEnvsView.form.placeholder",
@@ -143,6 +151,7 @@ export const ENV_GROUPS = [
     secretNames: [
       "MICROSOFT_CLIENT_ID",
       "MICROSOFT_CLIENT_SECRET",
+      "MICROSOFT_TENANT_ID",
       "MICROSOFT_OAUTH_ENABLED",
       "VITE_MICROSOFT_OAUTH_ENABLED",
     ],
@@ -162,7 +171,12 @@ export const ENV_GROUPS = [
     id: "microsoftCalendar",
     titleKey: "adminEnvsView.groups.microsoftCalendar.title",
     descriptionKey: "adminEnvsView.groups.microsoftCalendar.description",
-    secretNames: ["MICROSOFT_CALENDAR_CLIENT_ID", "MICROSOFT_CALENDAR_CLIENT_SECRET"],
+    secretNames: [
+      "MICROSOFT_CALENDAR_CLIENT_ID",
+      "MICROSOFT_CALENDAR_CLIENT_SECRET",
+      "MICROSOFT_TENANT_ID",
+      "MICROSOFT_TEAMS_MEETINGS_ENABLED",
+    ],
   },
   {
     id: "payments",

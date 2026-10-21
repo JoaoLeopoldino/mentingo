@@ -2747,6 +2747,12 @@
       "MICROSOFT_CALENDAR_CLIENT_SECRET": {
         "label": "Klucz tajny klienta kalendarza Microsoft"
       },
+      "MICROSOFT_TENANT_ID": {
+        "label": "Identyfikator dzierżawcy Microsoft Entra (ID katalogu lub domena)"
+      },
+      "MICROSOFT_TEAMS_MEETINGS_ENABLED": {
+        "label": "Twórz spotkania Microsoft Teams dla sesji (true/false)"
+      },
       "MICROSOFT_OAUTH_ENABLED": {
         "label": "Microsoft OAuth Enabled (true/false)"
       },

@@ -2513,6 +2513,12 @@
       "MICROSOFT_CALENDAR_CLIENT_SECRET": {
         "label": "Secret client du calendrier Microsoft"
       },
+      "MICROSOFT_TENANT_ID": {
+        "label": "ID de locataire Microsoft Entra (ID de répertoire ou domaine)"
+      },
+      "MICROSOFT_TEAMS_MEETINGS_ENABLED": {
+        "label": "Créer des réunions Microsoft Teams pour les sessions (true/false)"
+      },
       "MICROSOFT_OAUTH_ENABLED": {
         "label": "Microsoft OAuth activé (vrai/faux)"
       },

@@ -16,14 +16,18 @@ describe("MicrosoftGraphApiClient configuration", () => {
     jest.clearAllMocks();
   });
 
-  it("uses tenant-managed secrets for the authorization URL", async () => {
+  const mockEnv = (values: Record<string, string>) =>
     envService.getEnv.mockImplementation((name: string) =>
-      Promise.resolve({
-        name,
-        value:
-          name === "MICROSOFT_CALENDAR_CLIENT_ID" ? "tenant-calendar-client-id" : "tenant-secret",
-      }),
+      name in values
+        ? Promise.resolve({ name, value: values[name] })
+        : Promise.reject(new Error("Secret not found")),
     );
+
+  it("uses tenant-managed secrets for the authorization URL", async () => {
+    mockEnv({
+      MICROSOFT_CALENDAR_CLIENT_ID: "tenant-calendar-client-id",
+      MICROSOFT_CALENDAR_CLIENT_SECRET: "tenant-secret",
+    });
 
     const authorizationUrl = await client.getAuthorizationUrl(
       "signed-state",
@@ -50,5 +54,52 @@ describe("MicrosoftGraphApiClient configuration", () => {
       ),
     ).rejects.toThrow(new MicrosoftGraphError("Microsoft Calendar is not configured"));
     expect(configService.get).not.toHaveBeenCalled();
+  });
+
+  it("authorizes against the organization's Entra tenant when one is configured", async () => {
+    mockEnv({
+      MICROSOFT_CALENDAR_CLIENT_ID: "client-id",
+      MICROSOFT_CALENDAR_CLIENT_SECRET: "secret",
+      MICROSOFT_TENANT_ID: "omatapalo.onmicrosoft.com",
+    });
+
+    const url = new URL(
+      await client.getAuthorizationUrl("state", "https://tenant.example.com/callback"),
+    );
+
+    expect(url.pathname).toBe("/omatapalo.onmicrosoft.com/oauth2/v2.0/authorize");
+  });
+
+  it("falls back to the multi-tenant authority and rejects a malformed tenant", async () => {
+    mockEnv({ MICROSOFT_CALENDAR_CLIENT_ID: "client-id", MICROSOFT_CALENDAR_CLIENT_SECRET: "secret" });
+
+    const url = new URL(
+      await client.getAuthorizationUrl("state", "https://tenant.example.com/callback"),
+    );
+    expect(url.pathname).toBe("/common/oauth2/v2.0/authorize");
+
+    mockEnv({
+      MICROSOFT_CALENDAR_CLIENT_ID: "client-id",
+      MICROSOFT_CALENDAR_CLIENT_SECRET: "secret",
+      MICROSOFT_TENANT_ID: "evil.com/../x",
+    });
+    await expect(
+      client.getAuthorizationUrl("state", "https://tenant.example.com/callback"),
+    ).rejects.toThrow();
+  });
+
+  it("requests the Teams scope only when the organization enabled Teams meetings", async () => {
+    const base = { MICROSOFT_CALENDAR_CLIENT_ID: "client-id", MICROSOFT_CALENDAR_CLIENT_SECRET: "secret" };
+    const scopeFor = async () =>
+      new URL(await client.getAuthorizationUrl("state", "https://tenant.example.com/callback"))
+        .searchParams.get("scope");
+
+    mockEnv(base);
+    expect(await scopeFor()).not.toContain("OnlineMeetings.ReadWrite");
+    await expect(client.isTeamsMeetingsEnabled()).resolves.toBe(false);
+
+    mockEnv({ ...base, MICROSOFT_TEAMS_MEETINGS_ENABLED: "true" });
+    expect(await scopeFor()).toContain("OnlineMeetings.ReadWrite");
+    await expect(client.isTeamsMeetingsEnabled()).resolves.toBe(true);
   });
 });

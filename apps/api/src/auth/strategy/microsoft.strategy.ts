@@ -4,6 +4,7 @@ import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from "passport-microsoft";
 
 import { getCallbackPath } from "src/common/configuration/callbackUrl";
+import { resolveMicrosoftTenant } from "src/common/helpers/microsoftTenant";
 import { EnvService } from "src/env/services/env.service";
 
 import type { Request } from "express";
@@ -28,7 +29,7 @@ export class MicrosoftStrategy extends PassportStrategy(Strategy, "microsoft") {
   authenticate(req: Request, options?: unknown): void {
     (async () => {
       try {
-        const [id, secret] = await Promise.all([
+        const [id, secret, tenantId] = await Promise.all([
           this.envService
             .getEnv("MICROSOFT_CLIENT_ID")
             .then((r) => r.value)
@@ -41,6 +42,10 @@ export class MicrosoftStrategy extends PassportStrategy(Strategy, "microsoft") {
             .catch(() =>
               this.configService.get<string>("microsoft_authorization.MICROSOFT_CLIENT_SECRET"),
             ),
+          this.envService
+            .getEnv("MICROSOFT_TENANT_ID")
+            .then((r) => r.value)
+            .catch(() => undefined),
         ]);
 
         if (!id || !secret) {
@@ -48,13 +53,15 @@ export class MicrosoftStrategy extends PassportStrategy(Strategy, "microsoft") {
           return;
         }
 
+        const tenant = resolveMicrosoftTenant(tenantId);
+
         const inner = new Strategy(
           {
             clientID: id,
             clientSecret: secret,
             callbackURL: getCallbackPath("microsoft"),
             scope: ["user.read"],
-            tenant: "common",
+            tenant,
           },
           (
             accessToken: string,
