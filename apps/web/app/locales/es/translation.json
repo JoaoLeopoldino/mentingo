@@ -2323,7 +2323,10 @@
         "live_training_statistics": "Vea la asistencia y las estadísticas de entrenamiento en vivo.",
         "ai_thread_read": "Ver todas las conversaciones con IA y sus evaluaciones guardadas.",
         "activity_log_read": "Ver registros de actividad.",
-        "course_ai_generation": "Genere la estructura y el contenido del curso con herramientas de inteligencia artificial."
+        "course_ai_generation": "Genere la estructura y el contenido del curso con herramientas de inteligencia artificial.",
+        "competency_manage": "Gestionar marcos, catálogo, puestos y requisitos de competencias.",
+        "competency_assess_managed": "Evaluar las competencias de los alumnos de las unidades que gestiona.",
+        "competency_read_self": "Consultar sus propias competencias y planes de desarrollo."
       }
     },
     "dropdown": {

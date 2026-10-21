@@ -2164,7 +2164,10 @@
         "live_training_statistics": "Consultar presenças e estatísticas das acções de formação.",
         "ai_thread_read": "Consultar todas as conversas de IA e respectivas avaliações guardadas.",
         "activity_log_read": "Consultar registos de actividade.",
-        "course_ai_generation": "Gerar a estrutura e o conteúdo de formações com ferramentas de IA."
+        "course_ai_generation": "Gerar a estrutura e o conteúdo de formações com ferramentas de IA.",
+        "competency_manage": "Gerir quadros, catálogo, funções e requisitos de competências.",
+        "competency_assess_managed": "Avaliar as competências dos colaboradores das unidades que gere.",
+        "competency_read_self": "Consultar as suas próprias competências e planos de desenvolvimento."
       }
     },
     "dropdown": {

@@ -2330,7 +2330,10 @@
         "live_training_end": "Gali užbaigti gyvų mokymų sesijas.",
         "live_training_statistics": "Gali peržiūrėti gyvų mokymų lankomumą ir statistiką.",
         "ai_thread_read": "Gali peržiūrėti visus pokalbius su DI ir jų išsaugotus vertinimus.",
-        "activity_log_read": "Gali peržiūrėti veiklos žurnalus."
+        "activity_log_read": "Gali peržiūrėti veiklos žurnalus.",
+        "competency_manage": "Valdyti kompetencijų sistemas, katalogą, pareigas ir reikalavimus.",
+        "competency_assess_managed": "Vertinti jūsų valdomų padalinių besimokančiųjų kompetencijas.",
+        "competency_read_self": "Peržiūrėti savo kompetencijas ir tobulėjimo planus."
       }
     },
     "dropdown": {

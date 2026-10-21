@@ -2325,7 +2325,10 @@
         "live_training_statistics": "Consultez la participation aux formations en direct et les statistiques.",
         "ai_thread_read": "Afficher toutes les conversations avec l’IA et leurs évaluations enregistrées.",
         "activity_log_read": "Afficher les journaux d'activité.",
-        "course_ai_generation": "Générez une structure et du contenu de cours avec des outils d'IA."
+        "course_ai_generation": "Générez une structure et du contenu de cours avec des outils d'IA.",
+        "competency_manage": "Gérer les référentiels, le catalogue, les fonctions et les exigences de compétences.",
+        "competency_assess_managed": "Évaluer les compétences des apprenants des unités que vous gérez.",
+        "competency_read_self": "Consulter vos propres compétences et plans de développement."
       }
     },
     "dropdown": {

@@ -2331,7 +2331,10 @@
         "live_training_statistics": "View live training attendance and statistics.",
         "ai_thread_read": "View all AI conversations and their saved evaluations.",
         "activity_log_read": "View activity logs.",
-        "course_ai_generation": "Generate course structure and content with AI tools."
+        "course_ai_generation": "Generate course structure and content with AI tools.",
+        "competency_manage": "Manage competency frameworks, catalog, job roles, and requirements.",
+        "competency_assess_managed": "Assess the competencies of learners in the units you manage.",
+        "competency_read_self": "View your own competencies and development plans."
       }
     },
     "dropdown": {

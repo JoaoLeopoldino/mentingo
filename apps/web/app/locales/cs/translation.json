@@ -2336,7 +2336,10 @@
         "live_training_end": "Může ukončovat relace živého školení.",
         "live_training_statistics": "Může zobrazit docházku a statistiky živých školení.",
         "ai_thread_read": "Může zobrazit všechny konverzace s AI a jejich uložená hodnocení.",
-        "activity_log_read": "Může zobrazit protokoly aktivit."
+        "activity_log_read": "Může zobrazit protokoly aktivit.",
+        "competency_manage": "Správa rámců, katalogu, funkcí a požadavků na kompetence.",
+        "competency_assess_managed": "Hodnocení kompetencí studujících v jednotkách, které spravujete.",
+        "competency_read_self": "Zobrazení vlastních kompetencí a plánů rozvoje."
       }
     },
     "dropdown": {

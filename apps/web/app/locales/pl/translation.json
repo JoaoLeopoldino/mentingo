@@ -2555,7 +2555,10 @@
         "live_training_statistics": "Może przeglądać obecność i statystyki szkoleń live.",
         "ai_thread_read": "Może przeglądać wszystkie rozmowy z AI i ich zapisane oceny.",
         "activity_log_read": "Może przeglądać dziennik aktywności.",
-        "course_ai_generation": "Może generować strukturę i treści kursu za pomocą narzędzi AI."
+        "course_ai_generation": "Może generować strukturę i treści kursu za pomocą narzędzi AI.",
+        "competency_manage": "Zarządzanie ramami, katalogiem, rolami i wymaganiami kompetencji.",
+        "competency_assess_managed": "Ocena kompetencji uczestników w zarządzanych jednostkach.",
+        "competency_read_self": "Przeglądanie własnych kompetencji i planów rozwoju."
       }
     },
     "dropdown": {
