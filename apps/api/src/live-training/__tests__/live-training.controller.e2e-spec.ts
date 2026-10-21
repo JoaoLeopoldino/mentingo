@@ -305,6 +305,70 @@ describe("LiveTrainingController (e2e)", () => {
     );
   });
 
+  it("records a Teams meeting request without exposing internal Teams metadata", async () => {
+    const admin = await createAdmin();
+    const startsAt = getFutureDateOnScheduleStep(60);
+    const endsAt = getFutureDateOnScheduleStep(120);
+
+    await request(app.getHttpServer())
+      .post("/api/live-training")
+      .set("Cookie", await cookieFor(admin, app))
+      .send({
+        language,
+        title: "Teams offline training",
+        startsAt,
+        endsAt,
+        timezone,
+        location: "Room 3",
+        deliveryType: LIVE_TRAINING_DELIVERY_TYPES.OFFLINE,
+        teamsMeeting: true,
+      })
+      .expect(201);
+
+    const liveTraining = await getLatestLiveTrainingByTitle(admin.id, "Teams offline training");
+
+    const readDetails = async () =>
+      request(app.getHttpServer())
+        .get(`/api/live-training/${liveTraining.id}`)
+        .set("Cookie", await cookieFor(admin, app))
+        .query({ language })
+        .expect(200);
+
+    // The creation event is handled asynchronously; with the feature flag off it must settle on "disabled".
+    let details = await readDetails();
+    for (let attempt = 0; attempt < 20 && details.body.data.teamsMeeting.status === "pending"; attempt++) {
+      await new Promise((resolve) => setTimeout(resolve, 250));
+      details = await readDetails();
+    }
+
+    expect(details.body.data.teamsMeeting).toMatchObject({
+      requested: true,
+      status: "error",
+      joinUrl: null,
+      errorCode: "liveTraining.teams.errors.disabled",
+    });
+
+    await db
+      .update(liveTrainings)
+      .set({
+        metadata: sql`jsonb_set(coalesce(metadata, '{}'::jsonb), '{teams}', ${JSON.stringify({
+          requested: true,
+          status: "ready",
+          joinUrl: "https://teams.microsoft.com/l/meetup-join/secret",
+        })}::text::jsonb)`,
+      })
+      .where(eq(liveTrainings.id, liveTraining.id));
+
+    details = await readDetails();
+
+    expect(details.body.data.teamsMeeting).toMatchObject({
+      requested: true,
+      status: "ready",
+      joinUrl: "https://teams.microsoft.com/l/meetup-join/secret",
+    });
+    expect(details.body.data.metadata).not.toHaveProperty("teams");
+  });
+
   it("updates paired calendar event and increments sequence for visible calendar changes", async () => {
     const admin = await createAdmin();
     const liveTraining = await createOfflineLiveTraining(admin);

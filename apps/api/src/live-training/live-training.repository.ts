@@ -78,6 +78,7 @@ export class LiveTrainingRepository {
       .insert(liveTrainings)
       .values({
         ...input.liveTraining,
+        metadata: sql`${JSON.stringify(input.liveTraining.metadata ?? {})}::text::jsonb`,
         calendarEventId: calendarEvent.id,
       })
       .returning({ id: liveTrainings.id });
