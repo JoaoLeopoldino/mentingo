@@ -219,6 +219,7 @@ export class MicrosoftCalendarRepository {
           allDay: calendarEvents.allDay,
           timezone: calendarEvents.timezone,
           location: calendarEvents.location,
+          teamsJoinUrl: sql<string | null>`${liveTrainings.metadata}->'teams'->>'joinUrl'`,
           sourceType: sql<MicrosoftCalendarOutboundSourceType>`${CALENDAR_EVENT_SOURCE_TYPES.LIVE_TRAINING}`,
           sourceId: liveTrainings.id,
           recipientId: users.id,
@@ -276,6 +277,7 @@ export class MicrosoftCalendarRepository {
           allDay: calendarEvents.allDay,
           timezone: calendarEvents.timezone,
           location: calendarEvents.location,
+          teamsJoinUrl: sql<string | null>`NULL::text`,
           sourceType: sql<MicrosoftCalendarOutboundSourceType>`${CALENDAR_EVENT_SOURCE_TYPES.COURSE_DUE_DATE}`,
           sourceId: groupCourses.courseId,
           recipientId: users.id,
@@ -318,6 +320,46 @@ export class MicrosoftCalendarRepository {
       const message = error instanceof Error ? error.message : String(error);
       throw new Error(`Failed to load Microsoft outbound candidates: ${message}`);
     }
+  }
+
+  async getLiveTrainingTeamsState(liveTrainingId: UUIDType) {
+    const [row] = await this.db
+      .select({
+        id: liveTrainings.id,
+        authorId: liveTrainings.authorId,
+        metadata: liveTrainings.metadata,
+        deletedAt: liveTrainings.deletedAt,
+        eventDeletedAt: calendarEvents.deletedAt,
+        startsAt: calendarEvents.startsAt,
+        endsAt: calendarEvents.endsAt,
+        title: calendarEvents.title,
+        baseLanguage: calendarEvents.baseLanguage,
+      })
+      .from(liveTrainings)
+      .innerJoin(calendarEvents, eq(calendarEvents.id, liveTrainings.calendarEventId))
+      .where(eq(liveTrainings.id, liveTrainingId))
+      .limit(1);
+
+    return row ?? null;
+  }
+
+  async listLiveTrainingHostIds(liveTrainingId: UUIDType) {
+    const rows = await this.db
+      .select({ userId: liveTrainingMembers.userId })
+      .from(liveTrainingMembers)
+      .where(eq(liveTrainingMembers.liveTrainingId, liveTrainingId))
+      .orderBy(liveTrainingMembers.displayOrder);
+
+    return rows.map((row) => row.userId);
+  }
+
+  async saveLiveTrainingTeamsState(liveTrainingId: UUIDType, teams: Record<string, unknown>) {
+    await this.db
+      .update(liveTrainings)
+      .set({
+        metadata: sql`jsonb_set(coalesce(${liveTrainings.metadata}, '{}'::jsonb), '{teams}', ${JSON.stringify(teams)}::text::jsonb)`,
+      })
+      .where(eq(liveTrainings.id, liveTrainingId));
   }
 
   async deleteOutboundMapping(id: UUIDType) {

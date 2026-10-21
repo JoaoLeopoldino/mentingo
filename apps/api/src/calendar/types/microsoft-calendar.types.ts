@@ -69,6 +69,7 @@ export type OutboundCandidate = {
   allDay: boolean;
   timezone: string;
   location: string | null;
+  teamsJoinUrl: string | null;
   sourceType: MicrosoftCalendarOutboundSourceType;
   groupName: string | null;
   courseTitle: string | null;
@@ -125,6 +126,17 @@ export type MicrosoftGraphCalendar = {
   id: string;
   name?: string | null;
   isDefaultCalendar?: boolean;
+};
+
+export type MicrosoftGraphOnlineMeetingInput = {
+  subject: string;
+  startDateTime: string;
+  endDateTime: string;
+};
+
+export type MicrosoftGraphOnlineMeeting = {
+  id: string;
+  joinWebUrl: string;
 };
 
 export type MicrosoftGraphOutboundEvent = {

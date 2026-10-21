@@ -17,6 +17,8 @@ import { MicrosoftCalendarTokenEncryptionService } from "./microsoft-calendar-to
 
 import type { OutboundCandidate } from "../types/microsoft-calendar.types";
 
+const TEAMS_HOSTS = new Set(["teams.microsoft.com", "teams.live.com"]);
+
 @Injectable()
 export class MicrosoftCalendarOutboundService {
   constructor(
@@ -185,9 +187,15 @@ export class MicrosoftCalendarOutboundService {
         ? `<p>${escapeHtml(description ?? "Mandatory course due date")}</p><p>Course: ${escapeHtml(candidate.courseTitle ?? title)}</p><p>Group: ${escapeHtml(candidate.groupName ?? "")}</p><p>This is informational. No action is required in Outlook.</p>`
         : `<p>${escapeHtml(description ?? "Mentingo live training")}</p><p>This session is managed in Mentingo.</p>`;
 
+    const teamsJoinUrl = this.getTeamsJoinUrl(candidate.teamsJoinUrl);
+    const teamsBody = teamsJoinUrl
+      ? `<p><a href="${escapeHtml(teamsJoinUrl)}">Join Microsoft Teams meeting</a></p>`
+      : "";
+    const locationName = candidate.location || (teamsJoinUrl ? "Microsoft Teams" : null);
+
     return {
       subject: title,
-      body: { contentType: "HTML" as const, content: body },
+      body: { contentType: "HTML" as const, content: `${body}${teamsBody}` },
       start: {
         dateTime: this.toGraphDateTime(candidate.startsAt, candidate.timezone, candidate.allDay),
         timeZone: candidate.timezone,
@@ -197,11 +205,25 @@ export class MicrosoftCalendarOutboundService {
         timeZone: candidate.timezone,
       },
       isAllDay: candidate.allDay,
-      ...(candidate.location ? { location: { displayName: candidate.location } } : {}),
+      ...(locationName ? { location: { displayName: locationName } } : {}),
       singleValueExtendedProperties: [
         { id: this.microsoftGraphApiClient.getManagedEventMarkerProperty(), value: "true" },
       ],
     };
+  }
+
+  private getTeamsJoinUrl(value: string | null) {
+    if (!value) return null;
+
+    try {
+      const url = new URL(value);
+
+      return url.protocol === "https:" && TEAMS_HOSTS.has(url.hostname.toLowerCase())
+        ? url.toString()
+        : null;
+    } catch {
+      return null;
+    }
   }
 
   private async getAccessToken(

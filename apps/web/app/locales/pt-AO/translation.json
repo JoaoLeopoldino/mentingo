@@ -1281,7 +1281,14 @@
       "assignedToLessonsDescription": "Esta formação síncrona está associada a {{count}} lição. Elimine primeiro a lição associada antes de eliminar a formação síncrona.",
       "assignedToLessonsDescription_plural": "Esta formação síncrona está associada a {{count}} lições. Elimine primeiro as lições associadas antes de eliminar a formação síncrona."
     },
-    "description": "Esta página conterá o espaço de trabalho completo da formação síncrona."
+    "description": "Esta página conterá o espaço de trabalho completo da formação síncrona.",
+    "teams": {
+      "formLabel": "Criar uma reunião no Microsoft Teams",
+      "formHint": "Cria uma reunião Teams para esta sessão a partir do calendário Microsoft ligado do formador e partilha a ligação de acesso com os participantes.",
+      "label": "Microsoft Teams",
+      "join": "Entrar na reunião do Teams",
+      "pending": "Reunião do Teams em preparação"
+    }
   },
   "newsView": {
     "header": "Notícias",
@@ -8326,6 +8333,14 @@
       "activeSessionUpdateForbidden": "Esta formação síncrona não pode ser alterada enquanto uma sessão estiver em curso.",
       "maxParticipantsReached": "Foi atingido o número máximo de participantes.",
       "maxParallelSessionsReached": "Foi atingido o número máximo de sessões de formação síncrona activas."
+    },
+    "teams": {
+      "errors": {
+        "disabled": "As reuniões do Teams não estão activadas nesta plataforma.",
+        "noConnectedOrganizer": "Nenhum formador tem o calendário Microsoft ligado. Ligue-o nas Definições.",
+        "authorizationRequired": "A Microsoft precisa de nova autorização. Volte a ligar o calendário Microsoft nas Definições.",
+        "failed": "Não foi possível criar a reunião do Teams. Será tentado de novo quando a sessão for alterada."
+      }
     }
   },
   "automationSteps": {

@@ -1426,6 +1426,13 @@
       "toast": {
         "success": "Živé školení bylo úspěšně aktualizováno."
       }
+    },
+    "teams": {
+      "formLabel": "Vytvořit schůzku v Microsoft Teams",
+      "formHint": "Vytvoří jednu schůzku Teams pro tuto relaci v připojeném kalendáři Microsoft lektora a sdílí odkaz s účastníky.",
+      "label": "Microsoft Teams",
+      "join": "Připojit se ke schůzce Teams",
+      "pending": "Schůzka Teams se připravuje"
     }
   },
   "newsView": {
@@ -6108,6 +6115,14 @@
       "activeSessionUpdateForbidden": "Toto živé školení nelze během probíhající relace měnit.",
       "maxParticipantsReached": "Bylo dosaženo maximálního počtu účastníků.",
       "maxParallelSessionsReached": "Bylo dosaženo maximálního počtu aktivních relací Živé školení."
+    },
+    "teams": {
+      "errors": {
+        "disabled": "Schůzky Teams nejsou na této platformě povoleny.",
+        "noConnectedOrganizer": "Žádný lektor nemá připojený kalendář Microsoft. Připojte jej v Nastavení.",
+        "authorizationRequired": "Microsoft vyžaduje nové oprávnění. Znovu připojte kalendář Microsoft v Nastavení.",
+        "failed": "Schůzku Teams se nepodařilo vytvořit. Pokus se zopakuje po změně relace."
+      }
     }
   },
   "modernCourseView": {

@@ -33,6 +33,7 @@ export const createLiveTrainingSchema = Type.Object({
     Type.Number({ minimum: 1, maximum: LIVE_TRAINING_MAX_PARTICIPANTS_LIMIT }),
   ),
   settings: Type.Optional(updateLiveTrainingSettingsSchema),
+  teamsMeeting: Type.Optional(Type.Boolean()),
   hostUserIds: Type.Optional(Type.Array(UUIDSchema)),
   linkedCourseIds: Type.Optional(Type.Array(UUIDSchema)),
   beforeResourceIds: Type.Optional(Type.Array(UUIDSchema)),

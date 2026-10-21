@@ -162,6 +162,8 @@ export function CalendarCreateLiveTrainingDialog({
           ? formState.location.trim()
           : null,
       maxParticipants: formState.maxParticipants,
+      teamsMeeting:
+        formState.deliveryType === LIVE_TRAINING_DELIVERY_TYPES.OFFLINE && formState.teamsMeeting,
       settings: {
         viewerPermissions: {
           microphoneEnabled: formState.microphoneEnabled,

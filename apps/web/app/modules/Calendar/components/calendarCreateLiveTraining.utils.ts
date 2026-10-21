@@ -75,5 +75,6 @@ export const buildInitialCalendarCreateLiveTrainingFormState = (
     maxParticipants: LIVE_TRAINING_MAX_PARTICIPANTS_LIMIT,
     microphoneEnabled: DEFAULT_LIVE_TRAINING_SETTINGS.viewerPermissions.microphoneEnabled,
     cameraEnabled: DEFAULT_LIVE_TRAINING_SETTINGS.viewerPermissions.cameraEnabled,
+    teamsMeeting: false,
   };
 };

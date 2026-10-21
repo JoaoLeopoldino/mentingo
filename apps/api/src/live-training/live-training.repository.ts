@@ -495,6 +495,19 @@ export class LiveTrainingRepository {
     return this.db.update(liveTrainings).set(data).where(eq(liveTrainings.id, liveTrainingId));
   }
 
+  async setTeamsMeetingRequested(liveTrainingId: UUIDType, requested: boolean) {
+    return this.db
+      .update(liveTrainings)
+      .set({
+        metadata: sql`jsonb_set(
+          coalesce(${liveTrainings.metadata}, '{}'::jsonb),
+          '{teams}',
+          coalesce(${liveTrainings.metadata}->'teams', '{}'::jsonb) || ${JSON.stringify({ requested })}::text::jsonb
+        )`,
+      })
+      .where(eq(liveTrainings.id, liveTrainingId));
+  }
+
   async deleteHosts(liveTrainingId: UUIDType) {
     return this.db
       .delete(liveTrainingMembers)

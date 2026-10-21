@@ -14,6 +14,7 @@ export const liveTrainingFormStateSchema = z.object({
   maxParticipants: z.number(),
   microphoneEnabled: z.boolean(),
   cameraEnabled: z.boolean(),
+  teamsMeeting: z.boolean(),
 });
 
 export type LiveTrainingFormState = z.infer<typeof liveTrainingFormStateSchema>;

@@ -1,5 +1,5 @@
 import { LIVE_TRAINING_DELIVERY_TYPES } from "@repo/shared";
-import { Info, MapPin } from "lucide-react";
+import { Info, MapPin, Video } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { cn } from "~/lib/utils";
@@ -51,6 +51,29 @@ export function LiveTrainingOverview({
             <dt className="text-neutral-500">{t("liveTrainingView.sidebar.courses")}</dt>
             <dd className="text-right text-neutral-900">{liveTraining.linkedCourses.length}</dd>
           </div>
+          {liveTraining.teamsMeeting.requested && (
+            <div className="flex justify-between gap-4">
+              <dt className="inline-flex items-center gap-1.5 text-neutral-500">
+                <Video className="size-3.5" />
+                {t("liveTrainingView.teams.label")}
+              </dt>
+              <dd className="text-right text-neutral-900">
+                {liveTraining.teamsMeeting.joinUrl ? (
+                  <a
+                    href={liveTraining.teamsMeeting.joinUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-primary-700 underline"
+                    data-testid="live-training-teams-join-link"
+                  >
+                    {t("liveTrainingView.teams.join")}
+                  </a>
+                ) : (
+                  t(liveTraining.teamsMeeting.errorCode ?? "liveTrainingView.teams.pending")
+                )}
+              </dd>
+            </div>
+          )}
           {isOffline && liveTraining.location && (
             <div className="flex justify-between gap-4">
               <dt className="inline-flex items-center gap-1.5 text-neutral-500">

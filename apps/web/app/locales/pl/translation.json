@@ -1434,6 +1434,13 @@
       "toast": {
         "success": "Szkolenie na żywo zostało zaktualizowane."
       }
+    },
+    "teams": {
+      "formLabel": "Utwórz spotkanie w Microsoft Teams",
+      "formHint": "Tworzy jedno spotkanie Teams dla tej sesji w podłączonym kalendarzu Microsoft prowadzącego i udostępnia uczestnikom link.",
+      "label": "Microsoft Teams",
+      "join": "Dołącz do spotkania Teams",
+      "pending": "Spotkanie Teams jest przygotowywane"
     }
   },
   "learningPathsView": {
@@ -6166,6 +6173,14 @@
       "activeSessionUpdateForbidden": "Nie można zmieniać tego szkolenia na żywo, gdy sesja jest w toku.",
       "maxParticipantsReached": "Osiągnięto maksymalną liczbę uczestników.",
       "maxParallelSessionsReached": "Osiągnięto maksymalną liczbę aktywnych sesji szkoleń na żywo."
+    },
+    "teams": {
+      "errors": {
+        "disabled": "Spotkania Teams nie są włączone na tej platformie.",
+        "noConnectedOrganizer": "Żaden prowadzący nie ma podłączonego kalendarza Microsoft. Podłącz go w Ustawieniach.",
+        "authorizationRequired": "Microsoft wymaga ponownej autoryzacji. Podłącz ponownie kalendarz Microsoft w Ustawieniach.",
+        "failed": "Nie udało się utworzyć spotkania Teams. Próba zostanie ponowiona po zmianie sesji."
+      }
     }
   },
   "modernCourseView": {

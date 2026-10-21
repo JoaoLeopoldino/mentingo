@@ -17,6 +17,17 @@ export const liveTrainingDetailsSchema = Type.Intersect([
   Type.Object({
     settings: liveTrainingSettingsSchema,
     metadata: Type.Record(Type.String(), Type.Unknown()),
+    teamsMeeting: Type.Object({
+      requested: Type.Boolean(),
+      status: Type.Union([
+        Type.Literal("pending"),
+        Type.Literal("ready"),
+        Type.Literal("error"),
+        Type.Null(),
+      ]),
+      joinUrl: Type.Union([Type.String(), Type.Null()]),
+      errorCode: Type.Union([Type.String(), Type.Null()]),
+    }),
     author: liveTrainingUserSummarySchema,
     hosts: Type.Array(liveTrainingUserSummarySchema),
     linkedCourses: Type.Array(liveTrainingCourseSummarySchema),

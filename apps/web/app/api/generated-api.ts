@@ -3751,6 +3751,12 @@ export interface GetLessonByIdResponse {
             };
           };
           metadata: object;
+          teamsMeeting: {
+            requested: boolean;
+            status: "pending" | "ready" | "error" | null;
+            joinUrl: string | null;
+            errorCode: string | null;
+          };
           author: {
             /** @format uuid */
             id: string;
@@ -3932,6 +3938,7 @@ export interface BetaCreateLiveTrainingLessonBody {
         cameraEnabled?: boolean;
       };
     };
+    teamsMeeting?: boolean;
     hostUserIds?: string[];
     beforeResourceIds?: string[];
     afterResourceIds?: string[];
@@ -3985,6 +3992,7 @@ export interface AttachLiveTrainingLessonBody {
         cameraEnabled?: boolean;
       };
     };
+    teamsMeeting?: boolean;
     hostUserIds?: string[];
     beforeResourceIds?: string[];
     afterResourceIds?: string[];
@@ -8464,6 +8472,12 @@ export interface GetLiveTrainingResponse {
       };
     };
     metadata: object;
+    teamsMeeting: {
+      requested: boolean;
+      status: "pending" | "ready" | "error" | null;
+      joinUrl: string | null;
+      errorCode: string | null;
+    };
     author: {
       /** @format uuid */
       id: string;
@@ -8559,6 +8573,7 @@ export interface CreateLiveTrainingBody {
       cameraEnabled?: boolean;
     };
   };
+  teamsMeeting?: boolean;
   hostUserIds?: string[];
   linkedCourseIds?: string[];
   beforeResourceIds?: string[];
@@ -8613,6 +8628,7 @@ export type UpdateLiveTrainingBody = {
       cameraEnabled?: boolean;
     };
   };
+  teamsMeeting?: boolean;
   hostUserIds?: string[];
   linkedCourseIds?: string[];
   beforeResourceIds?: string[];
@@ -8648,6 +8664,12 @@ export interface UpdateLiveTrainingResponse {
       };
     };
     metadata: object;
+    teamsMeeting: {
+      requested: boolean;
+      status: "pending" | "ready" | "error" | null;
+      joinUrl: string | null;
+      errorCode: string | null;
+    };
     author: {
       /** @format uuid */
       id: string;

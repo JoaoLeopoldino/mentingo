@@ -1414,6 +1414,13 @@
       "toast": {
         "success": "Formación en vivo actualizada con éxito."
       }
+    },
+    "teams": {
+      "formLabel": "Crear una reunión de Microsoft Teams",
+      "formHint": "Crea una reunión de Teams para esta sesión con el calendario de Microsoft conectado del formador y comparte el enlace de acceso con los participantes.",
+      "label": "Microsoft Teams",
+      "join": "Unirse a la reunión de Teams",
+      "pending": "Reunión de Teams en preparación"
     }
   },
   "newsView": {
@@ -6058,6 +6065,14 @@
       "activeSessionUpdateForbidden": "Esta formación en directo no se puede modificar mientras haya una sesión en curso.",
       "maxParticipantsReached": "Se ha alcanzado el número máximo de participantes.",
       "maxParallelSessionsReached": "Se alcanzó el número máximo de sesiones de formación en vivo activas."
+    },
+    "teams": {
+      "errors": {
+        "disabled": "Las reuniones de Teams no están habilitadas en esta plataforma.",
+        "noConnectedOrganizer": "Ningún formador tiene un calendario de Microsoft conectado. Conéctelo en Ajustes.",
+        "authorizationRequired": "Microsoft necesita una nueva autorización. Vuelva a conectar el calendario de Microsoft en Ajustes.",
+        "failed": "No se pudo crear la reunión de Teams. Se reintentará cuando cambie la sesión."
+      }
     }
   },
   "modernCourseView": {

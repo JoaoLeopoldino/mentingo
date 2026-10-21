@@ -43,6 +43,7 @@ export const buildLiveTrainingEditFormState = (
     maxParticipants: String(liveTraining.maxParticipants),
     microphoneEnabled: liveTraining.settings.viewerPermissions.microphoneEnabled,
     cameraEnabled: liveTraining.settings.viewerPermissions.cameraEnabled,
+    teamsMeeting: liveTraining.teamsMeeting.requested,
   };
 };
 
@@ -70,6 +71,7 @@ export const buildUpdateLiveTrainingPayload = (
     timezone,
     deliveryType: formState.deliveryType,
     location: isOffline ? formState.location.trim() : null,
+    teamsMeeting: isOffline && formState.teamsMeeting,
     settings: {
       viewerPermissions: {
         microphoneEnabled: formState.microphoneEnabled,

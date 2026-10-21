@@ -13,4 +13,5 @@ export type LiveTrainingEditFormState = {
   maxParticipants: string;
   microphoneEnabled: boolean;
   cameraEnabled: boolean;
+  teamsMeeting: boolean;
 };

@@ -35,6 +35,7 @@ export const updateLiveTrainingSchema = Type.Intersect([
       status: liveTrainingStatusSchema,
       maxParticipants: Type.Number({ minimum: 1, maximum: LIVE_TRAINING_MAX_PARTICIPANTS_LIMIT }),
       settings: updateLiveTrainingSettingsSchema,
+      teamsMeeting: Type.Boolean(),
       hostUserIds: Type.Array(UUIDSchema),
       linkedCourseIds: Type.Array(UUIDSchema),
       beforeResourceIds: Type.Array(UUIDSchema),

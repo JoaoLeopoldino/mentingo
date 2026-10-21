@@ -1420,6 +1420,13 @@
       "toast": {
         "success": "Tiesioginiai mokymai sėkmingai atnaujinti."
       }
+    },
+    "teams": {
+      "formLabel": "Sukurti „Microsoft Teams“ susitikimą",
+      "formHint": "Sukuria vieną „Teams“ susitikimą šiai sesijai naudojant vedančiojo prijungtą „Microsoft“ kalendorių ir pasidalija prisijungimo nuoroda su dalyviais.",
+      "label": "Microsoft Teams",
+      "join": "Prisijungti prie „Teams“ susitikimo",
+      "pending": "„Teams“ susitikimas ruošiamas"
     }
   },
   "newsView": {
@@ -6104,6 +6111,14 @@
       "activeSessionUpdateForbidden": "Šio tiesioginio mokymo negalima keisti, kol vyksta sesija.",
       "maxParticipantsReached": "Pasiektas maksimalus dalyvių skaičius.",
       "maxParallelSessionsReached": "Pasiektas maksimalus aktyvių Tiesioginiai mokymai sesijų skaičius."
+    },
+    "teams": {
+      "errors": {
+        "disabled": "„Teams“ susitikimai šioje platformoje neįjungti.",
+        "noConnectedOrganizer": "Nė vienas vedantysis neprijungė „Microsoft“ kalendoriaus. Prijunkite jį nustatymuose.",
+        "authorizationRequired": "„Microsoft“ reikia naujo leidimo. Iš naujo prijunkite „Microsoft“ kalendorių nustatymuose.",
+        "failed": "Nepavyko sukurti „Teams“ susitikimo. Bus bandoma dar kartą pakeitus sesiją."
+      }
     }
   },
   "modernCourseView": {

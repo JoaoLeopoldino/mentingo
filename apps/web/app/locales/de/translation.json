@@ -1420,6 +1420,13 @@
       "toast": {
         "success": "Live-Schulung erfolgreich aktualisiert."
       }
+    },
+    "teams": {
+      "formLabel": "Microsoft-Teams-Besprechung erstellen",
+      "formHint": "Erstellt eine Teams-Besprechung für diese Sitzung über den verbundenen Microsoft-Kalender der Leitung und teilt den Beitrittslink mit den Teilnehmenden.",
+      "label": "Microsoft Teams",
+      "join": "An der Teams-Besprechung teilnehmen",
+      "pending": "Teams-Besprechung wird vorbereitet"
     }
   },
   "newsView": {
@@ -6099,6 +6106,14 @@
       "activeSessionUpdateForbidden": "Dieses Live-Training kann während einer laufenden Sitzung nicht geändert werden.",
       "maxParticipantsReached": "Die maximale Teilnehmerzahl wurde erreicht.",
       "maxParallelSessionsReached": "Die maximale Anzahl aktiver Live-Schulungssitzungen wurde erreicht."
+    },
+    "teams": {
+      "errors": {
+        "disabled": "Teams-Besprechungen sind auf dieser Plattform nicht aktiviert.",
+        "noConnectedOrganizer": "Keine Leitung hat einen verbundenen Microsoft-Kalender. Verbinden Sie ihn in den Einstellungen.",
+        "authorizationRequired": "Microsoft benötigt eine neue Autorisierung. Verbinden Sie den Microsoft-Kalender in den Einstellungen erneut.",
+        "failed": "Die Teams-Besprechung konnte nicht erstellt werden. Es wird erneut versucht, wenn sich die Sitzung ändert."
+      }
     }
   },
   "modernCourseView": {

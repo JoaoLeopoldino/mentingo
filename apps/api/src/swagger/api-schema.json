@@ -42547,6 +42547,59 @@
                               "^(.*)$": {}
                             }
                           },
+                          "teamsMeeting": {
+                            "type": "object",
+                            "properties": {
+                              "requested": {
+                                "type": "boolean"
+                              },
+                              "status": {
+                                "anyOf": [
+                                  {
+                                    "const": "pending",
+                                    "type": "string"
+                                  },
+                                  {
+                                    "const": "ready",
+                                    "type": "string"
+                                  },
+                                  {
+                                    "const": "error",
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "joinUrl": {
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "errorCode": {
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              }
+                            },
+                            "required": [
+                              "requested",
+                              "status",
+                              "joinUrl",
+                              "errorCode"
+                            ]
+                          },
                           "author": {
                             "type": "object",
                             "properties": {
@@ -42962,6 +43015,7 @@
                         "required": [
                           "settings",
                           "metadata",
+                          "teamsMeeting",
                           "author",
                           "hosts",
                           "linkedCourses",
@@ -43588,6 +43642,9 @@
                   }
                 }
               },
+              "teamsMeeting": {
+                "type": "boolean"
+              },
               "hostUserIds": {
                 "type": "array",
                 "items": {
@@ -43780,6 +43837,9 @@
                     }
                   }
                 }
+              },
+              "teamsMeeting": {
+                "type": "boolean"
               },
               "hostUserIds": {
                 "type": "array",
@@ -64701,6 +64761,59 @@
                       "^(.*)$": {}
                     }
                   },
+                  "teamsMeeting": {
+                    "type": "object",
+                    "properties": {
+                      "requested": {
+                        "type": "boolean"
+                      },
+                      "status": {
+                        "anyOf": [
+                          {
+                            "const": "pending",
+                            "type": "string"
+                          },
+                          {
+                            "const": "ready",
+                            "type": "string"
+                          },
+                          {
+                            "const": "error",
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "joinUrl": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "errorCode": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "requested",
+                      "status",
+                      "joinUrl",
+                      "errorCode"
+                    ]
+                  },
                   "author": {
                     "type": "object",
                     "properties": {
@@ -65116,6 +65229,7 @@
                 "required": [
                   "settings",
                   "metadata",
+                  "teamsMeeting",
                   "author",
                   "hosts",
                   "linkedCourses",
@@ -65245,6 +65359,9 @@
                 }
               }
             }
+          },
+          "teamsMeeting": {
+            "type": "boolean"
           },
           "hostUserIds": {
             "type": "array",
@@ -65521,6 +65638,9 @@
                   }
                 }
               },
+              "teamsMeeting": {
+                "type": "boolean"
+              },
               "hostUserIds": {
                 "type": "array",
                 "items": {
@@ -65725,6 +65845,59 @@
                     "patternProperties": {
                       "^(.*)$": {}
                     }
+                  },
+                  "teamsMeeting": {
+                    "type": "object",
+                    "properties": {
+                      "requested": {
+                        "type": "boolean"
+                      },
+                      "status": {
+                        "anyOf": [
+                          {
+                            "const": "pending",
+                            "type": "string"
+                          },
+                          {
+                            "const": "ready",
+                            "type": "string"
+                          },
+                          {
+                            "const": "error",
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "joinUrl": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "errorCode": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "requested",
+                      "status",
+                      "joinUrl",
+                      "errorCode"
+                    ]
                   },
                   "author": {
                     "type": "object",
@@ -66141,6 +66314,7 @@
                 "required": [
                   "settings",
                   "metadata",
+                  "teamsMeeting",
                   "author",
                   "hosts",
                   "linkedCourses",

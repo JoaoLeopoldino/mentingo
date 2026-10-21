@@ -68,6 +68,7 @@ export function LiveTrainingFormFields({
   const descriptionId = `${idPrefix}-description`;
   const allDayId = `${idPrefix}-all-day`;
   const maxParticipantsId = `${idPrefix}-max-participants`;
+  const teamsMeetingId = `${idPrefix}-teams-meeting`;
   const locationId = `${idPrefix}-location`;
   const microphoneId = `${idPrefix}-microphone-enabled`;
   const cameraId = `${idPrefix}-camera-enabled`;
@@ -276,6 +277,23 @@ export function LiveTrainingFormFields({
               value={formState.location}
               onChange={(event) => onFormStateChange("location", event.target.value)}
               placeholder={t("calendarView.create.placeholder.location")}
+            />
+          </div>
+        )}
+
+        {formState.deliveryType === LIVE_TRAINING_DELIVERY_TYPES.OFFLINE && (
+          <div className="flex items-start justify-between gap-3 rounded-md border border-neutral-200 px-3 py-2.5">
+            <div className="grid gap-0.5">
+              <label htmlFor={teamsMeetingId} className="text-sm font-medium text-neutral-900">
+                {t("liveTrainingView.teams.formLabel")}
+              </label>
+              <p className="text-xs text-neutral-500">{t("liveTrainingView.teams.formHint")}</p>
+            </div>
+            <Switch
+              id={teamsMeetingId}
+              data-testid={LIVE_TRAINING_FORM_HANDLES.teamsMeetingSwitch(idPrefix)}
+              checked={formState.teamsMeeting}
+              onCheckedChange={(checked) => onFormStateChange("teamsMeeting", checked)}
             />
           </div>
         )}

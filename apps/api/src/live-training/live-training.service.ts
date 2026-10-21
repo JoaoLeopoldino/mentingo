@@ -47,6 +47,11 @@ import { FileService } from "src/file/file.service";
 import { IMAGE_QUALITY } from "src/file/image-variants/image-variant.constants";
 import { OutboxPublisher } from "src/outbox/outbox.publisher";
 import { DB } from "src/storage/db/db.providers";
+import {
+  LIVE_TRAINING_TEAMS_JOIN_LEAD_MS,
+  LIVE_TRAINING_TEAMS_STATUSES,
+  type LiveTrainingTeamsState,
+} from "src/calendar/types/live-training-teams.types";
 import { calendarEvents, courses, liveTrainingLinks, liveTrainings } from "src/storage/schema";
 
 import { LiveTrainingSessionsRepository } from "./live-training-sessions/live-training-sessions.repository";
@@ -371,6 +376,9 @@ export class LiveTrainingService {
         status: LIVE_TRAINING_STATUSES.SCHEDULED,
         maxParticipants: this.getMaxParticipants(body.maxParticipants),
         settings: this.mergeSettings(body.settings),
+        metadata: body.teamsMeeting
+          ? { teams: { requested: true, status: LIVE_TRAINING_TEAMS_STATUSES.PENDING } }
+          : {},
       },
       hosts: this.getHostRows(hostUserIds),
     };
@@ -464,6 +472,10 @@ export class LiveTrainingService {
 
     if (this.hasUpdateValues(liveTrainingUpdate)) {
       await this.liveTrainingRepository.updateLiveTraining(row.id, liveTrainingUpdate);
+    }
+
+    if (body.teamsMeeting !== undefined) {
+      await this.liveTrainingRepository.setTeamsMeetingRequested(row.id, body.teamsMeeting);
     }
 
     if (hostUserIds !== undefined) {
@@ -738,7 +750,8 @@ export class LiveTrainingService {
       hostIds: hosts.map((host) => host.id),
       linkedCourseIds: linkedCourses.map((course) => course.id),
       settings: row.settings,
-      metadata: row.metadata as Record<string, unknown>,
+      metadata: this.getPublicMetadata(row.metadata),
+      teamsMeeting: this.getTeamsMeetingView(row, isPrivilegedViewer),
       author: {
         id: row.authorId,
         fullName: row.authorName,
@@ -1013,6 +1026,32 @@ export class LiveTrainingService {
       PERMISSIONS.LIVE_TRAINING_UPDATE,
       PERMISSIONS.LIVE_TRAINING_DELETE,
     ]);
+  }
+
+  private getPublicMetadata(metadata: unknown): Record<string, unknown> {
+    const { teams: _teams, ...publicMetadata } = (metadata ?? {}) as Record<string, unknown>;
+
+    return publicMetadata;
+  }
+
+  private getTeamsMeetingView(
+    row: { metadata: unknown; startsAt: string; status: string },
+    isPrivilegedViewer: boolean,
+  ) {
+    const teams = ((row.metadata ?? {}) as { teams?: LiveTrainingTeamsState }).teams;
+    const opensAt = new Date(row.startsAt).getTime() - LIVE_TRAINING_TEAMS_JOIN_LEAD_MS;
+    const isJoinable =
+      row.status !== LIVE_TRAINING_STATUSES.ENDED &&
+      row.status !== LIVE_TRAINING_STATUSES.CANCELLED &&
+      row.status !== LIVE_TRAINING_STATUSES.EXPIRED &&
+      Date.now() >= opensAt;
+
+    return {
+      requested: teams?.requested ?? false,
+      status: teams?.status ?? null,
+      joinUrl: teams?.joinUrl && (isPrivilegedViewer || isJoinable) ? teams.joinUrl : null,
+      errorCode: isPrivilegedViewer ? (teams?.errorCode ?? null) : null,
+    };
   }
 
   private canViewAllMaterials(

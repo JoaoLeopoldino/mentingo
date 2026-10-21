@@ -36,6 +36,7 @@ export type CreateLiveTrainingRecordInput = {
     status: LiveTrainingStatus;
     maxParticipants: number;
     settings: LiveTrainingSettings;
+    metadata?: Record<string, unknown>;
   };
   hosts: Array<{
     userId: UUIDType;

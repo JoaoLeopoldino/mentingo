@@ -23,6 +23,7 @@ export const LIVE_TRAINING_FORM_HANDLES = {
   deliveryTypeOption: (deliveryType: string) => `${deliveryType}-delivery-type-option`,
   maxParticipantsInput: (prefix: string) => `${prefix}-max-participants-input`,
   locationInput: (prefix: string) => `${prefix}-location-input`,
+  teamsMeetingSwitch: (prefix: string) => `${prefix}-teams-meeting-switch`,
   startDateButton: (prefix: string) => `${prefix}-start-date-button`,
   startTimeSelect: (prefix: string) => `${prefix}-start-time-select`,
   endDateButton: (prefix: string) => `${prefix}-end-date-button`,

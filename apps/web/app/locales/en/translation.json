@@ -1421,6 +1421,13 @@
       "toast": {
         "success": "Live Training updated successfully."
       }
+    },
+    "teams": {
+      "formLabel": "Create a Microsoft Teams meeting",
+      "formHint": "Creates one Teams meeting for this session using the host's connected Microsoft calendar and shares the join link with participants.",
+      "label": "Microsoft Teams",
+      "join": "Join the Teams meeting",
+      "pending": "Teams meeting being prepared"
     }
   },
   "newsView": {
@@ -6121,6 +6128,14 @@
       "activeSessionUpdateForbidden": "This Live Training cannot be changed while a session is in progress.",
       "maxParticipantsReached": "The maximum number of participants has been reached.",
       "maxParallelSessionsReached": "The maximum number of active Live Training sessions has been reached."
+    },
+    "teams": {
+      "errors": {
+        "disabled": "Teams meetings are not enabled on this platform.",
+        "noConnectedOrganizer": "No host has a connected Microsoft calendar. Connect it in Settings.",
+        "authorizationRequired": "Microsoft needs new authorization. Reconnect the Microsoft calendar in Settings.",
+        "failed": "The Teams meeting could not be created. It will be retried when the session changes."
+      }
     }
   },
   "modernCourseView": {

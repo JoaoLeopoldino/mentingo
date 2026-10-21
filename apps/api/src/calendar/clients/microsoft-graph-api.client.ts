@@ -15,6 +15,8 @@ import type {
   MicrosoftGraphProfile,
   MicrosoftGraphCalendar,
   MicrosoftGraphEvent,
+  MicrosoftGraphOnlineMeeting,
+  MicrosoftGraphOnlineMeetingInput,
   MicrosoftGraphOutboundEvent,
   MicrosoftGraphSubscription,
   MicrosoftTokenResponse,
@@ -24,6 +26,11 @@ const MICROSOFT_AUTHORITY = "https://login.microsoftonline.com/common/oauth2/v2.
 const MICROSOFT_GRAPH = "https://graph.microsoft.com/v1.0";
 export const MICROSOFT_MENTINGO_MARKER_PROPERTY = MICROSOFT_CALENDAR_DEFAULT_MARKER_PROPERTY;
 const MICROSOFT_CALENDAR_SCOPES = ["User.Read", "Calendars.ReadWrite", "offline_access"];
+export const MICROSOFT_TEAMS_MEETING_SCOPES = ["OnlineMeetings.ReadWrite"];
+
+// Teams meetings are opt-in: requesting an extra scope at sign-in would make tenants that block user
+// consent reject the whole calendar connection.
+const isTeamsMeetingsEnabled = () => process.env.MICROSOFT_TEAMS_MEETINGS_ENABLED === "true";
 
 type MicrosoftGraphErrorResponse = {
   error?: string | { code?: string; message?: string };
@@ -81,7 +88,13 @@ export class MicrosoftGraphApiClient {
     url.searchParams.set("response_type", "code");
     url.searchParams.set("redirect_uri", redirectUri);
     url.searchParams.set("response_mode", "query");
-    url.searchParams.set("scope", MICROSOFT_CALENDAR_SCOPES.join(" "));
+    url.searchParams.set(
+      "scope",
+      [
+        ...MICROSOFT_CALENDAR_SCOPES,
+        ...(isTeamsMeetingsEnabled() ? MICROSOFT_TEAMS_MEETING_SCOPES : []),
+      ].join(" "),
+    );
     url.searchParams.set("state", state);
     url.searchParams.set("prompt", "select_account");
     return url.toString();
@@ -91,8 +104,46 @@ export class MicrosoftGraphApiClient {
     return this.requestToken({ code, redirect_uri: redirectUri, grant_type: "authorization_code" });
   }
 
-  async refreshAccessToken(refreshToken: string) {
-    return this.requestToken({ refresh_token: refreshToken, grant_type: "refresh_token" });
+  async refreshAccessToken(refreshToken: string, scopes: string[] = MICROSOFT_CALENDAR_SCOPES) {
+    return this.requestToken({
+      refresh_token: refreshToken,
+      grant_type: "refresh_token",
+      scope: scopes.join(" "),
+    });
+  }
+
+  isTeamsMeetingsEnabled() {
+    return isTeamsMeetingsEnabled();
+  }
+
+  async createOnlineMeeting(
+    accessToken: string,
+    meeting: MicrosoftGraphOnlineMeetingInput,
+  ): Promise<MicrosoftGraphOnlineMeeting> {
+    return this.graphRequest<MicrosoftGraphOnlineMeeting>("post", `${MICROSOFT_GRAPH}/me/onlineMeetings`, {
+      accessToken,
+      data: meeting,
+    });
+  }
+
+  async updateOnlineMeeting(
+    accessToken: string,
+    meetingId: string,
+    meeting: MicrosoftGraphOnlineMeetingInput,
+  ): Promise<void> {
+    await this.graphRequest<void>(
+      "patch",
+      `${MICROSOFT_GRAPH}/me/onlineMeetings/${encodeURIComponent(meetingId)}`,
+      { accessToken, data: meeting },
+    );
+  }
+
+  async deleteOnlineMeeting(accessToken: string, meetingId: string): Promise<void> {
+    await this.graphRequest<void>(
+      "delete",
+      `${MICROSOFT_GRAPH}/me/onlineMeetings/${encodeURIComponent(meetingId)}`,
+      { accessToken },
+    );
   }
 
   async getProfile(accessToken: string): Promise<MicrosoftGraphProfile> {
@@ -231,7 +282,7 @@ export class MicrosoftGraphApiClient {
       client_id: clientId,
       client_secret: clientSecret,
       scope: MICROSOFT_CALENDAR_SCOPES.join(" "),
-      ...payload,
+      ...payload, // an explicit "scope" in the payload overrides the default calendar scopes
     });
 
     try {
