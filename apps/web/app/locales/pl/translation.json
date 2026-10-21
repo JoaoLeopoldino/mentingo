@@ -1771,6 +1771,8 @@
     "taxNumber": "Numer NIP",
     "emailAddress": "Adres email",
     "courtRegisterNumber": "Numer KRS",
+    "linkedinOrganizationId": "ID organizacji LinkedIn",
+    "linkedinOrganizationIdHint": "Numeryczny identyfikator strony firmy, używany przy dodawaniu certyfikatów do profili LinkedIn. Zostaw puste, aby użyć nazwy firmy.",
     "noDataAvailable": "Brak informacji o dostawcy",
     "createSuccess": "Informacje o dostawcy zostały utworzone",
     "updateSuccess": "Informacje o dostawcy zostały zaktualizowane",
@@ -1780,6 +1782,7 @@
     "validation": {
       "nipMustBe10Digits": "NIP musi mieć 10 cyfr",
       "krsMustBe10Digits": "KRS musi mieć 10 cyfr",
+      "linkedinOrganizationIdMustBeNumeric": "Dozwolone są tylko cyfry",
       "invalidEmailFormat": "Nieprawidłowy format email",
       "brandingNameRequired": "Wprowadź nazwę.",
       "brandingNameTooLong": "Nazwa przekracza dozwoloną długość."
@@ -4996,7 +4999,8 @@
     "button": {
       "download": "Pobierz",
       "preview": "Podgląd",
-      "shareLinkedIn": "Udostępnij na LinkedIn"
+      "shareLinkedIn": "Udostępnij na LinkedIn",
+      "addToLinkedInProfile": "Dodaj do profilu LinkedIn"
     },
     "controls": {
       "languageToggle": "Przełącznik języka",

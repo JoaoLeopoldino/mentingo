@@ -242,6 +242,7 @@ export const learningPathCertificateSchema = Type.Object({
 export const learningPathCertificateShareLinkSchema = Type.Object({
   shareUrl: Type.String(),
   linkedinShareUrl: Type.String(),
+  linkedinAddToProfileUrl: Type.String(),
 });
 
 export const learningPathCertificateDownloadSchema = Type.Object({

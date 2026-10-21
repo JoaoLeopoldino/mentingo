@@ -4,11 +4,11 @@ import { match } from "ts-pattern";
 
 import { useCreateCertificateShareLink } from "~/api/mutations/useCreateCertificateShareLink";
 import { useCreateLearningPathCertificateShareLink } from "~/api/mutations/useCreateLearningPathCertificateShareLink";
+import { useCompanyInformation } from "~/api/queries/useCompanyInformation";
 import { cn } from "~/lib/utils";
 import { useLanguageStore } from "~/modules/Dashboard/Settings/Language/LanguageStore";
 import { formatCertificateDate } from "~/utils/formatCertificateDate";
 
-import { useCompanyInformation } from "~/api/queries/useCompanyInformation";
 
 import CertificateContent from "./CertificateContent";
 import CertificateControls from "./CertificateControls";
@@ -80,20 +80,24 @@ const CertificatePreview = ({
     setColorTheme(getCertificateColorTheme(initialColor));
   }, [initialColor]);
 
-  const handleShareToLinkedIn = async () => {
+  const openLinkedIn = async (target: "linkedinShareUrl" | "linkedinAddToProfileUrl") => {
     if (!certificateId || isPreparingShare || isPreparingLearningPathShare) return;
 
     const createShareLink = match(certificateKind)
       .with(CERTIFICATE_KIND.LEARNING_PATH, () => createLearningPathCertificateShareLink)
       .with(CERTIFICATE_KIND.COURSE, () => createCertificateShareLink)
       .exhaustive();
-    const { linkedinShareUrl } = await createShareLink({
+    const shareLinks = await createShareLink({
       certificateId,
       language: selectedLanguage,
     });
 
-    window.open(linkedinShareUrl, "_blank", "noopener,noreferrer");
+    window.open(shareLinks[target], "_blank", "noopener,noreferrer");
   };
+
+  const handleShareToLinkedIn = () => openLinkedIn("linkedinShareUrl");
+
+  const handleAddToLinkedInProfile = () => openLinkedIn("linkedinAddToProfileUrl");
 
   const handleDownloadCertificate = async () => {
     await downloadCertificatePdf({ certificateId, lang: selectedLanguage });
@@ -127,6 +131,7 @@ const CertificatePreview = ({
               downloadCertificatePdf={handleDownloadCertificate}
               isPreparingDownload={isPreparingDownload}
               onShareToLinkedIn={handleShareToLinkedIn}
+              onAddToLinkedInProfile={handleAddToLinkedInProfile}
               isPreparingShare={isPreparingShare || isPreparingLearningPathShare}
               colorTheme={colorTheme}
               setColorTheme={setColorTheme}

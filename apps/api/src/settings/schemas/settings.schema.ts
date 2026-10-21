@@ -26,6 +26,7 @@ export const companyInformationJSONSchema = Type.Object({
   taxNumber: Type.Optional(Type.String()),
   emailAddress: Type.Optional(Type.String()),
   courtRegisterNumber: Type.Optional(Type.String()),
+  linkedinOrganizationId: Type.Optional(Type.String({ pattern: "^\\d*$" })),
 });
 
 export const globalSettingsJSONSchema = Type.Object({

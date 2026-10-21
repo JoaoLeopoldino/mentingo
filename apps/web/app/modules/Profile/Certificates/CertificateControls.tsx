@@ -1,5 +1,5 @@
 import * as PopoverPrimitive from "@radix-ui/react-popover";
-import { Download, Loader2, Palette, X } from "lucide-react";
+import { BadgeCheck, Download, Loader2, Palette, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -29,6 +29,7 @@ interface CertificateControlsProps {
   downloadCertificatePdf: () => Promise<void>;
   isPreparingDownload: boolean;
   onShareToLinkedIn?: () => Promise<void>;
+  onAddToLinkedInProfile?: () => Promise<void>;
   isPreparingShare?: boolean;
   colorTheme: CertificateColorTheme;
   setColorTheme: React.Dispatch<React.SetStateAction<CertificateColorTheme>>;
@@ -49,6 +50,7 @@ const CertificateControls = ({
   downloadCertificatePdf,
   isPreparingDownload,
   onShareToLinkedIn,
+  onAddToLinkedInProfile,
   isPreparingShare = false,
   colorTheme,
   setColorTheme,
@@ -159,6 +161,17 @@ const CertificateControls = ({
           ) : (
             <Linkedin className="size-5" />
           )}
+        </button>
+      )}
+      {showShareButton && onAddToLinkedInProfile && (
+        <button
+          className={buttonClasses}
+          onClick={() => void onAddToLinkedInProfile()}
+          disabled={isPreparingShare}
+          aria-label={t("studentCertificateView.button.addToLinkedInProfile")}
+          title={t("studentCertificateView.button.addToLinkedInProfile")}
+        >
+          <BadgeCheck className="size-5" />
         </button>
       )}
       {onClose && (

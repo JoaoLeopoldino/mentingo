@@ -36,6 +36,7 @@ export const createCertificateShareLinkSchema = Type.Object({
 export const certificateShareLinkResponseSchema = Type.Object({
   shareUrl: Type.String(),
   linkedinShareUrl: Type.String(),
+  linkedinAddToProfileUrl: Type.String(),
 });
 
 export const resetCourseCertificatesSchema = Type.Object({

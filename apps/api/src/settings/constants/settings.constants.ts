@@ -7,6 +7,7 @@ const DEFAULT_COMPANY_INFORMATION = {
   taxNumber: "",
   emailAddress: "",
   courtRegisterNumber: "",
+  linkedinOrganizationId: "",
 };
 
 export const DEFAULT_LIVE_TRAINING_MAX_PARALLEL_SESSIONS = 5;

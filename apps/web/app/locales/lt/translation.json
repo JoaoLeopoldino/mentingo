@@ -1526,6 +1526,8 @@
     "taxNumber": "Mokesčio numeris (NIP)",
     "emailAddress": "El. pašto adresas",
     "courtRegisterNumber": "Teismo registro numeris (KRS)",
+    "linkedinOrganizationId": "„LinkedIn“ organizacijos ID",
+    "linkedinOrganizationIdHint": "Įmonės puslapio skaitinis ID, naudojamas pridedant sertifikatus prie „LinkedIn“ profilių. Palikite tuščią, jei norite naudoti įmonės pavadinimą.",
     "noDataAvailable": "Informacijos apie teikėją nėra",
     "createSuccess": "Teikėjo informacija sėkmingai sukurta",
     "updateSuccess": "Teikėjo informacija sėkmingai atnaujinta",
@@ -1535,6 +1537,7 @@
     "validation": {
       "nipMustBe10Digits": "NIP turi būti 10 skaitmenų",
       "krsMustBe10Digits": "KRS turi būti 10 skaitmenų",
+      "linkedinOrganizationIdMustBeNumeric": "Leidžiami tik skaitmenys",
       "invalidEmailFormat": "Netinkamas el. pašto formatas",
       "brandingNameRequired": "Įveskite pavadinimą.",
       "brandingNameTooLong": "Pavadinimas viršija leistiną ilgį."
@@ -4709,7 +4712,8 @@
     "button": {
       "download": "Atsisiųsti",
       "preview": "Peržiūra",
-      "shareLinkedIn": "Bendrinkite „LinkedIn“."
+      "shareLinkedIn": "Bendrinkite „LinkedIn“.",
+      "addToLinkedInProfile": "Pridėti prie „LinkedIn“ profilio"
     },
     "controls": {
       "languageToggle": "Kalbos perjungimas",

@@ -479,6 +479,8 @@ export interface GetPublicGlobalSettingsResponse {
       taxNumber?: string;
       emailAddress?: string;
       courtRegisterNumber?: string;
+      /** @pattern ^\d*$ */
+      linkedinOrganizationId?: string;
     };
     platformLogoS3Key: string | null;
     loginBackgroundImageS3Key: string | null;
@@ -787,6 +789,8 @@ export interface UpdateUnregisteredUserCoursesAccessibilityResponse {
       taxNumber?: string;
       emailAddress?: string;
       courtRegisterNumber?: string;
+      /** @pattern ^\d*$ */
+      linkedinOrganizationId?: string;
     };
     platformLogoS3Key: string | null;
     loginBackgroundImageS3Key: string | null;
@@ -849,6 +853,8 @@ export interface UpdateEnforceSSOResponse {
       taxNumber?: string;
       emailAddress?: string;
       courtRegisterNumber?: string;
+      /** @pattern ^\d*$ */
+      linkedinOrganizationId?: string;
     };
     platformLogoS3Key: string | null;
     loginBackgroundImageS3Key: string | null;
@@ -911,6 +917,8 @@ export interface UpdateModernCourseListEnabledResponse {
       taxNumber?: string;
       emailAddress?: string;
       courtRegisterNumber?: string;
+      /** @pattern ^\d*$ */
+      linkedinOrganizationId?: string;
     };
     platformLogoS3Key: string | null;
     loginBackgroundImageS3Key: string | null;
@@ -977,6 +985,8 @@ export interface UpdateFeaturedCourseResponse {
       taxNumber?: string;
       emailAddress?: string;
       courtRegisterNumber?: string;
+      /** @pattern ^\d*$ */
+      linkedinOrganizationId?: string;
     };
     platformLogoS3Key: string | null;
     loginBackgroundImageS3Key: string | null;
@@ -1039,6 +1049,8 @@ export interface UpdateCourseDiscussionsEnabledResponse {
       taxNumber?: string;
       emailAddress?: string;
       courtRegisterNumber?: string;
+      /** @pattern ^\d*$ */
+      linkedinOrganizationId?: string;
     };
     platformLogoS3Key: string | null;
     loginBackgroundImageS3Key: string | null;
@@ -1101,6 +1113,8 @@ export interface UpdateCalendarEnabledResponse {
       taxNumber?: string;
       emailAddress?: string;
       courtRegisterNumber?: string;
+      /** @pattern ^\d*$ */
+      linkedinOrganizationId?: string;
     };
     platformLogoS3Key: string | null;
     loginBackgroundImageS3Key: string | null;
@@ -1163,6 +1177,8 @@ export interface UpdateLiveTrainingEnabledResponse {
       taxNumber?: string;
       emailAddress?: string;
       courtRegisterNumber?: string;
+      /** @pattern ^\d*$ */
+      linkedinOrganizationId?: string;
     };
     platformLogoS3Key: string | null;
     loginBackgroundImageS3Key: string | null;
@@ -1230,6 +1246,8 @@ export interface UpdateLiveTrainingMaxParallelSessionsResponse {
       taxNumber?: string;
       emailAddress?: string;
       courtRegisterNumber?: string;
+      /** @pattern ^\d*$ */
+      linkedinOrganizationId?: string;
     };
     platformLogoS3Key: string | null;
     loginBackgroundImageS3Key: string | null;
@@ -1292,6 +1310,8 @@ export interface UpdateLearningPathsEnabledResponse {
       taxNumber?: string;
       emailAddress?: string;
       courtRegisterNumber?: string;
+      /** @pattern ^\d*$ */
+      linkedinOrganizationId?: string;
     };
     platformLogoS3Key: string | null;
     loginBackgroundImageS3Key: string | null;
@@ -1385,6 +1405,8 @@ export interface UpdateColorSchemaResponse {
       taxNumber?: string;
       emailAddress?: string;
       courtRegisterNumber?: string;
+      /** @pattern ^\d*$ */
+      linkedinOrganizationId?: string;
     };
     platformLogoS3Key: string | null;
     loginBackgroundImageS3Key: string | null;
@@ -1554,6 +1576,8 @@ export interface GetCompanyInformationResponse {
     taxNumber?: string;
     emailAddress?: string;
     courtRegisterNumber?: string;
+    /** @pattern ^\d*$ */
+    linkedinOrganizationId?: string;
   };
 }
 
@@ -1585,6 +1609,8 @@ export interface UpdateCompanyInformationBody {
   taxNumber?: string;
   emailAddress?: string;
   courtRegisterNumber?: string;
+  /** @pattern ^\d*$ */
+  linkedinOrganizationId?: string;
 }
 
 export interface UpdateCompanyInformationResponse {
@@ -1616,6 +1642,8 @@ export interface UpdateCompanyInformationResponse {
     taxNumber?: string;
     emailAddress?: string;
     courtRegisterNumber?: string;
+    /** @pattern ^\d*$ */
+    linkedinOrganizationId?: string;
   };
 }
 
@@ -7814,6 +7842,7 @@ export interface CreateCertificateShareLinkBody {
 export interface CreateCertificateShareLinkResponse {
   shareUrl: string;
   linkedinShareUrl: string;
+  linkedinAddToProfileUrl: string;
 }
 
 export interface GetCertificateValidityImpactBody {

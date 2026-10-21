@@ -1526,6 +1526,8 @@
     "taxNumber": "Steuernummer (NIP)",
     "emailAddress": "E-Mail-Adresse",
     "courtRegisterNumber": "Gerichtsregisternummer (KRS)",
+    "linkedinOrganizationId": "LinkedIn-Organisations-ID",
+    "linkedinOrganizationIdHint": "Numerische ID der Unternehmensseite, die beim Hinzufügen von Zertifikaten zu LinkedIn-Profilen verwendet wird. Leer lassen, um den Firmennamen zu verwenden.",
     "noDataAvailable": "Keine Anbieterinformationen verfügbar",
     "createSuccess": "Anbieterinformationen erfolgreich erstellt",
     "updateSuccess": "Anbieterinformationen erfolgreich aktualisiert",
@@ -1535,6 +1537,7 @@
     "validation": {
       "nipMustBe10Digits": "NIP muss 10 Ziffern lang sein",
       "krsMustBe10Digits": "KRS muss 10-stellig sein",
+      "linkedinOrganizationIdMustBeNumeric": "Nur Ziffern erlaubt",
       "invalidEmailFormat": "Ungültiges E-Mail-Format",
       "brandingNameRequired": "Geben Sie einen Namen ein.",
       "brandingNameTooLong": "Der Name überschreitet die zulässige Länge."
@@ -4705,7 +4708,8 @@
     "button": {
       "download": "Herunterladen",
       "preview": "Vorschau",
-      "shareLinkedIn": "Auf LinkedIn teilen"
+      "shareLinkedIn": "Auf LinkedIn teilen",
+      "addToLinkedInProfile": "Zum LinkedIn-Profil hinzufügen"
     },
     "controls": {
       "languageToggle": "Sprachumschaltung",

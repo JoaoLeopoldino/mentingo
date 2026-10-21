@@ -43,6 +43,11 @@ const companyInformationFormSchema = z
       .optional()
       .or(z.literal("")),
     emailAddress: z.string().email().optional().or(z.literal("")),
+    linkedinOrganizationId: z
+      .string()
+      .regex(/^\d+$/)
+      .optional()
+      .or(z.literal("")),
     courtRegisterNumber: z
       .string()
       .regex(/^\d{10}$/)
@@ -90,6 +95,7 @@ export const ProviderInformationEditCard = ({
       taxNumber: "",
       emailAddress: "",
       courtRegisterNumber: "",
+      linkedinOrganizationId: "",
       ...companyInformation,
       applicationName:
         companyInformation?.applicationName || companyInformation?.companyName || "Utu Lab",
@@ -214,6 +220,28 @@ export const ProviderInformationEditCard = ({
           {errors.courtRegisterNumber && (
             <p className="mt-1 text-xs text-red-500">
               {t("providerInformation.validation.krsMustBe10Digits")}
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="linkedinOrganizationId">
+            {t("providerInformation.linkedinOrganizationId")}
+          </Label>
+          <Input
+            id="linkedinOrganizationId"
+            placeholder="1234567"
+            className={cn({
+              "border-red-500 focus:!ring-red-500": errors.linkedinOrganizationId,
+            })}
+            {...register("linkedinOrganizationId")}
+          />
+          <p className="text-xs text-gray-500">
+            {t("providerInformation.linkedinOrganizationIdHint")}
+          </p>
+          {errors.linkedinOrganizationId && (
+            <p className="mt-1 text-xs text-red-500">
+              {t("providerInformation.validation.linkedinOrganizationIdMustBeNumeric")}
             </p>
           )}
         </div>

@@ -33,6 +33,7 @@ import { match } from "ts-pattern";
 import { ActivityLogsService } from "src/activity-logs/activity-logs.service";
 import { ACTIVITY_LOG_ACTION_TYPES, ACTIVITY_LOG_RESOURCE_TYPES } from "src/activity-logs/types";
 import { DatabasePg } from "src/common";
+import { buildLinkedinAddToProfileUrl } from "src/common/helpers/buildLinkedinAddToProfileUrl";
 import { getSortOptions } from "src/common/helpers/getSortOptions";
 import { resolveTenantOrigin } from "src/common/helpers/resolveTenantOrigin";
 import { DEFAULT_PAGE_SIZE, parsePagination } from "src/common/pagination";
@@ -571,9 +572,22 @@ export class CertificatesService implements OnModuleDestroy {
     linkedinShareUrl.searchParams.set("mini", "true");
     linkedinShareUrl.searchParams.set("url", shareUrl);
 
+    const companyInformation = await this.settingsService.getCompanyInformationByTenantId(
+      publicCertificate.tenantId,
+    );
+
     return {
       shareUrl,
       linkedinShareUrl: linkedinShareUrl.toString(),
+      linkedinAddToProfileUrl: buildLinkedinAddToProfileUrl({
+        name: publicCertificate.courseTitle,
+        organizationId: companyInformation.linkedinOrganizationId,
+        organizationName: companyInformation.companyName || publicCertificate.tenantName,
+        certId: certificateId,
+        certUrl: shareUrl,
+        issuedAt: publicCertificate.issuedAt,
+        expiresAt: publicCertificate.expiresAt,
+      }),
     };
   }
 

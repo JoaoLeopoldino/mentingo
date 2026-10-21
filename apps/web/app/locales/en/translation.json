@@ -1527,6 +1527,8 @@
     "taxNumber": "Tax Number (NIP)",
     "emailAddress": "Email Address",
     "courtRegisterNumber": "Court Register Number (KRS)",
+    "linkedinOrganizationId": "LinkedIn Organization ID",
+    "linkedinOrganizationIdHint": "Numeric ID of the company page, used when adding certificates to LinkedIn profiles. Leave empty to use the company name.",
     "noDataAvailable": "No provider information available",
     "createSuccess": "Provider information created successfully",
     "updateSuccess": "Provider information updated successfully",
@@ -1536,6 +1538,7 @@
     "validation": {
       "nipMustBe10Digits": "NIP must be 10 digits",
       "krsMustBe10Digits": "KRS must be 10 digits",
+      "linkedinOrganizationIdMustBeNumeric": "Must contain digits only",
       "invalidEmailFormat": "Invalid email format",
       "brandingNameRequired": "Enter a name.",
       "brandingNameTooLong": "The name exceeds the permitted length."
@@ -4706,7 +4709,8 @@
     "button": {
       "download": "Download",
       "preview": "Preview",
-      "shareLinkedIn": "Share on LinkedIn"
+      "shareLinkedIn": "Share on LinkedIn",
+      "addToLinkedInProfile": "Add to LinkedIn profile"
     },
     "controls": {
       "languageToggle": "Language toggle",

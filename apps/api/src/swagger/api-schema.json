@@ -25902,6 +25902,10 @@
                   },
                   "courtRegisterNumber": {
                     "type": "string"
+                  },
+                  "linkedinOrganizationId": {
+                    "pattern": "^\\d*$",
+                    "type": "string"
                   }
                 }
               },
@@ -27792,6 +27796,10 @@
                   },
                   "courtRegisterNumber": {
                     "type": "string"
+                  },
+                  "linkedinOrganizationId": {
+                    "pattern": "^\\d*$",
+                    "type": "string"
                   }
                 }
               },
@@ -28083,6 +28091,10 @@
                   },
                   "courtRegisterNumber": {
                     "type": "string"
+                  },
+                  "linkedinOrganizationId": {
+                    "pattern": "^\\d*$",
+                    "type": "string"
                   }
                 }
               },
@@ -28373,6 +28385,10 @@
                     "type": "string"
                   },
                   "courtRegisterNumber": {
+                    "type": "string"
+                  },
+                  "linkedinOrganizationId": {
+                    "pattern": "^\\d*$",
                     "type": "string"
                   }
                 }
@@ -28684,6 +28700,10 @@
                   },
                   "courtRegisterNumber": {
                     "type": "string"
+                  },
+                  "linkedinOrganizationId": {
+                    "pattern": "^\\d*$",
+                    "type": "string"
                   }
                 }
               },
@@ -28974,6 +28994,10 @@
                     "type": "string"
                   },
                   "courtRegisterNumber": {
+                    "type": "string"
+                  },
+                  "linkedinOrganizationId": {
+                    "pattern": "^\\d*$",
                     "type": "string"
                   }
                 }
@@ -29266,6 +29290,10 @@
                   },
                   "courtRegisterNumber": {
                     "type": "string"
+                  },
+                  "linkedinOrganizationId": {
+                    "pattern": "^\\d*$",
+                    "type": "string"
                   }
                 }
               },
@@ -29556,6 +29584,10 @@
                     "type": "string"
                   },
                   "courtRegisterNumber": {
+                    "type": "string"
+                  },
+                  "linkedinOrganizationId": {
+                    "pattern": "^\\d*$",
                     "type": "string"
                   }
                 }
@@ -29860,6 +29892,10 @@
                   },
                   "courtRegisterNumber": {
                     "type": "string"
+                  },
+                  "linkedinOrganizationId": {
+                    "pattern": "^\\d*$",
+                    "type": "string"
                   }
                 }
               },
@@ -30150,6 +30186,10 @@
                     "type": "string"
                   },
                   "courtRegisterNumber": {
+                    "type": "string"
+                  },
+                  "linkedinOrganizationId": {
+                    "pattern": "^\\d*$",
                     "type": "string"
                   }
                 }
@@ -30620,6 +30660,10 @@
                     "type": "string"
                   },
                   "courtRegisterNumber": {
+                    "type": "string"
+                  },
+                  "linkedinOrganizationId": {
+                    "pattern": "^\\d*$",
                     "type": "string"
                   }
                 }
@@ -31438,6 +31482,10 @@
               },
               "courtRegisterNumber": {
                 "type": "string"
+              },
+              "linkedinOrganizationId": {
+                "pattern": "^\\d*$",
+                "type": "string"
               }
             }
           }
@@ -31526,6 +31574,10 @@
           },
           "courtRegisterNumber": {
             "type": "string"
+          },
+          "linkedinOrganizationId": {
+            "pattern": "^\\d*$",
+            "type": "string"
           }
         }
       },
@@ -31611,6 +31663,10 @@
                 "type": "string"
               },
               "courtRegisterNumber": {
+                "type": "string"
+              },
+              "linkedinOrganizationId": {
+                "pattern": "^\\d*$",
                 "type": "string"
               }
             }
@@ -61074,11 +61130,15 @@
           },
           "linkedinShareUrl": {
             "type": "string"
+          },
+          "linkedinAddToProfileUrl": {
+            "type": "string"
           }
         },
         "required": [
           "shareUrl",
-          "linkedinShareUrl"
+          "linkedinShareUrl",
+          "linkedinAddToProfileUrl"
         ]
       },
       "GetCertificateValidityImpactBody": {

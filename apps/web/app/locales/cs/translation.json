@@ -1532,6 +1532,8 @@
     "taxNumber": "daňové číslo (NIP)",
     "emailAddress": "E-mailová adresa",
     "courtRegisterNumber": "Číslo soudního rejstříku (KRS)",
+    "linkedinOrganizationId": "ID organizace na LinkedIn",
+    "linkedinOrganizationIdHint": "Číselné ID firemní stránky používané při přidávání certifikátů do profilů LinkedIn. Nechte prázdné pro použití názvu společnosti.",
     "noDataAvailable": "Nejsou k dispozici žádné informace o poskytovateli",
     "createSuccess": "Informace o poskytovateli byly úspěšně vytvořeny",
     "updateSuccess": "Informace o poskytovateli byly úspěšně aktualizovány",
@@ -1541,6 +1543,7 @@
     "validation": {
       "nipMustBe10Digits": "NIP musí mít 10 číslic",
       "krsMustBe10Digits": "KRS musí mít 10 číslic",
+      "linkedinOrganizationIdMustBeNumeric": "Povoleny jsou pouze číslice",
       "invalidEmailFormat": "Neplatný formát e-mailu",
       "brandingNameRequired": "Zadejte název.",
       "brandingNameTooLong": "Název překračuje povolenou délku."
@@ -4714,7 +4717,8 @@
     "button": {
       "download": "Stáhnout",
       "preview": "Náhled",
-      "shareLinkedIn": "Sdílet na LinkedIn"
+      "shareLinkedIn": "Sdílet na LinkedIn",
+      "addToLinkedInProfile": "Přidat do profilu LinkedIn"
     },
     "controls": {
       "languageToggle": "Přepínač jazyka",

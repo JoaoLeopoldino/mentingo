@@ -20,6 +20,7 @@ import { escape } from "lodash";
 import puppeteer, { type Browser, type Page } from "puppeteer";
 
 import { DatabasePg } from "src/common";
+import { buildLinkedinAddToProfileUrl } from "src/common/helpers/buildLinkedinAddToProfileUrl";
 import { assertCanReadLearnerCertificates } from "src/common/permissions/assert-can-read-learner-certificates";
 import { FileService } from "src/file/file.service";
 import { IMAGE_QUALITY } from "src/file/image-variants/image-variant.constants";
@@ -205,7 +206,23 @@ export class LearningPathCertificateService {
     linkedinShareUrl.searchParams.set("mini", "true");
     linkedinShareUrl.searchParams.set("url", shareUrl);
 
-    return { shareUrl, linkedinShareUrl: linkedinShareUrl.toString() };
+    const companyInformation = await this.settingsService.getCompanyInformationByTenantId(
+      publicCertificate.tenantId,
+    );
+
+    return {
+      shareUrl,
+      linkedinShareUrl: linkedinShareUrl.toString(),
+      linkedinAddToProfileUrl: buildLinkedinAddToProfileUrl({
+        name: publicCertificate.pathTitle,
+        organizationId: companyInformation.linkedinOrganizationId,
+        organizationName: companyInformation.companyName || publicCertificate.tenantName,
+        certId: certificateId,
+        certUrl: shareUrl,
+        issuedAt: publicCertificate.issuedAt,
+        expiresAt: publicCertificate.expiresAt,
+      }),
+    };
   }
 
   async getPublicSharePage(certificateId: UUIDType, language?: SupportedLanguages) {

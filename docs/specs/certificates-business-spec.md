@@ -22,6 +22,7 @@ The feature also gives course managers controlled ways to handle certificate val
 - Switch certificate preview language between all supported platform languages.
 - Download certificate PDFs with generated filenames.
 - Share certificates externally through LinkedIn/public share links.
+- Add a certificate to the learner's LinkedIn "Licenses & certifications" section through a pre-filled "Add to Profile" link (certificate name, issuer, issue/expiry month, certificate ID and public verification URL). The issuer uses the tenant's optional LinkedIn Organization ID from Provider Information, otherwise the company or tenant name.
 - Configure whether a course issues certificates.
 - Preview course certificates with the signed-in user's name before enabling issuance.
 - Customize and save the certificate font color from the live preview.
